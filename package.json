@@ -1,0 +1,33 @@
+{
+  "name": "npm-link-up",
+  "version": "0.0.1001",
+  "description": "Use this package to link your complex projects together for local development.",
+  "main": "index.js",
+  "scripts": {
+    "test": "suman"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ORESoftware/npm-link-up.git"
+  },
+  "keywords": [
+    "npm",
+    "link",
+    "suman",
+    "local",
+    "development",
+    "modules",
+    "modularization",
+    "nodejs",
+    "node.js"
+  ],
+  "author": "Olegzandr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ORESoftware/npm-link-up/issues"
+  },
+  "homepage": "https://github.com/ORESoftware/npm-link-up#readme",
+  "dependencies": {
+    "async": "^2.3.0"
+  }
+}
