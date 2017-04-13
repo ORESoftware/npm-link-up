@@ -1,6 +1,9 @@
 {
   "name": "npm-link-up",
   "version": "0.0.1001",
+  "bin": {
+    "npmlinkup": "index.js"
+  },
   "description": "Use this package to link your complex projects together for local development.",
   "main": "index.js",
   "scripts": {
@@ -28,6 +31,10 @@
   },
   "homepage": "https://github.com/ORESoftware/npm-link-up#readme",
   "dependencies": {
-    "async": "^2.3.0"
+    "async": "^2.3.0",
+    "colors": "^1.1.2",
+    "dashdash": "^1.14.1",
+    "pragmatik": "0.0.407",
+    "residence": "0.0.201"
   }
 }

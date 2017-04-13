@@ -1,0 +1,13 @@
+{
+  "searchRoot": [
+    "HOME"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".git"
+  ],
+  "list": [
+    "residence",
+    "pragmatik"
+  ]
+}
