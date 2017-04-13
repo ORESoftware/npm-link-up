@@ -13,8 +13,6 @@ installation method instead:
 
 ```cd $HOME && mkdir -p .npmlinkup/global && cd .npmlinkup/global && npm init -f && npm install -S npm-link-up@latest```
 
-..you might get a warning that there is no package.json file, just ignore it
-
 then add this to your ~./bashrc file:
 
 ```bash
@@ -25,6 +23,14 @@ function npmlinkup(){
 }
 ```
 
+Finally, source your ~/.bashrc file in your current terminal session:
+
+```bash
+source ~/.bashrc 
+```
+
+
+Be sure that your system is configured so that your bashrc file is source for all sessions/terminals.
 There is really no good reason to install this module locally to a project.
 So one of the two above install methods should be sufficient.
 
