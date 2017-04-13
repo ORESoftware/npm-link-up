@@ -4,7 +4,7 @@ Use the CLI interface to link your local projects together for rapid and pain-fr
 development.
 
 
-## Installation
+## => Installation
 
 ### ```npm install -g npm-link-up```
 
@@ -35,7 +35,7 @@ There is really no good reason to install this module locally to a project.
 So one of the two above install methods should be sufficient.
 
 
-## Usage
+## => Usage
 
 Create a file called ```npm-link-up.json``` in the root of your project, (heretofore "project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
@@ -95,11 +95,11 @@ on your filesystem at will, and the tool still works; it also requires less conf
 
 2. It moves up the dependency tree, for each dependency z, it runs
 
-    *  ```cd <package z>``` # change directory to the package root
-    *  ```npm install```    # self-explanatory, always runs this, for the obvious reasons
-    *  ```npm link <x>```   # runs this for each dependency, that is in the list above.
-    *  ```npm link .```     # links the local project globally
-    *  ```npm link <z>```   # if "linkToItself" is true, will link the project to itself (useful for running the tests)
+    *  ```cd <package z>```     # change directory to the package root
+    *  ```npm install```        # self-explanatory, always runs this, for the obvious reasons
+    *  ```npm link <x>```       # runs this for each dependency, that is in the list above.
+    *  ```npm link .```         # links the local project globally
+    *  ```npm link <z>```       # if "linkToItself" is true, will link the project to itself (useful for running the tests)
 
 3. If anything fails, the tool will fail with an exit code of 1.
 
