@@ -11,14 +11,14 @@ development.
 If you use NVM, and switch Node.js versions frequently, you should use the following
 installation method instead:
 
-```cd $HOME && mkdir -p .npmlinkup && cd .npmlinkup && npm install npm-link-up@latest```
+```cd $HOME && mkdir -p .npmlinkup/global && cd .npmlinkup/global && npm init -f && npm install -S npm-link-up@latest```
 
-you might get a warning that there is no package.json file, just ignore it
+..you might get a warning that there is no package.json file, just ignore it
 
 then add this to your ~./bashrc file:
 
 ```bash
-export PATH=$PATH:$HOME/.npmlinkup/node_modules/.bin
+export PATH=$PATH:$HOME/.npmlinkup/global/node_modules/.bin
 
 function npmlinkup(){
   command npmlink $@

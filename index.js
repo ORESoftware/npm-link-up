@@ -29,7 +29,7 @@ process.once('exit', function (code) {
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
-    ' => Your present working directory is =>\n' + cwd);
+    ' => Your present working directory is =>\n' + colors.magenta.bold(cwd));
   process.exit(1);
 }
 
