@@ -5,6 +5,8 @@
 //TODO: list in main project, appends to any list in any subproject
 //TODO: instead of just checking for presence of node_modules directory - check to see if all dependencies
 // are installed
+//TODO: boolean - select either rimraf node_modules or just remove/replace symlinks
+
 
 //core
 const cp = require('child_process');
@@ -37,10 +39,20 @@ let pkg, conf;
 
 try {
   pkg = require(path.resolve(root + '/package.json'));
+}
+catch (e) {
+  console.error('\n', e.stack || e, '\n');
+  console.error(colors.magenta.bold(' => Bizarrely, you do not have a "package.json" file in the root of your project.'));
+  process.exit(1);
+}
+
+try{
   conf = require(path.resolve(root + '/npm-link-up.json'));
 }
-catch (err) {
-  console.error('\n', err.stack || err, '\n');
+catch(e){
+  console.error('\n', e.stack || e, '\n');
+  console.error(colors.magenta.bold(' => You do not have an "npm-link-up.json" file in the root of your project. ' +
+    'You need this config file for npmlinkup to do it\'s thing.'));
   process.exit(1);
 }
 
@@ -196,6 +208,7 @@ async.eachLimit(searchRoots, 2, function (item, cb) {
     return process.exit(1);
   }
 
+  const strm = fs.createWriteStream(path.resolve(root + '/npm-link-up.log'));
   const keys = Object.keys(map);
 
   if (!keys.length) {
@@ -212,22 +225,43 @@ async.eachLimit(searchRoots, 2, function (item, cb) {
     });
   }
 
-  function areAllLinked(names) {
+  function areAllLinked(names, n) {
     return names.every(function (name) {
+      console.log('name => ', name, 'n => ',n);
+      if(name === n){
+        // handle circular deps
+        console.log('!! handled circular deps');
+        return true;
+      }
       return map[name].isLinked;
     });
   }
 
+  function getCountOfUnlinkedDeps(dep){
+    return dep.deps.filter(function(d){
+        return !d.isLinked;
+    }).length;
+  }
+
   function findNextDep() {
-    // this routine finds the next dep, that has no deps or no unlinked dependencies
+    // not anymore: this routine finds the next dep, that has no deps or no unlinked dependencies
+    // this routine finds the next dep with the fewest number of unlinked dependencies
 
     let dep;
+    let count = null;
 
     for (let name in map) {
       if (map.hasOwnProperty(name)) {
-        if (!map[name].isLinked && areAllLinked(map[name].deps)) {
-          dep = map[name];
-          break;
+        let $dep = map[name];
+        if (!$dep.isLinked ) {
+          if(!count){
+            dep = $dep;
+            count = dep.deps.length;
+          }
+          else if(getCountOfUnlinkedDeps($dep) < count){
+            dep = $dep;
+            count = dep.deps.length;
+          }
         }
       }
     }
@@ -241,12 +275,29 @@ async.eachLimit(searchRoots, 2, function (item, cb) {
   }
 
   function getNPMLinkList(deps) {
-    return deps.map(function (d) {
+    return deps.filter(function(d){
+      return map[d].isLinked;
+    })
+    .map(function (d) {
       return `npm link ${d}`;
     });
   }
 
+  function getCommandListOfLinked(name) {
+    return Object.keys(map)
+    .filter(function (k) {
+      return map[k].isLinked && map[k].deps.includes(name);
+    })
+    .map(function(k){
+      return `cd ${map[k].path} && npm link ${name}`;
+    });
+  }
+
+  console.log('\n\n');
+
   async.until(isAllLinked, function (cb) {
+
+    console.log(` => Searching for next dep to run.`);
 
     const dep = findNextDep();
     console.log(' => Processing dep with name => ', dep.name);
@@ -257,17 +308,102 @@ async.eachLimit(searchRoots, 2, function (item, cb) {
     const script = [
 
       `cd ${dep.path}`,
-      '&& npm install',
+      // '&& rm -rf node_modules && npm install',
       links,
       '&& npm link .',
       `&& npm link ${dep.name}`
 
     ].join(' ');
 
-    console.log('script => ', script);
+    console.log(' => Script is => ', script);
+    console.log('\n');
 
-    dep.isLinked = true;
-    process.nextTick(cb);
+    const k = cp.spawn('bash', [], {
+       env: Object.assign({}, process.env, {
+           NPM_LINK_UP: 'yes'
+       })
+    });
+
+    k.stdin.write('\n' + script + '\n');
+
+    strm.write('\n\n >>> Beginning of "' + dep.name + '"...\n\n');
+
+    k.stdout.pipe(strm, {end: false});
+    k.stderr.pipe(strm, {end: false});
+
+    process.nextTick(function(){
+      k.stdin.end();
+    });
+
+    k.stderr.setEncoding('utf8');
+
+    let data = '';
+    k.stderr.on('data', function(d){
+      data+=d;
+    });
+
+    k.once('error', cb);
+
+    k.once('close', function(code){
+
+
+      if(code > 0){
+
+        console.log(`\n => Dep with name "${dep.name}" is done, but with an error.\n`);
+
+        cb({
+          code: code,
+          dep: dep,
+          error: data
+        });
+      }
+      else{
+
+        console.log(`\n => Dep with name "${dep.name}" is done.\n`);
+
+        dep.isLinked = map[dep.name].isLinked = true;
+
+        function linkPreviouslyUnlinked(cb){
+
+          const cmds = getCommandListOfLinked(dep.name);
+
+          if(!cmds.length){
+            return process.nextTick(cb);
+          }
+
+          const cmd = cmds.join(' && ');
+
+          strm.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
+
+          const k = cp.spawn('bash', [], {
+             env: Object.assign({}, process.env, {
+               NPM_LINK_UP: 'yes'
+             })
+          });
+
+          k.stdin.write('\n' + cmd + '\n');
+
+          k.stdout.pipe(strm, {end: false});
+          k.stderr.pipe(strm, {end: false});
+
+          process.nextTick(function(){
+            k.stdin.end();
+          });
+
+          k.once('close', cb);
+
+        }
+
+        linkPreviouslyUnlinked(function(err){
+          cb(err, {
+            code: code,
+            dep: dep,
+            error: data
+          });
+        });
+
+      }
+    });
 
   }, function (err) {
 
@@ -276,7 +412,12 @@ async.eachLimit(searchRoots, 2, function (item, cb) {
       return process.exit(1);
     }
 
-    console.log('all done.');
+    strm.write('\n\n => NPM-Link-Up run was successful. All done.\n\n');
+    strm.end();
+
+    setTimeout(function(){
+      process.exit(0);
+    },1000);
 
   });
 

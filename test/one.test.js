@@ -1,4 +1,6 @@
 
 
 
- console.log(['a','b', 'c'].filter(_ => _));
+console.log([].every(function(){
+  return true;
+}));

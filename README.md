@@ -9,9 +9,9 @@ development.
 ### ```npm install -g npm-link-up```
 
 If you use NVM, and switch Node.js versions frequently, you should use the following
-installation method instead:
+installation method instead (installs the dep in your $HOME dir):
 
-```cd $HOME && mkdir -p .npmlinkup/global && cd .npmlinkup/global && npm init -f && npm install -S npm-link-up@latest```
+```mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && npm init -f && npm install -S npm-link-up@latest```
 
 then add this to your ~./bashrc file:
 
