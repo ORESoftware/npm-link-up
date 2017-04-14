@@ -4,7 +4,7 @@ Use the CLI interface to link your local projects together for rapid and pain-fr
 development.
 
 
-## => Installation
+## > Installation
 
 ### ```npm install -g npm-link-up```
 
@@ -35,7 +35,7 @@ There is really no good reason to install this module locally to a project.
 So one of the two above install methods should be sufficient.
 
 
-## => Usage
+## > Usage
 
 Create a file called ```npm-link-up.json``` in the root of your project, (heretofore "project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
