@@ -1,8 +1,8 @@
 {
-  "searchRoot": [
-    "HOME"
+  "searchRoots": [
+    "$HOME/WebstormProjects"
   ],
-  "ignorePaths": [
+  "ignore": [
     "node_modules",
     ".git"
   ],

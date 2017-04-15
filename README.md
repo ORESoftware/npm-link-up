@@ -3,7 +3,10 @@
 Use the CLI interface to link your local projects together for rapid and pain-free local
 development.
 
+Should be quite a bit leaner and simpler than Lerna and Rush.
+All this tool does is link your projects together with NPM link, using declarative config files and a CLI.
 
+<p>
 ## &#9658; Installation
 
 ### ```npm install -g npm-link-up```
@@ -29,15 +32,16 @@ Finally, source your ~/.bashrc file in your current terminal session:
 source ~/.bashrc 
 ```
 
+ => npmlinkup is a long command name, but there is a thing called tab completion :)
 
-Be sure that your system is configured so that your bashrc file is source for all sessions/terminals.
+Be sure that your system is configured so that your bashrc file is sourced for all sessions/terminals.
 There is really no good reason to install this module locally to a project.
 So one of the two above install methods should be sufficient.
 
 
 ## &#9658; Usage
 
-Create a file called ```npm-link-up.json``` in the root of your project, (heretofore "project X"). The reason
+Create a file called ```npm-link-up.json``` in the root of your project ("project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
 are dependencies of project X.
 
@@ -46,11 +50,12 @@ The following is a simple npm-link-up.json file:
 ```json
 {
   "searchRoots": [   
-    "HOME"
+    "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
+    "$HOME/vscode-projects"    // it's recommended to use something more specific than $HOME             
   ],
-  "ignore": [
-    "node_modules",
-    ".git"
+  "ignore": [                // paths to skip, these will be converted to regex, using new RegExp(x)
+    "/node_modules/",        // "any-match" style path pattern matching has always sucked IMO
+    "/.git/"
   ],
   "list": [
     "residence",
@@ -81,10 +86,10 @@ Well, imagine we have this dependency structure, and these projects are on our l
     / \              /  \  \
    /   \            /    \  \
   D     E          I     J   K
-         \       /
-          \     /
-           \   / 
-             F 
+         \       /  \
+          \     /    \
+           \   /      \
+             F         E
              
 ```             
 
