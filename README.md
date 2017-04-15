@@ -27,7 +27,7 @@ installation method instead (installs the dep in your $HOME dir):
 then add this to your ~./bashrc file:
 
 ```bash
-export PATH=$PATH:$HOME/.npmlinkup/global/node_modules/.bin
+export PATH=$PATH:~/.npmlinkup/global/node_modules/.bin
 
 function npmlinkup(){
   command npmlink $@
@@ -55,7 +55,7 @@ are dependencies of project X.
 
 The following is a simple npm-link-up.json file:
 
-```json
+```js
 {
   "searchRoots": [   
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
