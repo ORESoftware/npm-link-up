@@ -17,7 +17,10 @@ using declarative config files and a CLI.
 If you use NVM, and switch Node.js versions frequently, you should use the following
 installation method instead (installs the dep in your $HOME dir):
 
-```mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
+<p>
+
+```
+    mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
     npm init -f && npm install -S npm-link-up@latest
 ```
 
