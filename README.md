@@ -3,7 +3,8 @@
 Use the CLI interface to link your local projects together for rapid and pain-free local
 development.
 
-Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and Rush.
+Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and 
+[Rush](https://www.npmjs.com/package/@microsoft/rush).
 
 All this tool does is automatically link your projects together with NPM link, <br>
 using declarative config files and a CLI.
@@ -20,8 +21,10 @@ installation method instead (installs the dep in your $HOME dir):
 <p>
 
 ```
-    mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
-    npm init -f && npm install -S npm-link-up@latest
+
+ mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
+  npm init -f && npm install -S npm-link-up@latest
+  
 ```
 
 then add this to your ~./bashrc file:
