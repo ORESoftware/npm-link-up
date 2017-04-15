@@ -3,10 +3,13 @@
 Use the CLI interface to link your local projects together for rapid and pain-free local
 development.
 
-Should be quite a bit leaner and simpler than Lerna and Rush.
-All this tool does is link your projects together with NPM link, using declarative config files and a CLI.
+Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and Rush.
+
+All this tool does is automatically link your projects together with NPM link, <br>
+using declarative config files and a CLI.
 
 <p>
+
 ## &#9658; Installation
 
 ### ```npm install -g npm-link-up```
@@ -14,7 +17,9 @@ All this tool does is link your projects together with NPM link, using declarati
 If you use NVM, and switch Node.js versions frequently, you should use the following
 installation method instead (installs the dep in your $HOME dir):
 
-```mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && npm init -f && npm install -S npm-link-up@latest```
+```mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
+    npm init -f && npm install -S npm-link-up@latest
+```
 
 then add this to your ~./bashrc file:
 
@@ -51,7 +56,7 @@ The following is a simple npm-link-up.json file:
 {
   "searchRoots": [   
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
-    "$HOME/vscode-projects"    // it's recommended to use something more specific than $HOME             
+    "$HOME/vscode_projects"    // it's recommended to use something more specific than $HOME             
   ],
   "ignore": [                // paths to skip, these will be converted to regex, using new RegExp(x)
     "/node_modules/",        // "any-match" style path pattern matching has always sucked IMO
