@@ -27,12 +27,12 @@ let options = [
   {
     names: ['version', 'vn'],
     type: 'bool',
-    help: 'Print the npm-link-up version, and exit 1.'
+    help: 'Print the npm-link-up version, and exit 0.'
   },
   {
     names: ['help', 'h'],
     type: 'bool',
-    help: 'Print help menu for npm-link-up, and exit 1.'
+    help: 'Print help menu for npm-link-up, and exit 0.'
   },
   {
     names: ['verbosity', 'v'],
@@ -49,8 +49,14 @@ let options = [
   {
     names: ['force'],
     type: 'bool',
-    help: 'Force execution request at hand.',
+    help: 'Force execution at hand.',
     default: false
+  },
+  {
+    names: ['completion'],
+    type: 'bool',
+    help: 'Generate bash-completion code.',
+    hidden: true
   },
   {
     names: ['install-all'],
@@ -105,8 +111,19 @@ if (opts.help) {
   console.log('usage: node foo.js [OPTIONS]\n'
     + 'options:\n'
     + help);
-  process.exit(1);
+  process.exit(0);
 }
+
+if(opts.completion){
+  let generatedBashCode = dashdash.bashCompletionFromOptions({
+    name: 'npmlinkup',
+    options: options,
+    includeHidden: true
+  });
+  console.log(generatedBashCode);
+  process.exit(0);
+}
+
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
@@ -172,11 +189,16 @@ if (list.length < 1) {
   return process.exit(1);
 }
 
-const searchRoots = conf.searchRoots || [path.resolve(process.env.HOME)];
+let searchRoots = (conf.searchRoots || []).concat(opts.searchRoots).filter(function (item, i, arr) {
+  return arr.indexOf(item) === i;  // get a unique list
+});
 
 if (!conf.searchRoots) {
   console.error(' => Warning => no "searchRoots" property provided, NPM-Link-Up must therefore search through your entire home directory.');
-  if (!opts.force) {
+  if (opts.force) {
+    searchRoots = [path.resolve(process.env.HOME)];
+  }
+  else {
     console.error(' => You must use --force to do this.');
     process.exit(1);
   }
@@ -252,7 +274,7 @@ async.autoInject({
       NPM_LINK_UP: 'yes'
     });
 
-    k.stdin.write('\n' + 'npm cache clean' + '\n');
+    k.stdin.write('\n' + 'npm cache clean; yarn cache clean' + '\n');
 
     process.nextTick(function () {
       k.stdin.end();
