@@ -62,11 +62,11 @@ The following is a simple npm-link-up.json file:
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
     "$HOME/vscode_projects"    // it's recommended to use something more specific than $HOME             
   ],
-  "ignore": [                // paths to skip, these will be converted to regex, using new RegExp(x)
-    "/node_modules/",        // "any-match" style path pattern matching has always sucked IMO
+  "ignore": [                // paths to skip; these will be converted to regex, using new RegExp(x)
+    "/node_modules/",        // "any-match" style path pattern matching has always sucked IMO, this works better
     "/.git/"
   ],
-  "list": [
+  "list": [               // list the packages that you want to symlink to this project, here. NPM package name only, no paths needed.
     "residence",
     "pragmatik"
   ]
@@ -99,7 +99,9 @@ Well, imagine we have this dependency structure, and these projects are on our l
           \     /    \
            \   /      \
              F         E
-             
+                       /
+                      /
+                     H
 ```             
 
 
@@ -117,6 +119,12 @@ on your filesystem at will, and the tool still works; it also requires less conf
 
 3. If anything fails, the tool will fail with an exit code of 1.
 
+<i>
+Notice the circular dependency in the above tree, between H and E. This tool will handle it no problem. (NPM link makes
+it pretty easy.) What it does: it starts with H and then symlinks everything but E. (H depends on E, though). Then it gets to E and symlinks everything,
+including H. That it searches for all packages that have already been symlinked, but that depend on E (that would be H),
+and then cd's into H and sylinks E into H, retroactively. That's all there is to it.
+</i>
 
 **An example run, given the above tree.**
 
