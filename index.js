@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 
-//TODO: boolean in config telling us whether to link a project to itself or not
-//TODO: boolean in config telling us whether to do an npm install in the lib before npm link
-//TODO: list in main project, appends to any list in any subproject
-//TODO: instead of just checking for presence of node_modules directory - check to see if all dependencies
-// are installed
-//TODO: boolean - select either rimraf node_modules or just remove/replace symlinks
 
 //core
 const cp = require('child_process');
@@ -27,6 +21,76 @@ process.once('exit', function (code) {
 });
 
 //////////////////////////////////////////////////////////////
+
+
+let dashdash = require('dashdash');
+
+let options = [
+  {
+    names: ['version','vn'],
+    type: 'bool',
+    help: 'Print the npm-link-up version, and exit 1.'
+  },
+  {
+    names: ['help', 'h'],
+    type: 'bool',
+    help: 'Print help menu for npm-link-up, and exit 1.'
+  },
+  {
+    names: ['verbosity', 'v'],
+    type: 'positiveInteger',
+    help: 'Verbosity level is an integer between 1 and 3, inclusive.'
+  },
+  {
+    names: ['install'],
+    type: 'bool',
+    help: 'The "install" option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
+    'using npm instead of yarn is the default.'
+  },
+  {
+    names: ['search-root'],
+    type: 'arrayOfString',
+    help: 'Path to use to begin searching for relevant NPM packages.'
+  },
+  {
+    names: ['self'],
+    type: 'bool',
+    help: 'Link all projects to themselves; to have unique behavior per project, ' +
+    'add a "self" property to each project\'s npm-link-up.json file.'
+  },
+  {
+    names: ['manager'],
+    type: 'string',
+    help: 'Choose between "npm" and "yarn", to manage packages; this option will affect ' +
+    'all your relevant local projects; to have unique behavior per project,' +
+    'add a "manager" property to the npm-link-up.json file in a given project.',
+    default: 'npm'
+  }
+];
+
+
+let opts, parser = dashdash.createParser({options: options});
+try {
+   opts = parser.parse(process.argv);
+} catch (e) {
+  console.error(' => CLI parsing error: %s', e.message);
+  process.exit(1);
+}
+
+if(opts.version){
+  let npmLinkUpPkg = require('../package.json');
+  console.log(npmLinkUpPkg.version);
+  process.exit(0);
+}
+
+if (opts.help) {
+  let help = parser.help({includeEnv: true}).trimRight();
+  console.log('usage: node foo.js [OPTIONS]\n'
+    + 'options:\n'
+    + help);
+  process.exit(1);
+}
+
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
@@ -54,6 +118,15 @@ catch (e) {
     'You need this config file for npmlinkup to do it\'s thing.'));
   process.exit(1);
 }
+
+
+// let schema = require('./schemas/npm-link-up-schema.json');
+// let Ajv = require('ajv');
+// let ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
+// let validate = ajv.compile(schema);
+
+const NLU = require('./schemas/npm-link-up-schema');
+new NLU(conf, false).validate();
 
 const name = pkg.name;
 
@@ -439,9 +512,9 @@ async.autoInject({
       const script = [
 
         `cd ${dep.path}`,
-        dep.runNPMInstall ? '&& rm -rf node_modules && npm install' : '',
+        // dep.runNPMInstall ? '&& rm -rf node_modules && npm install' : '',
         links,
-        '&& npm link .',
+        '&& npm link',
         `&& npm link ${dep.name}`
 
       ].filter(i => i).join(' ');
@@ -457,7 +530,8 @@ async.autoInject({
 
       k.stdin.write('\n' + script + '\n');
 
-      strm.write('\n\n >>> Beginning of "' + dep.name + '"...\n\n');
+      strm.write(`\n\n >>> Beginning of "${dep.name}"...\n\n`);
+      strm.write(`\n\n >>> Running script => "${script}"...\n\n`);
 
       k.stdout.setEncoding('utf8');
       k.stderr.setEncoding('utf8');

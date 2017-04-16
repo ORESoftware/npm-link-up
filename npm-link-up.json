@@ -3,11 +3,10 @@
     "$HOME/WebstormProjects"
   ],
   "ignore": [
-    "node_modules",
-    ".git"
+    "/node_modules/",
+    "/.git/"
   ],
   "list": [
-    "residence",
-    "pragmatik"
+    "residence"
   ]
 }

@@ -1,0 +1,5 @@
+.idea
+*.sh
+*.md
+*.log
+*.json
