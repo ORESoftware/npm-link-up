@@ -130,7 +130,7 @@ and then cd's into H and sylinks E into H, retroactively. That's all there is to
 
 <p>
 
-**An example run, given the above tree.**
+### **An example run, given the above tree.**
 
 First the tool would install:
 
