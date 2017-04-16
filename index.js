@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 //core
 const cp = require('child_process');
 const path = require('path');
@@ -22,12 +21,11 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-
 let dashdash = require('dashdash');
 
 let options = [
   {
-    names: ['version','vn'],
+    names: ['version', 'vn'],
     type: 'bool',
     help: 'Print the npm-link-up version, and exit 1.'
   },
@@ -39,10 +37,23 @@ let options = [
   {
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
-    help: 'Verbosity level is an integer between 1 and 3, inclusive.'
+    help: 'Verbosity level is an integer between 1 and 3, inclusive.',
+    default: 2
   },
   {
-    names: ['install'],
+    names: ['log'],
+    type: 'bool',
+    help: 'Write to output log in project.',
+    default: true
+  },
+  {
+    names: ['force'],
+    type: 'bool',
+    help: 'Force execution request at hand.',
+    default: false
+  },
+  {
+    names: ['install-all'],
     type: 'bool',
     help: 'The "install" option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
     'using npm instead of yarn is the default.'
@@ -53,13 +64,19 @@ let options = [
     help: 'Path to use to begin searching for relevant NPM packages.'
   },
   {
-    names: ['self'],
+    names: ['self-link-all'],
     type: 'bool',
     help: 'Link all projects to themselves; to have unique behavior per project, ' +
     'add a "self" property to each project\'s npm-link-up.json file.'
   },
   {
-    names: ['manager'],
+    names: ['clear-all-caches'],
+    type: 'bool',
+    help: 'Clear all relevant NPM / Yarn / etc caches.',
+    default: false
+  },
+  {
+    names: ['manager-all'],
     type: 'string',
     help: 'Choose between "npm" and "yarn", to manage packages; this option will affect ' +
     'all your relevant local projects; to have unique behavior per project,' +
@@ -68,16 +85,16 @@ let options = [
   }
 ];
 
-
 let opts, parser = dashdash.createParser({options: options});
+
 try {
-   opts = parser.parse(process.argv);
+  opts = parser.parse(process.argv);
 } catch (e) {
   console.error(' => CLI parsing error: %s', e.message);
   process.exit(1);
 }
 
-if(opts.version){
+if (opts.version) {
   let npmLinkUpPkg = require('../package.json');
   console.log(npmLinkUpPkg.version);
   process.exit(0);
@@ -90,7 +107,6 @@ if (opts.help) {
     + help);
   process.exit(1);
 }
-
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
@@ -118,7 +134,6 @@ catch (e) {
     'You need this config file for npmlinkup to do it\'s thing.'));
   process.exit(1);
 }
-
 
 // let schema = require('./schemas/npm-link-up-schema.json');
 // let Ajv = require('ajv');
@@ -161,6 +176,10 @@ const searchRoots = conf.searchRoots || [path.resolve(process.env.HOME)];
 
 if (!conf.searchRoots) {
   console.error(' => Warning => no "searchRoots" property provided, NPM-Link-Up must therefore search through your entire home directory.');
+  if (!opts.force) {
+    console.error(' => You must use --force to do this.');
+    process.exit(1);
+  }
 }
 
 const inListButNotInDeps = [];
@@ -178,7 +197,7 @@ inListButNotInDeps.forEach(function (item) {
     'but is not listed in your package.json dependencies => "' + item + '".'));
 });
 
-//push this very projects name
+// always push the very project's name
 list.push(name);
 
 list = list.filter(function (item, index) {
@@ -187,7 +206,7 @@ list = list.filter(function (item, index) {
 
 const alwaysIgnoreThese = [
   '/node_modules/',
-  '/git/'
+  '/.git/'
 ];
 
 const ignore = (conf.ignore || []).concat(alwaysIgnoreThese).filter(function (item, index, arr) {
@@ -199,7 +218,7 @@ const ignore = (conf.ignore || []).concat(alwaysIgnoreThese).filter(function (it
 function isIgnored(pth) {
   return ignore.some(function (r) {
     if (r.test(pth)) {
-      if (false) {
+      if (opts.verbosity > 2) {
         console.log(`\n=> Path with value ${pth} was ignored because it matched the following regex:\n${r}`);
       }
       return true;
@@ -218,14 +237,14 @@ inListAndInDeps.forEach(function (item) {
   console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
 });
 
-const strm = fs.createWriteStream(path.resolve(root + '/npm-link-up.log'));
+const strm = fs.createWriteStream(opts.log ? path.resolve(root + '/npm-link-up.log') : '/dev/null');
 const map = {};
 
 async.autoInject({
 
   npmCacheClean: function (cb) {
 
-    if (true) {
+    if (!opts.clear_all_caches) {
       return process.nextTick(cb);
     }
 
@@ -245,11 +264,14 @@ async.autoInject({
     k.once('error', cb);
 
     k.once('close', function (code) {
-      if (code) {
+      if (code > 0) {
         cb({
           path: 'npm cache clean',
           code: code
         })
+      }
+      else {
+        cb();
       }
     })
 
@@ -344,7 +366,7 @@ async.autoInject({
                     //ignore
                   }
 
-                  let isNodeModulesPresent;
+                  let isNodeModulesPresent = false;
 
                   try {
                     isNodeModulesPresent = fs.statSync(path.resolve(dirname + '/node_modules')).isDirectory();
@@ -353,7 +375,7 @@ async.autoInject({
                     //ignore
                   }
 
-                  let isAtLinkShPresent;
+                  let isAtLinkShPresent = false;
 
                   try {
                     isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
@@ -373,8 +395,8 @@ async.autoInject({
                     map[pkg.name] = {
                       name: pkg.name,
                       linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
-                      runNPMInstall: !!isNodeModulesPresent,
-                      hasAtLinkSh: !!isAtLinkShPresent,
+                      runInstall: !isNodeModulesPresent,
+                      hasAtLinkSh: isAtLinkShPresent,
                       path: dirname,
                       deps: deps
                     };
@@ -499,12 +521,29 @@ async.autoInject({
 
     console.log('\n\n');
 
+    function getInstallCommand(dep) {
+      if (dep.runInstall || opts.install_all) {
+        return '&& rm -rf node_modules && npm install';
+      }
+    }
+
+    function getLinkToItselfCommand(dep) {
+      if (opts.linkToItself || dep.self_link_all) {
+        return `&& npm link ${dep.name}`
+      }
+    }
+
     async.until(isAllLinked, function (cb) {
 
-      console.log(` => Searching for next dep to run.`);
+      if (opts.verbosity > 2) {
+        console.log(` => Searching for next dep to run.`);
+      }
 
       const dep = findNextDep();
-      console.log(' => Processing dep with name => ', dep.name);
+
+      if (opts.verbosity > 1) {
+        console.log(' => Processing dep with name => ', dep.name);
+      }
 
       const deps = getNPMLinkList(dep.deps);
       const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
@@ -512,10 +551,10 @@ async.autoInject({
       const script = [
 
         `cd ${dep.path}`,
-        // dep.runNPMInstall ? '&& rm -rf node_modules && npm install' : '',
+        getInstallCommand(dep),
         links,
         '&& npm link',
-        `&& npm link ${dep.name}`
+        getLinkToItselfCommand(dep)
 
       ].filter(i => i).join(' ');
 
@@ -551,7 +590,7 @@ async.autoInject({
 
       k.once('close', function (code) {
 
-        if (code > 0) {
+        if (code > 0 && /ERR/.test(data)) {
 
           console.log(`\n => Dep with name "${dep.name}" is done, but with an error.\n`);
 
@@ -563,7 +602,14 @@ async.autoInject({
         }
         else {
 
-          console.log(`\n => Dep with name "${dep.name}" is done.\n`);
+          if (data) {
+            strm.write(' => Warning => ' + data);
+            console.log(' => Warning => ', data);
+          }
+
+          if (opts.verbosity > 1) {
+            console.log(`\n => Dep with name "${dep.name}" is done.\n`);
+          }
 
           dep.isLinked = map[dep.name].isLinked = true;
 
@@ -620,8 +666,10 @@ async.autoInject({
     return process.exit(1);
   }
 
-  strm.write('\n\n => NPM-Link-Up run was successful. All done.\n\n');
+  const line = '\n\n => NPM-Link-Up run was successful. All done.\n\n';
+  strm.write(line);
   strm.end();
+  console.log(line);
 
   setTimeout(function () {
     process.exit(0);

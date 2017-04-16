@@ -19,6 +19,10 @@ NLU.getSchema = function () {
         type: 'object',
         required: true,
         properties: {
+          "linkToItself":{
+            type: 'boolean',
+            required: false
+          },
           "searchRoots": {
             type: 'array',
             required: false,
