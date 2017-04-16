@@ -67,9 +67,12 @@ The following is a simple npm-link-up.json file:
     "/.git/"
   ],
   "list": [               // list the packages that you want to symlink to this project, here. NPM package name only, no paths needed.
-    "residence",
-    "pragmatik"
-  ]
+    "socket.io",          // instead of being these well-known NPM packages, they will be *your* local package names
+    "mongoose",
+    "lodash"
+  ],
+  "install": "yarn",     // we give specific instructions (a bash script) on how to install, ("npm install" is default)
+  "linkToItself": true   // if true, we link this project to itself, true is the default
 }
 ```
 
@@ -107,12 +110,13 @@ Well, imagine we have this dependency structure, and these projects are on our l
 
 1. Using the "searchRoots" directory/ies, the tool looks for the NPM package roots that match 
 the names in the "list" property in the npm-link-up.json file. This is nice because you can move projects around
-on your filesystem at will, and the tool still works; it also requires less configuration.
+on your filesystem at will, and the tool still works; it also requires less configuration, and fewer command line 
+arguments, etc.
 
 2. It moves up the dependency tree, for each dependency z, it runs
 
     *  ```cd <package z>```     # change directory to the package root
-    *  ```npm install```        # self-explanatory, always runs this, for the obvious reasons
+    *  ```npm install```        # self-explanatory; will run this if --install flag is used or, install
     *  ```npm link <x>```       # runs this for each dependency, that is in the list above.
     *  ```npm link .```         # links the local project globally
     *  ```npm link <z>```       # if "linkToItself" is true, will link the project to itself (useful for running the tests)

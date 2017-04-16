@@ -37,5 +37,10 @@
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
     "residence": "latest"
+  },
+  "devDependencies": {
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.1",
+    "suman": "latest"
   }
 }

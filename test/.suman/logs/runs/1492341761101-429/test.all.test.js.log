@@ -1,0 +1,87 @@
+ => Beginning of stderr log for test with full path => 
+/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/all.test.js
+
+ => $PATH =>  /Users/alexamil/.nvm/versions/node/v6.10.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Applications/Google Chrome.app/Contents/MacOS/:/Users/alexamil/.suman/global/node_modules/.bin
+
+ => Cannot require dependency with name => data
+
+npm
+ WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm
+ WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm 
+WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm
+ WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm 
+WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm
+ WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+after
+
+
+
+
+
+	.------------------------------------------------------------------------------------------.
+	|                              Results for: /test/all.test.js                              |
+	|------------------------------------------------------------------------------------------|
+	|            Metric             |       Value       |               Comments               |
+	|-------------------------------|-------------------|--------------------------------------|
+	| Status                        | Ran to completion |                                      |
+	| Num. of Unskipped Test Blocks |                 1 |                                      |
+	| Test blocks skipped           |                 - |                                      |
+	| Hooks skipped                 |                 - |                                    - |
+	| Hooks stubbed                 |                 - |                                    - |
+	| --------------------------    |               --- |                                    - |
+	| Tests skipped                 |                 - |                                      |
+	| Tests stubbed                 |                 - |                                      |
+	| Tests passed                  |                 - |                                      |
+	| Tests failed                  |                 - |                                      |
+	| Tests total                   |                 - |                                      |
+	| --------------------------    |               --- |                                    - |
+	| Passing rate                  |               N/A |                                      |
+	| Total time millis (delta)     |             43553 |                                    - |
+	| Total time minutes (delta)    |            0.7259 |                                    - |
+	'------------------------------------------------------------------------------------------'
+
+
+
+
+
+
+
+ => Suman test is exiting with code 0  
+
+
+

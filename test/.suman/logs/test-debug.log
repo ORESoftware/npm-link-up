@@ -1,1 +1,51 @@
-Suman recommends that you tail the files in this directory when you're developing tests => most useful thing to do is to tail the runner-debug.log when running tests with the Suman runner,this is because accessing the individual test errors is less transparent due to the nature of child-processes/subprocesses)
+
+
+
+
+
+
+
+ ### Suman start run @Sun Apr 16 2017 04:22:41 GMT-0700 (PDT)
+
+ ### Filename => /Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/all.test.js
+
+ ### Command => ["/Users/alexamil/.nvm/versions/node/v6.10.2/bin/node","/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/cli.js"]
+
+Error: The following desired dependency is not in your suman.ioc.js file: "rimraf"
+ => ...your available dependencies are: [ "example" , "example_dot_com" , "fs_search" ]
+    at deps.forEach.dep (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:67:21)
+    at Array.forEach (native)
+    at acquireDepsOriginal (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:33:8)
+    at Domain.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:223:11)
+    at Domain.run (domain.js:221:14)
+    at makeSuite (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:221:11)
+    at Immediate.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/index.js:631:39)
+    at runCallback (timers.js:666:20)
+    at tryOnImmediate (timers.js:639:5)
+    at processImmediate [as _immediateCallback] (timers.js:611:5)
+
+Error: The following desired dependency is not in your suman.ioc.js file: "mkdirp"
+ => ...your available dependencies are: [ "example" , "example_dot_com" , "fs_search" ]
+    at deps.forEach.dep (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:67:21)
+    at Array.forEach (native)
+    at acquireDepsOriginal (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:33:8)
+    at Domain.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:223:11)
+    at Domain.run (domain.js:221:14)
+    at makeSuite (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:221:11)
+    at Immediate.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/index.js:631:39)
+    at runCallback (timers.js:666:20)
+    at tryOnImmediate (timers.js:639:5)
+    at processImmediate [as _immediateCallback] (timers.js:611:5)
+
+Error: The following desired dependency is not in your suman.ioc.js file: "async"
+ => ...your available dependencies are: [ "example" , "example_dot_com" , "fs_search" ]
+    at deps.forEach.dep (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:67:21)
+    at Array.forEach (native)
+    at acquireDepsOriginal (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/acquire-deps-original.js:33:8)
+    at Domain.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:223:11)
+    at Domain.run (domain.js:221:14)
+    at makeSuite (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/exec-suite.js:221:11)
+    at Immediate.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/index.js:631:39)
+    at runCallback (timers.js:666:20)
+    at tryOnImmediate (timers.js:639:5)
+    at processImmediate [as _immediateCallback] (timers.js:611:5)

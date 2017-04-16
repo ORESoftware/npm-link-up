@@ -1,0 +1,88 @@
+ => Beginning of stderr log for test with full path => 
+/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/all.test.js
+
+ => $PATH =>  /Users/alexamil/.nvm/versions/node/v6.10.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Applications/Google Chrome.app/Contents/MacOS/:/Users/alexamil/.suman/global/node_modules/.bin
+
+ => Cannot require dependency with name => data
+
+npm
+ WARN enoent ENOENT: no such file or directory, open '/Users/alexamil/.npmlinkup/test/package.json'
+npm WARN test No description
+npm WARN test No repository field.
+npm WARN test No README data
+npm WARN test No license field.
+
+npm
+ ERR! code E404
+npm ERR! 404 Registry returned 404 for GET on https://registry.npmjs.org/suman-watch
+npm ERR! 404 
+npm ERR! 404  'suman-watch' is not in the npm registry.
+npm ERR! 404 You should bug the author to publish it (or use the name yourself!)
+npm ERR! 404 
+npm ERR! 404 Note that you can also install from a
+npm ERR! 404 tarball, folder, http url, or git url.
+
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/alexamil/.npm/_logs/2017-04-16T11_21_29_290Z-debug.log
+
+
+
+
+   
+   ⚑ [1m => Suman fatal error  => making a graceful exit => 
+   [1mError: 1
+       at testAndHookCallbackHandler (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/test-suite-helpers/handle-callback-helper.js:129:47)
+       at done (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/lib/test-suite-helpers/make-handle-befores-afters.js:157:15)
+       at /Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/async/dist/async.js:460:16
+       at ChildProcess.iterateeCallback (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/async/dist/async.js:962:17)
+       at ChildProcess.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/async/dist/async.js:944:16)
+       at ChildProcess.g (events.js:291:16)
+       at emitTwo (events.js:106:13)
+       at ChildProcess.emit (events.js:191:7)
+       at maybeClose (internal/child_process.js:886:16)
+       at Socket.<anonymous> (internal/child_process.js:342:11)
+   
+   
+   
+
+
+
+
+
+	.------------------------------------------------------------------------------------------------.
+	|                                 Results for: /test/all.test.js                                 |
+	|------------------------------------------------------------------------------------------------|
+	|            Metric             |          Value          |               Comments               |
+	|-------------------------------|-------------------------|--------------------------------------|
+	| Status                        |  Test file errored out. |                                      |
+	| Num. of Unskipped Test Blocks |                         |                                      |
+	| Test blocks skipped           |                       - |                                      |
+	| Hooks skipped                 |                       - |                                    - |
+	| Hooks stubbed                 |                       - |                                    - |
+	| --------------------------    |                     --- |                                    - |
+	| Tests skipped                 |                       - |                                      |
+	| Tests stubbed                 |                       - |                                      |
+	| Tests passed                  |                       - |                                      |
+	| Tests failed                  |                       - |                                      |
+	| Tests total                   |                       - |                                      |
+	| --------------------------    |                     --- |                                    - |
+	| Passing rate                  |                     N/A |                                      |
+	| Total time millis (delta)     |                     N/A |                                    - |
+	| Total time minutes (delta)    |                     N/A |                                    - |
+	'------------------------------------------------------------------------------------------------'
+
+
+
+
+
+
+ =>[4m[1m Suman test process experienced a fatal error during the run, most likely the majority of tests, if not all tests, were not run.
+
+
+
+
+ => Suman test is exiting with code 1   => see http://sumanjs.github.io/exit-codes.html
+
+
+
