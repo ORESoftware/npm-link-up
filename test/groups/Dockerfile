@@ -26,6 +26,7 @@ WORKDIR /home/newuser
 RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/node_modules || echo "no node_modules"
 RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/bin || echo "no bin"
 RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/share  || echo "no share"
+RUN sudo chown -R $(whoami) $(npm config get prefix)/lib || echo "no lib"
 
 COPY all.sh .
 
