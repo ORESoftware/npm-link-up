@@ -20,7 +20,7 @@ Test.create(function (assert, before, after, path, fs, it, rimraf, child_process
       cwd: pth
     });
 
-    k.once('error', h.fail);
+    k.once('error', h.fatal);
 
     // find the executable for this project
     const index = require.resolve('../../index.js');
