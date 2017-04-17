@@ -3,7 +3,7 @@
 
 const suman = require('suman');
 const Test = suman.init(module, {
-  pre: ['npmlinkup']
+  pre: ['clone all repos']
 });
 
 Test.create(function (assert, before, after, path, fs, it, rimraf, child_process) {
