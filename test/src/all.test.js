@@ -14,13 +14,17 @@ Test.create(function (assert, before, after, path, fs, it, rimraf, child_process
 
   before.cb('npmlinkup', {timeout: 5000000}, h => {
 
+    console.log('starting npmlinkup...');
+
     const k = child_process.spawn('bash', [], {
       cwd: pth
     });
 
+    k.once('error', h.fail);
+
     // find the executable for this project
     const index = require.resolve('../../index.js');
-    const script = `cd ${sumanProjRoot} && node ${index} --install-all --search-root $HOME/.npmlinkup/test`;
+    const script = `cd ${sumanProjRoot} && node ${index} --install-all --send-log-to-stdout --search-root $HOME/.npmlinkup/test`;
     k.stdin.write(`\n ${script} \n`);
     k.stderr.pipe(process.stderr);
     k.stdin.end();
