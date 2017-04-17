@@ -1,30 +1,86 @@
  => Beginning of run.
-Sending build context to Docker daemon 3.072 kB
-Step 1/10 : FROM node:6
+Sending build context to Docker daemon 3.584 kB
+Step 1/13 : FROM node:6
  ---> 22fb755e42f6
-Step 2/10 : RUN npm cache clean
+Step 2/13 : RUN npm cache clean
  ---> Using cache
  ---> 4d7f9d50b542
-Step 3/10 : RUN chmod -R 777 $(npm root -g)
- ---> Using cache
- ---> 8ae8bf292fe5
-Step 4/10 : RUN echo $NODE_PATH
- ---> Using cache
- ---> c4c2eb730910
-Step 5/10 : RUN useradd -ms /bin/bash newuser
- ---> Using cache
- ---> 5b8acbd348b6
-Step 6/10 : USER newuser
- ---> Using cache
- ---> 8e90df01c167
-Step 7/10 : WORKDIR /home/newuser
- ---> Using cache
- ---> ca6e045274da
-Step 8/10 : RUN sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
- ---> Running in 76f502f76769
+Step 3/13 : RUN echo $NODE_PATH
+ ---> Running in 46a119ffa145
+
+ ---> b056c27020df
+Removing intermediate container 46a119ffa145
+Step 4/13 : RUN apt-get update &&       apt-get -y install sudo
+ ---> Running in 257e48b00a2e
+Get:1 http://security.debian.org jessie/updates InRelease [63.1 kB]
+Ign http://deb.debian.org jessie InRelease
+Get:2 http://deb.debian.org jessie-updates InRelease [145 kB]
+Get:3 http://security.debian.org jessie/updates/main amd64 Packages [464 kB]
+Get:4 http://deb.debian.org jessie Release.gpg [2373 B]
+Get:5 http://deb.debian.org jessie Release [148 kB]
+Get:6 http://deb.debian.org jessie-updates/main amd64 Packages [17.6 kB]
+Get:7 http://deb.debian.org jessie/main amd64 Packages [9049 kB]
+Fetched 9889 kB in 8s (1222 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  sudo
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.
+Need to get 855 kB of archives.
+After this operation, 2390 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian/ jessie/main sudo amd64 1.8.10p3-1+deb8u3 [855 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 855 kB in 1s (733 kB/s)
+Selecting previously unselected package sudo.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 21217 files and directories currently installed.)
+Preparing to unpack .../sudo_1.8.10p3-1+deb8u3_amd64.deb ...
+Unpacking sudo (1.8.10p3-1+deb8u3) ...
+Processing triggers for systemd (215-17+deb8u6) ...
+Setting up sudo (1.8.10p3-1+deb8u3) ...
+Processing triggers for systemd (215-17+deb8u6) ...
+ ---> cf1c185fdb76
+Removing intermediate container 257e48b00a2e
+Step 5/13 : RUN npm cache clean
+ ---> Running in 381ad3f6ad59
 [91mnpm info it worked if it ends with ok
 npm info using npm@3.10.10
 npm info using node@v6.10.2
 [0m[91mnpm info ok 
-[0m[91m/bin/sh: 1: sudo: not found
-[0mThe command '/bin/sh -c sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}' returned a non-zero code: 127
+[0m ---> a1f4e2616ade
+Removing intermediate container 381ad3f6ad59
+Step 6/13 : RUN chmod -R 777 $(npm root -g)
+ ---> Running in 913b8e607edd
+[91mnpm info it worked if it ends with ok
+npm info using npm@3.10.10
+npm info using node@v6.10.2
+[0m[91mnpm info ok 
+[0m ---> d158c5f06ed2
+Removing intermediate container 913b8e607edd
+Step 7/13 : RUN sudo echo "newuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+ ---> Running in 167a4fbbd311
+ ---> ad570fcb28dd
+Removing intermediate container 167a4fbbd311
+Step 8/13 : RUN useradd -ms /bin/bash newuser && echo "newuser:newuser" | chpasswd && adduser newuser sudo
+ ---> Running in 3565cf1b7fae
+Adding user `newuser' to group `sudo' ...
+Adding user newuser to group sudo
+Done.
+ ---> f5a836cfb9e2
+Removing intermediate container 3565cf1b7fae
+Step 9/13 : USER newuser
+ ---> Running in 0a4a9acbe053
+ ---> 7c05824b021b
+Removing intermediate container 0a4a9acbe053
+Step 10/13 : WORKDIR /home/newuser
+ ---> 3723bb0a9a1a
+Removing intermediate container e8d6c2c64bec
+Step 11/13 : RUN sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+ ---> Running in 9897fa927508
+[91mnpm info it worked if it ends with ok
+npm info using npm@3.10.10
+npm info using node@v6.10.2
+[0m[91mnpm info ok 
+[0m[91mchown: cannot access '/usr/local/{lib/node_modules,bin,share}': No such file or directory
+[0mThe command '/bin/sh -c sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}' returned a non-zero code: 1

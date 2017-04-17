@@ -23,7 +23,9 @@ RUN useradd -ms /bin/bash newuser && echo "newuser:newuser" | chpasswd && adduse
 USER newuser
 WORKDIR /home/newuser
 
-RUN sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/node_modules || echo "no node_modules"
+RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/bin || echo "no bin"
+RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/share  || echo "no share"
 
 COPY all.sh .
 
