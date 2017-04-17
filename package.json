@@ -7,7 +7,7 @@
   "description": "Use this package to link your complex projects together for local development.",
   "main": "index.js",
   "scripts": {
-    "test": "suman"
+    "test": "./@test.sh"
   },
   "repository": {
     "type": "git",

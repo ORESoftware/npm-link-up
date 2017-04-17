@@ -31,1494 +31,1503 @@ Cloning into 'npm-link-up'...
 npm info it worked if it ends with ok
 npm info using npm@3.10.10
 npm info using node@v6.10.2
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/ajv
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/async
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/colors
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/dashdash
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/frankenstop
-npm info attempt registry request try #1 at 4:17:52 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/residence
-npm http 200 https://registry.npmjs.org/residence
-npm info addNameTag [ 'residence', 'latest' ]
-npm info retry fetch attempt 1 at 4:17:52 AM
-npm info attempt registry request try #1 at 4:17:52 AM
-npm http fetch GET https://registry.npmjs.org/residence/-/residence-0.0.202.tgz
-npm http 200 https://registry.npmjs.org/ajv
-npm http fetch 200 https://registry.npmjs.org/residence/-/residence-0.0.202.tgz
-npm info retry fetch attempt 1 at 4:17:52 AM
-npm info attempt registry request try #1 at 4:17:52 AM
-npm http fetch GET https://registry.npmjs.org/ajv/-/ajv-4.11.6.tgz
 npm http 200 https://registry.npmjs.org/colors
-npm info retry fetch attempt 1 at 4:17:52 AM
-npm info attempt registry request try #1 at 4:17:52 AM
-npm http fetch GET https://registry.npmjs.org/colors/-/colors-1.1.2.tgz
-npm http fetch 200 https://registry.npmjs.org/colors/-/colors-1.1.2.tgz
-npm http fetch 200 https://registry.npmjs.org/ajv/-/ajv-4.11.6.tgz
-npm http 200 https://registry.npmjs.org/async
-npm info retry fetch attempt 1 at 4:17:52 AM
-npm info attempt registry request try #1 at 4:17:52 AM
-npm http fetch GET https://registry.npmjs.org/async/-/async-2.3.0.tgz
-npm http fetch 200 https://registry.npmjs.org/async/-/async-2.3.0.tgz
 npm http 200 https://registry.npmjs.org/dashdash
-npm info retry fetch attempt 1 at 4:17:53 AM
-npm info attempt registry request try #1 at 4:17:53 AM
+npm http 200 https://registry.npmjs.org/async
+npm http 200 https://registry.npmjs.org/residence
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
+npm http fetch GET https://registry.npmjs.org/async/-/async-2.3.0.tgz
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
+npm http fetch GET https://registry.npmjs.org/colors/-/colors-1.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/dashdash/-/dashdash-1.14.1.tgz
+npm info addNameTag [ 'residence', 'latest' ]
+npm http 200 https://registry.npmjs.org/ajv
+npm http fetch 200 https://registry.npmjs.org/async/-/async-2.3.0.tgz
 npm http fetch 200 https://registry.npmjs.org/dashdash/-/dashdash-1.14.1.tgz
+npm http fetch 200 https://registry.npmjs.org/colors/-/colors-1.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
+npm http fetch GET https://registry.npmjs.org/residence/-/residence-0.0.202.tgz
 npm http 200 https://registry.npmjs.org/frankenstop
+npm http fetch 200 https://registry.npmjs.org/residence/-/residence-0.0.202.tgz
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
+npm http fetch GET https://registry.npmjs.org/ajv/-/ajv-4.11.6.tgz
 npm info addNameTag [ 'frankenstop', 'latest' ]
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1005.tgz
+npm http fetch 200 https://registry.npmjs.org/ajv/-/ajv-4.11.6.tgz
 npm http fetch 200 https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1005.tgz
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/co
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/json-stable-stringify
 npm http 200 https://registry.npmjs.org/co
 npm http 200 https://registry.npmjs.org/json-stable-stringify
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/co/-/co-4.6.0.tgz
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/co/-/co-4.6.0.tgz
 npm http fetch 200 https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/jsonify
 npm http 200 https://registry.npmjs.org/jsonify
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http request GET https://registry.npmjs.org/lodash
 npm http 200 https://registry.npmjs.org/lodash
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:23 AM
+npm info attempt registry request try #1 at 4:27:23 AM
 npm http fetch GET https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http request GET https://registry.npmjs.org/assert-plus
 npm http 200 https://registry.npmjs.org/assert-plus
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:24 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http fetch GET https://registry.npmjs.org/assert-plus/-/assert-plus-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/assert-plus/-/assert-plus-1.0.0.tgz
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http request GET https://registry.npmjs.org/mkdirp
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http request GET https://registry.npmjs.org/rimraf
-npm info attempt registry request try #1 at 4:17:55 AM
-npm http request GET https://registry.npmjs.org/suman
+npm info git [ 'clone',
+npm info git   '--template=/home/newuser/.npm/_git-remotes/_templates',
+npm info git   '--mirror',
+npm info git   'git://github.com/sumanjs/suman.git',
+npm info git   '/home/newuser/.npm/_git-remotes/git-github-com-sumanjs-suman-git-rebase-branch-7f6c5d9d' ]
 npm http 200 https://registry.npmjs.org/mkdirp
-npm http 200 https://registry.npmjs.org/rimraf
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm info retry fetch attempt 1 at 4:27:24 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http fetch GET https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz
-npm info retry fetch attempt 1 at 4:17:55 AM
-npm info attempt registry request try #1 at 4:17:55 AM
+npm http 200 https://registry.npmjs.org/rimraf
+npm info retry fetch attempt 1 at 4:27:24 AM
+npm info attempt registry request try #1 at 4:27:24 AM
 npm http fetch GET https://registry.npmjs.org/rimraf/-/rimraf-2.6.1.tgz
 npm http fetch 200 https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz
 npm http fetch 200 https://registry.npmjs.org/rimraf/-/rimraf-2.6.1.tgz
-npm http 200 https://registry.npmjs.org/suman
-npm info addNameTag [ 'suman', 'latest' ]
-npm info retry fetch attempt 1 at 4:17:56 AM
-npm info attempt registry request try #1 at 4:17:56 AM
-npm http fetch GET https://registry.npmjs.org/suman/-/suman-1.1.512235.tgz
-npm http fetch 200 https://registry.npmjs.org/suman/-/suman-1.1.512235.tgz
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info git [ 'rev-list', '-n1', 'rebase_branch' ]
+npm info git [ 'clone',
+npm info git   '/home/newuser/.npm/_git-remotes/git-github-com-sumanjs-suman-git-rebase-branch-7f6c5d9d',
+npm info git   '/tmp/npm-12-eed29fda/git-cache-527a7886/cb62ef392492f495c04be8b51795944d5eb3a226' ]
+npm info git [ 'checkout', 'cb62ef392492f495c04be8b51795944d5eb3a226' ]
+npm info git [ 'submodule', '-q', 'update', '--init', '--recursive' ]
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/minimist
 npm http 200 https://registry.npmjs.org/minimist
-npm info retry fetch attempt 1 at 4:17:56 AM
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz
 npm http fetch 200 https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/glob
 npm http 200 https://registry.npmjs.org/glob
-npm info retry fetch attempt 1 at 4:17:56 AM
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/glob/-/glob-7.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/glob/-/glob-7.1.1.tgz
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/fs.realpath
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/inflight
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/inherits
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/minimatch
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/once
-npm info attempt registry request try #1 at 4:17:56 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/path-is-absolute
-npm http 200 https://registry.npmjs.org/fs.realpath
-npm http 200 https://registry.npmjs.org/inherits
-npm http 200 https://registry.npmjs.org/inflight
-npm info retry fetch attempt 1 at 4:17:56 AM
-npm info attempt registry request try #1 at 4:17:56 AM
-npm http fetch GET https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz
-npm http 200 https://registry.npmjs.org/path-is-absolute
 npm http 200 https://registry.npmjs.org/once
-npm http 200 https://registry.npmjs.org/minimatch
-npm http fetch 200 https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
-npm http fetch GET https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
-npm http fetch GET https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
-npm http fetch GET https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
+npm http 200 https://registry.npmjs.org/fs.realpath
+npm http 200 https://registry.npmjs.org/path-is-absolute
+npm http 200 https://registry.npmjs.org/inherits
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/once/-/once-1.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
-npm http fetch GET https://registry.npmjs.org/minimatch/-/minimatch-3.0.3.tgz
-npm http fetch 200 https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz
+npm http 200 https://registry.npmjs.org/minimatch
+npm http 200 https://registry.npmjs.org/inflight
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
+npm http fetch GET https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
+npm http fetch GET https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
+npm http fetch GET https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/once/-/once-1.4.0.tgz
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
+npm http fetch GET https://registry.npmjs.org/minimatch/-/minimatch-3.0.3.tgz
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
+npm http fetch GET https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz
+npm http fetch 200 https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz
-npm http fetch 200 https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz
+npm http fetch 200 https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/minimatch/-/minimatch-3.0.3.tgz
-npm info attempt registry request try #1 at 4:17:57 AM
+npm http fetch 200 https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/wrappy
 npm http 200 https://registry.npmjs.org/wrappy
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/brace-expansion
 npm http 200 https://registry.npmjs.org/brace-expansion
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.7.tgz
 npm http fetch 200 https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.7.tgz
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/balanced-match
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/concat-map
 npm http 200 https://registry.npmjs.org/concat-map
 npm http 200 https://registry.npmjs.org/balanced-match
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:57 AM
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info retry fetch attempt 1 at 4:27:32 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http fetch GET https://registry.npmjs.org/balanced-match/-/balanced-match-0.4.2.tgz
 npm http fetch 200 https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/balanced-match/-/balanced-match-0.4.2.tgz
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/ansi-256-colors
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/ascii-table
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/builtin-modules
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/callsite
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/camelcase
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/chmodr
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/du
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/function-arguments
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lockfile
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.flatten
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.flattendeep
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.includes
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.intersection
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.mapvalues
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.merge
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.shuffle
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.sortby
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.uniq
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/lodash.uniqby
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/make-beep
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/progress
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/request
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/require-from-string
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/semver
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/socket.io
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/socket.io-client
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/tap-parser
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/tcp-ping
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/underscore
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/uuid
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/v8flags
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/websocket-stream
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/pragmatik
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/siamese
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-debug
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-events
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-example-reporter
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-browser-polyfills
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-utils
-npm info attempt registry request try #1 at 4:17:57 AM
+npm info attempt registry request try #1 at 4:27:32 AM
 npm http request GET https://registry.npmjs.org/suman-watch
 npm http 200 https://registry.npmjs.org/builtin-modules
 npm http 200 https://registry.npmjs.org/callsite
-npm http 200 https://registry.npmjs.org/chmodr
 npm http 200 https://registry.npmjs.org/ansi-256-colors
+npm http 200 https://registry.npmjs.org/chmodr
 npm http 200 https://registry.npmjs.org/du
-npm http 200 https://registry.npmjs.org/make-beep
 npm http 200 https://registry.npmjs.org/require-from-string
+npm http 200 https://registry.npmjs.org/make-beep
 npm http 200 https://registry.npmjs.org/camelcase
 npm http 200 https://registry.npmjs.org/ascii-table
-npm http 200 https://registry.npmjs.org/lockfile
 npm http 200 https://registry.npmjs.org/lodash.flatten
 npm http 200 https://registry.npmjs.org/function-arguments
-npm http 200 https://registry.npmjs.org/lodash.mapvalues
-npm http 200 https://registry.npmjs.org/lodash.uniqby
-npm http 200 https://registry.npmjs.org/lodash.flattendeep
+npm http 200 https://registry.npmjs.org/lockfile
 npm http 200 https://registry.npmjs.org/lodash.includes
-npm http 200 https://registry.npmjs.org/progress
+npm http 200 https://registry.npmjs.org/lodash.flattendeep
+npm http 200 https://registry.npmjs.org/lodash.mapvalues
 npm http 200 https://registry.npmjs.org/lodash.shuffle
+npm http 200 https://registry.npmjs.org/lodash.uniqby
+npm http 200 https://registry.npmjs.org/progress
 npm http 200 https://registry.npmjs.org/lodash.intersection
 npm http 200 https://registry.npmjs.org/lodash.uniq
-npm http 200 https://registry.npmjs.org/underscore
 npm http 200 https://registry.npmjs.org/lodash.merge
 npm http 200 https://registry.npmjs.org/lodash.sortby
 npm http 200 https://registry.npmjs.org/semver
-npm http 200 https://registry.npmjs.org/tap-parser
-npm http 200 https://registry.npmjs.org/tcp-ping
 npm http 200 https://registry.npmjs.org/uuid
+npm http 200 https://registry.npmjs.org/tap-parser
+npm http 200 https://registry.npmjs.org/underscore
+npm http 200 https://registry.npmjs.org/v8flags
 npm http 200 https://registry.npmjs.org/socket.io-client
 npm http 200 https://registry.npmjs.org/socket.io
 npm http 200 https://registry.npmjs.org/request
 npm http 200 https://registry.npmjs.org/pragmatik
-npm http 200 https://registry.npmjs.org/v8flags
-npm http 200 https://registry.npmjs.org/websocket-stream
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/chmodr/-/chmodr-1.0.2.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/ansi-256-colors/-/ansi-256-colors-1.1.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/du/-/du-0.1.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/make-beep/-/make-beep-0.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/camelcase/-/camelcase-4.1.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lockfile/-/lockfile-1.0.3.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.flatten/-/lodash.flatten-4.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/function-arguments/-/function-arguments-1.0.8.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.mapvalues/-/lodash.mapvalues-4.6.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/progress/-/progress-2.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz
-npm http 200 https://registry.npmjs.org/suman-debug
-npm http 200 https://registry.npmjs.org/suman-browser-polyfills
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.intersection/-/lodash.intersection-4.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz
 npm http 200 https://registry.npmjs.org/siamese
-npm http fetch 200 https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz
+npm http 200 https://registry.npmjs.org/tcp-ping
+npm http 200 https://registry.npmjs.org/suman-events
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/ansi-256-colors/-/ansi-256-colors-1.1.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/chmodr/-/chmodr-1.0.2.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/du/-/du-0.1.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.1.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/make-beep/-/make-beep-0.0.1.tgz
+npm http 200 https://registry.npmjs.org/websocket-stream
+npm http 200 https://registry.npmjs.org/suman-example-reporter
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/camelcase/-/camelcase-4.1.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.flatten/-/lodash.flatten-4.4.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/function-arguments/-/function-arguments-1.0.8.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lockfile/-/lockfile-1.0.3.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.mapvalues/-/lodash.mapvalues-4.6.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/progress/-/progress-2.0.0.tgz
 npm http 200 https://registry.npmjs.org/suman-utils
-npm http fetch 200 https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.1.tgz
-npm http fetch 200 https://registry.npmjs.org/make-beep/-/make-beep-0.0.1.tgz
+npm http 200 https://registry.npmjs.org/suman-debug
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.intersection/-/lodash.intersection-4.4.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz
+npm http fetch 200 https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/ansi-256-colors/-/ansi-256-colors-1.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.1.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz
+npm http fetch 200 https://registry.npmjs.org/make-beep/-/make-beep-0.0.1.tgz
+npm http fetch 200 https://registry.npmjs.org/chmodr/-/chmodr-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/du/-/du-0.1.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/semver/-/semver-5.3.0.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash.flatten/-/lodash.flatten-4.4.0.tgz
-npm http fetch 200 https://registry.npmjs.org/camelcase/-/camelcase-4.1.0.tgz
-npm http fetch 200 https://registry.npmjs.org/progress/-/progress-2.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz
-npm http fetch 200 https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz
-npm http fetch 200 https://registry.npmjs.org/lodash.intersection/-/lodash.intersection-4.4.0.tgz
-npm http fetch 200 https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash.mapvalues/-/lodash.mapvalues-4.6.0.tgz
-npm http fetch 200 https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz
-npm http fetch 200 https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/semver/-/semver-5.3.0.tgz
+npm http 200 https://registry.npmjs.org/suman-browser-polyfills
+npm http 200 https://registry.npmjs.org/suman-watch
 npm http fetch 200 https://registry.npmjs.org/lockfile/-/lockfile-1.0.3.tgz
+npm http fetch 200 https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz
+npm http fetch 200 https://registry.npmjs.org/camelcase/-/camelcase-4.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz
+npm http fetch 200 https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz
 npm http fetch 200 https://registry.npmjs.org/function-arguments/-/function-arguments-1.0.8.tgz
-npm http fetch 200 https://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz
+npm http fetch 200 https://registry.npmjs.org/progress/-/progress-2.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/tap-parser/-/tap-parser-5.3.3.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/tcp-ping/-/tcp-ping-0.1.1.tgz
-npm http 200 https://registry.npmjs.org/suman-events
-npm http 200 https://registry.npmjs.org/suman-example-reporter
+npm http fetch 200 https://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz
+npm info addNameTag [ 'pragmatik', 'latest' ]
+npm http fetch 200 https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz
+npm http fetch 200 https://registry.npmjs.org/lodash.intersection/-/lodash.intersection-4.4.0.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.0.tgz
 npm http fetch 200 https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz
-npm http fetch 200 https://registry.npmjs.org/semver/-/semver-5.3.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/socket.io-client/-/socket.io-client-1.7.3.tgz
-npm info addNameTag [ 'pragmatik', 'latest' ]
-npm http 200 https://registry.npmjs.org/suman-watch
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/socket.io/-/socket.io-1.7.3.tgz
-npm http fetch 200 https://registry.npmjs.org/tap-parser/-/tap-parser-5.3.3.tgz
-npm http fetch 200 https://registry.npmjs.org/tcp-ping/-/tcp-ping-0.1.1.tgz
-npm http fetch 200 https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz
-npm http fetch 200 https://registry.npmjs.org/socket.io-client/-/socket.io-client-1.7.3.tgz
-npm http fetch 200 https://registry.npmjs.org/chmodr/-/chmodr-1.0.2.tgz
-npm http fetch 200 https://registry.npmjs.org/socket.io/-/socket.io-1.7.3.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/request/-/request-2.81.0.tgz
-npm info addNameTag [ 'suman-debug', 'latest' ]
-npm info addNameTag [ 'suman-browser-polyfills', 'latest' ]
-npm info addNameTag [ 'siamese', 'latest' ]
-npm info addNameTag [ 'suman-utils', 'latest' ]
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/pragmatik/-/pragmatik-0.0.407.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/tap-parser/-/tap-parser-5.3.3.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
 npm http fetch GET https://registry.npmjs.org/v8flags/-/v8flags-2.0.12.tgz
-npm http fetch 200 https://registry.npmjs.org/request/-/request-2.81.0.tgz
+npm info addNameTag [ 'siamese', 'latest' ]
+npm http fetch 200 https://registry.npmjs.org/semver/-/semver-5.3.0.tgz
 npm info addNameTag [ 'suman-events', 'latest' ]
-npm info addNameTag [ 'suman-example-reporter', 'latest' ]
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/websocket-stream/-/websocket-stream-4.0.0.tgz
-npm info addNameTag [ 'suman-watch', 'latest' ]
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/socket.io-client/-/socket.io-client-1.7.3.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/socket.io/-/socket.io-1.7.3.tgz
+npm http fetch 200 https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/v8flags/-/v8flags-2.0.12.tgz
-npm http fetch 200 https://registry.npmjs.org/pragmatik/-/pragmatik-0.0.407.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/suman-debug/-/suman-debug-0.0.110.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1004.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm http fetch 200 https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz
+npm http fetch 200 https://registry.npmjs.org/tap-parser/-/tap-parser-5.3.3.tgz
+npm http fetch 200 https://registry.npmjs.org/socket.io-client/-/socket.io-client-1.7.3.tgz
+npm info addNameTag [ 'suman-example-reporter', 'latest' ]
+npm http fetch 200 https://registry.npmjs.org/socket.io/-/socket.io-1.7.3.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/request/-/request-2.81.0.tgz
+npm info addNameTag [ 'suman-utils', 'latest' ]
+npm info addNameTag [ 'suman-debug', 'latest' ]
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/pragmatik/-/pragmatik-0.0.407.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/tcp-ping/-/tcp-ping-0.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
 npm http fetch GET https://registry.npmjs.org/siamese/-/siamese-2.0.4.tgz
-npm http fetch 200 https://registry.npmjs.org/websocket-stream/-/websocket-stream-4.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/suman-utils/-/suman-utils-0.0.73107.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
 npm http fetch GET https://registry.npmjs.org/suman-events/-/suman-events-0.0.107.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/suman-example-reporter/-/suman-example-reporter-1.0.1002.tgz
-npm http fetch 200 https://registry.npmjs.org/suman-debug/-/suman-debug-0.0.110.tgz
-npm http fetch 200 https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1004.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/suman-watch/-/suman-watch-0.0.1001.tgz
+npm info addNameTag [ 'suman-browser-polyfills', 'latest' ]
+npm info addNameTag [ 'suman-watch', 'latest' ]
+npm http fetch 200 https://registry.npmjs.org/request/-/request-2.81.0.tgz
+npm http fetch 200 https://registry.npmjs.org/tcp-ping/-/tcp-ping-0.1.1.tgz
+npm http fetch 200 https://registry.npmjs.org/pragmatik/-/pragmatik-0.0.407.tgz
 npm http fetch 200 https://registry.npmjs.org/siamese/-/siamese-2.0.4.tgz
-npm http fetch 200 https://registry.npmjs.org/suman-utils/-/suman-utils-0.0.73107.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/websocket-stream/-/websocket-stream-4.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/suman-events/-/suman-events-0.0.107.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/suman-example-reporter/-/suman-example-reporter-1.0.1002.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/suman-utils/-/suman-utils-0.0.73107.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/suman-debug/-/suman-debug-0.0.110.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1004.tgz
+npm info retry fetch attempt 1 at 4:27:33 AM
+npm info attempt registry request try #1 at 4:27:33 AM
+npm http fetch GET https://registry.npmjs.org/suman-watch/-/suman-watch-0.0.1001.tgz
+npm http fetch 200 https://registry.npmjs.org/websocket-stream/-/websocket-stream-4.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/suman-example-reporter/-/suman-example-reporter-1.0.1002.tgz
+npm http fetch 200 https://registry.npmjs.org/suman-utils/-/suman-utils-0.0.73107.tgz
+npm http fetch 200 https://registry.npmjs.org/suman-debug/-/suman-debug-0.0.110.tgz
 npm http fetch 200 https://registry.npmjs.org/suman-watch/-/suman-watch-0.0.1001.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm http fetch 200 https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1004.tgz
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http request GET https://registry.npmjs.org/async
+npm http 304 https://registry.npmjs.org/async
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/async/-/async-0.1.22.tgz
 npm http fetch 200 https://registry.npmjs.org/async/-/async-0.1.22.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz
 npm http fetch 200 https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/debug
 npm http 200 https://registry.npmjs.org/debug
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/debug/-/debug-2.6.3.tgz
 npm http fetch 200 https://registry.npmjs.org/debug/-/debug-2.6.3.tgz
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/ms
 npm http 200 https://registry.npmjs.org/ms
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/ms/-/ms-0.7.2.tgz
 npm http fetch 200 https://registry.npmjs.org/ms/-/ms-0.7.2.tgz
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/aws-sign2
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/aws4
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/caseless
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/combined-stream
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/extend
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/forever-agent
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/form-data
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/har-validator
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/hawk
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/http-signature
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/is-typedarray
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/isstream
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/json-stringify-safe
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/mime-types
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/oauth-sign
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/performance-now
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/qs
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/safe-buffer
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/stringstream
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/tough-cookie
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/tunnel-agent
 npm http 200 https://registry.npmjs.org/aws-sign2
-npm http 200 https://registry.npmjs.org/is-typedarray
-npm http 200 https://registry.npmjs.org/isstream
-npm http 200 https://registry.npmjs.org/extend
-npm http 200 https://registry.npmjs.org/http-signature
-npm http 200 https://registry.npmjs.org/forever-agent
 npm http 200 https://registry.npmjs.org/caseless
-npm http 200 https://registry.npmjs.org/json-stringify-safe
-npm http 200 https://registry.npmjs.org/oauth-sign
-npm http 200 https://registry.npmjs.org/tunnel-agent
-npm http 200 https://registry.npmjs.org/performance-now
-npm http 200 https://registry.npmjs.org/safe-buffer
 npm http 200 https://registry.npmjs.org/combined-stream
+npm http 200 https://registry.npmjs.org/forever-agent
+npm http 200 https://registry.npmjs.org/extend
+npm http 200 https://registry.npmjs.org/tunnel-agent
+npm http 200 https://registry.npmjs.org/oauth-sign
+npm http 200 https://registry.npmjs.org/isstream
+npm http 200 https://registry.npmjs.org/json-stringify-safe
 npm http 200 https://registry.npmjs.org/stringstream
+npm http 200 https://registry.npmjs.org/is-typedarray
+npm http 200 https://registry.npmjs.org/performance-now
+npm http 200 https://registry.npmjs.org/http-signature
+npm http 200 https://registry.npmjs.org/safe-buffer
 npm http 200 https://registry.npmjs.org/form-data
-npm http 200 https://registry.npmjs.org/mime-types
 npm http 200 https://registry.npmjs.org/aws4
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.6.0.tgz
+npm http 200 https://registry.npmjs.org/mime-types
+npm http 200 https://registry.npmjs.org/tough-cookie
+npm http 200 https://registry.npmjs.org/har-validator
 npm http 200 https://registry.npmjs.org/qs
 npm http 200 https://registry.npmjs.org/hawk
-npm http 200 https://registry.npmjs.org/har-validator
-npm http 200 https://registry.npmjs.org/tough-cookie
-npm http fetch 200 https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.6.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/extend/-/extend-3.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/http-signature/-/http-signature-1.1.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.6.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.5.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/extend/-/extend-3.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/stringstream/-/stringstream-0.0.5.tgz
-npm http fetch 200 https://registry.npmjs.org/extend/-/extend-3.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz
-npm http fetch 200 https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/form-data/-/form-data-2.1.4.tgz
-npm info retry fetch attempt 1 at 4:17:58 AM
-npm info attempt registry request try #1 at 4:17:58 AM
-npm http fetch GET https://registry.npmjs.org/mime-types/-/mime-types-2.1.15.tgz
-npm http fetch 200 https://registry.npmjs.org/http-signature/-/http-signature-1.1.1.tgz
-npm http fetch 200 https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz
-npm http fetch 200 https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz
+npm http fetch 200 https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.6.0.tgz
 npm http fetch 200 https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz
-npm http fetch 200 https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz
-npm http fetch 200 https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/aws4/-/aws4-1.6.0.tgz
-npm http fetch 200 https://registry.npmjs.org/stringstream/-/stringstream-0.0.5.tgz
-npm http fetch 200 https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/http-signature/-/http-signature-1.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.5.tgz
-npm http fetch 200 https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/qs/-/qs-6.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/hawk/-/hawk-3.1.3.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/form-data/-/form-data-2.1.4.tgz
+npm http fetch 200 https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz
+npm http fetch 200 https://registry.npmjs.org/extend/-/extend-3.0.0.tgz
+npm http fetch 200 https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz
+npm http fetch 200 https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/aws4/-/aws4-1.6.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/mime-types/-/mime-types-2.1.15.tgz
+npm http fetch 200 https://registry.npmjs.org/stringstream/-/stringstream-0.0.5.tgz
+npm http fetch 200 https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz
+npm http fetch 200 https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz
+npm http fetch 200 https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz
+npm http fetch 200 https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz
+npm http fetch 200 https://registry.npmjs.org/http-signature/-/http-signature-1.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.2.tgz
+npm http fetch 200 https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/qs/-/qs-6.4.0.tgz
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
+npm http fetch GET https://registry.npmjs.org/hawk/-/hawk-3.1.3.tgz
 npm http fetch 200 https://registry.npmjs.org/form-data/-/form-data-2.1.4.tgz
-npm http fetch 200 https://registry.npmjs.org/aws4/-/aws4-1.6.0.tgz
 npm http fetch 200 https://registry.npmjs.org/mime-types/-/mime-types-2.1.15.tgz
 npm http fetch 200 https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.2.tgz
+npm http fetch 200 https://registry.npmjs.org/aws4/-/aws4-1.6.0.tgz
+npm http fetch 200 https://registry.npmjs.org/qs/-/qs-6.4.0.tgz
 npm http fetch 200 https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz
 npm http fetch 200 https://registry.npmjs.org/hawk/-/hawk-3.1.3.tgz
-npm http fetch 200 https://registry.npmjs.org/qs/-/qs-6.4.0.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/delayed-stream
 npm http 200 https://registry.npmjs.org/delayed-stream
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http request GET https://registry.npmjs.org/asynckit
 npm http 200 https://registry.npmjs.org/asynckit
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:34 AM
+npm info attempt registry request try #1 at 4:27:34 AM
 npm http fetch GET https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz
 npm http fetch 200 https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/mime-db
 npm http 200 https://registry.npmjs.org/mime-db
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/mime-db/-/mime-db-1.27.0.tgz
 npm http fetch 200 https://registry.npmjs.org/mime-db/-/mime-db-1.27.0.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/har-schema
 npm http 200 https://registry.npmjs.org/har-schema
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/har-schema/-/har-schema-1.0.5.tgz
 npm http fetch 200 https://registry.npmjs.org/har-schema/-/har-schema-1.0.5.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/hoek
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/boom
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/cryptiles
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/sntp
-npm http 200 https://registry.npmjs.org/sntp
 npm http 200 https://registry.npmjs.org/hoek
+npm http 200 https://registry.npmjs.org/sntp
 npm http 200 https://registry.npmjs.org/cryptiles
 npm http 200 https://registry.npmjs.org/boom
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/hoek/-/hoek-2.16.3.tgz
-npm http fetch 200 https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/cryptiles/-/cryptiles-2.0.5.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/boom/-/boom-2.10.1.tgz
 npm http fetch 200 https://registry.npmjs.org/hoek/-/hoek-2.16.3.tgz
+npm http fetch 200 https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz
 npm http fetch 200 https://registry.npmjs.org/cryptiles/-/cryptiles-2.0.5.tgz
 npm http fetch 200 https://registry.npmjs.org/boom/-/boom-2.10.1.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/jsprim
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/sshpk
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http request GET https://registry.npmjs.org/assert-plus
 npm http 200 https://registry.npmjs.org/jsprim
+npm http 200 https://registry.npmjs.org/assert-plus
 npm http 200 https://registry.npmjs.org/sshpk
-npm http fetch 200 https://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/jsprim/-/jsprim-1.4.0.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/sshpk/-/sshpk-1.13.0.tgz
+npm http fetch 200 https://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz
 npm http fetch 200 https://registry.npmjs.org/jsprim/-/jsprim-1.4.0.tgz
 npm http fetch 200 https://registry.npmjs.org/sshpk/-/sshpk-1.13.0.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/extsprintf
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/json-schema
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/verror
-npm http 200 https://registry.npmjs.org/extsprintf
 npm http 200 https://registry.npmjs.org/json-schema
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm http 200 https://registry.npmjs.org/extsprintf
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz
 npm http 200 https://registry.npmjs.org/verror
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/verror/-/verror-1.3.6.tgz
-npm http fetch 200 https://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz
+npm http fetch 200 https://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/verror/-/verror-1.3.6.tgz
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/asn1
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/getpass
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/jsbn
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/tweetnacl
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/jodid25519
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/ecc-jsbn
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/bcrypt-pbkdf
 npm http 200 https://registry.npmjs.org/getpass
 npm http 200 https://registry.npmjs.org/jsbn
+npm http 200 https://registry.npmjs.org/jodid25519
+npm http 200 https://registry.npmjs.org/bcrypt-pbkdf
+npm http 200 https://registry.npmjs.org/ecc-jsbn
 npm http 200 https://registry.npmjs.org/asn1
 npm http 200 https://registry.npmjs.org/tweetnacl
-npm http 200 https://registry.npmjs.org/ecc-jsbn
-npm http 200 https://registry.npmjs.org/bcrypt-pbkdf
-npm http 200 https://registry.npmjs.org/jodid25519
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/getpass/-/getpass-0.1.6.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
-npm http fetch GET https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:17:59 AM
-npm info attempt registry request try #1 at 4:17:59 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz
 npm http fetch 200 https://registry.npmjs.org/getpass/-/getpass-0.1.6.tgz
-npm http fetch 200 https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz
-npm http fetch 200 https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz
-npm http fetch 200 https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz
-npm http fetch 200 https://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http fetch 200 https://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz
+npm http fetch 200 https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz
+npm http fetch 200 https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz
+npm http fetch 200 https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/punycode
 npm http 200 https://registry.npmjs.org/punycode
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz
 npm http fetch 200 https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/engine.io
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/has-binary
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/object-assign
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/socket.io-adapter
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/socket.io-parser
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/debug/-/debug-2.3.3.tgz
-npm http 200 https://registry.npmjs.org/object-assign
-npm http 200 https://registry.npmjs.org/has-binary
-npm http 200 https://registry.npmjs.org/socket.io-parser
-npm http 200 https://registry.npmjs.org/socket.io-adapter
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/debug/-/debug-2.3.3.tgz
+npm http 200 https://registry.npmjs.org/socket.io-parser
+npm http 200 https://registry.npmjs.org/has-binary
+npm http 200 https://registry.npmjs.org/socket.io-adapter
+npm http 200 https://registry.npmjs.org/object-assign
 npm http 200 https://registry.npmjs.org/engine.io
-npm http fetch 200 https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/has-binary/-/has-binary-0.1.7.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-2.3.1.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/has-binary/-/has-binary-0.1.7.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/socket.io-adapter/-/socket.io-adapter-0.5.0.tgz
-npm http fetch 200 https://registry.npmjs.org/has-binary/-/has-binary-0.1.7.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/engine.io/-/engine.io-1.8.3.tgz
-npm http fetch 200 https://registry.npmjs.org/socket.io-adapter/-/socket.io-adapter-0.5.0.tgz
+npm http fetch 200 https://registry.npmjs.org/has-binary/-/has-binary-0.1.7.tgz
 npm http fetch 200 https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-2.3.1.tgz
+npm http fetch 200 https://registry.npmjs.org/socket.io-adapter/-/socket.io-adapter-0.5.0.tgz
+npm http fetch 200 https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/engine.io/-/engine.io-1.8.3.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/accepts
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/base64id
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/engine.io-parser
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/ws
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/cookie
-npm http 200 https://registry.npmjs.org/base64id
-npm http 200 https://registry.npmjs.org/cookie
-npm http 200 https://registry.npmjs.org/engine.io-parser
 npm http 200 https://registry.npmjs.org/accepts
-npm http 200 https://registry.npmjs.org/ws
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/base64id/-/base64id-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-1.3.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/base64id
+npm http 200 https://registry.npmjs.org/engine.io-parser
+npm http 200 https://registry.npmjs.org/cookie
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/accepts/-/accepts-1.3.3.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/ws
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/base64id/-/base64id-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-1.3.2.tgz
+npm http fetch 200 https://registry.npmjs.org/accepts/-/accepts-1.3.3.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
+npm http fetch GET https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/ws/-/ws-1.1.2.tgz
 npm http fetch 200 https://registry.npmjs.org/base64id/-/base64id-1.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz
 npm http fetch 200 https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-1.3.2.tgz
-npm http fetch 200 https://registry.npmjs.org/accepts/-/accepts-1.3.3.tgz
+npm http fetch 200 https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz
 npm http fetch 200 https://registry.npmjs.org/ws/-/ws-1.1.2.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/negotiator
 npm http 200 https://registry.npmjs.org/negotiator
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:35 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http fetch GET https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz
 npm http fetch 200 https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/after
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/arraybuffer.slice
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/base64-arraybuffer
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/blob
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:35 AM
 npm http request GET https://registry.npmjs.org/wtf-8
 npm http 200 https://registry.npmjs.org/arraybuffer.slice
-npm http 200 https://registry.npmjs.org/after
-npm http 200 https://registry.npmjs.org/blob
 npm http 200 https://registry.npmjs.org/wtf-8
 npm http 200 https://registry.npmjs.org/base64-arraybuffer
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/blob
+npm http 200 https://registry.npmjs.org/after
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/arraybuffer.slice/-/arraybuffer.slice-0.0.6.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/after/-/after-0.8.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/blob/-/blob-0.0.4.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/wtf-8/-/wtf-8-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/blob/-/blob-0.0.4.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/after/-/after-0.8.2.tgz
 npm http fetch 200 https://registry.npmjs.org/arraybuffer.slice/-/arraybuffer.slice-0.0.6.tgz
-npm http fetch 200 https://registry.npmjs.org/after/-/after-0.8.2.tgz
-npm http fetch 200 https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz
 npm http fetch 200 https://registry.npmjs.org/wtf-8/-/wtf-8-1.0.0.tgz
+npm http fetch 200 https://registry.npmjs.org/after/-/after-0.8.2.tgz
 npm http fetch 200 https://registry.npmjs.org/blob/-/blob-0.0.4.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http fetch 200 https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/isarray
 npm http 200 https://registry.npmjs.org/isarray
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/options
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/ultron
 npm http 200 https://registry.npmjs.org/options
-npm http 200 https://registry.npmjs.org/ultron
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/options/-/options-0.0.6.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/ultron
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz
-npm http fetch 200 https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/options/-/options-0.0.6.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http fetch 200 https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/json3
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/component-emitter
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/debug/-/debug-2.2.0.tgz
-npm http 200 https://registry.npmjs.org/component-emitter
 npm http 200 https://registry.npmjs.org/json3
-npm http fetch 200 https://registry.npmjs.org/debug/-/debug-2.2.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/component-emitter
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/json3/-/json3-3.3.2.tgz
-npm http fetch 200 https://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz
+npm http fetch 200 https://registry.npmjs.org/debug/-/debug-2.2.0.tgz
 npm http fetch 200 https://registry.npmjs.org/json3/-/json3-3.3.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http fetch 200 https://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/ms/-/ms-0.7.1.tgz
 npm http fetch 200 https://registry.npmjs.org/ms/-/ms-0.7.1.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/backo2
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/component-bind
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/engine.io-client
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/indexof
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/object-component
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/parseuri
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/to-array
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/component-emitter/-/component-emitter-1.2.1.tgz
-npm http fetch 200 https://registry.npmjs.org/component-emitter/-/component-emitter-1.2.1.tgz
-npm http 200 https://registry.npmjs.org/indexof
+npm http 200 https://registry.npmjs.org/component-bind
 npm http 200 https://registry.npmjs.org/backo2
+npm http 200 https://registry.npmjs.org/indexof
 npm http 200 https://registry.npmjs.org/to-array
 npm http 200 https://registry.npmjs.org/parseuri
+npm http fetch 200 https://registry.npmjs.org/component-emitter/-/component-emitter-1.2.1.tgz
 npm http 200 https://registry.npmjs.org/object-component
-npm http 200 https://registry.npmjs.org/component-bind
 npm http 200 https://registry.npmjs.org/engine.io-client
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/backo2/-/backo2-1.0.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/to-array/-/to-array-0.1.4.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/parseuri/-/parseuri-0.0.5.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/component-bind/-/component-bind-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/engine.io-client/-/engine.io-client-1.8.3.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/backo2/-/backo2-1.0.2.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/to-array/-/to-array-0.1.4.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/parseuri/-/parseuri-0.0.5.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/component-bind/-/component-bind-1.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz
-npm http fetch 200 https://registry.npmjs.org/parseuri/-/parseuri-0.0.5.tgz
-npm http fetch 200 https://registry.npmjs.org/to-array/-/to-array-0.1.4.tgz
-npm http fetch 200 https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/backo2/-/backo2-1.0.2.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/engine.io-client/-/engine.io-client-1.8.3.tgz
+npm http fetch 200 https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
+npm http fetch 200 https://registry.npmjs.org/to-array/-/to-array-0.1.4.tgz
+npm http fetch 200 https://registry.npmjs.org/parseuri/-/parseuri-0.0.5.tgz
+npm http fetch 200 https://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/engine.io-client/-/engine.io-client-1.8.3.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/component-inherit
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/has-cors
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/parsejson
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/parseqs
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/xmlhttprequest-ssl
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/yeast
 npm http 200 https://registry.npmjs.org/component-inherit
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz
-npm http 200 https://registry.npmjs.org/parsejson
-npm http 200 https://registry.npmjs.org/xmlhttprequest-ssl
 npm http 200 https://registry.npmjs.org/has-cors
-npm http 200 https://registry.npmjs.org/yeast
+npm http 200 https://registry.npmjs.org/parsejson
 npm http 200 https://registry.npmjs.org/parseqs
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/parsejson/-/parsejson-0.0.3.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm http 200 https://registry.npmjs.org/yeast
+npm http 200 https://registry.npmjs.org/xmlhttprequest-ssl
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/has-cors/-/has-cors-1.1.0.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
-npm http fetch GET https://registry.npmjs.org/yeast/-/yeast-0.1.2.tgz
-npm info retry fetch attempt 1 at 4:18:00 AM
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/parsejson/-/parsejson-0.0.3.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/parseqs/-/parseqs-0.0.5.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/yeast/-/yeast-0.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz
 npm http fetch 200 https://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz
+npm http fetch 200 https://registry.npmjs.org/has-cors/-/has-cors-1.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/parsejson/-/parsejson-0.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/yeast/-/yeast-0.1.2.tgz
 npm http fetch 200 https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz
-npm http fetch 200 https://registry.npmjs.org/has-cors/-/has-cors-1.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/parseqs/-/parseqs-0.0.5.tgz
-npm http fetch 200 https://registry.npmjs.org/parsejson/-/parsejson-0.0.3.tgz
-npm info attempt registry request try #1 at 4:18:00 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/better-assert
 npm http 200 https://registry.npmjs.org/better-assert
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/better-assert/-/better-assert-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/better-assert/-/better-assert-1.0.2.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1002.tgz
 npm http fetch 200 https://registry.npmjs.org/suman-browser-polyfills/-/suman-browser-polyfills-0.0.1002.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/chokidar
 npm http 200 https://registry.npmjs.org/chokidar
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/chokidar/-/chokidar-1.6.1.tgz
 npm http fetch 200 https://registry.npmjs.org/chokidar/-/chokidar-1.6.1.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/anymatch
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/async-each
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/glob-parent
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/is-binary-path
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/is-glob
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/readdirp
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/fsevents
-npm http 200 https://registry.npmjs.org/anymatch
-npm http 200 https://registry.npmjs.org/async-each
-npm http 200 https://registry.npmjs.org/is-binary-path
 npm http 200 https://registry.npmjs.org/glob-parent
+npm http 200 https://registry.npmjs.org/async-each
+npm http 200 https://registry.npmjs.org/anymatch
+npm http 200 https://registry.npmjs.org/is-binary-path
 npm http 200 https://registry.npmjs.org/is-glob
 npm http 200 https://registry.npmjs.org/readdirp
 npm http 200 https://registry.npmjs.org/fsevents
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/anymatch/-/anymatch-1.3.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/async-each/-/async-each-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/async-each/-/async-each-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/anymatch/-/anymatch-1.3.0.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
+npm http fetch GET https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/is-glob/-/is-glob-2.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:36 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http fetch GET https://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz
-npm http fetch 200 https://registry.npmjs.org/anymatch/-/anymatch-1.3.0.tgz
 npm http fetch 200 https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/async-each/-/async-each-1.0.1.tgz
-npm http fetch 200 https://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/anymatch/-/anymatch-1.3.0.tgz
+npm http fetch 200 https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/is-glob/-/is-glob-2.0.1.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm http fetch 200 https://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/arrify
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:36 AM
 npm http request GET https://registry.npmjs.org/micromatch
 npm http 200 https://registry.npmjs.org/arrify
-npm http 200 https://registry.npmjs.org/micromatch
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/arrify/-/arrify-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm http 200 https://registry.npmjs.org/micromatch
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/micromatch/-/micromatch-2.3.11.tgz
 npm http fetch 200 https://registry.npmjs.org/arrify/-/arrify-1.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/micromatch/-/micromatch-2.3.11.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/arr-diff
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/array-unique
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/braces
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/expand-brackets
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/extglob
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/filename-regex
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-extglob
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/kind-of
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/normalize-path
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/object.omit
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/parse-glob
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/regex-cache
-npm http 200 https://registry.npmjs.org/arr-diff
-npm http 200 https://registry.npmjs.org/is-extglob
-npm http 200 https://registry.npmjs.org/filename-regex
-npm http 200 https://registry.npmjs.org/parse-glob
-npm http 200 https://registry.npmjs.org/regex-cache
-npm http 200 https://registry.npmjs.org/normalize-path
-npm http 200 https://registry.npmjs.org/extglob
-npm http 200 https://registry.npmjs.org/object.omit
 npm http 200 https://registry.npmjs.org/array-unique
-npm http 200 https://registry.npmjs.org/expand-brackets
+npm http 200 https://registry.npmjs.org/arr-diff
+npm http 200 https://registry.npmjs.org/normalize-path
 npm http 200 https://registry.npmjs.org/kind-of
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz
+npm http 200 https://registry.npmjs.org/regex-cache
+npm http 200 https://registry.npmjs.org/is-extglob
+npm http 200 https://registry.npmjs.org/object.omit
+npm http 200 https://registry.npmjs.org/filename-regex
 npm http 200 https://registry.npmjs.org/braces
-npm http fetch 200 https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/is-extglob/-/is-extglob-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.3.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/normalize-path/-/normalize-path-2.1.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm http 200 https://registry.npmjs.org/parse-glob
+npm http 200 https://registry.npmjs.org/extglob
+npm http 200 https://registry.npmjs.org/expand-brackets
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/array-unique/-/array-unique-0.2.1.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/normalize-path/-/normalize-path-2.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/kind-of/-/kind-of-3.1.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.3.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/is-extglob/-/is-extglob-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/braces/-/braces-1.8.5.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz
+npm http fetch 200 https://registry.npmjs.org/array-unique/-/array-unique-0.2.1.tgz
+npm http fetch 200 https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/is-extglob/-/is-extglob-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz
 npm http fetch 200 https://registry.npmjs.org/normalize-path/-/normalize-path-2.1.1.tgz
-npm http fetch 200 https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz
-npm http fetch 200 https://registry.npmjs.org/array-unique/-/array-unique-0.2.1.tgz
-npm http fetch 200 https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz
-npm http fetch 200 https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.3.tgz
-npm http fetch 200 https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz
 npm http fetch 200 https://registry.npmjs.org/kind-of/-/kind-of-3.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.3.tgz
+npm http fetch 200 https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/braces/-/braces-1.8.5.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm http fetch 200 https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz
+npm http fetch 200 https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz
+npm http fetch 200 https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/arr-flatten
 npm http 200 https://registry.npmjs.org/arr-flatten
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/arr-flatten/-/arr-flatten-1.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/arr-flatten/-/arr-flatten-1.0.3.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/expand-range
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/preserve
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/repeat-element
+npm http 200 https://registry.npmjs.org/preserve
 npm http 200 https://registry.npmjs.org/expand-range
 npm http 200 https://registry.npmjs.org/repeat-element
-npm http 200 https://registry.npmjs.org/preserve
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.2.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/preserve/-/preserve-0.2.0.tgz
-npm http fetch 200 https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.2.tgz
 npm http fetch 200 https://registry.npmjs.org/preserve/-/preserve-0.2.0.tgz
+npm http fetch 200 https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz
 npm http fetch 200 https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.2.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/fill-range
 npm http 200 https://registry.npmjs.org/fill-range
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/fill-range/-/fill-range-2.2.3.tgz
 npm http fetch 200 https://registry.npmjs.org/fill-range/-/fill-range-2.2.3.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-number
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/isobject
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/randomatic
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/repeat-string
 npm http 200 https://registry.npmjs.org/is-number
-npm http 200 https://registry.npmjs.org/isobject
 npm http 200 https://registry.npmjs.org/randomatic
 npm http 200 https://registry.npmjs.org/repeat-string
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm http 200 https://registry.npmjs.org/isobject
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-number/-/is-number-2.1.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
-npm http fetch GET https://registry.npmjs.org/isobject/-/isobject-2.1.0.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/randomatic/-/randomatic-1.1.6.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/isobject/-/isobject-2.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/is-number/-/is-number-2.1.0.tgz
+npm http fetch 200 https://registry.npmjs.org/randomatic/-/randomatic-1.1.6.tgz
 npm http fetch 200 https://registry.npmjs.org/isobject/-/isobject-2.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz
-npm http fetch 200 https://registry.npmjs.org/randomatic/-/randomatic-1.1.6.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-buffer
 npm http 200 https://registry.npmjs.org/is-buffer
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.5.tgz
 npm http fetch 200 https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.5.tgz
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-posix-bracket
 npm http 200 https://registry.npmjs.org/is-posix-bracket
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/remove-trailing-separator
 npm http 200 https://registry.npmjs.org/remove-trailing-separator
-npm info retry fetch attempt 1 at 4:18:01 AM
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.0.1.tgz
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/for-own
-npm info attempt registry request try #1 at 4:18:01 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-extendable
-npm http 200 https://registry.npmjs.org/is-extendable
 npm http 200 https://registry.npmjs.org/for-own
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/is-extendable
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/for-own/-/for-own-0.1.5.tgz
-npm http fetch 200 https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/for-own/-/for-own-0.1.5.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http fetch 200 https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/for-in
 npm http 200 https://registry.npmjs.org/for-in
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/glob-base
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-dotfile
 npm http 200 https://registry.npmjs.org/glob-base
 npm http 200 https://registry.npmjs.org/is-dotfile
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-dotfile/-/is-dotfile-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz
 npm http fetch 200 https://registry.npmjs.org/is-dotfile/-/is-dotfile-1.0.2.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-equal-shallow
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/is-primitive
 npm http 200 https://registry.npmjs.org/is-equal-shallow
 npm http 200 https://registry.npmjs.org/is-primitive
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-equal-shallow/-/is-equal-shallow-0.1.3.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/is-primitive/-/is-primitive-2.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/is-equal-shallow/-/is-equal-shallow-0.1.3.tgz
 npm http fetch 200 https://registry.npmjs.org/is-primitive/-/is-primitive-2.0.0.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/binary-extensions
 npm http 200 https://registry.npmjs.org/binary-extensions
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.8.0.tgz
 npm http fetch 200 https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.8.0.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/graceful-fs
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/readable-stream
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http request GET https://registry.npmjs.org/set-immediate-shim
-npm http 200 https://registry.npmjs.org/readable-stream
-npm http 200 https://registry.npmjs.org/set-immediate-shim
 npm http 200 https://registry.npmjs.org/graceful-fs
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.9.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/set-immediate-shim
+npm http 200 https://registry.npmjs.org/readable-stream
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
 npm http fetch GET https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz
-npm http fetch 200 https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.9.tgz
-npm http fetch 200 https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz
+npm info retry fetch attempt 1 at 4:27:37 AM
+npm info attempt registry request try #1 at 4:27:37 AM
+npm http fetch GET https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.9.tgz
 npm http fetch 200 https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http fetch 200 https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz
+npm http fetch 200 https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.9.tgz
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/buffer-shims
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/core-util-is
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/process-nextick-args
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/string_decoder
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/util-deprecate
-npm http 200 https://registry.npmjs.org/process-nextick-args
-npm http 200 https://registry.npmjs.org/core-util-is
-npm http 200 https://registry.npmjs.org/util-deprecate
 npm http 200 https://registry.npmjs.org/buffer-shims
 npm http 200 https://registry.npmjs.org/string_decoder
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/util-deprecate
+npm http 200 https://registry.npmjs.org/process-nextick-args
+npm http 200 https://registry.npmjs.org/core-util-is
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/buffer-shims/-/buffer-shims-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz
-npm http fetch 200 https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz
-npm http fetch 200 https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz
-npm http fetch 200 https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz
 npm http fetch 200 https://registry.npmjs.org/buffer-shims/-/buffer-shims-1.0.0.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http fetch 200 https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz
+npm http fetch 200 https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.0.tgz
+npm http fetch 200 https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz
+npm http fetch 200 https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/events-to-array
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/js-yaml
-npm http 200 https://registry.npmjs.org/js-yaml
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.3.tgz
-npm http fetch 200 https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.3.tgz
 npm http 200 https://registry.npmjs.org/events-to-array
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/js-yaml
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/events-to-array/-/events-to-array-1.1.2.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.3.tgz
 npm http fetch 200 https://registry.npmjs.org/events-to-array/-/events-to-array-1.1.2.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http fetch 200 https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.3.tgz
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/argparse
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/esprima
-npm http 200 https://registry.npmjs.org/esprima
 npm http 200 https://registry.npmjs.org/argparse
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
-npm http fetch GET https://registry.npmjs.org/esprima/-/esprima-3.1.3.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/esprima
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz
-npm http fetch 200 https://registry.npmjs.org/esprima/-/esprima-3.1.3.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/esprima/-/esprima-3.1.3.tgz
 npm http fetch 200 https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http fetch 200 https://registry.npmjs.org/esprima/-/esprima-3.1.3.tgz
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/sprintf-js
 npm http 200 https://registry.npmjs.org/sprintf-js
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz
 npm http fetch 200 https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/user-home
 npm http 200 https://registry.npmjs.org/user-home
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/user-home/-/user-home-1.1.1.tgz
 npm http fetch 200 https://registry.npmjs.org/user-home/-/user-home-1.1.1.tgz
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/duplexify
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/xtend
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/ws/-/ws-2.2.3.tgz
 npm http 200 https://registry.npmjs.org/xtend
-npm http 200 https://registry.npmjs.org/duplexify
 npm http fetch 200 https://registry.npmjs.org/ws/-/ws-2.2.3.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz
-npm info retry fetch attempt 1 at 4:18:02 AM
-npm info attempt registry request try #1 at 4:18:02 AM
+npm http 200 https://registry.npmjs.org/duplexify
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/duplexify/-/duplexify-3.5.0.tgz
 npm http fetch 200 https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz
 npm http fetch 200 https://registry.npmjs.org/duplexify/-/duplexify-3.5.0.tgz
-npm info attempt registry request try #1 at 4:18:03 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/end-of-stream
-npm info attempt registry request try #1 at 4:18:03 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http request GET https://registry.npmjs.org/stream-shift
-npm http 200 https://registry.npmjs.org/end-of-stream
 npm http 200 https://registry.npmjs.org/stream-shift
-npm info retry fetch attempt 1 at 4:18:03 AM
-npm info attempt registry request try #1 at 4:18:03 AM
-npm http fetch GET https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:03 AM
-npm info attempt registry request try #1 at 4:18:03 AM
+npm http 200 https://registry.npmjs.org/end-of-stream
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.0.tgz
-npm http fetch 200 https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
+npm http fetch GET https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.0.0.tgz
 npm http fetch 200 https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.0.tgz
-npm info retry fetch attempt 1 at 4:18:03 AM
-npm info attempt registry request try #1 at 4:18:03 AM
+npm http fetch 200 https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.0.0.tgz
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/once/-/once-1.3.3.tgz
 npm http fetch 200 https://registry.npmjs.org/once/-/once-1.3.3.tgz
-npm info retry fetch attempt 1 at 4:18:03 AM
-npm info attempt registry request try #1 at 4:18:03 AM
+npm info retry fetch attempt 1 at 4:27:38 AM
+npm info attempt registry request try #1 at 4:27:38 AM
 npm http fetch GET https://registry.npmjs.org/ultron/-/ultron-1.1.0.tgz
 npm http fetch 200 https://registry.npmjs.org/ultron/-/ultron-1.1.0.tgz
 npm info lifecycle npm-link-up@0.0.1004~preinstall: npm-link-up@0.0.1004
@@ -2448,7 +2457,7 @@ npm-link-up@0.0.1004 /home/newuser/npm-link-up
 |   |   `-- concat-map@0.0.1 
 |   +-- once@1.4.0 
 |   `-- path-is-absolute@1.0.1 
-`-- suman@1.1.512235 
+`-- suman@1.1.512235  (git://github.com/sumanjs/suman.git#cb62ef392492f495c04be8b51795944d5eb3a226)
   +-- ansi-256-colors@1.1.0 
   +-- ascii-table@0.0.9 
   +-- builtin-modules@1.1.1 
@@ -2660,29 +2669,40 @@ npm info ok
  
 
  => $PATH =>  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Error:  => Suman fatal error => there was a problem verifying the integrants listed in test file "/home/newuser/npm-link-up/test/src/all.test.js"
-Error:  => Suman fatal error => integrant entity with name = "npmlinkup" was not found to be a function => [ 'clone all repos', [Function] ]
-    at depList.forEach.d (/home/newuser/npm-link-up/node_modules/suman/lib/acquire-deps.js:38:13)
-    at Array.forEach (native)
-    at acquireDependencies (/home/newuser/npm-link-up/node_modules/suman/lib/acquire-deps.js:30:11)
-    at Domain.<anonymous> (/home/newuser/npm-link-up/node_modules/suman/lib/index.js:486:21)
-    at Domain.run (domain.js:221:14)
-    at integrantsFn (/home/newuser/npm-link-up/node_modules/suman/lib/index.js:471:15)
-    at /home/newuser/npm-link-up/node_modules/suman/lib/index.js:655:17
-    at _combinedTickCallback (internal/process/next_tick.js:73:7)
-    at process._tickDomainCallback (internal/process/next_tick.js:128:9)
-    at Module.runMain (module.js:606:11)
-    at Domain.<anonymous> (/home/newuser/npm-link-up/node_modules/suman/lib/index.js:457:23)
-    at Domain.g (events.js:291:16)
-    at emitOne (events.js:96:13)
-    at Domain.emit (events.js:188:7)
-    at Domain._errorHandler (domain.js:97:23)
-    at process._fatalException (bootstrap_node.js:294:33)
+val val val =>  null
+rimraf v =>  null
+val val val =>  { rimraf: undefined }
+mkdirp v =>  { rimraf: undefined }
+val val val =>  { rimraf: undefined, mkdirp: '/home/newuser/.npmlinkup' }
+npm init v =>  { rimraf: undefined, mkdirp: '/home/newuser/.npmlinkup' }
+npm info it worked if it ends with ok
+npm info using npm@3.10.10
+npm info using node@v6.10.2
+npm WARN using --force I sure hope you know what you are doing.
+npm info init written successfully
+npm info ok 
+val val val =>  { 'npm init': null }
+clone all repos v =>  { 'npm init': null }
+Cloning into 'suman'...
+Cloning into 'suman-utils'...
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+Error:  => Suman fatal error => Suman had a problem verifying your integrants in your suman.once.js file. => 
+128
+    at /home/newuser/npm-link-up/node_modules/suman/lib/acquire-deps.js:149:11
+    at bound (domain.js:280:14)
+    at runBound (domain.js:293:12)
 
 
  => Suman test process experienced a fatal error during the run, most likely the majority of tests, if not all tests, were not run.
 
 
- => Suman test is exiting with code 64   => see http://sumanjs.github.io/exit-codes.html
+ => You have some additional errors/warnings - check the test debug log (<suman-helpers-dir>/logs/test-debug.log) for more information.
+
+
+ => Suman test is exiting with code 70   => see http://sumanjs.github.io/exit-codes.html
 
 

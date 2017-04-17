@@ -19,12 +19,12 @@ module.exports = $data => {
   const sumanProjRoot = path.resolve(pth + '/suman');
 
   const all = {
-    'suman': 'git@github.com:sumanjs/suman.git',
-    'suman-utils': 'git@github.com:sumanjs/suman-utils.git',
-    'suman-events': 'git@github.com:sumanjs/suman-events.git',
-    'suman-watch': 'git@github.com:sumanjs/suman-watch.git',
-    'pragmatik': 'git@github.com:oresoftware/pragmatik.git',
-    'residence': 'git@github.com:oresoftware/residence.git'
+    'suman': 'https://github.com:sumanjs/suman.git',
+    'suman-utils': 'https://github.com:sumanjs/suman-utils.git',
+    'suman-events': 'https://github.com:sumanjs/suman-events.git',
+    'suman-watch': 'https://github.com:sumanjs/suman-watch.git',
+    'pragmatik': 'https://github.com:oresoftware/pragmatik.git',
+    'residence': 'https://github.com:oresoftware/residence.git'
   };
 
   return {
