@@ -74,25 +74,6 @@ module.exports = $data => {
         k.once('close', cb);
 
       }, cb);
-    }],
-
-    'npmlinkup': ['clone all repos', function (v, cb) {
-
-      const k = cp.spawn('bash', [], {
-        cwd: pth
-      });
-
-      // find the executable for this project
-      const index = require.resolve('../../index.js');
-      const script = `cd ${sumanProjRoot} && node ${index} --install-all --search-root $HOME/.npmlinkup/test`;
-      k.stdin.write(`\n ${script} \n`);
-      k.stderr.pipe(process.stderr);
-      k.stdin.end();
-      k.once('close', function (code) {
-        console.log('npmlinkup done with code => ', code);
-        cb(code);
-      });
-
     }]
   }
 };

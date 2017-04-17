@@ -65,6 +65,11 @@ let options = [
     'using npm instead of yarn is the default.'
   },
   {
+    names: ['send-log-to-stdout'],
+    type: 'bool',
+    help: 'Send child process stdout/stderr to stdout.'
+  },
+  {
     names: ['search-root'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; overrides config. ' +
@@ -278,7 +283,18 @@ inListAndInDeps.forEach(function (item) {
   console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
 });
 
-const strm = fs.createWriteStream(opts.log ? path.resolve(root + '/npm-link-up.log') : '/dev/null');
+
+const strm = require('./transform');
+
+if(opts.send_log_to_stdout){
+  strm.pipe(process.stdout);
+}
+
+if(opts.log){
+  strm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
+}
+
+
 const map = {};
 
 async.autoInject({
