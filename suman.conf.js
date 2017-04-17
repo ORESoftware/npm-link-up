@@ -20,8 +20,8 @@ module.exports = {
 
   //string
   testDir: 'test',
-  testSrcDir: 'test',                   // recommended that you create a test/src directory
-  testTargetDir: 'test-target',         // only used if compiling/transpiling tests
+  testSrcDir: 'test/src',                   // recommended that you create a test/src directory
+  testTargetDir: 'test/target',         // only used if compiling/transpiling tests
   sumanHelpersDir: 'test/.suman',
   uniqueAppName: '<your-app-name-here>',
   browser: 'Firefox',                 // browser to open test results with

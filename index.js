@@ -67,7 +67,14 @@ let options = [
   {
     names: ['search-root'],
     type: 'arrayOfString',
-    help: 'Path to use to begin searching for relevant NPM packages.'
+    help: 'Path to use to begin searching for relevant NPM packages; overrides config. ' +
+    'To add multiple search-root\'s, use "--search-root x --search-root y".'
+  },
+  {
+    names: ['search-root-append'],
+    type: 'arrayOfString',
+    help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
+    'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
   },
   {
     names: ['self-link-all'],
@@ -114,7 +121,7 @@ if (opts.help) {
   process.exit(0);
 }
 
-if(opts.completion){
+if (opts.completion) {
   let generatedBashCode = dashdash.bashCompletionFromOptions({
     name: 'npmlinkup',
     options: options,
@@ -123,7 +130,6 @@ if(opts.completion){
   console.log(generatedBashCode);
   process.exit(0);
 }
-
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
@@ -167,7 +173,10 @@ if (!name) {
   return process.exit(1);
 }
 
-const deps = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.devDependencies || {}));
+const deps =
+  Object.keys(pkg.dependencies || {})
+  .concat(Object.keys(pkg.devDependencies || {}))
+  .concat(Object.keys(pkg.optionalDependencies || {}));
 
 if (!deps.length) {
   console.error(' => Ummmm, your package.json file does not have any dependencies listed.');
@@ -189,23 +198,33 @@ if (list.length < 1) {
   return process.exit(1);
 }
 
-let searchRoots = (conf.searchRoots || []).concat(opts.searchRoots).filter(function (item, i, arr) {
-  return arr.indexOf(item) === i;  // get a unique list
-});
+let searchRoots;
 
-if (!conf.searchRoots) {
-  console.error(' => Warning => no "searchRoots" property provided, NPM-Link-Up must therefore search through your entire home directory.');
-  if (opts.force) {
-    searchRoots = [path.resolve(process.env.HOME)];
+if (opts.search_root && opts.search_root.length > 0) {
+  searchRoots = opts.search_root.filter(function (item, i, arr) {
+    return arr.indexOf(item) === i;  // get a unique list
+  });
+}
+else {
+
+  if (!conf.searchRoots) {
+    console.error(' => Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
+      'NPM-Link-Up will therefore search through your entire home directory.');
+    if (opts.force) {
+      searchRoots = [path.resolve(process.env.HOME)];
+    }
+    else {
+      console.error(' => You must use --force to do this.');
+      process.exit(1);
+    }
   }
-  else {
-    console.error(' => You must use --force to do this.');
-    process.exit(1);
-  }
+
+  searchRoots = (conf.searchRoots || []).concat(opts.search_root_append || []).filter(function (item, i, arr) {
+    return arr.indexOf(item) === i;  // get a unique list
+  });
 }
 
 const inListButNotInDeps = [];
-
 const inListAndInDeps = list.filter(function (item) {
   const includes = deps.includes(item);
   if (!includes) {
@@ -408,7 +427,9 @@ async.autoInject({
 
                   if (list.includes(pkg.name)) {
 
-                    let deps = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.devDependencies || {}));
+                    let deps = Object.keys(pkg.dependencies || {})
+                    .concat(Object.keys(pkg.devDependencies || {}))
+                    .concat(Object.keys(pkg.optionalDependencies || {}));
 
                     deps = deps.filter(function (d) {
                       return list.includes(d);
@@ -416,7 +437,7 @@ async.autoInject({
 
                     map[pkg.name] = {
                       name: pkg.name,
-                      linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
+                      linkToItself: npmlinkup && npmlinkup.linkToItself,
                       runInstall: !isNodeModulesPresent,
                       hasAtLinkSh: isAtLinkShPresent,
                       path: dirname,
@@ -428,9 +449,10 @@ async.autoInject({
                 cb();
               }
               else if (stats.isDirectory()) {
-                // if (/\/node_modules\//.test(String(item)) || /\/.git\//.test(String(item))) {
                 if (isIgnored(String(item))) {
-                  // console.log(' => Warning => node_modules/.git path ignored => ', item);
+                  if(opts.verbosity > 2){
+                    console.log(' => Warning => node_modules/.git path ignored => ', item);
+                  }
                   cb();
                 }
                 else {
@@ -439,7 +461,9 @@ async.autoInject({
                 }
               }
               else {
-                console.log(' => Not directory or file => ', item);
+                if(opts.verbosity > 1){
+                  console.log(' => Not a directory or file (maybe a symlink?) => ', item);
+                }
                 cb();
               }
 
@@ -524,7 +548,11 @@ async.autoInject({
 
     function getNPMLinkList(deps) {
       return deps.filter(function (d) {
-        return map[d].isLinked;
+        if (!map[d]) {
+          console.log(' => Map for key ="' + d + '" is not defined.');
+          return;
+        }
+        return map[d] && map[d].isLinked;
       })
       .map(function (d) {
         return `npm link ${d}`;
@@ -550,7 +578,7 @@ async.autoInject({
     }
 
     function getLinkToItselfCommand(dep) {
-      if (opts.linkToItself || dep.self_link_all) {
+      if (opts.self_link_all || (dep.linkToItself !== false)) {
         return `&& npm link ${dep.name}`
       }
     }
