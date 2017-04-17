@@ -82,7 +82,9 @@ module.exports = $data => {
         cwd: pth
       });
 
-      const script = `cd ${sumanProjRoot} && npmlinkup --install-all --search-root $HOME/.npmlinkup/test`;
+      // find the executable for this project
+      const index = require.resolve('../../index.js');
+      const script = `cd ${sumanProjRoot} && node ${index} --install-all --search-root $HOME/.npmlinkup/test`;
       k.stdin.write(`\n ${script} \n`);
       k.stderr.pipe(process.stderr);
       k.stdin.end();
