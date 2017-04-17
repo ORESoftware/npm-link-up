@@ -26,6 +26,7 @@ Test.create(function (assert, before, after, path, fs, it, rimraf, child_process
     const index = require.resolve('../../index.js');
     const script = `cd ${sumanProjRoot} && node ${index} --install-all --send-log-to-stdout --search-root $HOME/.npmlinkup/test`;
     k.stdin.write(`\n ${script} \n`);
+    k.stdout.pipe(process.stdout);
     k.stderr.pipe(process.stderr);
     k.stdin.end();
     k.once('close', function (code) {

@@ -65,7 +65,7 @@ let options = [
     'using npm instead of yarn is the default.'
   },
   {
-    names: ['send-log-to-stdout'],
+    names: ['inherit-log'],
     type: 'bool',
     help: 'Send child process stdout/stderr to stdout.'
   },
@@ -283,17 +283,17 @@ inListAndInDeps.forEach(function (item) {
   console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
 });
 
+const {stdout, stderr} = require('./streaming');
 
-const strm = require('./transform');
-
-if(opts.send_log_to_stdout){
-  strm.pipe(process.stdout);
+if (opts.inherit_log) {
+  stdout.pipe(process.stdout);
+  stderr.pipe(process.stderr);
 }
 
-if(opts.log){
-  strm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
+if (opts.log) {
+  stdout.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
+  stderr.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
 }
-
 
 const map = {};
 
@@ -466,7 +466,7 @@ async.autoInject({
               }
               else if (stats.isDirectory()) {
                 if (isIgnored(String(item))) {
-                  if(opts.verbosity > 2){
+                  if (opts.verbosity > 2) {
                     console.log(' => Warning => node_modules/.git path ignored => ', item);
                   }
                   cb();
@@ -477,7 +477,7 @@ async.autoInject({
                 }
               }
               else {
-                if(opts.verbosity > 1){
+                if (opts.verbosity > 1) {
                   console.log(' => Not a directory or file (maybe a symlink?) => ', item);
                 }
                 cb();
@@ -635,13 +635,13 @@ async.autoInject({
 
       k.stdin.write('\n' + script + '\n');
 
-      strm.write(`\n\n >>> Beginning of "${dep.name}"...\n\n`);
-      strm.write(`\n\n >>> Running script => "${script}"...\n\n`);
+      stdout.write(`\n\n >>> Beginning of "${dep.name}"...\n\n`);
+      stdout.write(`\n\n >>> Running script => "${script}"...\n\n`);
 
       k.stdout.setEncoding('utf8');
       k.stderr.setEncoding('utf8');
-      k.stdout.pipe(strm, {end: false});
-      k.stderr.pipe(strm, {end: false});
+      k.stdout.pipe(stdout, {end: false});
+      k.stderr.pipe(stderr, {end: false});
 
       process.nextTick(function () {
         k.stdin.end();
@@ -669,8 +669,7 @@ async.autoInject({
         else {
 
           if (data) {
-            strm.write(' => Warning => ' + data);
-            console.log(' => Warning => ', data);
+            stderr.write(' => Warning => ' + data);
           }
 
           if (opts.verbosity > 1) {
@@ -688,7 +687,7 @@ async.autoInject({
             }
 
             const cmd = cmds.join(' && ');
-            strm.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
+            stdout.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
 
             const k = cp.spawn('bash', [], {
               env: Object.assign({}, process.env, {
@@ -700,8 +699,8 @@ async.autoInject({
 
             k.stdout.setEncoding('utf8');
             k.stderr.setEncoding('utf8');
-            k.stdout.pipe(strm, {end: false});
-            k.stderr.pipe(strm, {end: false});
+            k.stdout.pipe(stdout, {end: false});
+            k.stderr.pipe(stderr, {end: false});
 
             process.nextTick(function () {
               k.stdin.end();
@@ -733,8 +732,9 @@ async.autoInject({
   }
 
   const line = '\n\n => NPM-Link-Up run was successful. All done.\n\n';
-  strm.write(line);
-  strm.end();
+  stdout.write(line);
+  stdout.end();
+  stderr.end();
   console.log(line);
 
   setTimeout(function () {
