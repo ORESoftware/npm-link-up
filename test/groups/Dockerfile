@@ -15,7 +15,7 @@ RUN useradd -ms /bin/bash newuser
 USER newuser
 WORKDIR /home/newuser
 
-#RUN sudo chown -R $(whoami) $(npm root -g) $(npm root) ~/.npm
+RUN sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
 
 COPY all.sh .
 
