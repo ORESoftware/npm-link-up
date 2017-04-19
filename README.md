@@ -9,6 +9,11 @@ Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/l
 All this tool does is automatically link your projects together with NPM link, <br>
 using declarative config files and a CLI.
 
+## Caveats + Disclaimer
+
+The NPM link utility itself has some flaw whereby if you install a new package to your project, frequently links will be broken between local NPM packages. I believe NPM will fix this with newer versions. Unfortunately, "NPM Link Up" cannot do anything about that.
+This doesn't cause any real problems, except force you to run npmlinkup after installing a new module/package to your project.
+
 <p>
 
 ## &#9658; Installation
