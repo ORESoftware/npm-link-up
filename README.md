@@ -127,7 +127,7 @@ arguments, etc.
 <p>
 
 <i>
-Notice the </b>circular dependency</b> in the above tree, between <b>H</b> and <b>E</b>. This tool will handle it no problem. (NPM link makes
+Notice the <b>circular dependency</b> in the above tree, between <b>H</b> and <b>E</b>. This tool will handle it no problem. (NPM link makes
 it pretty easy.) What it does: it starts with H and then symlinks everything but E. (H depends on E, though). Then it gets to E and symlinks everything,
 including H. That it searches for all packages that have already been symlinked, but that depend on E (that would be H),
 and then cd's into H and sylinks E into H, retroactively. That's all there is to it.
