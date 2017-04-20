@@ -9,10 +9,6 @@ Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/l
 All this tool does is automatically link your projects together with NPM link, <br>
 using declarative config files and a CLI.
 
-## Caveats + Disclaimer
-
-The NPM link utility itself has some flaw whereby if you install a new package to your project, frequently links will be broken between local NPM packages. I believe NPM will fix this with newer versions. Unfortunately, "NPM Link Up" cannot do anything about that.
-This doesn't cause any real problems, except force you to run npmlinkup after installing a new module/package to your project.
 
 <p>
 
@@ -162,7 +158,17 @@ You can set a concurrency limit, the default is 3. Meaning, no more than 3 "lett
 can be installed at the same time.
 
 
+## Caveats + Disclaimer
 
+Using NPM, after installing a new package, you may need to re-link with npmlinkup - this is a problem/bug with NPM.
+It is a strange problem, considering that $(npm link) is an NPM feature! But when you run `$ npm install x`, it seems to break
+some symlinks. On the other hand, if you use `$yarn add x` to add a new dependency, you may be able avoid this hiccup.
 
+### Restatement of the above
 
+The NPM link utility itslef (`$npm link`)  has some flaw whereby if you install a new package to your project, 
+frequently symlinks will be broken between local NPM packages. I believe NPM will fix this with newer versions. 
+Unfortunately, "NPM Link Up" cannot do anything about that.
+This doesn't cause any real problems, except you may have to run npmlinkup again to relink your project. 
+Installing with Yarn instead of NPM may prevent this issue altogether.
 
