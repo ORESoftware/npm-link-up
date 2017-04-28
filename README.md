@@ -32,8 +32,15 @@ then add this to your ~./bashrc file:
 export PATH=$PATH:~/.npmlinkup/global/node_modules/.bin
 
 function npmlinkup(){
-  command npmlink $@
+  command npmlinkup $@
 }
+
+# if you don't want to change your $PATH, you could do this:
+
+function npmlinkup(){
+   ~/.npmlinkup/global/node_modules/.bin/npmlinkup $@
+}
+
 ```
 
 Finally, source your ~/.bashrc file in your current terminal session:
