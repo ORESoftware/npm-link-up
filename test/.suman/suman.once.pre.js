@@ -29,51 +29,56 @@ module.exports = $data => {
 
   return {
 
-    'rimraf': function (v, cb) {
-      console.log('rimraf v => ', v);
-      rimraf(pth, cb);
-    },
+    dependencies: {
 
-    'mkdirp': ['rimraf', function (v, cb) {
-      console.log('mkdirp v => ', v);
-      mkdirp(pth, cb);
-    }],
+      'rimraf': function (v, cb) {
+        console.log('rimraf v => ', v);
+        rimraf(pth, cb);
+      },
 
-    'npm init': ['rimraf', 'mkdirp', function (v, cb) {
+      'mkdirp': ['rimraf', function (v, cb) {
+        console.log('mkdirp v => ', v);
+        mkdirp(pth, cb);
+      }],
 
-      console.log('npm init v => ', v);
+      'npm init': ['rimraf', 'mkdirp', function (v, cb) {
 
-      const k = cp.spawn('bash', [], {
-        cwd: pth
-      });
-      const script = `npm init -f`;
-      k.stdin.write(`\n ${script} \n`);
-      k.stderr.pipe(process.stderr);
-      k.stdin.end();
-      k.once('close', cb);
-
-    }],
-
-    'clone all repos': ['npm init', function (v, cb) {
-
-      console.log('clone all repos v => ', v);
-
-      const keys = Object.keys(all);
-
-      async.eachLimit(keys, 2, function (key, cb) {
+        console.log('npm init v => ', v);
 
         const k = cp.spawn('bash', [], {
           cwd: pth
         });
-
-        const script = `git clone ${all[key]}`;
+        const script = `npm init -f`;
         k.stdin.write(`\n ${script} \n`);
         k.stderr.pipe(process.stderr);
         k.stdin.end();
-
         k.once('close', cb);
 
-      }, cb);
-    }]
+      }],
+
+      'clone all repos': ['npm init', function (v, cb) {
+
+        console.log('clone all repos v => ', v);
+
+        const keys = Object.keys(all);
+
+        async.eachLimit(keys, 2, function (key, cb) {
+
+          const k = cp.spawn('bash', [], {
+            cwd: pth
+          });
+
+          const script = `git clone ${all[key]}`;
+          k.stdin.write(`\n ${script} \n`);
+          k.stderr.pipe(process.stderr);
+          k.stdin.end();
+
+          k.once('close', cb);
+
+        }, cb);
+      }]
+
+    }
+
   }
 };
