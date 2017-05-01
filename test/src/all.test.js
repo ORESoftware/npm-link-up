@@ -23,8 +23,8 @@ Test.create(function (assert, before, after, path, fs, it, rimraf, child_process
     k.once('error', h.fatal);
 
     // find the executable for this project
-    // const index = require.resolve('../../index.js');
-    const index = require.resolve('npm-link-up');
+    const index = require.resolve('../../index.js');
+    // const index = require.resolve('npm-link-up');
     const script = `cd ${sumanProjRoot} && node ${index} --install-all --inherit-log --search-root $HOME/.npmlinkup/test`;
     k.stdin.write(`\n ${script} \n`);
     k.stdout.pipe(process.stdout);
