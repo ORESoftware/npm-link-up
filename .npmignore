@@ -3,3 +3,5 @@
 *.md
 *.log
 *.json
+test
+node_modules

@@ -194,7 +194,7 @@ inListAndInDeps.forEach(function (item) {
   console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
 });
 
-const {stdout, stderr} = require('./streaming');
+const {stdout, stderr} = require('./lib/streaming');
 
 if (opts.inherit_log) {
   stdout.pipe(process.stdout);
