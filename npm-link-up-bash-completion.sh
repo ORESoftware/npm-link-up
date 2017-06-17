@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Bash completion generated for 'npmlinkup' at Sun Apr 16 2017 02:53:39 GMT-0700 (PDT).
+# Bash completion generated for 'npmlinkup' at Fri Jun 16 2017 20:55:50 GMT-0700 (PDT).
 #
 # The original template lives here:
 # https://github.com/trentm/node-dashdash/blob/master/etc/dashdash.bash_completion.in
@@ -81,8 +81,8 @@ function _npmlinkup_completer {
     # ---- cmd definition
 
     local cmd_shortopts="-h -v"
-local cmd_longopts="--clear-all-caches --force --help --install-all --log --manager-all --search-root --self-link-all --verbosity --version --vn"
-local cmd_optargs="--manager-all=string --search-root=arrayOfString --verbosity=positiveInteger -v=positiveInteger"
+local cmd_longopts="--clear-all-caches --force --help --inherit-log --install-all --log --manager-all --search-root --search-root-append --self-link-all --verbosity --version --vn"
+local cmd_optargs="--manager-all=string --search-root-append=arrayOfString --search-root=arrayOfString --verbosity=positiveInteger -v=positiveInteger"
 
 
     # ---- locals
@@ -391,4 +391,5 @@ fi
 ##
 
 
+ => NPM-Link-Up is exiting with code =>  0 
 

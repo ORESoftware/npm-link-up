@@ -75,7 +75,7 @@ The following is a simple npm-link-up.json file:
     "/.git/"
   ],
   "list": [               // list the packages that you want to symlink to this project, here. NPM package name only, no paths needed.
-    "socket.io",          // instead of being these well-known NPM packages, they will be *your* local package names
+    "socket.io",          // (these are just examples using well-known NPM packages)
     "mongoose",
     "lodash"
   ],
@@ -160,9 +160,6 @@ Finally, it would run:
 
 A
 
-
-You can set a concurrency limit, the default is 3. Meaning, no more than 3 "letters" 
-can be installed at the same time.
 
 
 ## Caveats + Disclaimer

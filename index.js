@@ -7,6 +7,7 @@ const fs = require('fs');
 const util = require('util');
 
 //npm
+const dashdash = require('dashdash');
 const colors = require('colors/safe');
 const async = require('async');
 const residence = require('residence');
@@ -21,87 +22,7 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-let dashdash = require('dashdash');
-
-let options = [
-  {
-    names: ['version', 'vn'],
-    type: 'bool',
-    help: 'Print the npm-link-up version, and exit 0.'
-  },
-  {
-    names: ['help', 'h'],
-    type: 'bool',
-    help: 'Print help menu for npm-link-up, and exit 0.'
-  },
-  {
-    names: ['verbosity', 'v'],
-    type: 'positiveInteger',
-    help: 'Verbosity level is an integer between 1 and 3, inclusive.',
-    default: 2
-  },
-  {
-    names: ['log'],
-    type: 'bool',
-    help: 'Write to output log in project.',
-    default: true
-  },
-  {
-    names: ['force'],
-    type: 'bool',
-    help: 'Force execution at hand.',
-    default: false
-  },
-  {
-    names: ['completion'],
-    type: 'bool',
-    help: 'Generate bash-completion code.',
-    hidden: true
-  },
-  {
-    names: ['install-all'],
-    type: 'bool',
-    help: 'The "install" option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
-    'using npm instead of yarn is the default.'
-  },
-  {
-    names: ['inherit-log'],
-    type: 'bool',
-    help: 'Send child process stdout/stderr to stdout.'
-  },
-  {
-    names: ['search-root'],
-    type: 'arrayOfString',
-    help: 'Path to use to begin searching for relevant NPM packages; overrides config. ' +
-    'To add multiple search-root\'s, use "--search-root x --search-root y".'
-  },
-  {
-    names: ['search-root-append'],
-    type: 'arrayOfString',
-    help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
-    'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
-  },
-  {
-    names: ['self-link-all'],
-    type: 'bool',
-    help: 'Link all projects to themselves; to have unique behavior per project, ' +
-    'add a "self" property to each project\'s npm-link-up.json file.'
-  },
-  {
-    names: ['clear-all-caches'],
-    type: 'bool',
-    help: 'Clear all relevant NPM / Yarn / etc caches.',
-    default: false
-  },
-  {
-    names: ['manager-all'],
-    type: 'string',
-    help: 'Choose between "npm" and "yarn", to manage packages; this option will affect ' +
-    'all your relevant local projects; to have unique behavior per project,' +
-    'add a "manager" property to the npm-link-up.json file in a given project.',
-    default: 'npm'
-  }
-];
+const options = require('./lib/cmd-line-opts').default;
 
 let opts, parser = dashdash.createParser({options: options});
 
@@ -113,7 +34,7 @@ try {
 }
 
 if (opts.version) {
-  let npmLinkUpPkg = require('../package.json');
+  let npmLinkUpPkg = require('./package.json');
   console.log(npmLinkUpPkg.version);
   process.exit(0);
 }
@@ -180,20 +101,13 @@ if (!name) {
 
 const deps =
   Object.keys(pkg.dependencies || {})
-  .concat(Object.keys(pkg.devDependencies || {}))
-  .concat(Object.keys(pkg.optionalDependencies || {}));
+    .concat(Object.keys(pkg.devDependencies || {}))
+    .concat(Object.keys(pkg.optionalDependencies || {}));
 
 if (!deps.length) {
   console.error(' => Ummmm, your package.json file does not have any dependencies listed.');
   return process.exit(0);
 }
-
-// let list = Object.keys(conf.list || {}).filter(function (k) {
-//   if (conf.list[k]) {
-//     return true;
-//   }
-//   console.log(' => The following dependency will not be linked => ', k);
-// });
 
 let list = conf.list;
 
@@ -231,15 +145,15 @@ else {
 
 const inListButNotInDeps = [];
 const inListAndInDeps = list.filter(function (item) {
-  const includes = deps.includes(item);
-  if (!includes) {
+  if (!deps.includes(item)) {
     inListButNotInDeps.push(item);
+    return false;
   }
-  return includes;
+  return true;
 });
 
 inListButNotInDeps.forEach(function (item) {
-  console.error(colors.red.bold(' => Warning => The following item was listed in your npm-link-up.conf,\n' +
+  console.error(colors.red.bold(' => Warning => The following item was listed in your npm-link-up.json file,\n' +
     'but is not listed in your package.json dependencies => "' + item + '".'));
 });
 
@@ -250,10 +164,7 @@ list = list.filter(function (item, index) {
   return list.indexOf(item) === index;
 });
 
-const alwaysIgnoreThese = [
-  '/node_modules/',
-  '/.git/'
-];
+const alwaysIgnoreThese = require('./lib/always-ignore').default;
 
 const ignore = (conf.ignore || []).concat(alwaysIgnoreThese).filter(function (item, index, arr) {
   return arr.indexOf(item) === index;
@@ -261,7 +172,7 @@ const ignore = (conf.ignore || []).concat(alwaysIgnoreThese).filter(function (it
   return new RegExp(item);
 });
 
-function isIgnored(pth) {
+function isIgnored (pth) {
   return ignore.some(function (r) {
     if (r.test(pth)) {
       if (opts.verbosity > 2) {
@@ -297,6 +208,8 @@ if (opts.log) {
 
 const map = {};
 
+console.log('this map');
+
 async.autoInject({
 
   npmCacheClean: function (cb) {
@@ -321,16 +234,8 @@ async.autoInject({
     k.once('error', cb);
 
     k.once('close', function (code) {
-      if (code > 0) {
-        cb({
-          path: 'npm cache clean',
-          code: code
-        })
-      }
-      else {
-        cb();
-      }
-    })
+      code > 0 ? cb({path: 'npm cache clean', code: code}) : cb();
+    });
 
   },
 
@@ -344,7 +249,7 @@ async.autoInject({
       NPM_LINK_UP: 'yes'
     });
 
-    k.stdin.write('\n' + mappedRoots + '\n');
+    k.stdin.write('\n' + mappedRoots.join(' ') + '\n');
 
     process.nextTick(function () {
       k.stdin.end();
@@ -384,7 +289,7 @@ async.autoInject({
 
     async.eachLimit(searchRoots, 2, function (item, cb) {
 
-      (function getMarkers(dir, cb) {
+      (function getMarkers (dir, cb) {
 
         fs.readdir(dir, function (err, items) {
 
@@ -402,7 +307,7 @@ async.autoInject({
             fs.stat(item, function (err, stats) {
 
               if (err) {
-                console.log(' => [suman internal] => probably a symlink => ', item);
+                console.log(' => [npm-link-up internal] => probably a symlink? => ', item);
                 console.error(err.stack || err);
                 return cb();
               }
@@ -444,8 +349,8 @@ async.autoInject({
                   if (list.includes(pkg.name)) {
 
                     let deps = Object.keys(pkg.dependencies || {})
-                    .concat(Object.keys(pkg.devDependencies || {}))
-                    .concat(Object.keys(pkg.optionalDependencies || {}));
+                      .concat(Object.keys(pkg.devDependencies || {}))
+                      .concat(Object.keys(pkg.optionalDependencies || {}));
 
                     deps = deps.filter(function (d) {
                       return list.includes(d);
@@ -506,32 +411,30 @@ async.autoInject({
 
     console.log('\n => Map => \n', colors.blue.bold(util.inspect(map)));
 
-    function isAllLinked() {
+    function isAllLinked () {
       //Object.values might not be available on all Node.js versions.
       return Object.keys(map).every(function (k) {
         return map[k].isLinked;
       });
     }
 
-    function areAllLinked(names, n) {
+    function areAllLinked (names, n) {
       return names.every(function (name) {
-        console.log('name => ', name, 'n => ', n);
         if (name === n) {
           // handle circular deps
-          console.log('!! handled circular deps');
           return true;
         }
         return map[name].isLinked;
       });
     }
 
-    function getCountOfUnlinkedDeps(dep) {
+    function getCountOfUnlinkedDeps (dep) {
       return dep.deps.filter(function (d) {
         return !d.isLinked;
       }).length;
     }
 
-    function findNextDep() {
+    function findNextDep () {
       // not anymore: this routine finds the next dep, that has no deps or no unlinked dependencies
       // this routine finds the next dep with the fewest number of unlinked dependencies
 
@@ -562,38 +465,40 @@ async.autoInject({
       return dep;
     }
 
-    function getNPMLinkList(deps) {
+    function getNPMLinkList (deps) {
       return deps.filter(function (d) {
-        if (!map[d]) {
-          console.log(' => Map for key ="' + d + '" is not defined.');
-          return;
-        }
-        return map[d] && map[d].isLinked;
-      })
-      .map(function (d) {
-        return `npm link ${d}`;
-      });
+          if (!map[d]) {
+            console.log(' => Map for key ="' + d + '" is not defined.');
+            return false;
+          }
+          else{
+            return map[d] && map[d].isLinked;
+          }
+        })
+        .map(function (d) {
+          return `npm link ${d}`;
+        });
     }
 
-    function getCommandListOfLinked(name) {
+    function getCommandListOfLinked (name) {
       return Object.keys(map)
-      .filter(function (k) {
-        return map[k].isLinked && map[k].deps.includes(name);
-      })
-      .map(function (k) {
-        return `cd ${map[k].path} && npm link ${name}`;
-      });
+        .filter(function (k) {
+          return map[k].isLinked && map[k].deps.includes(name);
+        })
+        .map(function (k) {
+          return `cd ${map[k].path} && npm link ${name}`;
+        });
     }
 
-    console.log('\n\n');
+    console.log('\n');
 
-    function getInstallCommand(dep) {
+    function getInstallCommand (dep) {
       if (dep.runInstall || opts.install_all) {
         return '&& rm -rf node_modules && npm install';
       }
     }
 
-    function getLinkToItselfCommand(dep) {
+    function getLinkToItselfCommand (dep) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
         return `&& npm link ${dep.name}`
       }
@@ -678,7 +583,7 @@ async.autoInject({
 
           dep.isLinked = map[dep.name].isLinked = true;
 
-          function linkPreviouslyUnlinked(cb) {
+          function linkPreviouslyUnlinked (cb) {
 
             const cmds = getCommandListOfLinked(dep.name);
 
