@@ -58,7 +58,7 @@ So one of the two above install methods should be sufficient.
 
 ## &#9658; Usage
 
-Create a file called ```npm-link-up.json``` in the root of your project ("project X"). The reason
+Create a file called ```npm-link-up.json``` in the root of your project (we will call it "project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
 are dependencies of project X.
 
@@ -120,6 +120,7 @@ Well, imagine we have this dependency structure, and these projects are on our l
 the names in the "list" property in the npm-link-up.json file. This is nice because you can move projects around
 on your filesystem at will, and the tool still works; it also requires less configuration, and fewer command line 
 arguments, etc.
+
 
 2. It moves up the dependency tree, for each dependency z, it runs
 

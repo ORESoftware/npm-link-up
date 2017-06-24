@@ -101,8 +101,9 @@ if (!name) {
 
 const deps =
   Object.keys(pkg.dependencies || {})
-    .concat(Object.keys(pkg.devDependencies || {}))
-    .concat(Object.keys(pkg.optionalDependencies || {}));
+  .concat(Object.keys(pkg.devDependencies || {}))
+  .concat(Object.keys(pkg.optionalDependencies || {}))
+  .concat(pkg['npmLinkUpDeps'] || []);
 
 if (!deps.length) {
   console.error(' => Ummmm, your package.json file does not have any dependencies listed.');
@@ -172,7 +173,7 @@ const ignore = (conf.ignore || []).concat(alwaysIgnoreThese).filter(function (it
   return new RegExp(item);
 });
 
-function isIgnored (pth) {
+function isIgnored(pth) {
   return ignore.some(function (r) {
     if (r.test(pth)) {
       if (opts.verbosity > 2) {
@@ -289,7 +290,7 @@ async.autoInject({
 
     async.eachLimit(searchRoots, 2, function (item, cb) {
 
-      (function getMarkers (dir, cb) {
+      (function getMarkers(dir, cb) {
 
         fs.readdir(dir, function (err, items) {
 
@@ -349,8 +350,9 @@ async.autoInject({
                   if (list.includes(pkg.name)) {
 
                     let deps = Object.keys(pkg.dependencies || {})
-                      .concat(Object.keys(pkg.devDependencies || {}))
-                      .concat(Object.keys(pkg.optionalDependencies || {}));
+                    .concat(Object.keys(pkg.devDependencies || {}))
+                    .concat(Object.keys(pkg.optionalDependencies || {}))
+                    .concat(pkg['npmLinkUpDeps'] || []);
 
                     deps = deps.filter(function (d) {
                       return list.includes(d);
@@ -411,14 +413,14 @@ async.autoInject({
 
     console.log('\n => Map => \n', colors.blue.bold(util.inspect(map)));
 
-    function isAllLinked () {
+    function isAllLinked() {
       //Object.values might not be available on all Node.js versions.
       return Object.keys(map).every(function (k) {
         return map[k].isLinked;
       });
     }
 
-    function areAllLinked (names, n) {
+    function areAllLinked(names, n) {
       return names.every(function (name) {
         if (name === n) {
           // handle circular deps
@@ -428,13 +430,13 @@ async.autoInject({
       });
     }
 
-    function getCountOfUnlinkedDeps (dep) {
+    function getCountOfUnlinkedDeps(dep) {
       return dep.deps.filter(function (d) {
         return !d.isLinked;
       }).length;
     }
 
-    function findNextDep () {
+    function findNextDep() {
       // not anymore: this routine finds the next dep, that has no deps or no unlinked dependencies
       // this routine finds the next dep with the fewest number of unlinked dependencies
 
@@ -465,40 +467,40 @@ async.autoInject({
       return dep;
     }
 
-    function getNPMLinkList (deps) {
+    function getNPMLinkList(deps) {
       return deps.filter(function (d) {
-          if (!map[d]) {
-            console.log(' => Map for key ="' + d + '" is not defined.');
-            return false;
-          }
-          else{
-            return map[d] && map[d].isLinked;
-          }
-        })
-        .map(function (d) {
-          return `npm link ${d}`;
-        });
+        if (!map[d]) {
+          console.log(' => Map for key ="' + d + '" is not defined.');
+          return false;
+        }
+        else {
+          return map[d] && map[d].isLinked;
+        }
+      })
+      .map(function (d) {
+        return `npm link ${d}`;
+      });
     }
 
-    function getCommandListOfLinked (name) {
+    function getCommandListOfLinked(name) {
       return Object.keys(map)
-        .filter(function (k) {
-          return map[k].isLinked && map[k].deps.includes(name);
-        })
-        .map(function (k) {
-          return `cd ${map[k].path} && npm link ${name}`;
-        });
+      .filter(function (k) {
+        return map[k].isLinked && map[k].deps.includes(name);
+      })
+      .map(function (k) {
+        return `cd ${map[k].path} && npm link ${name}`;
+      });
     }
 
     console.log('\n');
 
-    function getInstallCommand (dep) {
+    function getInstallCommand(dep) {
       if (dep.runInstall || opts.install_all) {
         return '&& rm -rf node_modules && npm install';
       }
     }
 
-    function getLinkToItselfCommand (dep) {
+    function getLinkToItselfCommand(dep) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
         return `&& npm link ${dep.name}`
       }
@@ -583,7 +585,7 @@ async.autoInject({
 
           dep.isLinked = map[dep.name].isLinked = true;
 
-          function linkPreviouslyUnlinked (cb) {
+          function linkPreviouslyUnlinked(cb) {
 
             const cmds = getCommandListOfLinked(dep.name);
 
