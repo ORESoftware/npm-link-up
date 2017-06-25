@@ -1,4 +1,7 @@
 import * as stream from 'stream';
+import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+
+/////////////////////////////////////////////////////////////////////
 
 export const stdoutStrm = new stream.Transform({objectMode: true});
 

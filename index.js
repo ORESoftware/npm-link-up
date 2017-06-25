@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var util = require("util");
 var path = require("path");
 var fs = require("fs");
-var cp = require("child_process");
 var dashdash = require('dashdash');
 var colors = require('colors/safe');
 var async = require('async');
@@ -13,15 +12,18 @@ var cwd = process.cwd();
 var root = residence.findProjectRoot(cwd);
 var treeify = require('treeify');
 var streaming_1 = require("./lib/streaming");
+var find_projects_1 = require("./lib/find-projects");
 var map_paths_with_env_vars_1 = require("./lib/map-paths-with-env-vars");
 var cache_clean_1 = require("./lib/cache-clean");
 var always_ignore_1 = require("./lib/always-ignore");
 var logging_1 = require("./lib/logging");
+var handle_options_1 = require("./lib/handle-options");
+var cmd_line_opts_1 = require("./lib/cmd-line-opts");
+var run_link_1 = require("./lib/run-link");
 process.once('exit', function (code) {
     console.log('\n\n => NPM-Link-Up is exiting with code => ', code, '\n');
 });
-var options = require('./lib/cmd-line-opts').default;
-var opts, parser = dashdash.createParser({ options: options });
+var opts, parser = dashdash.createParser({ options: cmd_line_opts_1.default });
 try {
     opts = parser.parse(process.argv);
 }
@@ -44,7 +46,7 @@ if (opts.help) {
 if (opts.completion) {
     var generatedBashCode = dashdash.bashCompletionFromOptions({
         name: 'npmlinkup',
-        options: options,
+        options: cmd_line_opts_1.default,
         includeHidden: true
     });
     console.log(generatedBashCode);
@@ -61,17 +63,17 @@ try {
     pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
+    logging_1.logError('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
     console.error('\n', e.stack || e, '\n');
-    console.error(colors.magenta.bold(' => Bizarrely, you do not have a "package.json" file in the root of your project.'));
     process.exit(1);
 }
 try {
     conf = require(path.resolve(root + '/npm-link-up.json'));
 }
 catch (e) {
+    logging_1.logError('You do not have an "npm-link-up.json" file in the root of your project. ' +
+        'You need this config file for npmlinkup to do it\'s thing.');
     console.error('\n', e.stack || e, '\n');
-    console.error(colors.magenta.bold(' => You do not have an "npm-link-up.json" file in the root of your project. ' +
-        'You need this config file for npmlinkup to do it\'s thing.'));
     process.exit(1);
 }
 var NLU = require('./schemas/npm-link-up-schema');
@@ -131,28 +133,7 @@ list = list.filter(function (item, index) {
     return list.indexOf(item) === index;
 });
 var totalList = list.slice(0);
-var ignore = (conf.ignore || []).concat(always_ignore_1.default)
-    .filter(function (item, index, arr) {
-    return arr.indexOf(item) === index;
-}).map(function (item) {
-    return new RegExp(item);
-});
-function isIgnored(pth) {
-    return ignore.some(function (r) {
-        if (r.test(pth)) {
-            if (opts.verbosity > 2) {
-                console.log("\n=> Path with value " + pth + " was ignored because it matched the following regex:\n" + r);
-            }
-            return true;
-        }
-    });
-}
-if (ignore.length > 0) {
-    console.log('\n => NPM Link Up will ignore paths that match any of the following => ');
-    ignore.forEach(function (item) {
-        console.log(colors.gray.bold(item));
-    });
-}
+var ignore = handle_options_1.getIgnore(conf, always_ignore_1.default);
 console.log('\n');
 originalList.forEach(function (item) {
     logging_1.logGood("The following dep will be NPM link'ed to this project => \"" + item + "\".");
@@ -183,7 +164,14 @@ async.autoInject({
         var q = async.queue(function (task, cb) {
             task(cb);
         }, 2);
-        q.once('drain', cb);
+        var findProject = find_projects_1.makeFindProject(q, totalList, map, ignore, opts);
+        var callable = true;
+        q.drain = function () {
+            if (callable) {
+                callable = false;
+                cb();
+            }
+        };
         var createTask = function (searchRoot) {
             return function (cb) {
                 findProject(searchRoot, cb);
@@ -197,172 +185,7 @@ async.autoInject({
         if (opts.treeify) {
             return process.nextTick(cb);
         }
-        Object.keys(map).filter(function (k) {
-            return totalList.indexOf(k) < 0;
-        }).forEach(function (k) {
-            delete map[k];
-        });
-        var keys = Object.keys(map);
-        if (!keys.length) {
-            console.error(' => No deps could be found.');
-            return process.exit(1);
-        }
-        logging_1.logGood('=> Map => \n', colors.magenta.bold(util.inspect(map)));
-        function isAllLinked() {
-            return Object.keys(map).every(function (k) {
-                return map[k].isLinked;
-            });
-        }
-        function getCountOfUnlinkedDeps(dep) {
-            return dep.deps.filter(function (d) {
-                return !map[d].isLinked;
-            }).length;
-        }
-        function findNextDep() {
-            var dep;
-            var count = null;
-            for (var name_1 in map) {
-                if (map.hasOwnProperty(name_1)) {
-                    var $dep = map[name_1];
-                    if (!$dep.isLinked) {
-                        if (!count) {
-                            dep = $dep;
-                            count = dep.deps.length;
-                        }
-                        else if (getCountOfUnlinkedDeps($dep) < count) {
-                            dep = $dep;
-                            count = dep.deps.length;
-                        }
-                    }
-                }
-            }
-            if (!dep) {
-                console.error(' => Internal implementation error => no dep found,\nbut there should be at least one yet-to-be-linked dep.');
-                return process.exit(1);
-            }
-            return dep;
-        }
-        function getNPMLinkList(deps) {
-            return deps.filter(function (d) {
-                if (!map[d]) {
-                    console.log(' => Map for key ="' + d + '" is not defined.');
-                    return false;
-                }
-                else {
-                    return map[d] && map[d].isLinked;
-                }
-            })
-                .map(function (d) {
-                return "npm link " + d;
-            });
-        }
-        function getCommandListOfLinked(name) {
-            return Object.keys(map)
-                .filter(function (k) {
-                return map[k].isLinked && map[k].deps.includes(name);
-            })
-                .map(function (k) {
-                return "cd " + map[k].path + " && npm link " + name;
-            });
-        }
-        console.log('\n');
-        function getInstallCommand(dep) {
-            if (dep.runInstall || opts.install_all) {
-                return '&& rm -rf node_modules && npm install';
-            }
-        }
-        function getLinkToItselfCommand(dep) {
-            if (opts.self_link_all || (dep.linkToItself !== false)) {
-                return "&& npm link " + dep.name;
-            }
-        }
-        async.until(isAllLinked, function (cb) {
-            if (opts.verbosity > 2) {
-                logging_1.logInfo("Searching for next dep to run.");
-            }
-            var dep = findNextDep();
-            if (opts.verbosity > 1) {
-                logging_1.logGood('Processing dep with name => ', dep.name);
-            }
-            var deps = getNPMLinkList(dep.deps);
-            var links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
-            var script = [
-                "cd " + dep.path,
-                getInstallCommand(dep),
-                links,
-                '&& npm link',
-                getLinkToItselfCommand(dep)
-            ].filter(function (i) { return i; }).join(' ');
-            logging_1.logInfo('Script is => ', script);
-            console.log('\n');
-            var k = cp.spawn('bash', [], {
-                env: Object.assign({}, process.env, {
-                    NPM_LINK_UP: 'yes'
-                })
-            });
-            k.stdin.write('\n' + script + '\n');
-            streaming_1.stdoutStrm.write("\n\n >>> Beginning of \"" + dep.name + "\"...\n\n");
-            streaming_1.stdoutStrm.write("\n\n >>> Running script => \"" + script + "\"...\n\n");
-            k.stdout.setEncoding('utf8');
-            k.stderr.setEncoding('utf8');
-            k.stdout.pipe(streaming_1.stdoutStrm, { end: false });
-            k.stderr.pipe(streaming_1.stderrStrm, { end: false });
-            process.nextTick(function () {
-                k.stdin.end();
-            });
-            var stderr = '';
-            k.stderr.on('data', function (d) {
-                stderr += d;
-            });
-            k.once('error', cb);
-            k.once('close', function (code) {
-                if (code > 0 && /ERR/i.test(stderr)) {
-                    console.log('\n');
-                    logging_1.logError("Dep with name \"" + dep.name + "\" is done, but with an error.");
-                    cb({
-                        code: code,
-                        dep: dep,
-                        error: stderr
-                    });
-                }
-                else {
-                    if (opts.verbosity > 1) {
-                        logging_1.logGood("Dep with name \"" + dep.name + "\" is done.\n");
-                        console.log('\n');
-                    }
-                    dep.isLinked = map[dep.name].isLinked = true;
-                    var linkPreviouslyUnlinked = function (cb) {
-                        var cmds = getCommandListOfLinked(dep.name);
-                        if (!cmds.length) {
-                            return process.nextTick(cb);
-                        }
-                        var cmd = cmds.join(' && ');
-                        streaming_1.stdoutStrm.write("\n => Running this command for \"" + dep.name + "\" =>\n\"" + cmd + "\".\n\n\n");
-                        var k = cp.spawn('bash', [], {
-                            env: Object.assign({}, process.env, {
-                                NPM_LINK_UP: 'yes'
-                            })
-                        });
-                        k.stdin.write('\n' + cmd + '\n');
-                        k.stdout.setEncoding('utf8');
-                        k.stderr.setEncoding('utf8');
-                        k.stdout.pipe(streaming_1.stdoutStrm, { end: false });
-                        k.stderr.pipe(streaming_1.stderrStrm, { end: false });
-                        process.nextTick(function () {
-                            k.stdin.end();
-                        });
-                        k.once('close', cb);
-                    };
-                    linkPreviouslyUnlinked(function (err) {
-                        cb(err, {
-                            code: code,
-                            dep: dep,
-                            error: stderr
-                        });
-                    });
-                }
-            });
-        }, cb);
+        run_link_1.runNPMLink(map, totalList, opts, cb);
     }
 }, function (err) {
     if (err) {

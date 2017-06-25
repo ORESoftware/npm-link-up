@@ -1,12 +1,12 @@
 export interface INPMLinkUpOpts {
+    clear_all_caches: boolean;
     verbosity: number;
     version: string;
     help: boolean;
     completion: boolean;
+    install_all: boolean;
+    self_link_all: boolean;
     treeify: boolean;
-}
-export interface INPMLinkUpVisualTree {
-    [key: string]: INPMLinkUpVisualTree;
 }
 export interface INPMLinkUpMapItem {
     name: string;
@@ -20,4 +20,7 @@ export interface INPMLinkUpMapItem {
 }
 export interface INPMLinkUpMap {
     [key: string]: INPMLinkUpMapItem;
+}
+export interface INPMLinkUpVisualTree {
+    [key: string]: INPMLinkUpVisualTree;
 }

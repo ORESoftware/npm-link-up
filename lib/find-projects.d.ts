@@ -1,2 +1,2 @@
 import { INPMLinkUpMap, INPMLinkUpOpts } from "../index";
-export declare const makeFindProject: (q: Object, totalList: string[], map: INPMLinkUpMap, isIgnored: Function, opts: INPMLinkUpOpts) => (item: string, cb: Function) => void;
+export declare const makeFindProject: (q: any, totalList: string[], map: INPMLinkUpMap, ignore: RegExp[], opts: INPMLinkUpOpts) => (item: string, cb: Function) => void;

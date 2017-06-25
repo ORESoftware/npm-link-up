@@ -1,5 +1,8 @@
 'use strict';
 
+//typescript
+import {AsyncQueue} from '@types/async';
+
 //core
 import * as util from 'util';
 import * as assert from 'assert';
@@ -20,8 +23,21 @@ import {INPMLinkUpMap, INPMLinkUpOpts} from "../index";
 
 ////////////////////////////////////////////////////////////////
 
-export const makeFindProject = function (q: Object, totalList: Array<string>, map: INPMLinkUpMap,
-                                         isIgnored: Function, opts: INPMLinkUpOpts) {
+
+
+export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>, map: INPMLinkUpMap,
+                                         ignore: Array<RegExp>, opts: INPMLinkUpOpts) {
+
+  let isIgnored = function (pth: string) {
+    return ignore.some(function (r: RegExp) {
+      if (r.test(pth)) {
+        if (opts.verbosity > 2) {
+          console.log(`\n=> Path with value ${pth} was ignored because it matched the following regex:\n${r}`);
+        }
+        return true;
+      }
+    });
+  };
 
   return function (item: string, cb: Function) {
 
