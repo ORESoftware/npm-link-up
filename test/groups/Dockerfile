@@ -38,7 +38,7 @@ RUN npm set progress=false
 RUN npm set loglevel=warn
 
 
-RUN echo "installing suman globally..."
+RUN echo "installing suman globally...7"
 RUN npm install -g suman@latest
 
 RUN echo "done installing suman globally1"

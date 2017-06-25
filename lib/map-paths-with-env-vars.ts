@@ -22,7 +22,7 @@ export const mapPaths = function(searchRoots: Array<string>, cb: Function){
     })
   });
 
-  k.stdin.write('\n' + mappedRoots.join('\n') + '\n');
+  k.stdin.write('\n' + mappedRoots.join(' ') + '\n');
 
   process.nextTick(function () {
     k.stdin.end();

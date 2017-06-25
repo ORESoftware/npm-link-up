@@ -123,17 +123,17 @@ export const runNPMLink =
 
     function getInstallCommand(dep: INPMLinkUpMapItem) {
       if (dep.runInstall || opts.install_all) {
-        return '&& rm -rf node_modules && npm install --no-optional --log-level=warn --silent;';
+        return '&& rm -rf node_modules && npm install --no-optional --log-level=warn --silent';
       }
     }
 
     function getLinkToItselfCommand(dep: INPMLinkUpMapItem) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
-        return `&& npm link ${dep.name}`
+        return `&& npm link ${String(dep.name).trim()}`
       }
     }
 
-    async.until(isAllLinked, function (cb) {
+    async.until(isAllLinked, function (cb: Function) {
 
       if (opts.verbosity > 2) {
         logInfo(`Searching for next dep to run.`);
@@ -188,7 +188,7 @@ export const runNPMLink =
 
       k.once('error', cb);
 
-      k.once('close', function (code) {
+      k.once('exit', function (code) {
 
         if (code > 0 && /ERR/i.test(stderr)) {
 
