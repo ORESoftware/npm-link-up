@@ -50,264 +50,264 @@ Step 16/23 : RUN npm install -g suman@latest
 Step 17/23 : RUN echo "done installing suman globally1"
  ---> Using cache
  ---> 5d5362056622
-Step 18/23 : RUN echo "done installing suman globally3"
- ---> Running in cab3f3162e9b
-done installing suman globally3
- ---> cc2da3809ce9
-Removing intermediate container cab3f3162e9b
+Step 18/23 : RUN echo "done installing suman globally4"
+ ---> Running in 78d7662e654b
+done installing suman globally4
+ ---> e549a12fda3b
+Removing intermediate container 78d7662e654b
 Step 19/23 : RUN git clone https://github.com/ORESoftware/npm-link-up.git
- ---> Running in 30968f4cf3a0
+ ---> Running in 0ae1af6ed5b9
 [91mCloning into 'npm-link-up'...
-[0m ---> 25e8896bc453
-Removing intermediate container 30968f4cf3a0
+[0m ---> 96c8d5b02d0c
+Removing intermediate container 0ae1af6ed5b9
 Step 20/23 : WORKDIR /home/newuser/npm-link-up
- ---> 3037df4f5cb8
-Removing intermediate container 29ff9edf2c37
+ ---> 17159943124c
+Removing intermediate container 36a7e8856ddf
 Step 21/23 : RUN npm install
- ---> Running in 59efaf9e6824
-[91mnpm[0m[91m [0m[91minfo[0m[91m [0m[91mit worked if it ends with ok
-[0m[91mnpm[0m[91m info[0m[91m [0m[91musing[0m[91m npm@3.10.10
-npm[0m[91m info[0m[91m [0m[91musing node@v6.10.2
-[0m[91mnpm info [0m[91mattempt[0m[91m registry request try #1 at 10:41:00 AM
-[0m[91mnpm [0m[91mhttp request[0m[91m GET https://registry.npmjs.org/frankenstop
-[0m[91mnpm info attempt registry request try #1 at 10:41:00 AM
-[0m[91mnpm http[0m[91m request GET https://registry.npmjs.org/treeify
-[0m[91mnpm info [0m[91mattempt registry request try #1 at 10:41:00 AM
-[0m[91mnpm http request[0m[91m GET https://registry.npmjs.org/async
-[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:00 AM
-[0m[91mnpm[0m[91m http[0m[91m [0m[91mrequest GET https://registry.npmjs.org/chalk
-[0m[91mnpm info [0m[91mattempt registry request try #1 at 10:41:00 AM
-[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/dashdash
-[0m[91mnpm info attempt registry request try #1 at 10:41:00 AM
-[0m[91mnpm http[0m[91m request GET https://registry.npmjs.org/residence
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/residence
-[0m[91mnpm http[0m[91m 304[0m[91m https://registry.npmjs.org/dashdash
-[0m[91mnpm info addNameTag [ 'residence', 'latest' ]
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/async
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/chalk
-[0m[91mnpm [0m[91mhttp [0m[91m200[0m[91m https://registry.npmjs.org/treeify
+ ---> Running in 28d2016f2dcd
+[91mnpm[0m[91m info [0m[91mit worked if it ends with[0m[91m ok
+[0m[91mnpm [0m[91minfo using npm@3.10.10
+npm info using node@v6.10.2
+[0m[91mnpm info attempt registry request try #1 at 10:41:49 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/frankenstop
+[0m[91mnpm info attempt registry request try #1 at 10:41:49 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/treeify
+[0m[91mnpm info attempt registry request try #1 at 10:41:49 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/async
+[0m[91mnpm info attempt registry request try #1 at 10:41:49 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/chalk
+[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:49 AM
+npm http request GET https://registry.npmjs.org/dashdash
+[0m[91mnpm info attempt[0m[91m registry request try #1 at 10:41:49 AM
+npm http request GET https://registry.npmjs.org/residence
+[0m[91mnpm http 304 https://registry.npmjs.org/dashdash
+[0m[91mnpm http[0m[91m 304 https://registry.npmjs.org/residence
+[0m[91mnpm http 304 https://registry.npmjs.org/chalk
+[0m[91mnpm http 200 https://registry.npmjs.org/treeify
+[0m[91mnpm http 304 https://registry.npmjs.org/async
+[0m[91mnpm info [0m[91maddNameTag[0m[91m [ 'residence', 'latest' ]
 [0m[91mnpm http 200[0m[91m https://registry.npmjs.org/frankenstop
-[0m[91mnpm info retry fetch attempt 1 at 10:41:01 AM
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
+[0m[91mnpm info retry fetch attempt 1 at 10:41:50 AM
+[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:50 AM
 [0m[91mnpm http fetch GET https://registry.npmjs.org/treeify/-/treeify-1.0.1.tgz
-[0m[91mnpm [0m[91minfo addNameTag [ 'frankenstop', 'latest' ]
-[0m[91mnpm info [0m[91mretry fetch attempt 1 at 10:41:01 AM
-npm info attempt[0m[91m registry request try #1 at 10:41:01 AM
-[0m[91mnpm http[0m[91m fetch GET https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1007.tgz
+[0m[91mnpm info addNameTag [ 'frankenstop', 'latest' ]
 [0m[91mnpm http fetch 200 https://registry.npmjs.org/treeify/-/treeify-1.0.1.tgz
-[0m[91mnpm http fetch[0m[91m 200 https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1007.tgz
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http[0m[91m request[0m[91m GET https://registry.npmjs.org/lodash
+[0m[91mnpm info retry fetch attempt 1 at 10:41:50 AM
+[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm[0m[91m http fetch GET https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1007.tgz
+[0m[91mnpm http fetch 200 https://registry.npmjs.org/frankenstop/-/frankenstop-0.0.1007.tgz
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http[0m[91m request GET https://registry.npmjs.org/lodash
 [0m[91mnpm http 304 https://registry.npmjs.org/lodash
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/ansi-styles
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/escape-string-regexp
-[0m[91mnpm info [0m[91mattempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/has-ansi
-[0m[91mnpm [0m[91minfo attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/strip-ansi
-[0m[91mnpm info attempt[0m[91m registry request try #1 at 10:41:01 AM
-npm http request[0m[91m GET https://registry.npmjs.org/supports-color
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/ansi-styles
-[0m[91mnpm http 304 https://registry.npmjs.org/supports-color
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/strip-ansi
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/has-ansi
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/escape-string-regexp
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http[0m[91m request GET https://registry.npmjs.org/ansi-styles
+[0m[91mnpm info [0m[91mattempt registry request try #1 at 10:41:50 AM
+npm[0m[91m http request GET https://registry.npmjs.org/has-ansi
+[0m[91mnpm[0m[91m info[0m[91m [0m[91mattempt[0m[91m registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request[0m[91m GET https://registry.npmjs.org/strip-ansi
+[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/escape-string-regexp
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/supports-color
+[0m[91mnpm http[0m[91m 304 https://registry.npmjs.org/has-ansi
+[0m[91mnpm [0m[91mhttp 304 https://registry.npmjs.org/ansi-styles
+[0m[91mnpm http 304 https://registry.npmjs.org/escape-string-regexp
+[0m[91mnpm http 304 https://registry.npmjs.org/strip-ansi
+[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/supports-color
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
 [0m[91mnpm http request GET https://registry.npmjs.org/ansi-regex
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/ansi-regex
-[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/assert-plus
-[0m[91mnpm http[0m[91m 304 https://registry.npmjs.org/assert-plus
-[0m[91mnpm info attempt[0m[91m registry request try #1 at 10:41:01 AM
-npm http [0m[91mrequest GET https://registry.npmjs.org/@types%2fasync
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/@types%2fnode
-[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:01 AM
-npm http[0m[91m request[0m[91m GET https://registry.npmjs.org/@types%2fchalk
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-npm http[0m[91m request GET https://registry.npmjs.org/mkdirp
-[0m[91mnpm info attempt[0m[91m registry request try #1 at 10:41:01 AM
-npm[0m[91m http request GET https://registry.npmjs.org/rimraf
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/mkdirp
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/rimraf
-[0m[91mnpm http 304 https://registry.npmjs.org/@types%2fchalk
+[0m[91mnpm http 304 https://registry.npmjs.org/ansi-regex
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/assert-plus
+[0m[91mnpm http 304 https://registry.npmjs.org/assert-plus
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/@types%2fasync
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request[0m[91m GET https://registry.npmjs.org/@types%2fnode
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/@types%2fchalk
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http[0m[91m request GET https://registry.npmjs.org/mkdirp
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http request GET https://registry.npmjs.org/rimraf
+[0m[91mnpm http 304 https://registry.npmjs.org/mkdirp
+[0m[91mnpm http 304 https://registry.npmjs.org/rimraf
 [0m[91mnpm http 200 https://registry.npmjs.org/@types%2fasync
-[0m[91mnpm info retry fetch attempt 1 at 10:41:01 AM
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-npm http [0m[91mfetch GET https://registry.npmjs.org/@types/async/-/async-2.0.40.tgz
+[0m[91mnpm[0m[91m http[0m[91m 304 https://registry.npmjs.org/@types%2fchalk
+[0m[91mnpm info retry fetch attempt 1 at 10:41:50 AM
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http fetch GET https://registry.npmjs.org/@types/async/-/async-2.0.40.tgz
 [0m[91mnpm http 200 https://registry.npmjs.org/@types%2fnode
-[0m[91mnpm info retry fetch attempt 1 at 10:41:01 AM
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm[0m[91m http [0m[91mfetch GET https://registry.npmjs.org/@types/node/-/node-8.0.2.tgz
+[0m[91mnpm info retry fetch attempt 1 at 10:41:50 AM
+[0m[91mnpm [0m[91minfo attempt registry request try #1 at 10:41:50 AM
+npm http fetch GET https://registry.npmjs.org/@types/node/-/node-8.0.2.tgz
 [0m[91mnpm http fetch 200 https://registry.npmjs.org/@types/async/-/async-2.0.40.tgz
 [0m[91mnpm http fetch 200 https://registry.npmjs.org/@types/node/-/node-8.0.2.tgz
-[0m[91mnpm info [0m[91mattempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/minimist
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http request GET https://registry.npmjs.org/minimist
 [0m[91mnpm http 304 https://registry.npmjs.org/minimist
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request[0m[91m GET https://registry.npmjs.org/glob
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http request GET https://registry.npmjs.org/glob
 [0m[91mnpm http 304 https://registry.npmjs.org/glob
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http request GET https://registry.npmjs.org/fs.realpath
-[0m[91mnpm info[0m[91m attempt[0m[91m registry request try #1 at 10:41:01 AM
-[0m[91mnpm[0m[91m http request GET https://registry.npmjs.org/inflight
-[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/inherits
-[0m[91mnpm [0m[91minfo attempt registry request try #1 at 10:41:01 AM
-npm http[0m[91m request GET https://registry.npmjs.org/minimatch
-[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:01 AM
-[0m[91mnpm [0m[91mhttp request[0m[91m GET https://registry.npmjs.org/once
-[0m[91mnpm [0m[91minfo attempt registry request try #1 at 10:41:01 AM
-npm[0m[91m http request GET https://registry.npmjs.org/path-is-absolute
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/fs.realpath
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/inflight
-[0m[91mnpm http[0m[91m 304 https://registry.npmjs.org/inherits
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/once
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http request GET https://registry.npmjs.org/fs.realpath
+[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request[0m[91m GET https://registry.npmjs.org/inherits
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/minimatch
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/once
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/inflight
+[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm[0m[91m http request GET https://registry.npmjs.org/path-is-absolute
+[0m[91mnpm http 304 https://registry.npmjs.org/fs.realpath
+[0m[91mnpm http 304 https://registry.npmjs.org/inherits
+[0m[91mnpm http 304 https://registry.npmjs.org/minimatch
+[0m[91mnpm http 304 https://registry.npmjs.org/once
 [0m[91mnpm http 304 https://registry.npmjs.org/path-is-absolute
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/minimatch
-[0m[91mnpm info attempt registry request try #1 at 10:41:01 AM
+[0m[91mnpm http 304 https://registry.npmjs.org/inflight
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
 [0m[91mnpm http request GET https://registry.npmjs.org/wrappy
-[0m[91mnpm http[0m[91m 304 https://registry.npmjs.org/wrappy
-[0m[91mnpm info[0m[91m attempt registry request try #1 at 10:41:02 AM
+[0m[91mnpm http 304 https://registry.npmjs.org/wrappy
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
 npm http request GET https://registry.npmjs.org/brace-expansion
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/brace-expansion
-[0m[91mnpm[0m[91m info attempt registry request try #1 at 10:41:02 AM
-npm [0m[91mhttp [0m[91mrequest GET https://registry.npmjs.org/balanced-match
-[0m[91mnpm info attempt registry request try #1 at 10:41:02 AM
-[0m[91mnpm http [0m[91mrequest GET https://registry.npmjs.org/concat-map
-[0m[91mnpm http [0m[91m304 https://registry.npmjs.org/concat-map
-[0m[91mnpm http 304[0m[91m https://registry.npmjs.org/balanced-match
+[0m[91mnpm http 304 https://registry.npmjs.org/brace-expansion
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+npm http request GET https://registry.npmjs.org/balanced-match
+[0m[91mnpm info attempt registry request try #1 at 10:41:50 AM
+[0m[91mnpm http request GET https://registry.npmjs.org/concat-map
+[0m[91mnpm http 304 https://registry.npmjs.org/balanced-match
+[0m[91mnpm http 304 https://registry.npmjs.org/concat-map
 [0m[91mnpm info lifecycle npm-link-up@0.0.1005~preinstall: npm-link-up@0.0.1005
 [0m[91mnpm info lifecycle ansi-regex@2.1.1~preinstall: ansi-regex@2.1.1
 [0m[91mnpm info lifecycle ansi-styles@2.2.1~preinstall: ansi-styles@2.2.1
 [0m[91mnpm info lifecycle assert-plus@1.0.0~preinstall: assert-plus@1.0.0
 [0m[91mnpm info lifecycle balanced-match@1.0.0~preinstall: balanced-match@1.0.0
-[0m[91mnpm info lifecycle concat-map@0.0.1~preinstall: concat-map@0.0.1
-[0m[91mnpm info lifecycle[0m[91m brace-expansion@1.1.8~preinstall: brace-expansion@1.1.8
-[0m[91mnpm[0m[91m info lifecycle escape-string-regexp@1.0.5~preinstall: escape-string-regexp@1.0.5
-[0m[91mnpm info[0m[91m lifecycle fs.realpath@1.0.0~preinstall: fs.realpath@1.0.0
-[0m[91mnpm info lifecycle[0m[91m has-ansi@2.0.0~preinstall: has-ansi@2.0.0
-npm info lifecycle inherits@2.0.3~preinstall: inherits@2.0.3
-[0m[91mnpm [0m[91minfo lifecycle lodash@4.17.4~preinstall: lodash@4.17.4
-npm [0m[91minfo lifecycle[0m[91m minimatch@3.0.4~preinstall: minimatch@3.0.4
+[0m[91mnpm info[0m[91m lifecycle concat-map@0.0.1~preinstall: concat-map@0.0.1
+[0m[91mnpm info lifecycle brace-expansion@1.1.8~preinstall: brace-expansion@1.1.8
+[0m[91mnpm info lifecycle escape-string-regexp@1.0.5~preinstall: escape-string-regexp@1.0.5
+[0m[91mnpm info lifecycle fs.realpath@1.0.0~preinstall: fs.realpath@1.0.0
+[0m[91mnpm[0m[91m info lifecycle has-ansi@2.0.0~preinstall: has-ansi@2.0.0
+[0m[91mnpm[0m[91m info [0m[91mlifecycle inherits@2.0.3~preinstall: inherits@2.0.3
+[0m[91mnpm[0m[91m info lifecycle lodash@4.17.4~preinstall: lodash@4.17.4
+[0m[91mnpm[0m[91m info[0m[91m lifecycle minimatch@3.0.4~preinstall: minimatch@3.0.4
 [0m[91mnpm info lifecycle minimist@0.0.8~preinstall: minimist@0.0.8
-[0m[91mnpm info lifecycle path-is-absolute@1.0.1~preinstall: path-is-absolute@1.0.1
-[0m[91mnpm [0m[91minfo lifecycle strip-ansi@3.0.1~preinstall: strip-ansi@3.0.1
-[0m[91mnpm info [0m[91mlifecycle supports-color@2.0.0~preinstall: supports-color@2.0.0
-[0m[91mnpm info lifecycle wrappy@1.0.2~preinstall: wrappy@1.0.2
+[0m[91mnpm[0m[91m info lifecycle path-is-absolute@1.0.1~preinstall: path-is-absolute@1.0.1
+[0m[91mnpm info lifecycle[0m[91m strip-ansi@3.0.1~preinstall: strip-ansi@3.0.1
+[0m[91mnpm[0m[91m info lifecycle supports-color@2.0.0~preinstall: supports-color@2.0.0
+npm info [0m[91mlifecycle wrappy@1.0.2~preinstall: wrappy@1.0.2
 [0m[91mnpm info lifecycle once@1.4.0~preinstall: once@1.4.0
-[0m[91mnpm info lifecycle inflight@1.0.6~preinstall: inflight@1.0.6
-[0m[91mnpm [0m[91minfo lifecycle glob@7.1.2~preinstall: glob@7.1.2
-npm info[0m[91m lifecycle @types/async@2.0.40~preinstall: @types/async@2.0.40
-npm info [0m[91mlifecycle @types/chalk@0.4.31~preinstall: @types/chalk@0.4.31
-npm [0m[91minfo [0m[91mlifecycle @types/node@8.0.2~preinstall: @types/node@8.0.2
-[0m[91mnpm info lifecycle async@2.4.1~preinstall: async@2.4.1
-[0m[91mnpm [0m[91minfo lifecycle chalk@1.1.3~preinstall: chalk@1.1.3
-[0m[91mnpm info [0m[91mlifecycle dashdash@1.14.1~preinstall: dashdash@1.14.1
+npm info lifecycle inflight@1.0.6~preinstall: inflight@1.0.6
+[0m[91mnpm[0m[91m [0m[91minfo lifecycle glob@7.1.2~preinstall: glob@7.1.2
+[0m[91mnpm info lifecycle @types/async@2.0.40~preinstall: @types/async@2.0.40
+[0m[91mnpm info lifecycle @types/chalk@0.4.31~preinstall: @types/chalk@0.4.31
+[0m[91mnpm[0m[91m info lifecycle @types/node@8.0.2~preinstall: @types/node@8.0.2
+[0m[91mnpm[0m[91m info lifecycle async@2.4.1~preinstall: async@2.4.1
+npm[0m[91m info lifecycle chalk@1.1.3~preinstall: chalk@1.1.3
+[0m[91mnpm info lifecycle dashdash@1.14.1~preinstall: dashdash@1.14.1
 [0m[91mnpm info lifecycle frankenstop@0.0.1007~preinstall: frankenstop@0.0.1007
 [0m[91mnpm info lifecycle mkdirp@0.5.1~preinstall: mkdirp@0.5.1
-[0m[91mnpm info lifecycle[0m[91m residence@0.0.205~preinstall: residence@0.0.205
-[0m[91mnpm info lifecycle[0m[91m rimraf@2.6.1~preinstall: rimraf@2.6.1
+[0m[91mnpm info lifecycle residence@0.0.205~preinstall: residence@0.0.205
+[0m[91mnpm[0m[91m [0m[91minfo lifecycle rimraf@2.6.1~preinstall: rimraf@2.6.1
 npm info lifecycle treeify@1.0.1~preinstall: treeify@1.0.1
-[0m[91mnpm info linkStuff[0m[91m ansi-regex@2.1.1
-[0m[91mnpm info[0m[91m linkStuff[0m[91m ansi-styles@2.2.1
-[0m[91mnpm [0m[91minfo[0m[91m linkStuff assert-plus@1.0.0
-[0m[91mnpm info [0m[91mlinkStuff balanced-match@1.0.0
-[0m[91mnpm [0m[91minfo [0m[91mlinkStuff concat-map@0.0.1
-[0m[91mnpm info linkStuff[0m[91m brace-expansion@1.1.8
-[0m[91mnpm info [0m[91mlinkStuff escape-string-regexp@1.0.5
-[0m[91mnpm info linkStuff[0m[91m fs.realpath@1.0.0
-[0m[91mnpm info linkStuff[0m[91m has-ansi@2.0.0
-[0m[91mnpm info[0m[91m linkStuff inherits@2.0.3
-[0m[91mnpm info linkStuff[0m[91m lodash@4.17.4
-[0m[91mnpm info linkStuff[0m[91m minimatch@3.0.4
-[0m[91mnpm info [0m[91mlinkStuff minimist@0.0.8
-[0m[91mnpm info[0m[91m linkStuff path-is-absolute@1.0.1
-[0m[91mnpm info linkStuff[0m[91m strip-ansi@3.0.1
-[0m[91mnpm[0m[91m info linkStuff supports-color@2.0.0
-[0m[91mnpm info linkStuff[0m[91m wrappy@1.0.2
+[0m[91mnpm info linkStuff ansi-regex@2.1.1
+[0m[91mnpm info linkStuff ansi-styles@2.2.1
+[0m[91mnpm info linkStuff assert-plus@1.0.0
+[0m[91mnpm[0m[91m info linkStuff balanced-match@1.0.0
+[0m[91mnpm info linkStuff concat-map@0.0.1
+[0m[91mnpm info linkStuff brace-expansion@1.1.8
+[0m[91mnpm info linkStuff escape-string-regexp@1.0.5
+[0m[91mnpm info linkStuff fs.realpath@1.0.0
+[0m[91mnpm info linkStuff has-ansi@2.0.0
+[0m[91mnpm info linkStuff inherits@2.0.3
+[0m[91mnpm info linkStuff lodash@4.17.4
+[0m[91mnpm info linkStuff minimatch@3.0.4
+[0m[91mnpm info linkStuff minimist@0.0.8
+[0m[91mnpm info linkStuff path-is-absolute@1.0.1
+[0m[91mnpm info linkStuff strip-ansi@3.0.1
+[0m[91mnpm info linkStuff supports-color@2.0.0
+[0m[91mnpm info linkStuff wrappy@1.0.2
 [0m[91mnpm info linkStuff once@1.4.0
-[0m[91mnpm info [0m[91mlinkStuff inflight@1.0.6
-[0m[91mnpm info [0m[91mlinkStuff glob@7.1.2
+[0m[91mnpm info linkStuff inflight@1.0.6
+[0m[91mnpm info linkStuff glob@7.1.2
 [0m[91mnpm info linkStuff[0m[91m @types/async@2.0.40
-[0m[91mnpm [0m[91minfo linkStuff @types/chalk@0.4.31
+[0m[91mnpm info linkStuff @types/chalk@0.4.31
 [0m[91mnpm info linkStuff @types/node@8.0.2
-[0m[91mnpm info linkStuff[0m[91m async@2.4.1
-[0m[91mnpm[0m[91m info linkStuff chalk@1.1.3
-[0m[91mnpm info[0m[91m linkStuff dashdash@1.14.1
-[0m[91mnpm info linkStuff[0m[91m frankenstop@0.0.1007
-[0m[91mnpm info linkStuff[0m[91m mkdirp@0.5.1
-[0m[91mnpm[0m[91m info linkStuff residence@0.0.205
+[0m[91mnpm info linkStuff async@2.4.1
+[0m[91mnpm info linkStuff chalk@1.1.3
+[0m[91mnpm info linkStuff dashdash@1.14.1
+[0m[91mnpm info linkStuff frankenstop@0.0.1007
+[0m[91mnpm info linkStuff mkdirp@0.5.1
+[0m[91mnpm info linkStuff residence@0.0.205
 [0m[91mnpm info linkStuff rimraf@2.6.1
-[0m[91mnpm info linkStuff[0m[91m treeify@1.0.1
+[0m[91mnpm info linkStuff treeify@1.0.1
 [0m[91mnpm info lifecycle ansi-regex@2.1.1~install: ansi-regex@2.1.1
 [0m[91mnpm info lifecycle ansi-styles@2.2.1~install: ansi-styles@2.2.1
 [0m[91mnpm info lifecycle assert-plus@1.0.0~install: assert-plus@1.0.0
 [0m[91mnpm info lifecycle balanced-match@1.0.0~install: balanced-match@1.0.0
-[0m[91mnpm info lifecycle[0m[91m concat-map@0.0.1~install: concat-map@0.0.1
+[0m[91mnpm info lifecycle concat-map@0.0.1~install: concat-map@0.0.1
 [0m[91mnpm info lifecycle brace-expansion@1.1.8~install: brace-expansion@1.1.8
-[0m[91mnpm info[0m[91m lifecycle[0m[91m escape-string-regexp@1.0.5~install: escape-string-regexp@1.0.5
-[0m[91mnpm info [0m[91mlifecycle fs.realpath@1.0.0~install: fs.realpath@1.0.0
-[0m[91mnpm info [0m[91mlifecycle has-ansi@2.0.0~install: has-ansi@2.0.0
-[0m[91mnpm info [0m[91mlifecycle inherits@2.0.3~install: inherits@2.0.3
-[0m[91mnpm info[0m[91m lifecycle lodash@4.17.4~install: lodash@4.17.4
-[0m[91mnpm info lifecycle[0m[91m minimatch@3.0.4~install: minimatch@3.0.4
-[0m[91mnpm [0m[91minfo lifecycle minimist@0.0.8~install: minimist@0.0.8
-[0m[91mnpm info lifecycle[0m[91m path-is-absolute@1.0.1~install: path-is-absolute@1.0.1
-[0m[91mnpm info lifecycle[0m[91m strip-ansi@3.0.1~install: strip-ansi@3.0.1
-[0m[91mnpm info [0m[91mlifecycle supports-color@2.0.0~install: supports-color@2.0.0
+[0m[91mnpm info lifecycle escape-string-regexp@1.0.5~install: escape-string-regexp@1.0.5
+[0m[91mnpm info lifecycle fs.realpath@1.0.0~install: fs.realpath@1.0.0
+[0m[91mnpm info lifecycle has-ansi@2.0.0~install: has-ansi@2.0.0
+[0m[91mnpm info lifecycle inherits@2.0.3~install: inherits@2.0.3
+[0m[91mnpm info lifecycle lodash@4.17.4~install: lodash@4.17.4
+[0m[91mnpm info lifecycle minimatch@3.0.4~install: minimatch@3.0.4
+[0m[91mnpm info lifecycle minimist@0.0.8~install: minimist@0.0.8
+[0m[91mnpm info lifecycle path-is-absolute@1.0.1~install: path-is-absolute@1.0.1
+[0m[91mnpm info lifecycle strip-ansi@3.0.1~install: strip-ansi@3.0.1
+[0m[91mnpm info lifecycle supports-color@2.0.0~install: supports-color@2.0.0
 [0m[91mnpm info lifecycle wrappy@1.0.2~install: wrappy@1.0.2
-[0m[91mnpm info[0m[91m lifecycle once@1.4.0~install: once@1.4.0
-[0m[91mnpm info [0m[91mlifecycle inflight@1.0.6~install: inflight@1.0.6
-[0m[91mnpm info [0m[91mlifecycle glob@7.1.2~install: glob@7.1.2
-[0m[91mnpm info lifecycle[0m[91m @types/async@2.0.40~install: @types/async@2.0.40
-[0m[91mnpm [0m[91minfo lifecycle @types/chalk@0.4.31~install: @types/chalk@0.4.31
-[0m[91mnpm info lifecycle[0m[91m @types/node@8.0.2~install: @types/node@8.0.2
-[0m[91mnpm info lifecycle[0m[91m async@2.4.1~install: async@2.4.1
-[0m[91mnpm info lifecycle[0m[91m chalk@1.1.3~install: chalk@1.1.3
+[0m[91mnpm info lifecycle once@1.4.0~install: once@1.4.0
+[0m[91mnpm info lifecycle inflight@1.0.6~install: inflight@1.0.6
+[0m[91mnpm info lifecycle glob@7.1.2~install: glob@7.1.2
+[0m[91mnpm info lifecycle @types/async@2.0.40~install: @types/async@2.0.40
+[0m[91mnpm info lifecycle @types/chalk@0.4.31~install: @types/chalk@0.4.31
+[0m[91mnpm info lifecycle @types/node@8.0.2~install: @types/node@8.0.2
+[0m[91mnpm info lifecycle async@2.4.1~install: async@2.4.1
+[0m[91mnpm info lifecycle chalk@1.1.3~install: chalk@1.1.3
 [0m[91mnpm info lifecycle dashdash@1.14.1~install: dashdash@1.14.1
 [0m[91mnpm info lifecycle frankenstop@0.0.1007~install: frankenstop@0.0.1007
 [0m[91mnpm info lifecycle mkdirp@0.5.1~install: mkdirp@0.5.1
-[0m[91mnpm info [0m[91mlifecycle residence@0.0.205~install: residence@0.0.205
+[0m[91mnpm info lifecycle residence@0.0.205~install: residence@0.0.205
 [0m[91mnpm info lifecycle rimraf@2.6.1~install: rimraf@2.6.1
 [0m[91mnpm info lifecycle treeify@1.0.1~install: treeify@1.0.1
-[0m[91mnpm info [0m[91mlifecycle ansi-regex@2.1.1~postinstall: ansi-regex@2.1.1
-[0m[91mnpm info [0m[91mlifecycle ansi-styles@2.2.1~postinstall: ansi-styles@2.2.1
+[0m[91mnpm info lifecycle ansi-regex@2.1.1~postinstall: ansi-regex@2.1.1
+[0m[91mnpm info lifecycle ansi-styles@2.2.1~postinstall: ansi-styles@2.2.1
 [0m[91mnpm info lifecycle assert-plus@1.0.0~postinstall: assert-plus@1.0.0
-[0m[91mnpm info [0m[91mlifecycle balanced-match@1.0.0~postinstall: balanced-match@1.0.0
-[0m[91mnpm info lifecycle[0m[91m concat-map@0.0.1~postinstall: concat-map@0.0.1
+[0m[91mnpm info lifecycle balanced-match@1.0.0~postinstall: balanced-match@1.0.0
+[0m[91mnpm info lifecycle concat-map@0.0.1~postinstall: concat-map@0.0.1
 [0m[91mnpm info lifecycle brace-expansion@1.1.8~postinstall: brace-expansion@1.1.8
 [0m[91mnpm info lifecycle escape-string-regexp@1.0.5~postinstall: escape-string-regexp@1.0.5
-[0m[91mnpm info lifecycle[0m[91m fs.realpath@1.0.0~postinstall: fs.realpath@1.0.0
-[0m[91mnpm info lifecycle[0m[91m has-ansi@2.0.0~postinstall: has-ansi@2.0.0
-[0m[91mnpm info lifecycle[0m[91m inherits@2.0.3~postinstall: inherits@2.0.3
-[0m[91mnpm info [0m[91mlifecycle lodash@4.17.4~postinstall: lodash@4.17.4
+[0m[91mnpm info lifecycle fs.realpath@1.0.0~postinstall: fs.realpath@1.0.0
+[0m[91mnpm info lifecycle has-ansi@2.0.0~postinstall: has-ansi@2.0.0
+[0m[91mnpm info lifecycle inherits@2.0.3~postinstall: inherits@2.0.3
+[0m[91mnpm info lifecycle lodash@4.17.4~postinstall: lodash@4.17.4
 [0m[91mnpm info lifecycle minimatch@3.0.4~postinstall: minimatch@3.0.4
-[0m[91mnpm info lifecycle[0m[91m minimist@0.0.8~postinstall: minimist@0.0.8
-[0m[91mnpm info lifecycle[0m[91m path-is-absolute@1.0.1~postinstall: path-is-absolute@1.0.1
+[0m[91mnpm info lifecycle minimist@0.0.8~postinstall: minimist@0.0.8
+[0m[91mnpm info lifecycle path-is-absolute@1.0.1~postinstall: path-is-absolute@1.0.1
 [0m[91mnpm info lifecycle strip-ansi@3.0.1~postinstall: strip-ansi@3.0.1
 [0m[91mnpm info lifecycle supports-color@2.0.0~postinstall: supports-color@2.0.0
 [0m[91mnpm info lifecycle wrappy@1.0.2~postinstall: wrappy@1.0.2
-[0m[91mnpm info [0m[91mlifecycle once@1.4.0~postinstall: once@1.4.0
+[0m[91mnpm info lifecycle once@1.4.0~postinstall: once@1.4.0
 [0m[91mnpm info lifecycle inflight@1.0.6~postinstall: inflight@1.0.6
-[0m[91mnpm info lifecycle[0m[91m glob@7.1.2~postinstall: glob@7.1.2
-[0m[91mnpm info lifecycle[0m[91m @types/async@2.0.40~postinstall: @types/async@2.0.40
-[0m[91mnpm info [0m[91mlifecycle @types/chalk@0.4.31~postinstall: @types/chalk@0.4.31
+[0m[91mnpm info lifecycle glob@7.1.2~postinstall: glob@7.1.2
+[0m[91mnpm info lifecycle @types/async@2.0.40~postinstall: @types/async@2.0.40
+[0m[91mnpm info lifecycle @types/chalk@0.4.31~postinstall: @types/chalk@0.4.31
 [0m[91mnpm info lifecycle @types/node@8.0.2~postinstall: @types/node@8.0.2
-[0m[91mnpm info [0m[91mlifecycle async@2.4.1~postinstall: async@2.4.1
-[0m[91mnpm info[0m[91m lifecycle chalk@1.1.3~postinstall: chalk@1.1.3
-[0m[91mnpm info [0m[91mlifecycle dashdash@1.14.1~postinstall: dashdash@1.14.1
-[0m[91mnpm info lifecycle[0m[91m frankenstop@0.0.1007~postinstall: frankenstop@0.0.1007
-[0m[91mnpm info[0m[91m lifecycle mkdirp@0.5.1~postinstall: mkdirp@0.5.1
-[0m[91mnpm info [0m[91mlifecycle residence@0.0.205~postinstall: residence@0.0.205
-[0m[91mnpm info [0m[91mlifecycle rimraf@2.6.1~postinstall: rimraf@2.6.1
-[0m[91mnpm info lifecycle[0m[91m treeify@1.0.1~postinstall: treeify@1.0.1
-[0m[91mnpm info linkStuff[0m[91m npm-link-up@0.0.1005
-[0m[91mnpm info [0m[91mlifecycle npm-link-up@0.0.1005~install: npm-link-up@0.0.1005
-[0m[91mnpm info lifecycle[0m[91m npm-link-up@0.0.1005~postinstall: npm-link-up@0.0.1005
-[0m[91mnpm info[0m[91m lifecycle npm-link-up@0.0.1005~prepublish: npm-link-up@0.0.1005
+[0m[91mnpm info lifecycle async@2.4.1~postinstall: async@2.4.1
+[0m[91mnpm info lifecycle chalk@1.1.3~postinstall: chalk@1.1.3
+[0m[91mnpm info lifecycle dashdash@1.14.1~postinstall: dashdash@1.14.1
+[0m[91mnpm info lifecycle frankenstop@0.0.1007~postinstall: frankenstop@0.0.1007
+[0m[91mnpm info lifecycle mkdirp@0.5.1~postinstall: mkdirp@0.5.1
+[0m[91mnpm info lifecycle residence@0.0.205~postinstall: residence@0.0.205
+[0m[91mnpm info lifecycle rimraf@2.6.1~postinstall: rimraf@2.6.1
+[0m[91mnpm info lifecycle treeify@1.0.1~postinstall: treeify@1.0.1
+[0m[91mnpm info linkStuff npm-link-up@0.0.1005
+[0m[91mnpm info lifecycle npm-link-up@0.0.1005~install: npm-link-up@0.0.1005
+[0m[91mnpm info lifecycle npm-link-up@0.0.1005~postinstall: npm-link-up@0.0.1005
+[0m[91mnpm info lifecycle npm-link-up@0.0.1005~prepublish: npm-link-up@0.0.1005
 [0mnpm-link-up@0.0.1005 /home/newuser/npm-link-up
 +-- @types/async@2.0.40 
 +-- @types/chalk@0.4.31 
@@ -342,16 +342,16 @@ npm info lifecycle treeify@1.0.1~preinstall: treeify@1.0.1
 `-- treeify@1.0.1 
 
 [91mnpm info ok 
-[0m ---> b4c1cd8873d5
-Removing intermediate container 59efaf9e6824
+[0m ---> 16e3fe2f4474
+Removing intermediate container 28d2016f2dcd
 Step 22/23 : COPY all.sh .
- ---> 5018d5258147
-Removing intermediate container ea9f17904b37
+ ---> 6a0e7bdd44b5
+Removing intermediate container 4da3428aea4f
 Step 23/23 : ENTRYPOINT /bin/bash /home/newuser/npm-link-up/all.sh
- ---> Running in 4133003edffb
- ---> 2dba6c2d645c
-Removing intermediate container 4133003edffb
-Successfully built 2dba6c2d645c
+ ---> Running in 6919f415148e
+ ---> 2f2284958ed2
+Removing intermediate container 6919f415148e
+Successfully built 2f2284958ed2
  => Original path of Suman executable => "/usr/local/bin/suman"
  => No local Suman executable could be found, given the current directory => /home/newuser/npm-link-up
  => Attempting to run installed version of Suman here => '/usr/local/lib/node_modules/suman/cli.js'
@@ -362,7 +362,7 @@ npm info ok
  => [suman] =>  Resolved path of Suman executable => "/usr/local/lib/node_modules/suman/cli.js"
  => [suman] =>  Node.js version: v6.10.2
  => [suman] =>  Suman v1.1.512238 running...
- => [suman] =>  [pid] =>  33
+ => [suman] =>  [pid] =>  32
  => [suman] =>   => cwd: /home/newuser/npm-link-up
  => Suman message => note that Suman is not installed locally, you may wish to run "$ suman --init"
  => Suman verbose message => note that "suman-server" package is not yet installed.
@@ -430,28 +430,116 @@ Cloning into 'residence'...
 
 
 starting npmlinkup...
+ => [npm-link-up] =>  warning, the following item was listed in your npm-link-up.json file,
+but is not listed in your package.json dependencies => "suman-d".
+
+ => NPM Link Up will ignore paths that match any of the following => 
+ => [npm-link-up] =>  ignored => /\/node_modules\//
+ => [npm-link-up] =>  ignored => /\/.git\//
+ => [npm-link-up] =>  ignored => /\/.idea\//
+ => [npm-link-up] =>  ignored => /\/bower_components\//
+
+
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "pragmatik".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "residence".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-watch".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-d".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-utils".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-events".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-debug".
+ => [npm-link-up] =>  The following dep will be NPM link'ed to this project => "suman-browser-polyfills".
+
+
+
+
+ => [npm-link-up] =>  Searching these roots => 
+ [ '/home/newuser/.npmlinkup/test' ]
+ => [npm-link-up] =>  => Map => 
+ { residence: 
+   { name: 'residence',
+     hasNPMLinkUpJSONFile: false,
+     linkToItself: false,
+     runInstall: true,
+     hasAtLinkSh: false,
+     path: '/home/newuser/.npmlinkup/test/residence',
+     deps: [] },
+  pragmatik: 
+   { name: 'pragmatik',
+     hasNPMLinkUpJSONFile: true,
+     linkToItself: true,
+     runInstall: true,
+     hasAtLinkSh: true,
+     path: '/home/newuser/.npmlinkup/test/pragmatik',
+     deps: [ 'suman-browser-polyfills' ] },
+  'suman-events': 
+   { name: 'suman-events',
+     hasNPMLinkUpJSONFile: false,
+     linkToItself: false,
+     runInstall: true,
+     hasAtLinkSh: true,
+     path: '/home/newuser/.npmlinkup/test/suman-events',
+     deps: [] },
+  suman: 
+   { name: 'suman',
+     hasNPMLinkUpJSONFile: true,
+     linkToItself: true,
+     runInstall: true,
+     hasAtLinkSh: false,
+     path: '/home/newuser/.npmlinkup/test/suman',
+     deps: 
+      [ 'pragmatik',
+        'residence',
+        'suman-watch',
+        'suman-d',
+        'suman-utils',
+        'suman-events',
+        'suman-debug',
+        'suman-browser-polyfills',
+        'suman' ] },
+  'suman-watch': 
+   { name: 'suman-watch',
+     hasNPMLinkUpJSONFile: true,
+     linkToItself: true,
+     runInstall: true,
+     hasAtLinkSh: false,
+     path: '/home/newuser/.npmlinkup/test/suman-watch',
+     deps: 
+      [ 'residence',
+        'suman-utils',
+        'suman-events',
+        'suman-debug',
+        'suman',
+        'suman-browser-polyfills' ] },
+  'suman-utils': 
+   { name: 'suman-utils',
+     hasNPMLinkUpJSONFile: false,
+     linkToItself: false,
+     runInstall: true,
+     hasAtLinkSh: true,
+     path: '/home/newuser/.npmlinkup/test/suman-utils',
+     deps: [] } }
+
+
 
 
  => NPM-Link-Up is exiting with code =>  1 
 
-/home/newuser/npm-link-up/schemas/npm-link-up-schema.js:4
-const NLU = F.bestow(function (obj, isPreValidate) {
-              ^
+/home/newuser/npm-link-up/lib/run-link.js:37
+            return !map[d].isLinked;
+                          ^
 
-TypeError: F.bestow is not a function
-    at Object.<anonymous> (/home/newuser/npm-link-up/schemas/npm-link-up-schema.js:4:15)
-    at Module._compile (module.js:570:32)
-    at Object.Module._extensions..js (module.js:579:10)
-    at Module.load (module.js:487:32)
-    at tryModuleLoad (module.js:446:12)
-    at Function.Module._load (module.js:438:3)
-    at Module.require (module.js:497:17)
-    at require (internal/module.js:20:19)
-    at Object.<anonymous> (/home/newuser/npm-link-up/index.js:78:11)
-    at Module._compile (module.js:570:32)
+TypeError: Cannot read property 'isLinked' of undefined
+    at /home/newuser/npm-link-up/lib/run-link.js:37:27
+    at Array.filter (native)
+    at getCountOfUnlinkedDeps (/home/newuser/npm-link-up/lib/run-link.js:36:25)
+    at findNextDep (/home/newuser/npm-link-up/lib/run-link.js:51:30)
+    at /home/newuser/npm-link-up/lib/run-link.js:102:19
+    at whilst (/home/newuser/npm-link-up/node_modules/async/dist/async.js:5176:5)
+    at Object.until (/home/newuser/npm-link-up/node_modules/async/dist/async.js:5202:5)
+    at Object.exports.runNPMLink (/home/newuser/npm-link-up/lib/run-link.js:98:11)
+    at runUtility (/home/newuser/npm-link-up/index.js:187:20)
+    at newTask (/home/newuser/npm-link-up/node_modules/async/dist/async.js:2095:31)
 npmlinkup done with code =>  1
-
-
    
    ⚑  => Suman fatal error  => making a graceful exit => 
    Error: 1
@@ -466,6 +554,8 @@ npmlinkup done with code =>  1
    
    
    
+
+
 
 
 

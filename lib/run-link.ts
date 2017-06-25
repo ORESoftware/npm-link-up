@@ -27,7 +27,7 @@ export const runNPMLink =
 
   if(opts.treeify){
     logWarning('given the --treeify option passed at the command line, ' +
-      'npm-link-up will only print out the dependency tree and exit.')
+      'npm-link-up will only print out the dependency tree and exit.');
     return process.nextTick(cb);
   }
 
@@ -55,6 +55,10 @@ export const runNPMLink =
 
     function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
+        if(!map[d]){
+          logWarning(`there is no dependency named ${d} in the map.`);
+          return false;
+        }
         return !map[d].isLinked;
       }).length;
     }
