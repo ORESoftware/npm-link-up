@@ -57,7 +57,6 @@ if (!root) {
         ' => Your present working directory is =>\n' + colors.magenta.bold(cwd));
     process.exit(1);
 }
-var isTreeify = opts.treeify;
 var pkg, conf;
 try {
     pkg = require(path.resolve(root + '/package.json'));
@@ -205,6 +204,7 @@ async.autoInject({
                     createItem(d, v2, keys.slice(0));
                 }
                 else {
+                    keys.push(d);
                     obj[key][d] = null;
                 }
             });

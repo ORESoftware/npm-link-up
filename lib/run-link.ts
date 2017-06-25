@@ -26,6 +26,12 @@ import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
 export const runNPMLink =
   function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function) {
 
+  if(opts.treeify){
+    logWarning('given the --treeify option passed at the command line, ' +
+      'npm-link-up will only print out the dependency tree and exit.')
+    return process.nextTick(cb);
+  }
+
     Object.keys(map).filter(function (k) {
       return totalList.indexOf(k) < 0;
     }).forEach(function (k) {

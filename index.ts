@@ -64,9 +64,13 @@ export interface INPMLinkUpMap {
   [key: string]: INPMLinkUpMapItem
 }
 
+export interface INPMLinkUpVisualTree {
+  [key: string]: INPMLinkUpVisualTree
+}
+
 ////////////////////////////////////////////////////////////////////
 
-let opts: INPMLinkUpOpts, parser = dashdash.createParser({options: options});
+let opts: INPMLinkUpOpts, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
@@ -105,11 +109,6 @@ if (!root) {
   process.exit(1);
 }
 
-const isTreeify = opts.treeify;
-
-export interface INPMLinkUpVisualTree {
-  [key: string]: INPMLinkUpVisualTree
-}
 
 let pkg, conf;
 
@@ -311,7 +310,7 @@ async.autoInject({
             createItem(d, v2, keys.slice(0));
           }
           else {
-            // keys.push(d);
+            keys.push(d);
             obj[key][d] = null;
           }
 
