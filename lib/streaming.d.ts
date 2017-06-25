@@ -1,4 +1,4 @@
 /// <reference types="node" />
 import * as stream from 'stream';
-export declare const stdout: stream.Transform;
-export declare const stderr: stream.Transform;
+export declare const stdoutStrm: stream.Transform;
+export declare const stderrStrm: stream.Transform;

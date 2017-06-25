@@ -1,8 +1,8 @@
 import * as stream from 'stream';
 
-export const stdout = new stream.Transform({objectMode: true});
+export const stdoutStrm = new stream.Transform({objectMode: true});
 
-stdout._transform = function (chunk, encoding, done) {
+stdoutStrm._transform = function (chunk, encoding, done) {
   let data = chunk.toString();
   if (this._lastLineData) data = this._lastLineData + data;
 
@@ -13,15 +13,15 @@ stdout._transform = function (chunk, encoding, done) {
   done();
 };
 
-stdout._flush = function (done: Function) {
+stdoutStrm._flush = function (done: Function) {
   if (this._lastLineData) this.push(this._lastLineData);
   this._lastLineData = null;
   done();
 };
 
-export const stderr = new stream.Transform({objectMode: true});
+export const stderrStrm = new stream.Transform({objectMode: true});
 
-stderr._transform = function (chunk, encoding, done) {
+stderrStrm._transform = function (chunk, encoding, done) {
   let data = chunk.toString();
   if (this._lastLineData) data = this._lastLineData + data;
 
@@ -32,7 +32,7 @@ stderr._transform = function (chunk, encoding, done) {
   done();
 };
 
-stderr._flush = function (done: Function) {
+stderrStrm._flush = function (done: Function) {
   if (this._lastLineData) this.push(this._lastLineData);
   this._lastLineData = null;
   done();

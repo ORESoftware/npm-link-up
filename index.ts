@@ -17,8 +17,12 @@ const residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
+import  {stdoutStrm, stderrStrm} from './lib/streaming';
 
 //project
+import {makeFindProject} from './lib/find-projects';
+import {mapPaths} from './lib/map-paths-with-env-vars';
+import {cleanCache} from './lib/cache-clean';
 import alwaysIgnoreThese  from './lib/always-ignore';
 import {logInfo, logError, logWarning, logVeryGood, logGood} from './lib/logging';
 
@@ -30,9 +34,17 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
+export interface INPMLinkUpOpts {
+  verbosity: number,
+  version: string,
+  help: boolean,
+  completion: boolean,
+  treeify: boolean
+}
+
 const options = require('./lib/cmd-line-opts').default;
 
-let opts, parser = dashdash.createParser({options: options});
+let opts: INPMLinkUpOpts, parser = dashdash.createParser({options: options});
 
 try {
   opts = parser.parse(process.argv);
@@ -105,7 +117,7 @@ const name = pkg.name;
 
 if (!name) {
   console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
-  return process.exit(1);
+  process.exit(1);
 }
 
 const deps = Object.keys(pkg.dependencies || {})
@@ -117,7 +129,7 @@ let list = conf.list;
 if (list.length < 1) {
   console.error('\n', colors.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
   console.log('\n\n', colors.cyan.bold(util.inspect(conf)));
-  return process.exit(1);
+  process.exit(1);
 }
 
 let searchRoots: Array<string>;
@@ -206,16 +218,14 @@ originalList.forEach(function (item: string) {
 
 console.log('\n');
 
-const {stdout, stderr} = require('./lib/streaming');
-
 if (opts.inherit_log) {
-  stdout.pipe(process.stdout);
-  stderr.pipe(process.stderr);
+  stdoutStrm.pipe(process.stdout);
+  stderrStrm.pipe(process.stderr);
 }
 
 if (opts.log) {
-  stdout.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
-  stderr.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
+  stdoutStrm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
+  stderrStrm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
 }
 
 export interface INPMLinkUpMapItem {
@@ -243,73 +253,12 @@ async.autoInject({
       return process.nextTick(cb);
     }
 
-    const k = cp.spawn('bash', [], {
-      env: Object.assign({}, process.env, {
-        NPM_LINK_UP: 'yes'
-      })
-    });
-
-    k.stdin.write('\n' + 'npm cache clean; yarn cache clean;' + '\n');
-
-    process.nextTick(function () {
-      k.stdin.end();
-    });
-
-    k.stdout.setEncoding('utf8');
-    k.stderr.setEncoding('utf8');
-    k.stderr.pipe(process.stderr);
-    k.once('error', cb);
-
-    k.once('close', function (code) {
-      code > 0 ? cb({path: 'npm cache clean', code: code}) : cb();
-    });
+    cleanCache(cb);
 
   },
 
   searchRoots: function (npmCacheClean: any, cb: Function) {
-
-    const mappedRoots = searchRoots.map(function (v) {
-      return `echo "${v}";`;
-    });
-
-    const k = cp.spawn('bash', [], {
-      env: Object.assign({}, process.env, {
-        NPM_LINK_UP: 'yes'
-      })
-    });
-
-    k.stdin.write('\n' + mappedRoots.join(' ') + '\n');
-
-    process.nextTick(function () {
-      k.stdin.end();
-    });
-
-    const data: Array<string> = [];
-
-    k.stdout.setEncoding('utf8');
-    k.stderr.setEncoding('utf8');
-    k.stderr.pipe(process.stderr);
-
-    k.stdout.on('data', function (d: string) {
-      data.push(d);
-    });
-
-    k.once('close', function (code: number) {
-      if (code > 0) {
-        return cb({
-          code: code
-        });
-      }
-
-      const pths = data.map(function (d) {
-        return String(d).trim();
-      }).filter(function (item, index, array) {
-        // grab a unique list only
-        return array.indexOf(item) === index;
-      });
-
-      cb(null, pths);
-    });
+    mapPaths(searchRoots, cb);
   },
 
   findItems: function (searchRoots: Array<string>, cb: Function) {
@@ -317,133 +266,22 @@ async.autoInject({
     console.log('\n');
     logInfo('Searching these roots => \n', colors.magenta(searchRoots));
 
-    async.eachLimit(searchRoots, 2, function (item: string, cb: Function) {
+    const q = async.queue(function(task: Function, cb: Function) {
+           task(cb);
+    }, 2);
 
-      (function getMarkers(dir, cb) {
+    q.once('drain', cb);
 
-        fs.readdir(dir, function (err: Error, items: Array<string>) {
+    const createTask = function(searchRoot: string){
+      return function(cb: Function){
+         findProject(searchRoot, cb);
+      }
+    };
 
-          if (err) {
-            console.error(err.stack || err);
-            return cb();
-          }
+    searchRoots.forEach(function(sr){
+       q.push(createTask(sr));
+    });
 
-          items = items.map(function (item) {
-            return path.resolve(dir, item);
-          });
-
-          async.eachLimit(items, 3, function (item: string, cb: Function) {
-
-            fs.stat(item, function (err, stats) {
-
-              if (err) {
-                console.log(' => [npm-link-up internal] => probably a symlink? => ', item);
-                console.error(err.stack || err);
-                return cb();
-              }
-
-              if (stats.isFile()) {
-                let dirname = path.dirname(item);
-                let filename = path.basename(item);
-
-                if (String(filename) === 'package.json') {
-
-                  let pkg;
-
-                  try {
-                    pkg = require(item);
-                  }
-                  catch (err) {
-                    return cb(err);
-                  }
-
-                  const newItems: Array<string> = [];
-
-                  let npmlinkup;
-
-                  try {
-                    npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
-                  }
-                  catch (e) {
-                    //ignore
-                  }
-
-                  let isNodeModulesPresent = false;
-
-                  try {
-                    isNodeModulesPresent = fs.statSync(path.resolve(dirname + '/node_modules')).isDirectory();
-                  }
-                  catch (e) {
-                    //ignore
-                  }
-
-                  let isAtLinkShPresent = false;
-
-                  try {
-                    isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
-                  }
-                  catch (e) {
-                    //ignore
-                  }
-
-                  let deps;
-
-                  if (npmlinkup && npmlinkup.list) {
-                    assert(Array.isArray(npmlinkup.list),
-                      `{npm-link-up.json}.list is not an Array instance for ${filename}.`);
-
-                    deps = npmlinkup.list;
-
-                    npmlinkup.list.forEach(function (item: string) {
-                      if (totalList.indexOf(item) < 0) {
-                        totalList.push(item);
-                        newItems.push(item);
-                      }
-                    });
-                  }
-
-                  map[pkg.name] = {
-                    name: pkg.name,
-                    hasNPMLinkUpJSONFile: !!npmlinkup,
-                    linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
-                    runInstall: !isNodeModulesPresent,
-                    hasAtLinkSh: isAtLinkShPresent,
-                    path: dirname,
-                    deps: deps || []
-                  };
-                }
-
-                // TODO:
-                cb();
-              }
-              else if (stats.isDirectory()) {
-                if (isIgnored(String(item))) {
-                  if (opts.verbosity > 2) {
-                    logWarning('node_modules/.git path ignored => ', item);
-                  }
-                  cb();
-                }
-                else {
-                  // continue drilling down
-                  getMarkers(item, cb);
-                }
-              }
-              else {
-                if (opts.verbosity > 1) {
-                  logWarning('Not a directory or file (maybe a symlink?) => ', item);
-                }
-                cb();
-              }
-
-            });
-
-          }, cb);
-
-        });
-
-      })(item, cb);
-
-    }, cb);
 
   },
 
@@ -475,22 +313,6 @@ async.autoInject({
         return map[k].isLinked;
       });
     }
-
-    function areAllLinked(names: Array<string>, n: string) {
-      return names.every(function (name) {
-        if (name === n) {
-          // handle circular deps
-          return true;
-        }
-        return map[name].isLinked;
-      });
-    }
-
-    // function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
-    //   return dep.deps.filter(function (d) {
-    //     return !d.isLinked;
-    //   }).length;
-    // }
 
     function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
@@ -571,13 +393,13 @@ async.autoInject({
     async.until(isAllLinked, function (cb) {
 
       if (opts.verbosity > 2) {
-        console.log(` => Searching for next dep to run.`);
+        logInfo(`Searching for next dep to run.`);
       }
 
       const dep = findNextDep();
 
       if (opts.verbosity > 1) {
-        console.log(' => Processing dep with name => ', dep.name);
+        logGood('Processing dep with name => ', dep.name);
       }
 
       const deps = getNPMLinkList(dep.deps);
@@ -593,7 +415,7 @@ async.autoInject({
 
       ].filter(i => i).join(' ');
 
-      console.log(' => Script is => ', script);
+      logInfo('Script is => ', script);
       console.log('\n');
 
       const k = cp.spawn('bash', [], {
@@ -604,45 +426,43 @@ async.autoInject({
 
       k.stdin.write('\n' + script + '\n');
 
-      stdout.write(`\n\n >>> Beginning of "${dep.name}"...\n\n`);
-      stdout.write(`\n\n >>> Running script => "${script}"...\n\n`);
+      stdoutStrm.write(`\n\n >>> Beginning of "${dep.name}"...\n\n`);
+      stdoutStrm.write(`\n\n >>> Running script => "${script}"...\n\n`);
 
       k.stdout.setEncoding('utf8');
       k.stderr.setEncoding('utf8');
-      k.stdout.pipe(stdout, {end: false});
-      k.stderr.pipe(stderr, {end: false});
+      k.stdout.pipe(stdoutStrm, {end: false});
+      k.stderr.pipe(stderrStrm, {end: false});
 
       process.nextTick(function () {
         k.stdin.end();
       });
 
-      let data = '';
+      let stderr = '';
       k.stderr.on('data', function (d) {
-        data += d;
+        stderr += d;
       });
 
       k.once('error', cb);
 
       k.once('close', function (code) {
 
-        if (code > 0 && /ERR/.test(data)) {
+        if (code > 0 && /ERR/i.test(stderr)) {
 
-          console.log(`\n => Dep with name "${dep.name}" is done, but with an error.\n`);
+          console.log('\n');
+          logError(`Dep with name "${dep.name}" is done, but with an error.`);
 
           cb({
             code: code,
             dep: dep,
-            error: data
+            error: stderr
           });
         }
         else {
 
-          if (data) {
-            stderr.write(' => Warning => ' + data);
-          }
-
           if (opts.verbosity > 1) {
-            console.log(`\n => Dep with name "${dep.name}" is done.\n`);
+            logGood(`Dep with name "${dep.name}" is done.\n`);
+            console.log('\n');
           }
 
           dep.isLinked = map[dep.name].isLinked = true;
@@ -656,7 +476,7 @@ async.autoInject({
             }
 
             const cmd = cmds.join(' && ');
-            stdout.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
+            stdoutStrm.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
 
             const k = cp.spawn('bash', [], {
               env: Object.assign({}, process.env, {
@@ -668,8 +488,8 @@ async.autoInject({
 
             k.stdout.setEncoding('utf8');
             k.stderr.setEncoding('utf8');
-            k.stdout.pipe(stdout, {end: false});
-            k.stderr.pipe(stderr, {end: false});
+            k.stdout.pipe(stdoutStrm, {end: false});
+            k.stderr.pipe(stderrStrm, {end: false});
 
             process.nextTick(function () {
               k.stdin.end();
@@ -683,7 +503,7 @@ async.autoInject({
             cb(err, {
               code: code,
               dep: dep,
-              error: data
+              error: stderr
             });
           });
 
@@ -716,10 +536,10 @@ async.autoInject({
         if (key !== d && keys.indexOf(d) < 0) {
           keys.push(d);
           let v2 = obj[key][d] = {};
-          createItem(d, v2, keys);
+          createItem(d, v2, keys.slice(0));
         }
         else {
-          keys.push(d);
+          // keys.push(d);
           obj[key][d] = null;
         }
 
@@ -735,16 +555,15 @@ async.autoInject({
     createItem(k, tree[name], [name]);
   });
 
+  const line = colors.green(' => NPM-Link-Up run was successful. All done.');
+  stdoutStrm.write(line);
+  stdoutStrm.end();
+  stderrStrm.end();
+  console.log(line);
 
   console.log('\n');
-  logInfo('NPM-Link-Up results as a visual:\n');
+  logGood('NPM-Link-Up results as a visual:\n');
   console.log(treeify.asTree(tree, true));
-
-  const line = '\n\n => NPM-Link-Up run was successful. All done.\n\n';
-  stdout.write(line);
-  stdout.end();
-  stderr.end();
-  console.log(line);
 
   setTimeout(function () {
     process.exit(0);
