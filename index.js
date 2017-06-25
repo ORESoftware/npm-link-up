@@ -79,6 +79,9 @@ if (!name) {
     console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
     return process.exit(1);
 }
+var deps = Object.keys(pkg.dependencies || {})
+    .concat(Object.keys(pkg.devDependencies || {}))
+    .concat(Object.keys(pkg.optionalDependencies || {}));
 var list = conf.list;
 if (list.length < 1) {
     console.error('\n', colors.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
@@ -117,8 +120,8 @@ var inListAndInDeps = list.filter(function (item) {
     return true;
 });
 inListButNotInDeps.forEach(function (item) {
-    console.error(colors.red.bold(' => Warning => The following item was listed in your npm-link-up.json file,\n' +
-        'but is not listed in your package.json dependencies => "' + item + '".'));
+    logging_1.logWarning('warning, the following item was listed in your npm-link-up.json file,\n' +
+        'but is not listed in your package.json dependencies => "' + item + '".');
 });
 var originalList = list.slice(0);
 list.push(name);
@@ -149,9 +152,10 @@ if (ignore.length > 0) {
     });
 }
 console.log('\n');
-inListAndInDeps.forEach(function (item) {
-    console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
+originalList.forEach(function (item) {
+    logging_1.logGood("The following dep will be NPM link'ed to this project => \"" + item + "\".");
 });
+console.log('\n');
 var _a = require('./lib/streaming'), stdout = _a.stdout, stderr = _a.stderr;
 if (opts.inherit_log) {
     stdout.pipe(process.stdout);
@@ -268,10 +272,10 @@ async.autoInject({
                                     }
                                     catch (e) {
                                     }
-                                    var deps = void 0;
+                                    var deps_1;
                                     if (npmlinkup && npmlinkup.list) {
                                         assert(Array.isArray(npmlinkup.list), "{npm-link-up.json}.list is not an Array instance for " + filename + ".");
-                                        deps = npmlinkup.list;
+                                        deps_1 = npmlinkup.list;
                                         npmlinkup.list.forEach(function (item) {
                                             if (totalList.indexOf(item) < 0) {
                                                 totalList.push(item);
@@ -285,7 +289,7 @@ async.autoInject({
                                         runInstall: !isNodeModulesPresent,
                                         hasAtLinkSh: isAtLinkShPresent,
                                         path: dirname,
-                                        deps: deps || []
+                                        deps: deps_1 || []
                                     };
                                 }
                                 cb();

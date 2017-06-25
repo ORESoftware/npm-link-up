@@ -108,16 +108,9 @@ if (!name) {
   return process.exit(1);
 }
 
-// const deps =
-//   Object.keys(pkg.dependencies || {})
-//     .concat(Object.keys(pkg.devDependencies || {}))
-//     .concat(Object.keys(pkg.optionalDependencies || {}))
-//     .concat(pkg['npmLinkUpDeps'] || []);
-//
-// if (!deps.length) {
-//   console.error(' => Ummmm, your package.json file does not have any dependencies listed.');
-//   return process.exit(0);
-// }
+const deps = Object.keys(pkg.dependencies || {})
+  .concat(Object.keys(pkg.devDependencies || {}))
+  .concat(Object.keys(pkg.optionalDependencies || {}));
 
 let list = conf.list;
 
@@ -154,6 +147,7 @@ else {
     });
 }
 
+
 const inListButNotInDeps: Array<string> = [];
 const inListAndInDeps = list.filter(function (item: string) {
   if (!deps.includes(item)) {
@@ -164,8 +158,8 @@ const inListAndInDeps = list.filter(function (item: string) {
 });
 
 inListButNotInDeps.forEach(function (item) {
-  console.error(colors.red.bold(' => Warning => The following item was listed in your npm-link-up.json file,\n' +
-    'but is not listed in your package.json dependencies => "' + item + '".'));
+  logWarning('warning, the following item was listed in your npm-link-up.json file,\n' +
+    'but is not listed in your package.json dependencies => "' + item + '".');
 });
 
 // we need to store a version of the list without the top level package's name
@@ -207,9 +201,12 @@ if (ignore.length > 0) {
 
 console.log('\n');
 
-inListAndInDeps.forEach(function (item: string) {
-  console.log(' => The following dep will be NPM link\'ed to this project => "' + item + '".');
+originalList.forEach(function (item: string) {
+  logGood(`The following dep will be NPM link\'ed to this project => "${item}".`);
 });
+
+console.log('\n');
+
 
 const {stdout, stderr} = require('./lib/streaming');
 
@@ -365,68 +362,67 @@ async.autoInject({
 
                   // if (totalList.includes(pkg.name)) {
 
-                    let npmlinkup;
+                  let npmlinkup;
 
-                    try {
-                      npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
-                    }
-                    catch (e) {
-                      //ignore
-                    }
-
-                    let isNodeModulesPresent = false;
-
-                    try {
-                      isNodeModulesPresent = fs.statSync(path.resolve(dirname + '/node_modules')).isDirectory();
-                    }
-                    catch (e) {
-                      //ignore
-                    }
-
-                    let isAtLinkShPresent = false;
-
-                    try {
-                      isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
-                    }
-                    catch (e) {
-                      //ignore
-                    }
-
-                    let deps;
-
-                    if (npmlinkup && npmlinkup.list) {
-                      assert(Array.isArray(npmlinkup.list),
-                        `{npm-link-up.json}.list is not an Array instance for ${filename}.`);
-
-                      deps = npmlinkup.list;
-
-                      npmlinkup.list.forEach(function (item: string) {
-                        if (totalList.indexOf(item) < 0) {
-                          totalList.push(item);
-                          newItems.push(item);
-                        }
-                      });
-                    }
-
-                    // let deps = Object.keys(pkg.dependencies || {})
-                    //   .concat(Object.keys(pkg.devDependencies || {}))
-                    //   .concat(Object.keys(pkg.optionalDependencies || {}))
-                    //   .concat(pkg['npmLinkUpDeps'] || []);
-                    //
-                    // deps = deps.filter(function (d) {
-                    //   return totalList.includes(d);
-                    // });
-
-
-                    map[pkg.name] = {
-                      name: pkg.name,
-                      linkToItself: npmlinkup && npmlinkup.linkToItself,
-                      runInstall: !isNodeModulesPresent,
-                      hasAtLinkSh: isAtLinkShPresent,
-                      path: dirname,
-                      deps: deps || []
-                    };
+                  try {
+                    npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
                   }
+                  catch (e) {
+                    //ignore
+                  }
+
+                  let isNodeModulesPresent = false;
+
+                  try {
+                    isNodeModulesPresent = fs.statSync(path.resolve(dirname + '/node_modules')).isDirectory();
+                  }
+                  catch (e) {
+                    //ignore
+                  }
+
+                  let isAtLinkShPresent = false;
+
+                  try {
+                    isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
+                  }
+                  catch (e) {
+                    //ignore
+                  }
+
+                  let deps;
+
+                  if (npmlinkup && npmlinkup.list) {
+                    assert(Array.isArray(npmlinkup.list),
+                      `{npm-link-up.json}.list is not an Array instance for ${filename}.`);
+
+                    deps = npmlinkup.list;
+
+                    npmlinkup.list.forEach(function (item: string) {
+                      if (totalList.indexOf(item) < 0) {
+                        totalList.push(item);
+                        newItems.push(item);
+                      }
+                    });
+                  }
+
+                  // let deps = Object.keys(pkg.dependencies || {})
+                  //   .concat(Object.keys(pkg.devDependencies || {}))
+                  //   .concat(Object.keys(pkg.optionalDependencies || {}))
+                  //   .concat(pkg['npmLinkUpDeps'] || []);
+                  //
+                  // deps = deps.filter(function (d) {
+                  //   return totalList.includes(d);
+                  // });
+
+                  map[pkg.name] = {
+                    name: pkg.name,
+                    linkToItself: npmlinkup && npmlinkup.linkToItself,
+                    runInstall: !isNodeModulesPresent,
+                    hasAtLinkSh: isAtLinkShPresent,
+                    path: dirname,
+                    deps: deps || []
+                  };
+                }
                 // }
 
                 // TODO:
@@ -463,18 +459,17 @@ async.autoInject({
 
   },
 
-
   runUtility: function (findItems: void, cb: Function) {
 
     if (opts.treeify) {
       return process.nextTick(cb);
     }
 
-    Object.keys(map).filter(function(k){
-       return totalList.indexOf(k) < 0;
-    }).forEach(function(k){
+    Object.keys(map).filter(function (k) {
+      return totalList.indexOf(k) < 0;
+    }).forEach(function (k) {
       // we don't need these keys, this operation should be safe
-       delete map[k];
+      delete map[k];
     });
 
     const keys = Object.keys(map);

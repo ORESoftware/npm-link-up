@@ -6,6 +6,8 @@
   },
   "description": "Use this package to link your complex projects together for local development.",
   "main": "index.js",
+  "types": "index.d.ts",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "./@test.sh"
   },
