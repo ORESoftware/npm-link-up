@@ -32,11 +32,11 @@ RUN sudo chown -R $(whoami) $(npm root -g) || echo "no lib 2"
 RUN echo "installing suman globally..."
 RUN npm install -g suman@latest
 
-RUN echo "done installing suman globally"
+RUN echo "done installing suman globally1"
+RUN echo "done installing suman globally3"
 
 RUN git clone https://github.com/ORESoftware/npm-link-up.git
 WORKDIR /home/newuser/npm-link-up
-RUN git checkout master
 RUN npm install
 
 COPY all.sh .

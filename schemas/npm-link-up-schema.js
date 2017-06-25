@@ -1,5 +1,5 @@
 const util = require('util');
-const F = require('frankenstop');
+const F = require('frankenstop').default;
 
 const NLU = F.bestow(function (obj, isPreValidate) {
   this.config = obj;
