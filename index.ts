@@ -150,7 +150,8 @@ if (!name) {
   process.exit(1);
 }
 
-logGood(`We are running npm-link-up for your project named ${name}.`);
+console.log('\n');
+logGood(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
   .concat(Object.keys(pkg.devDependencies || {}))

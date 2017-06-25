@@ -42,6 +42,13 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
     (function getMarkers(dir, cb) {
 
+      if (isIgnored(String(dir + '/'))) {
+        if (opts.verbosity > 2) {
+          logWarning('path ignored => ', dir);
+        }
+        return process.nextTick(cb);
+      }
+
       fs.readdir(dir, function (err: Error, items: Array<string>) {
 
         if (err) {
@@ -54,6 +61,13 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
         });
 
         async.eachLimit(items, 3, function (item: string, cb: Function) {
+
+          if (isIgnored(String(item))) {
+            if (opts.verbosity > 2) {
+              logWarning('path ignored => ', item);
+            }
+            return process.nextTick(cb);
+          }
 
           fs.stat(item, function (err, stats) {
 
@@ -137,7 +151,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
               cb();
             }
             else if (stats.isDirectory()) {
-              if (isIgnored(String(item))) {
+              if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
                   logWarning('node_modules/.git path ignored => ', item);
                 }

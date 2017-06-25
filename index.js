@@ -84,7 +84,8 @@ if (!name) {
     console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
     process.exit(1);
 }
-logging_1.logGood("We are running npm-link-up for your project named " + name + ".");
+console.log('\n');
+logging_1.logGood("We are running the npm-link-up tool for your project named \"" + chalk.magenta(name) + "\".");
 var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
