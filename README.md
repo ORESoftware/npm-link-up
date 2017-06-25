@@ -1,5 +1,12 @@
 # NPM-Link-Up
 
+---------------
+Note: This tool currently works great with NPM v4. NPM v5 has problems, and these are problems with NPM itself,
+not with this tool. I assume that NPM will fix the problems with v5.0.3 etc, and then thsi tool will eventually
+work with later v5 releases. In short, use this tool with v4, if you can. If you get it working with v5,
+please let me know which version you use, I am curious.
+--------------
+
 Use the CLI interface to link your local projects together for rapid and pain-free local
 development.
 
@@ -7,8 +14,8 @@ Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/l
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
 All this tool does is automatically link your projects together with NPM link, <br>
-using declarative config files and a CLI.
-
+using declarative config files and a CLI. However this requires a bit of care to ensure 
+integrity, so this tool is not trival by any means.
 
 <p>
 
@@ -60,7 +67,9 @@ So one of the two above install methods should be sufficient.
 
 Create a file called ```npm-link-up.json``` in the root of your project (we will call it "project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
-are dependencies of project X.
+are dependencies of project X. Your other local projects may have their own `npm-link-up.json` files, which in turn,
+declare their own dependencies. That is expected of course, and this tool is designed to link up all dependencies for 
+every project in the hierarchy.
 
 The following is a simple npm-link-up.json file:
 
@@ -75,12 +84,12 @@ The following is a simple npm-link-up.json file:
     "/.git/"
   ],
   "list": [               // list the packages that you want to symlink to this project, here. NPM package name only, no paths needed.
-    "socket.io",          // (these are just examples using well-known NPM packages)
+    "socket.io",          // (these are just examples using well-known NPM packages, you will be using packages that you develop locally.)
     "mongoose",
     "lodash"
   ],
   "install": "yarn",     // we give specific instructions (a bash script) on how to install, ("npm install" is default)
-  "linkToItself": true   // if true, we link this project to itself, true is the default
+  "linkToItself": true   // if true, we link this project to itself, true is the default. Linking a project to itself is useful for testing.
 }
 ```
 
