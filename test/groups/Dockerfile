@@ -15,6 +15,9 @@ RUN npm cache clean
 
 RUN chmod -R 777 $(npm root -g)
 
+RUN sudo apt-get -y upgrade
+RUN sudo apt-get install -y sqlite3 libsqlite3-dev
+
 RUN sudo echo "newuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 #RUN useradd -ms /bin/bash newuser
@@ -23,10 +26,13 @@ RUN useradd -ms /bin/bash newuser && echo "newuser:newuser" | chpasswd && adduse
 USER newuser
 WORKDIR /home/newuser
 
-RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/node_modules || echo "no node_modules"
-RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/bin || echo "no bin"
-RUN sudo chown -R $(whoami) $(npm config get prefix)/lib/share  || echo "no share"
-RUN sudo chown -R $(whoami) $(npm config get prefix)/lib || echo "no lib"
+RUN sudo chown -R $(whoami) $(npm config get prefix) || echo "no lib 1"
+RUN sudo chown -R $(whoami) $(npm root -g) || echo "no lib 2"
+
+RUN echo "installing suman globally..."
+RUN npm install -g "github:sumanjs/suman#rebase_branch"
+
+RUN echo "down installing suman globally"
 
 COPY all.sh .
 

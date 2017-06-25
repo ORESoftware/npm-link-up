@@ -5,30 +5,14 @@
 
 
 
- ### Suman start run @Sun Apr 16 2017 20:18:59 GMT-0700 (PDT)
+
+ ### Suman start run @Sun Jun 25 2017 02:17:28 GMT-0700 (PDT)
 
  ### Filename => /Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/src/all.test.js
 
- ### Command => ["/Users/alexamil/.nvm/versions/node/v6.10.2/bin/node","/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/src/all.test.js"]
+ ### Command => ["/Users/alexamil/.nvm/versions/node/v6.10.2/bin/node","/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/node_modules/suman/cli.js"]
 
-Error:  => Suman fatal error => there was a problem verifying the integrants listed in test file "/Users/alexamil/WebstormProjects/oresoftware/npm-link-up/test/src/all.test.js"
-Error:  => Suman fatal error => integrant entity with name = "npmlinkup" was not found to be a function => [ 'clone all repos', [Function] ]
-    at depList.forEach.d (/Users/alexamil/.npmlinkup/test/suman/lib/acquire-deps.js:38:13)
-    at Array.forEach (native)
-    at acquireDependencies (/Users/alexamil/.npmlinkup/test/suman/lib/acquire-deps.js:30:11)
-    at Domain.<anonymous> (/Users/alexamil/.npmlinkup/test/suman/lib/index.js:486:21)
-    at Domain.run (domain.js:221:14)
-    at integrantsFn (/Users/alexamil/.npmlinkup/test/suman/lib/index.js:471:15)
-    at /Users/alexamil/.npmlinkup/test/suman/lib/index.js:655:17
-    at _combinedTickCallback (internal/process/next_tick.js:73:7)
-    at process._tickDomainCallback (internal/process/next_tick.js:128:9)
-    at Module.runMain (module.js:606:11)
-    at Domain.<anonymous> (/Users/alexamil/.npmlinkup/test/suman/lib/index.js:457:23)
-    at Domain.g (events.js:291:16)
-    at emitOne (events.js:96:13)
-    at Domain.emit (events.js:188:7)
-    at Domain._errorHandler (domain.js:97:23)
-    at process._fatalException (bootstrap_node.js:294:33)
+'ReferenceError: colors is not defined\n    at process.<anonymous> (/Users/alexamil/WebstormProjects/oresoftware/sumanjs/suman/lib/index-helpers/exit-handling.js:17:21)\n    at emitNone (events.js:91:20)\n    at process.emit (events.js:185:7)\n    at processEmit [as emit] (/Users/alexamil/.suman/global/node_modules/sqlite3/node_modules/node-pre-gyp/node_modules/npmlog/node_modules/gauge/node_modules/signal-exit/index.js:146:32)\n    at Signal.wrap.onsignal (internal/process.js:217:44)'
 
 
 
