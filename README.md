@@ -2,7 +2,7 @@
 
 ---------------
 Note: This tool currently works great with NPM v4. NPM v5 has problems, and these are problems with NPM itself,
-not with this tool. I assume that NPM will fix the problems with v5.0.3 etc, and then thsi tool will eventually
+not with this tool. I assume that NPM will fix the problems with v5.0.3 etc, and then this tool will eventually
 work with later v5 releases. In short, use this tool with v4, if you can. If you get it working with v5,
 please let me know which version you use, I am curious.
 --------------
