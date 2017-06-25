@@ -58,8 +58,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
           fs.stat(item, function (err, stats) {
 
             if (err) {
-              console.log(' => [npm-link-up internal] => probably a symlink? => ', item);
-              console.error(err.stack || err);
+              logWarning('warning => probably a symlink? => ', item);
               return cb();
             }
 

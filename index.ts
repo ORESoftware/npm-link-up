@@ -28,16 +28,18 @@ import {logInfo, logError, logWarning, logVeryGood, logGood} from './lib/logging
 import {getIgnore} from "./lib/handle-options";
 import options from './lib/cmd-line-opts';
 import {runNPMLink} from './lib/run-link';
+import {createTree} from './lib/create-visual-tree';
 
 //////////////////////////////////////////////////////////////////////////
 
 process.once('exit', function (code) {
-  console.log('\n\n => NPM-Link-Up is exiting with code => ', code, '\n');
+  console.log('\n');
+  logInfo('NPM-Link-Up is exiting with code => ', code, '\n');
 });
 
 //////////////////////////////////////////////////////////////
 
-export interface INPMLinkUpConf{
+export interface INPMLinkUpConf {
   alwaysReinstall: boolean,
   linkToItself: boolean,
   searchRoots: Array<string>,
@@ -117,7 +119,6 @@ if (!root) {
   process.exit(1);
 }
 
-
 let pkg, conf;
 
 try {
@@ -148,6 +149,8 @@ if (!name) {
   console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
+
+logGood(`We are running npm-link-up for your project named ${name}.`);
 
 const deps = Object.keys(pkg.dependencies || {})
   .concat(Object.keys(pkg.devDependencies || {}))
@@ -217,10 +220,8 @@ const ignore = getIgnore(conf, alwaysIgnoreThese);
 console.log('\n');
 
 originalList.forEach(function (item: string) {
-  logGood(`The following dep will be NPM link\'ed to this project => "${item}".`);
+  logGood(`The following dep will be 'NPM linked' to this project => "${item}".`);
 });
-
-console.log('\n');
 
 if (opts.inherit_log) {
   stdoutStrm.pipe(process.stdout);
@@ -246,14 +247,23 @@ async.autoInject({
 
     },
 
-    searchRoots: function (npmCacheClean: any, cb: Function) {
+    mapSearchRoots: function (npmCacheClean: any, cb: Function) {
       mapPaths(searchRoots, cb);
     },
 
-    findItems: function (searchRoots: Array<string>, cb: Function) {
+    findItems: function (mapSearchRoots: Array<string>, cb: Function) {
+
+      let searchRoots = mapSearchRoots.slice(0);
 
       console.log('\n');
-      logInfo('Searching these roots => \n', chalk.magenta(util.inspect(searchRoots)));
+      logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
+      if(opts.verbosity> 1){
+        console.log('\n');
+        logWarning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
+          'your original search roots, and these new directories will be searched as well.');
+      }
+
+      console.log('\n');
 
       const q = async.queue(function (task: Function, cb: Function) {
         task(cb);
@@ -265,7 +275,9 @@ async.autoInject({
       q.drain = function () {
         if (callable) {
           callable = false;
-          cb();
+          cb(null, {
+            actuallyRan: true
+          });
         }
       };
 
@@ -292,57 +304,34 @@ async.autoInject({
     }
   },
 
-  function (err: Error) {
+  function (err: Error, results: Object) {
 
     if (err) {
       console.error(err.stack || err);
       return process.exit(1);
     }
 
-    // console.log(util.inspect(map));
-
-    let tree: INPMLinkUpVisualTree = {
-      [name]: {}
-    };
-
-    let createItem = function (key: string, obj: INPMLinkUpVisualTree, keys: Array<string>) {
-
-      obj[key] = {};
-
-      if (map[key]) {
-        map[key].deps.forEach(function (d: string) {
-
-          if (key !== d && keys.indexOf(d) < 0) {
-            keys.push(d);
-            let v2 = obj[key][d] = {};
-            createItem(d, v2, keys.slice(0));
-          }
-          else {
-            keys.push(d);
-            obj[key][d] = null;
-          }
-
-        });
-      }
-      else {
-        logWarning(`no key named "${key}" in map.`);
-      }
-
-    };
-
-    originalList.forEach(function (k: string) {
-      createItem(k, tree[name], [name]);
-    });
-
-    const line = chalk.green(' => NPM-Link-Up run was successful. All done.');
-    stdoutStrm.write(line);
-    stdoutStrm.end();
-    stderrStrm.end();
-    console.log(line);
-
     console.log('\n');
+
+    if(results.runUtility){
+      // if runUtility is defined on results, then we actually ran the tool
+      const line = chalk.green.underline(' => NPM-Link-Up run was successful. All done.');
+      stdoutStrm.write(line);
+      stdoutStrm.end();
+      stderrStrm.end();
+      console.log(line);
+      console.log('\n');
+    }
+
     logGood('NPM-Link-Up results as a visual:\n');
-    console.log(treeify.asTree(tree, true));
+    const treeObj = createTree(map, name, originalList);
+    const treeString = treeify.asTree(treeObj, true);
+    const formattedStr = String(treeString).split('\n').map(function(line){
+      return '\t' + line;
+    });
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    console.log(chalk.white(formattedStr.join('\n')));
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
 
     setTimeout(function () {
       process.exit(0);

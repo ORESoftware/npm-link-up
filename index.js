@@ -20,8 +20,10 @@ var logging_1 = require("./lib/logging");
 var handle_options_1 = require("./lib/handle-options");
 var cmd_line_opts_1 = require("./lib/cmd-line-opts");
 var run_link_1 = require("./lib/run-link");
+var create_visual_tree_1 = require("./lib/create-visual-tree");
 process.once('exit', function (code) {
-    console.log('\n\n => NPM-Link-Up is exiting with code => ', code, '\n');
+    console.log('\n');
+    logging_1.logInfo('NPM-Link-Up is exiting with code => ', code, '\n');
 });
 var opts, parser = dashdash.createParser({ options: cmd_line_opts_1.default });
 try {
@@ -82,6 +84,7 @@ if (!name) {
     console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
     process.exit(1);
 }
+logging_1.logGood("We are running npm-link-up for your project named " + name + ".");
 var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
@@ -135,9 +138,8 @@ var totalList = list.slice(0);
 var ignore = handle_options_1.getIgnore(conf, always_ignore_1.default);
 console.log('\n');
 originalList.forEach(function (item) {
-    logging_1.logGood("The following dep will be NPM link'ed to this project => \"" + item + "\".");
+    logging_1.logGood("The following dep will be 'NPM linked' to this project => \"" + item + "\".");
 });
-console.log('\n');
 if (opts.inherit_log) {
     streaming_1.stdoutStrm.pipe(process.stdout);
     streaming_1.stderrStrm.pipe(process.stderr);
@@ -154,12 +156,19 @@ async.autoInject({
         }
         cache_clean_1.cleanCache(cb);
     },
-    searchRoots: function (npmCacheClean, cb) {
+    mapSearchRoots: function (npmCacheClean, cb) {
         map_paths_with_env_vars_1.mapPaths(searchRoots, cb);
     },
-    findItems: function (searchRoots, cb) {
+    findItems: function (mapSearchRoots, cb) {
+        var searchRoots = mapSearchRoots.slice(0);
         console.log('\n');
-        logging_1.logInfo('Searching these roots => \n', chalk.magenta(util.inspect(searchRoots)));
+        logging_1.logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
+        if (opts.verbosity > 1) {
+            console.log('\n');
+            logging_1.logWarning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
+                'your original search roots, and these new directories will be searched as well.');
+        }
+        console.log('\n');
         var q = async.queue(function (task, cb) {
             task(cb);
         }, 2);
@@ -168,7 +177,9 @@ async.autoInject({
         q.drain = function () {
             if (callable) {
                 callable = false;
-                cb();
+                cb(null, {
+                    actuallyRan: true
+                });
             }
         };
         var createTask = function (searchRoot) {
@@ -186,46 +197,30 @@ async.autoInject({
         }
         run_link_1.runNPMLink(map, totalList, opts, cb);
     }
-}, function (err) {
+}, function (err, results) {
     if (err) {
         console.error(err.stack || err);
         return process.exit(1);
     }
-    var tree = (_a = {},
-        _a[name] = {},
-        _a);
-    var createItem = function (key, obj, keys) {
-        obj[key] = {};
-        if (map[key]) {
-            map[key].deps.forEach(function (d) {
-                if (key !== d && keys.indexOf(d) < 0) {
-                    keys.push(d);
-                    var v2 = obj[key][d] = {};
-                    createItem(d, v2, keys.slice(0));
-                }
-                else {
-                    keys.push(d);
-                    obj[key][d] = null;
-                }
-            });
-        }
-        else {
-            logging_1.logWarning("no key named \"" + key + "\" in map.");
-        }
-    };
-    originalList.forEach(function (k) {
-        createItem(k, tree[name], [name]);
-    });
-    var line = chalk.green(' => NPM-Link-Up run was successful. All done.');
-    streaming_1.stdoutStrm.write(line);
-    streaming_1.stdoutStrm.end();
-    streaming_1.stderrStrm.end();
-    console.log(line);
     console.log('\n');
+    if (results.runUtility) {
+        var line = chalk.green.underline(' => NPM-Link-Up run was successful. All done.');
+        streaming_1.stdoutStrm.write(line);
+        streaming_1.stdoutStrm.end();
+        streaming_1.stderrStrm.end();
+        console.log(line);
+        console.log('\n');
+    }
     logging_1.logGood('NPM-Link-Up results as a visual:\n');
-    console.log(treeify.asTree(tree, true));
+    var treeObj = create_visual_tree_1.createTree(map, name, originalList);
+    var treeString = treeify.asTree(treeObj, true);
+    var formattedStr = String(treeString).split('\n').map(function (line) {
+        return '\t' + line;
+    });
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    console.log(chalk.white(formattedStr.join('\n')));
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
     setTimeout(function () {
         process.exit(0);
     }, 100);
-    var _a;
 });

@@ -25,11 +25,11 @@ import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
 export const runNPMLink =
   function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function) {
 
-  if(opts.treeify){
-    logWarning('given the --treeify option passed at the command line, ' +
-      'npm-link-up will only print out the dependency tree and exit.');
-    return process.nextTick(cb);
-  }
+    if (opts.treeify) {
+      logWarning('given the --treeify option passed at the command line, ' +
+        'npm-link-up will only print out the dependency tree and exit.');
+      return process.nextTick(cb);
+    }
 
     Object.keys(map).filter(function (k) {
       return totalList.indexOf(k) < 0;
@@ -55,7 +55,7 @@ export const runNPMLink =
 
     function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
-        if(!map[d]){
+        if (!map[d]) {
           logWarning(`there is no dependency named ${d} in the map.`);
           return false;
         }
