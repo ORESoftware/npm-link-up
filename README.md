@@ -174,6 +174,8 @@ A
 
 ## Caveats + Disclaimer
 
+This will not work with MS Windows. Only MacOS and *nix systems.
+
 Using NPM, after installing a new package, you may need to re-link with npmlinkup - this is a problem/bug with NPM.
 It is a strange problem, considering that `$npm link` is an NPM feature! But when you run `$ npm install x`, it seems to break
 some symlinks. On the other hand, if you use `$yarn add x` to add a new dependency, you may be able avoid this hiccup.
