@@ -147,7 +147,6 @@ else {
     });
 }
 
-
 const inListButNotInDeps: Array<string> = [];
 const inListAndInDeps = list.filter(function (item: string) {
   if (!deps.includes(item)) {
@@ -207,7 +206,6 @@ originalList.forEach(function (item: string) {
 
 console.log('\n');
 
-
 const {stdout, stderr} = require('./lib/streaming');
 
 if (opts.inherit_log) {
@@ -222,6 +220,7 @@ if (opts.log) {
 
 export interface INPMLinkUpMapItem {
   name: string,
+  hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
   runInstall: boolean,
   hasAtLinkSh: boolean,
@@ -360,8 +359,6 @@ async.autoInject({
 
                   const newItems: Array<string> = [];
 
-                  // if (totalList.includes(pkg.name)) {
-
                   let npmlinkup;
 
                   try {
@@ -405,25 +402,16 @@ async.autoInject({
                     });
                   }
 
-                  // let deps = Object.keys(pkg.dependencies || {})
-                  //   .concat(Object.keys(pkg.devDependencies || {}))
-                  //   .concat(Object.keys(pkg.optionalDependencies || {}))
-                  //   .concat(pkg['npmLinkUpDeps'] || []);
-                  //
-                  // deps = deps.filter(function (d) {
-                  //   return totalList.includes(d);
-                  // });
-
                   map[pkg.name] = {
                     name: pkg.name,
-                    linkToItself: npmlinkup && npmlinkup.linkToItself,
+                    hasNPMLinkUpJSONFile: !!npmlinkup,
+                    linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
                     runInstall: !isNodeModulesPresent,
                     hasAtLinkSh: isAtLinkShPresent,
                     path: dirname,
                     deps: deps || []
                   };
                 }
-                // }
 
                 // TODO:
                 cb();
@@ -479,7 +467,7 @@ async.autoInject({
       return process.exit(1);
     }
 
-    console.log('\n => Map => \n', colors.blue.bold(util.inspect(map)));
+    logGood('=> Map => \n', colors.magenta.bold(util.inspect(map)));
 
     function isAllLinked() {
       //Object.values might not be available on all Node.js versions.
@@ -747,17 +735,9 @@ async.autoInject({
     createItem(k, tree[name], [name]);
   });
 
-  // if (isTreeify) {
-  //   console.log(
-  //     treeify.asTree({
-  //       apples: 'gala',      //  ├─ apples: gala
-  //       oranges: 'mandarin'  //  └─ oranges: mandarin
-  //     }, true)
-  //   );
-  //   return;
-  // }
 
-  console.log('\n\n tree =>');
+  console.log('\n');
+  logInfo('NPM-Link-Up results as a visual:\n');
   console.log(treeify.asTree(tree, true));
 
   const line = '\n\n => NPM-Link-Up run was successful. All done.\n\n';

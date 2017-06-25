@@ -1,4 +1,6 @@
 export default  [
   '/node_modules/',
-  '/.git/'
+  '/.git/',
+  '/.idea/',
+  '/bower_components/'
 ];
