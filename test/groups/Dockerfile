@@ -29,15 +29,24 @@ WORKDIR /home/newuser
 RUN sudo chown -R $(whoami) $(npm config get prefix) || echo "no lib 1"
 RUN sudo chown -R $(whoami) $(npm root -g) || echo "no lib 2"
 
+RUN npm config --global set color false
+RUN npm config --global set progress=false
+RUN npm config --global set loglevel=warn
+
+RUN npm set color false
+RUN npm set progress=false
+RUN npm set loglevel=warn
+
+
 RUN echo "installing suman globally..."
 RUN npm install -g suman@latest
 
 RUN echo "done installing suman globally1"
-RUN echo "done installing suman globally4"
+RUN echo "done installing suman globally5"
 
 RUN git clone https://github.com/ORESoftware/npm-link-up.git
 WORKDIR /home/newuser/npm-link-up
-RUN npm install
+RUN npm install  --no-optional --log-level=warn --silent > /dev/null 2>&1
 
 COPY all.sh .
 

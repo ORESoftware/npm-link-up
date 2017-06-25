@@ -123,7 +123,7 @@ export const runNPMLink =
 
     function getInstallCommand(dep: INPMLinkUpMapItem) {
       if (dep.runInstall || opts.install_all) {
-        return '&& rm -rf node_modules && npm install';
+        return '&& rm -rf node_modules && npm install --no-optional --log-level=warn --silent;';
       }
     }
 
