@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 
-git clone https://github.com/ORESoftware/npm-link-up.git &&
-cd npm-link-up &&
-git checkout dev &&  # checkout the dev branch, not master branch
-npm install &&
+#git clone https://github.com/ORESoftware/npm-link-up.git &&
+#cd npm-link-up &&
+#git checkout dev &&  # checkout the dev branch, not master branch
+#npm install &&
 
 #SUMAN=$(which suman);
 #

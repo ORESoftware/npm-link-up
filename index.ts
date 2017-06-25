@@ -12,7 +12,6 @@ import * as cp from 'child_process';
 //npm
 import * as chalk from 'chalk';
 const dashdash = require('dashdash');
-const colors = require('colors/safe');
 const async = require('async');
 const residence = require('residence');
 const cwd = process.cwd();
@@ -105,7 +104,7 @@ if (opts.completion) {
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
-    ' => Your present working directory is =>\n' + colors.magenta.bold(cwd));
+    ' => Your present working directory is =>\n' + chalk.magenta.bold(cwd));
   process.exit(1);
 }
 
@@ -148,8 +147,8 @@ const deps = Object.keys(pkg.dependencies || {})
 let list = conf.list;
 
 if (list.length < 1) {
-  console.error('\n', colors.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
-  console.log('\n\n', colors.cyan.bold(util.inspect(conf)));
+  console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
+  console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));
   process.exit(1);
 }
 
@@ -245,7 +244,7 @@ async.autoInject({
     findItems: function (searchRoots: Array<string>, cb: Function) {
 
       console.log('\n');
-      logInfo('Searching these roots => \n', colors.magenta(searchRoots));
+      logInfo('Searching these roots => \n', chalk.magenta(util.inspect(searchRoots)));
 
       const q = async.queue(function (task: Function, cb: Function) {
         task(cb);
@@ -326,7 +325,7 @@ async.autoInject({
       createItem(k, tree[name], [name]);
     });
 
-    const line = colors.green(' => NPM-Link-Up run was successful. All done.');
+    const line = chalk.green(' => NPM-Link-Up run was successful. All done.');
     stdoutStrm.write(line);
     stdoutStrm.end();
     stderrStrm.end();

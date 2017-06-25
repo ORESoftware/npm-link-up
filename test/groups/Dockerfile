@@ -30,10 +30,15 @@ RUN sudo chown -R $(whoami) $(npm config get prefix) || echo "no lib 1"
 RUN sudo chown -R $(whoami) $(npm root -g) || echo "no lib 2"
 
 RUN echo "installing suman globally..."
-RUN npm install -g "github:sumanjs/suman#rebase_branch"
+RUN npm install -g suman@latest
 
-RUN echo "down installing suman globally"
+RUN echo "done installing suman globally"
+
+RUN git clone https://github.com/ORESoftware/npm-link-up.git
+WORKDIR /home/newuser/npm-link-up
+RUN git checkout master
+RUN npm install
 
 COPY all.sh .
 
-ENTRYPOINT ["/bin/bash", "/home/newuser/all.sh"]
+ENTRYPOINT ["/bin/bash", "/home/newuser/npm-link-up/all.sh"]

@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var util = require("util");
 var path = require("path");
 var fs = require("fs");
+var chalk = require("chalk");
 var dashdash = require('dashdash');
-var colors = require('colors/safe');
 var async = require('async');
 var residence = require('residence');
 var cwd = process.cwd();
@@ -54,7 +54,7 @@ if (opts.completion) {
 }
 if (!root) {
     console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
-        ' => Your present working directory is =>\n' + colors.magenta.bold(cwd));
+        ' => Your present working directory is =>\n' + chalk.magenta.bold(cwd));
     process.exit(1);
 }
 var pkg, conf;
@@ -87,8 +87,8 @@ var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.optionalDependencies || {}));
 var list = conf.list;
 if (list.length < 1) {
-    console.error('\n', colors.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
-    console.log('\n\n', colors.cyan.bold(util.inspect(conf)));
+    console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
+    console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));
     process.exit(1);
 }
 var searchRoots;
@@ -159,7 +159,7 @@ async.autoInject({
     },
     findItems: function (searchRoots, cb) {
         console.log('\n');
-        logging_1.logInfo('Searching these roots => \n', colors.magenta(searchRoots));
+        logging_1.logInfo('Searching these roots => \n', chalk.magenta(util.inspect(searchRoots)));
         var q = async.queue(function (task, cb) {
             task(cb);
         }, 2);
@@ -216,7 +216,7 @@ async.autoInject({
     originalList.forEach(function (k) {
         createItem(k, tree[name], [name]);
     });
-    var line = colors.green(' => NPM-Link-Up run was successful. All done.');
+    var line = chalk.green(' => NPM-Link-Up run was successful. All done.');
     streaming_1.stdoutStrm.write(line);
     streaming_1.stdoutStrm.end();
     streaming_1.stderrStrm.end();

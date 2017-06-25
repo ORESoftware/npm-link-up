@@ -5,7 +5,6 @@ import * as cp from 'child_process';
 
 //npm
 const dashdash = require('dashdash');
-const colors = require('colors/safe');
 import  {stdoutStrm, stderrStrm} from './streaming';
 import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
 

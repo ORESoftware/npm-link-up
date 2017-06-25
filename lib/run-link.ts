@@ -12,7 +12,6 @@ import * as cp from 'child_process';
 //npm
 import * as chalk from 'chalk';
 const dashdash = require('dashdash');
-const colors = require('colors/safe');
 const async = require('async');
 const residence = require('residence');
 const cwd = process.cwd();
