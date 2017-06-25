@@ -127,7 +127,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
                   name: pkg.name,
                   hasNPMLinkUpJSONFile: !!npmlinkup,
                   linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
-                  runInstall: !isNodeModulesPresent,
+                  runInstall: !isNodeModulesPresent || (npmlinkup && npmlinkup.alwaysReinstall),
                   hasAtLinkSh: isAtLinkShPresent,
                   path: dirname,
                   deps: deps || []

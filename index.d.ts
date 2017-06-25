@@ -1,4 +1,12 @@
+export interface INPMLinkUpConf {
+    alwaysReinstall: boolean;
+    linkToItself: boolean;
+    searchRoots: Array<string>;
+    ignore: Array<string>;
+    list: Array<string>;
+}
 export interface INPMLinkUpOpts {
+    search_root: Array<string>;
     clear_all_caches: boolean;
     verbosity: number;
     version: string;

@@ -42,7 +42,7 @@ RUN echo "installing suman globally...7"
 RUN npm install -g suman@latest
 
 RUN echo "done installing suman globally1"
-RUN echo "done installing suman globally6"
+RUN echo "done installing suman globally8"
 
 RUN git clone https://github.com/ORESoftware/npm-link-up.git
 WORKDIR /home/newuser/npm-link-up
