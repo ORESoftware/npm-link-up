@@ -31,14 +31,17 @@
   },
   "homepage": "https://github.com/ORESoftware/npm-link-up#readme",
   "dependencies": {
-    "ajv": "^4.11.6",
     "async": "^2.3.0",
     "colors": "^1.1.2",
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
-    "residence": "latest"
+    "residence": "latest",
+    "treeify": "^1.0.1"
   },
   "devDependencies": {
+    "@types/async": "^2.0.40",
+    "@types/chalk": "^0.4.31",
+    "@types/node": "^8.0.2",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
     "suman": "sumanjs/suman#rebase_branch"

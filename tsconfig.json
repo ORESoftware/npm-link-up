@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+    },
+    "types": [
+      "node"
+    ],
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "allowUnreachableCode": true,
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017"
+    ]
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "test",
+    "node_modules"
+  ]
+}
