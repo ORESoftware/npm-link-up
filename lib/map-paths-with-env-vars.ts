@@ -4,7 +4,6 @@
 import * as cp from 'child_process';
 
 //npm
-const dashdash = require('dashdash');
 import  {stdoutStrm, stderrStrm} from './streaming';
 import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
 

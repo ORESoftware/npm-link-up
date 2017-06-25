@@ -158,7 +158,7 @@ export const runNPMLink =
 
       ].filter(i => i).join(' ');
 
-      logInfo('Script is => ', script);
+      logInfo(`Script is => "${script}"`);
       console.log('\n');
 
       const k = cp.spawn('bash', [], {
