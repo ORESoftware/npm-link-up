@@ -2,6 +2,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var util = require("util");
+var assert = require("assert");
 var path = require("path");
 var fs = require("fs");
 var chalk = require("chalk");
@@ -90,6 +91,10 @@ var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
 var list = conf.list;
+assert(Array.isArray(list), ' => Your npm-link-up.json file must have a top-level list property that is an array of strings.');
+list = list.filter(function (item) {
+    return !/###/.test(item);
+});
 if (list.length < 1) {
     console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
     console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));

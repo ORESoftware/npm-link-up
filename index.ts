@@ -160,6 +160,13 @@ const deps = Object.keys(pkg.dependencies || {})
 
 let list = conf.list;
 
+assert(Array.isArray(list),
+  ' => Your npm-link-up.json file must have a top-level list property that is an array of strings.');
+
+list = list.filter(function(item: string){
+    return !/###/.test(item);
+});
+
 if (list.length < 1) {
   console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
   console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));

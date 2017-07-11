@@ -1,3 +1,7 @@
 
+
 * what happens when user is developing a project x, but haven't clone all list items locally? (all dependencies of project x)
 * what happens when you need to link to a project that isn't an NPM project?
+* what happens when a user has cloned a repo in more than one place on the filesystem?
+
+

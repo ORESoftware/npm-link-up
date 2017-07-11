@@ -105,7 +105,7 @@ export const runNPMLink =
           }
         })
         .map(function (d: string) {
-          return `npm link ${d}`;
+          return `npm link ${d} -f`;
         });
     }
 
@@ -115,7 +115,7 @@ export const runNPMLink =
           return map[k].isLinked && map[k].deps.includes(name);
         })
         .map(function (k) {
-          return `cd ${map[k].path} && npm link ${name}`;
+          return `cd ${map[k].path} && npm link ${name} -f`;
         });
     }
 
@@ -127,9 +127,15 @@ export const runNPMLink =
       }
     }
 
+    // function getInstallCommand(dep: INPMLinkUpMapItem) {
+    //   if (dep.runInstall || opts.install_all) {
+    //     return '&& rm -rf node_modules';  // we do not need to run npm install, npm link already does this
+    //   }
+    // }
+
     function getLinkToItselfCommand(dep: INPMLinkUpMapItem) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
-        return `&& npm link ${String(dep.name).trim()}`
+        return `&& npm link ${String(dep.name).trim()} -f`
       }
     }
 
@@ -153,7 +159,7 @@ export const runNPMLink =
         `cd ${dep.path}`,
         getInstallCommand(dep),
         links,
-        '&& npm link',
+        '&& npm link -f',
         getLinkToItselfCommand(dep)
 
       ].filter(i => i).join(' ');
