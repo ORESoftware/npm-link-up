@@ -2,6 +2,12 @@
 *.sh
 *.md
 *.log
+*.txt
 *.json
+.npmignore
+.gitignore
 test
 node_modules
+*.ts
+!*.d.ts
+suman.conf.js
