@@ -253,7 +253,6 @@ async.autoInject({
       }
 
       cleanCache(cb);
-
     },
 
     mapSearchRoots: function (npmCacheClean: any, cb: Function) {
@@ -284,9 +283,7 @@ async.autoInject({
       q.drain = function () {
         if (callable) {
           callable = false;
-          cb(null, {
-            actuallyRan: true
-          });
+          cb(null, {actuallyRan: true});
         }
       };
 

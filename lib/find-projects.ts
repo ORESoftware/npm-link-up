@@ -124,10 +124,8 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
                 if (npmlinkup && npmlinkup.list) {
                   assert(Array.isArray(npmlinkup.list),
-                    `{npm-link-up.json}.list is not an Array instance for ${filename}.`);
-
+                    `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
                   deps = npmlinkup.list;
-
                   npmlinkup.list.forEach(function (item: string) {
                     if (totalList.indexOf(item) < 0) {
                       totalList.push(item);

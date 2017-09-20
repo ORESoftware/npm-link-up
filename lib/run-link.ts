@@ -11,19 +11,20 @@ import * as cp from 'child_process';
 
 //npm
 import * as chalk from 'chalk';
+
 const dashdash = require('dashdash');
 const async = require('async');
 const residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
-import  {stdoutStrm, stderrStrm} from './streaming';
+import {stdoutStrm, stderrStrm} from './streaming';
 import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
 
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function) {
+  function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function): void {
 
     if (opts.treeify) {
       logWarning('given the --treeify option passed at the command line, ' +
@@ -96,27 +97,27 @@ export const runNPMLink =
 
     function getNPMLinkList(deps: Array<string>) {
       return deps.filter(function (d) {
-          if (!map[d]) {
-            logWarning('Map for key ="' + d + '" is not defined.');
-            return false;
-          }
-          else {
-            return map[d] && map[d].isLinked;
-          }
-        })
-        .map(function (d: string) {
-          return `npm link ${d} -f`;
-        });
+        if (!map[d]) {
+          logWarning('Map for key ="' + d + '" is not defined.');
+          return false;
+        }
+        else {
+          return map[d] && map[d].isLinked;
+        }
+      })
+      .map(function (d: string) {
+        return `npm link ${d} -f`;
+      });
     }
 
     function getCommandListOfLinked(name: string) {
       return Object.keys(map)
-        .filter(function (k) {
-          return map[k].isLinked && map[k].deps.includes(name);
-        })
-        .map(function (k) {
-          return `cd ${map[k].path} && npm link ${name} -f`;
-        });
+      .filter(function (k) {
+        return map[k].isLinked && map[k].deps.includes(name);
+      })
+      .map(function (k) {
+        return `cd ${map[k].path} && npm link ${name} -f`;
+      });
     }
 
     console.log('\n');
