@@ -20,6 +20,13 @@ integrity, so this tool is not trival by any means.
 
 <p>
 
+# Example usage
+
+See: https://github.com/sumanjs
+The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
+Just look for the `npm-link-up.json` file in the root of each project.
+https://github.com/sumanjs/suman is the "root" project.
+
 ## &#9658; Installation
 
 ### ```npm install -g npm-link-up```
