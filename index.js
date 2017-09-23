@@ -183,9 +183,7 @@ async.autoInject({
         q.drain = function () {
             if (callable) {
                 callable = false;
-                cb(null, {
-                    actuallyRan: true
-                });
+                cb(null, { actuallyRan: true });
             }
         };
         var createTask = function (searchRoot) {
