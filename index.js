@@ -5,6 +5,7 @@ var util = require("util");
 var assert = require("assert");
 var path = require("path");
 var fs = require("fs");
+var cp = require("child_process");
 var chalk = require("chalk");
 var dashdash = require('dashdash');
 var async = require('async');
@@ -162,10 +163,18 @@ async.autoInject({
         }
         cache_clean_1.cleanCache(cb);
     },
+    rimrafMainProject: function (cb) {
+        var nm = path.resolve(root + '/node_modules');
+        cp.exec("cd " + root + " && rm -rf " + nm, function (err, stdout, stderr) {
+            err && console.error(err.stack || err);
+            stderr && console.error(String(stderr).trim());
+            cb(null);
+        });
+    },
     mapSearchRoots: function (npmCacheClean, cb) {
         map_paths_with_env_vars_1.mapPaths(searchRoots, cb);
     },
-    findItems: function (mapSearchRoots, cb) {
+    findItems: function (rimrafMainProject, mapSearchRoots, cb) {
         var searchRoots = mapSearchRoots.slice(0);
         console.log('\n');
         logging_1.logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));

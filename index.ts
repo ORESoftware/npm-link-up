@@ -255,11 +255,20 @@ async.autoInject({
       cleanCache(cb);
     },
 
+    rimrafMainProject: function(cb: Function){
+      let nm = path.resolve(root + '/node_modules');
+      cp.exec(`cd ${root} && rm -rf ${nm}`, function(err, stdout, stderr){
+        err && console.error(err.stack || err);
+        stderr && console.error(String(stderr).trim());
+        cb(null);
+      });
+    },
+
     mapSearchRoots: function (npmCacheClean: any, cb: Function) {
       mapPaths(searchRoots, cb);
     },
 
-    findItems: function (mapSearchRoots: Array<string>, cb: Function) {
+    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: Function) {
 
       let searchRoots = mapSearchRoots.slice(0);
 
