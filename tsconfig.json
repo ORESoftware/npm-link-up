@@ -2,11 +2,6 @@
   "compilerOptions": {
     "declaration": true,
     "baseUrl": ".",
-    "paths": {
-    },
-    "types": [
-      "node"
-    ],
     "target": "es5",
     "module": "commonjs",
     "noImplicitAny": true,

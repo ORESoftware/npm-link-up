@@ -1,13 +1,34 @@
+### folders
 .idea
-*.sh
-*.md
-*.log
-*.txt
-*.json
-.npmignore
-.gitignore
-test
 node_modules
+coverage
+.nyc_output
+test
+.github
+.tscmultiwatch
+
+### matching files
+*.sh
 *.ts
-!*.d.ts
+*.md
+*.txt
+*.log
+*.json
+*.yml
+*.DS_Store
+
+### files
+exp.js
+.gitignore
+.npmignore
+webpack.config.js
+.gitattributes
 suman.conf.js
+.editorconfig
+.babelrc
+.dockerignore
+package-lock.json
+yarn.lock
+
+### negation
+!*.d.ts

@@ -1,5 +1,13 @@
-node_modules
+### folders
+node_modules/
 .idea/
+.nyc_output/
+coverage/
+
+### matching files
 *.log
 
-
+### files
+package-lock.json
+yarn.lock
+*.DS_Store
