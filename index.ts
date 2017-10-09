@@ -18,13 +18,13 @@ const residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
-import  {stdoutStrm, stderrStrm} from './lib/streaming';
+import {stdoutStrm, stderrStrm} from './lib/streaming';
 
 //project
 import {makeFindProject} from './lib/find-projects';
 import {mapPaths} from './lib/map-paths-with-env-vars';
 import {cleanCache} from './lib/cache-clean';
-import alwaysIgnoreThese  from './lib/always-ignore';
+import alwaysIgnoreThese from './lib/always-ignore';
 import {logInfo, logError, logWarning, logVeryGood, logGood} from './lib/logging';
 import {getIgnore} from "./lib/handle-options";
 import options from './lib/cmd-line-opts';
@@ -155,16 +155,16 @@ console.log('\n');
 logGood(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
-  .concat(Object.keys(pkg.devDependencies || {}))
-  .concat(Object.keys(pkg.optionalDependencies || {}));
+.concat(Object.keys(pkg.devDependencies || {}))
+.concat(Object.keys(pkg.optionalDependencies || {}));
 
 let list = conf.list;
 
 assert(Array.isArray(list),
   ' => Your npm-link-up.json file must have a top-level list property that is an array of strings.');
 
-list = list.filter(function(item: string){
-    return !/###/.test(item);
+list = list.filter(function (item: string) {
+  return !/###/.test(item);
 });
 
 if (list.length < 1) {
@@ -195,9 +195,9 @@ else {
   }
 
   searchRoots = (conf.searchRoots || []).concat(opts.search_root_append || [])
-    .filter(function (item: string, i: number, arr: Array<string>) {
-      return arr.indexOf(item) === i;  // get a unique list
-    });
+  .filter(function (item: string, i: number, arr: Array<string>) {
+    return arr.indexOf(item) === i;  // get a unique list
+  });
 }
 
 const inListButNotInDeps: Array<string> = [];
@@ -255,11 +255,11 @@ async.autoInject({
       cleanCache(cb);
     },
 
-    rimrafMainProject: function(cb: Function){
+    rimrafMainProject: function (cb: Function) {
       let nm = path.resolve(root + '/node_modules');
-      cp.exec(`cd ${root} && rm -rf ${nm}`, function(err, stdout, stderr){
+      cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
         err && console.error(err.stack || err);
-        stderr && console.error(String(stderr).trim());
+        (stderr = String(stderr).trim()) && console.error(stderr);
         cb(null);
       });
     },
@@ -274,7 +274,7 @@ async.autoInject({
 
       console.log('\n');
       logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
-      if(opts.verbosity> 1){
+      if (opts.verbosity > 1) {
         console.log('\n');
         logWarning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
           'your original search roots, and these new directories will be searched as well.');
@@ -328,7 +328,7 @@ async.autoInject({
 
     console.log('\n');
 
-    if(results.runUtility){
+    if (results.runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       const line = chalk.green.underline(' => NPM-Link-Up run was successful. All done.');
       stdoutStrm.write(line);
@@ -341,7 +341,7 @@ async.autoInject({
     logGood('NPM-Link-Up results as a visual:\n');
     const treeObj = createTree(map, name, originalList);
     const treeString = treeify.asTree(treeObj, true);
-    const formattedStr = String(treeString).split('\n').map(function(line){
+    const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;
     });
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');

@@ -167,7 +167,7 @@ async.autoInject({
         var nm = path.resolve(root + '/node_modules');
         cp.exec("cd " + root + " && rm -rf " + nm, function (err, stdout, stderr) {
             err && console.error(err.stack || err);
-            stderr && console.error(String(stderr).trim());
+            (stderr = String(stderr).trim()) && console.error(stderr);
             cb(null);
         });
     },
