@@ -21,13 +21,11 @@ test
 exp.js
 .gitignore
 .npmignore
-webpack.config.js
 .gitattributes
 suman.conf.js
 .editorconfig
 .babelrc
 .dockerignore
-package-lock.json
 yarn.lock
 
 ### negation
