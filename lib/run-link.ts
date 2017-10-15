@@ -210,7 +210,7 @@ export const runNPMLink =
         else {
 
           if (opts.verbosity > 1) {
-            log.veryGood(`Dep with name "${chalk.bold(dep.name)}" is done.`);
+            log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
           }
 
           dep.isLinked = map[dep.name].isLinked = true;

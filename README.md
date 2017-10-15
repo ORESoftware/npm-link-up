@@ -196,3 +196,8 @@ Unfortunately, "NPM Link Up" cannot do anything about that.
 This doesn't cause any real problems, except you may have to run npmlinkup again to relink your project. 
 Installing with Yarn instead of NPM may prevent this issue altogether.
 
+
+### Screenshots:
+
+![NLU cli in action](https://github.com/ORESoftware/npm-link-up/tree/master/media/cli-output.png "NLU cli in action.")
+

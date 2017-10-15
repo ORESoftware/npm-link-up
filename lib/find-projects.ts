@@ -14,7 +14,7 @@ import * as cp from 'child_process';
 
 //npm
 const dashdash = require('dashdash');
-const async = require('async');
+import async = require('async');
 const treeify = require('treeify');
 import  {stdoutStrm, stderrStrm} from './streaming';
 import {log} from './logging';
