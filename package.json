@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1008",
+  "version": "0.0.1009",
   "bin": {
     "npmlinkup": "index.js"
   },
