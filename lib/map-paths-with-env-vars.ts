@@ -4,12 +4,12 @@
 import * as cp from 'child_process';
 
 //npm
-import  {stdoutStrm, stderrStrm} from './streaming';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {stdoutStrm, stderrStrm} from './streaming';
+import {log} from './logging';
 
 ///////////////////////////////////////////////////////////////////////
 
-export const mapPaths = function(searchRoots: Array<string>, cb: Function){
+export const mapPaths = function (searchRoots: Array<string>, cb: Function) {
 
   const mappedRoots = searchRoots.map(function (v) {
     return `echo "${v}";`;
@@ -37,7 +37,12 @@ export const mapPaths = function(searchRoots: Array<string>, cb: Function){
     data.push(d);
   });
 
+  k.once('error', function (e) {
+    log.error(e.stack || e);
+  });
+
   k.once('close', function (code: number) {
+
     if (code > 0) {
       return cb({
         code: code
@@ -46,7 +51,8 @@ export const mapPaths = function(searchRoots: Array<string>, cb: Function){
 
     const pths = data.map(function (d) {
       return String(d).trim();
-    }).filter(function (item, index, array) {
+    })
+    .filter(function (item, index, array) {
       // grab a unique list only
       return array.indexOf(item) === index;
     });

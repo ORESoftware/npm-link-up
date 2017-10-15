@@ -11,15 +11,14 @@ import * as cp from 'child_process';
 
 //npm
 import * as chalk from 'chalk';
-
 const dashdash = require('dashdash');
-const async = require('async');
-const residence = require('residence');
+import async = require('async');
+import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
 import {stdoutStrm, stderrStrm} from './streaming';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {log} from './logging';
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,14 +26,15 @@ export const runNPMLink =
   function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function): void {
 
     if (opts.treeify) {
-      logWarning('given the --treeify option passed at the command line, ' +
+      log.warning('given the --treeify option passed at the command line, ' +
         'npm-link-up will only print out the dependency tree and exit.');
       return process.nextTick(cb);
     }
 
     Object.keys(map).filter(function (k) {
       return totalList.indexOf(k) < 0;
-    }).forEach(function (k) {
+    })
+    .forEach(function (k) {
       // we don't need these keys, this operation should be safe
       delete map[k];
     });
@@ -45,7 +45,7 @@ export const runNPMLink =
       return cb(new Error(' => No deps could be found.'));
     }
 
-    logGood('=> Map => \n', chalk.magenta.bold(util.inspect(map)));
+    log.good('=> Map => \n', chalk.magenta.bold(util.inspect(map)));
 
     function isAllLinked() {
       //Object.values might not be available on all Node.js versions.
@@ -57,7 +57,7 @@ export const runNPMLink =
     function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
         if (!map[d]) {
-          logWarning(`there is no dependency named ${d} in the map.`);
+          log.warning(`there is no dependency named ${d} in the map.`);
           return false;
         }
         return !map[d].isLinked;
@@ -98,7 +98,7 @@ export const runNPMLink =
     function getNPMLinkList(deps: Array<string>) {
       return deps.filter(function (d) {
         if (!map[d]) {
-          logWarning('Map for key ="' + d + '" is not defined.');
+          log.warning('Map for key ="' + d + '" is not defined.');
           return false;
         }
         else {
@@ -143,13 +143,13 @@ export const runNPMLink =
     async.until(isAllLinked, function (cb: Function) {
 
       if (opts.verbosity > 2) {
-        logInfo(`Searching for next dep to run.`);
+        log.info(`Searching for next dep to run.`);
       }
 
       const dep = findNextDep();
 
       if (opts.verbosity > 1) {
-        logGood('Processing dep with name => ', dep.name);
+        log.good(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
       }
 
       const deps = getNPMLinkList(dep.deps);
@@ -165,8 +165,7 @@ export const runNPMLink =
 
       ].filter(i => i).join(' ');
 
-      logInfo(`Script is => "${script}"`);
-      console.log('\n');
+      log.info(`Script is => "${script}"`);
 
       const k = cp.spawn('bash', [], {
         env: Object.assign({}, process.env, {
@@ -200,7 +199,7 @@ export const runNPMLink =
         if (code > 0 && /ERR/i.test(stderr)) {
 
           console.log('\n');
-          logError(`Dep with name "${dep.name}" is done, but with an error.`);
+          log.error(`Dep with name "${dep.name}" is done, but with an error.`);
 
           cb({
             code: code,
@@ -211,8 +210,7 @@ export const runNPMLink =
         else {
 
           if (opts.verbosity > 1) {
-            logGood(`Dep with name "${dep.name}" is done.\n`);
-            console.log('\n');
+            log.veryGood(`Dep with name "${chalk.bold(dep.name)}" is done.`);
           }
 
           dep.isLinked = map[dep.name].isLinked = true;

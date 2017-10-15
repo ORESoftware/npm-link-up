@@ -6,7 +6,7 @@ import * as cp from 'child_process';
 
 //npm
 import  {stdoutStrm, stderrStrm} from './streaming';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {log} from './logging';
 
 ///////////////////////////////////////////////////////////
 
@@ -29,7 +29,7 @@ export const cleanCache = function(cb: Function){
   k.stderr.pipe(process.stderr);
 
   k.once('error', function(e){
-     console.error('npm cache clean/yarn cache clean experience spawn error =>\n', e.stack || e);
+     log.error('npm cache clean/yarn cache clean experience spawn error =>\n', e.stack || e);
   });
 
   k.once('exit', function (code: number) {

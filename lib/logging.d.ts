@@ -1,5 +1,7 @@
-export declare const logInfo: any;
-export declare const logGood: any;
-export declare const logVeryGood: any;
-export declare const logWarning: any;
-export declare const logError: any;
+export declare const log: {
+    info: any;
+    good: any;
+    veryGood: any;
+    warning: any;
+    error: any;
+};

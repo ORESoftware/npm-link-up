@@ -1,7 +1,12 @@
 import * as chalk from 'chalk';
-const name = ' => [npm-link-up] => ';
-export const logInfo = console.log.bind(console, name);
-export const logGood = console.log.bind(console, chalk.cyan(name));
-export const logVeryGood = console.log.bind(console, chalk.green(name));
-export const logWarning = console.log.bind(console, chalk.yellow.bold(name));
-export const logError = console.log.bind(console, chalk.red(name));
+const name = ' [npm-link-up] ';
+
+export const log = {
+  info: console.log.bind(console, name),
+  good: console.log.bind(console, chalk.cyan(name)),
+  veryGood: console.log.bind(console, chalk.green(name)),
+  warning: console.log.bind(console, chalk.yellow.bold(name)),
+  error: console.log.bind(console, chalk.red(name))
+};
+
+

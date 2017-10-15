@@ -1,5 +1,5 @@
 import * as stream from 'stream';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {log} from './logging';
 
 /////////////////////////////////////////////////////////////////////
 

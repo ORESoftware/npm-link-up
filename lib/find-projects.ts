@@ -17,7 +17,7 @@ const dashdash = require('dashdash');
 const async = require('async');
 const treeify = require('treeify');
 import  {stdoutStrm, stderrStrm} from './streaming';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {log} from './logging';
 import {INPMLinkUpMap, INPMLinkUpOpts} from "../index";
 
 ////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
     return ignore.some(function (r: RegExp) {
       if (r.test(pth)) {
         if (opts.verbosity > 2) {
-          console.log(`\n=> Path with value ${pth} was ignored because it matched the following regex:\n${r}`);
+          log.warning(`\n=> Path with value ${pth} was ignored because it matched the following regex:\n${r}`);
         }
         return true;
       }
@@ -44,7 +44,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
       if (isIgnored(String(dir + '/'))) {
         if (opts.verbosity > 2) {
-          logWarning('path ignored => ', dir);
+          log.warning('path ignored => ', dir);
         }
         return process.nextTick(cb);
       }
@@ -64,7 +64,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
-              logWarning('path ignored => ', item);
+              log.warning('path ignored => ', item);
             }
             return process.nextTick(cb);
           }
@@ -72,7 +72,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
           fs.stat(item, function (err, stats) {
 
             if (err) {
-              logWarning('warning => probably a symlink? => ', item);
+              log.warning('warning => probably a symlink? => ', item);
               return cb();
             }
 
@@ -151,7 +151,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
             else if (stats.isDirectory()) {
               if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
-                  logWarning('node_modules/.git path ignored => ', item);
+                  log.warning('node_modules/.git path ignored => ', item);
                 }
                 cb();
               }
@@ -162,7 +162,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
             }
             else {
               if (opts.verbosity > 1) {
-                logWarning('Not a directory or file (maybe a symlink?) => ', item);
+                log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
               cb();
             }

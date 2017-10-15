@@ -25,7 +25,7 @@ import {makeFindProject} from './lib/find-projects';
 import {mapPaths} from './lib/map-paths-with-env-vars';
 import {cleanCache} from './lib/cache-clean';
 import alwaysIgnoreThese from './lib/always-ignore';
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './lib/logging';
+import {log} from './lib/logging';
 import {getIgnore} from "./lib/handle-options";
 import options from './lib/cmd-line-opts';
 import {runNPMLink} from './lib/run-link';
@@ -35,7 +35,7 @@ import {createTree} from './lib/create-visual-tree';
 
 process.once('exit', function (code) {
   console.log('\n');
-  logInfo('NPM-Link-Up is exiting with code => ', code, '\n');
+  log.info('NPM-Link-Up is exiting with code => ', code, '\n');
 });
 
 //////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ try {
   pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
-  logError('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
+  log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
   console.error('\n', e.stack || e, '\n');
   process.exit(1);
 }
@@ -135,7 +135,7 @@ try {
   conf = require(path.resolve(root + '/npm-link-up.json'));
 }
 catch (e) {
-  logError('You do not have an "npm-link-up.json" file in the root of your project. ' +
+  log.error('You do not have an "npm-link-up.json" file in the root of your project. ' +
     'You need this config file for npmlinkup to do it\'s thing.');
   console.error('\n', e.stack || e, '\n');
   process.exit(1);
@@ -152,7 +152,7 @@ if (!name) {
 }
 
 console.log('\n');
-logGood(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
+log.good(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
 .concat(Object.keys(pkg.devDependencies || {}))
@@ -210,7 +210,7 @@ const inListAndInDeps = list.filter(function (item: string) {
 });
 
 inListButNotInDeps.forEach(function (item) {
-  logWarning('warning, the following item was listed in your npm-link-up.json file,\n' +
+  log.warning('warning, the following item was listed in your npm-link-up.json file,\n' +
     'but is not listed in your package.json dependencies => "' + item + '".');
 });
 
@@ -229,7 +229,7 @@ const ignore = getIgnore(conf, alwaysIgnoreThese);
 console.log('\n');
 
 originalList.forEach(function (item: string) {
-  logGood(`The following dep will be 'NPM linked' to this project => "${item}".`);
+  log.good(`The following dep will be 'NPM linked' to this project => "${item}".`);
 });
 
 if (opts.inherit_log) {
@@ -273,10 +273,10 @@ async.autoInject({
       let searchRoots = mapSearchRoots.slice(0);
 
       console.log('\n');
-      logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
+      log.info('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
       if (opts.verbosity > 1) {
         console.log('\n');
-        logWarning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
+        log.warning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
           'your original search roots, and these new directories will be searched as well.');
       }
 
@@ -338,7 +338,7 @@ async.autoInject({
       console.log('\n');
     }
 
-    logGood('NPM-Link-Up results as a visual:\n');
+    log.good('NPM-Link-Up results as a visual:\n');
     const treeObj = createTree(map, name, originalList);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {

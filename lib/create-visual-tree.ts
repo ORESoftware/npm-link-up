@@ -1,7 +1,7 @@
 
 
 import {INPMLinkUpMap, INPMLinkUpVisualTree} from "../index";
-import {logInfo, logError, logWarning, logVeryGood, logGood} from './logging';
+import {log} from './logging';
 
 
 
@@ -33,7 +33,7 @@ export const createTree = function(map: INPMLinkUpMap, name: string, originalLis
       });
     }
     else {
-      logWarning(`no key named "${key}" in map.`);
+      log.warning(`no key named "${key}" in map.`);
     }
 
   };

@@ -25,7 +25,7 @@ var run_link_1 = require("./lib/run-link");
 var create_visual_tree_1 = require("./lib/create-visual-tree");
 process.once('exit', function (code) {
     console.log('\n');
-    logging_1.logInfo('NPM-Link-Up is exiting with code => ', code, '\n');
+    logging_1.log.info('NPM-Link-Up is exiting with code => ', code, '\n');
 });
 var opts, parser = dashdash.createParser({ options: cmd_line_opts_1.default });
 try {
@@ -66,7 +66,7 @@ try {
     pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
-    logging_1.logError('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
+    logging_1.log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
     console.error('\n', e.stack || e, '\n');
     process.exit(1);
 }
@@ -74,7 +74,7 @@ try {
     conf = require(path.resolve(root + '/npm-link-up.json'));
 }
 catch (e) {
-    logging_1.logError('You do not have an "npm-link-up.json" file in the root of your project. ' +
+    logging_1.log.error('You do not have an "npm-link-up.json" file in the root of your project. ' +
         'You need this config file for npmlinkup to do it\'s thing.');
     console.error('\n', e.stack || e, '\n');
     process.exit(1);
@@ -87,7 +87,7 @@ if (!name) {
     process.exit(1);
 }
 console.log('\n');
-logging_1.logGood("We are running the npm-link-up tool for your project named \"" + chalk.magenta(name) + "\".");
+logging_1.log.good("We are running the npm-link-up tool for your project named \"" + chalk.magenta(name) + "\".");
 var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
@@ -133,7 +133,7 @@ var inListAndInDeps = list.filter(function (item) {
     return true;
 });
 inListButNotInDeps.forEach(function (item) {
-    logging_1.logWarning('warning, the following item was listed in your npm-link-up.json file,\n' +
+    logging_1.log.warning('warning, the following item was listed in your npm-link-up.json file,\n' +
         'but is not listed in your package.json dependencies => "' + item + '".');
 });
 var originalList = list.slice(0);
@@ -145,7 +145,7 @@ var totalList = list.slice(0);
 var ignore = handle_options_1.getIgnore(conf, always_ignore_1.default);
 console.log('\n');
 originalList.forEach(function (item) {
-    logging_1.logGood("The following dep will be 'NPM linked' to this project => \"" + item + "\".");
+    logging_1.log.good("The following dep will be 'NPM linked' to this project => \"" + item + "\".");
 });
 if (opts.inherit_log) {
     streaming_1.stdoutStrm.pipe(process.stdout);
@@ -177,10 +177,10 @@ async.autoInject({
     findItems: function (rimrafMainProject, mapSearchRoots, cb) {
         var searchRoots = mapSearchRoots.slice(0);
         console.log('\n');
-        logging_1.logInfo('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
+        logging_1.log.info('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
         if (opts.verbosity > 1) {
             console.log('\n');
-            logging_1.logWarning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
+            logging_1.log.warning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
                 'your original search roots, and these new directories will be searched as well.');
         }
         console.log('\n');
@@ -224,7 +224,7 @@ async.autoInject({
         console.log(line);
         console.log('\n');
     }
-    logging_1.logGood('NPM-Link-Up results as a visual:\n');
+    logging_1.log.good('NPM-Link-Up results as a visual:\n');
     var treeObj = create_visual_tree_1.createTree(map, name, originalList);
     var treeString = treeify.asTree(treeObj, true);
     var formattedStr = String(treeString).split('\n').map(function (line) {
