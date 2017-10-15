@@ -55,7 +55,6 @@ function npmlinkup(){
 function npmlinkup(){
    ~/.npmlinkup/global/node_modules/.bin/npmlinkup $@
 }
-
 ```
 
 Finally, source your ~/.bashrc file in your current terminal session:

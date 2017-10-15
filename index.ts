@@ -151,7 +151,7 @@ if (!name) {
   process.exit(1);
 }
 
-console.log('\n');
+console.log();
 log.good(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
@@ -210,7 +210,7 @@ const inListAndInDeps = list.filter(function (item: string) {
 });
 
 inListButNotInDeps.forEach(function (item) {
-  log.warning('warning, the following item was listed in your npm-link-up.json file,\n' +
+  log.warning('warning, the following item was listed in your npm-link-up.json file, ' +
     'but is not listed in your package.json dependencies => "' + item + '".');
 });
 
@@ -224,7 +224,13 @@ list = list.filter(function (item: string, index: number) {
   return list.indexOf(item) === index;
 });
 
-const totalList: Array<string> = list.slice(0);
+const totalList = new Map();
+
+list.forEach(function(l: string){
+  totalList.set(l,true);
+});
+
+
 const ignore = getIgnore(conf, alwaysIgnoreThese);
 console.log('\n');
 
@@ -309,13 +315,7 @@ async.autoInject({
     },
 
     runUtility: function (findItems: void, cb: Function) {
-
-      if (opts.treeify) {
-        return process.nextTick(cb);
-      }
-
       runNPMLink(map, totalList, opts, cb);
-
     }
   },
 

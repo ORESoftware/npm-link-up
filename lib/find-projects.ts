@@ -16,15 +16,13 @@ import * as cp from 'child_process';
 const dashdash = require('dashdash');
 import async = require('async');
 const treeify = require('treeify');
-import  {stdoutStrm, stderrStrm} from './streaming';
+import {stdoutStrm, stderrStrm} from './streaming';
 import {log} from './logging';
 import {INPMLinkUpMap, INPMLinkUpOpts} from "../index";
 
 ////////////////////////////////////////////////////////////////
 
-
-
-export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>, map: INPMLinkUpMap,
+export const makeFindProject = function (q: AsyncQueue, totalList: Map<string, boolean>, map: INPMLinkUpMap,
                                          ignore: Array<RegExp>, opts: INPMLinkUpOpts) {
 
   let isIgnored = function (pth: string) {
@@ -82,7 +80,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
               if (String(filename) === 'package.json') {
 
-                let pkg;
+                let pkg: Object;
 
                 try {
                   pkg = require(item);
@@ -90,8 +88,6 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
                 catch (err) {
                   return cb(err);
                 }
-
-                const newItems: Array<string> = [];
 
                 let npmlinkup;
 
@@ -122,15 +118,14 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Array<string>
 
                 let deps;
 
-                if (npmlinkup && npmlinkup.list) {
+                if (npmlinkup && (deps = npmlinkup.list)) {
                   assert(Array.isArray(npmlinkup.list),
                     `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
-                  deps = npmlinkup.list;
                   npmlinkup.list.forEach(function (item: string) {
-                    if (totalList.indexOf(item) < 0) {
-                      totalList.push(item);
-                      newItems.push(item);
+                    if (item === 'symlink-city') {
+                      console.log('pkg.name has suman-run-plugins!', pkg.name);
                     }
+                    totalList.set(item, true);
                   });
                 }
 

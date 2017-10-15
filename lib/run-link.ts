@@ -23,26 +23,30 @@ import {log} from './logging';
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function (map: INPMLinkUpMap, totalList: Array<string>, opts: INPMLinkUpOpts, cb: Function): void {
+  function ($map: INPMLinkUpMap, totalList: Map<string, boolean>, opts: INPMLinkUpOpts, cb: Function): void {
 
-    if (opts.treeify) {
-      log.warning('given the --treeify option passed at the command line, ' +
-        'npm-link-up will only print out the dependency tree and exit.');
-      return process.nextTick(cb);
-    }
 
-    Object.keys(map).filter(function (k) {
-      return totalList.indexOf(k) < 0;
+    const map = {} as INPMLinkUpMap;
+
+    Object.keys($map).filter(function (k) {
+      return totalList.get(String(k));
     })
     .forEach(function (k) {
-      // we don't need these keys, this operation should be safe
-      delete map[k];
+      map[k] = $map[k];
     });
 
     const keys = Object.keys(map);
 
-    if (!keys.length) {
-      return cb(new Error(' => No deps could be found.'));
+    if (keys.length < 1) {
+      return cb(new Error('NLU could not find any dependencies on the filesystem;' +
+        ' perhaps broaden your search using searchRoots.'));
+    }
+
+    if (opts.treeify) {
+      log.warning('given the --treeify option passed at the command line, npm-link-up will only print out the dependency tree and exit.');
+      log.veryGood('the following is a complete list of recursively related dependencies:\n');
+      log.veryGood(util.inspect(Object.keys(map)));
+      return process.nextTick(cb);
     }
 
     log.good('=> Map => \n', chalk.magenta.bold(util.inspect(map)));

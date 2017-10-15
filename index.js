@@ -86,7 +86,7 @@ if (!name) {
     console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
     process.exit(1);
 }
-console.log('\n');
+console.log();
 logging_1.log.good("We are running the npm-link-up tool for your project named \"" + chalk.magenta(name) + "\".");
 var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
@@ -133,7 +133,7 @@ var inListAndInDeps = list.filter(function (item) {
     return true;
 });
 inListButNotInDeps.forEach(function (item) {
-    logging_1.log.warning('warning, the following item was listed in your npm-link-up.json file,\n' +
+    logging_1.log.warning('warning, the following item was listed in your npm-link-up.json file, ' +
         'but is not listed in your package.json dependencies => "' + item + '".');
 });
 var originalList = list.slice(0);
@@ -141,7 +141,10 @@ list.push(name);
 list = list.filter(function (item, index) {
     return list.indexOf(item) === index;
 });
-var totalList = list.slice(0);
+var totalList = new Map();
+list.forEach(function (l) {
+    totalList.set(l, true);
+});
 var ignore = handle_options_1.getIgnore(conf, always_ignore_1.default);
 console.log('\n');
 originalList.forEach(function (item) {
@@ -205,9 +208,6 @@ async.autoInject({
         });
     },
     runUtility: function (findItems, cb) {
-        if (opts.treeify) {
-            return process.nextTick(cb);
-        }
         run_link_1.runNPMLink(map, totalList, opts, cb);
     }
 }, function (err, results) {
