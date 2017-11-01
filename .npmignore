@@ -19,7 +19,6 @@ media
 *.DS_Store
 
 ### files
-exp.js
 .gitignore
 .npmignore
 .gitattributes

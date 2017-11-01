@@ -122,9 +122,6 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Map<string, b
                   assert(Array.isArray(npmlinkup.list),
                     `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
                   npmlinkup.list.forEach(function (item: string) {
-                    if (item === 'symlink-city') {
-                      console.log('pkg.name has suman-run-plugins!', pkg.name);
-                    }
                     totalList.set(item, true);
                   });
                 }

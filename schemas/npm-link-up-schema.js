@@ -37,6 +37,13 @@ NLU.getSchema = function () {
               type: 'string'
             }
           },
+          "comments": {
+            type: 'array',
+            required: false,
+            elements: {
+              type: 'string'
+            }
+          },
           "list": {
             type: 'array',
             required: true,
