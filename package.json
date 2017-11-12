@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1009",
+  "version": "0.0.1010",
   "bin": {
     "npmlinkup": "index.js"
   },
@@ -9,7 +9,7 @@
   "types": "index.d.ts",
   "typings": "index.d.ts",
   "scripts": {
-    "test": "./@test.sh"
+    "test": "./scripts/test.sh"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "node.js"
   ],
   "author": "Olegzandr",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ORESoftware/npm-link-up/issues"
   },
