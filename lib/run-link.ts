@@ -25,7 +25,6 @@ import {log} from './logging';
 export const runNPMLink =
   function ($map: INPMLinkUpMap, totalList: Map<string, boolean>, opts: INPMLinkUpOpts, cb: Function): void {
 
-
     const map = {} as INPMLinkUpMap;
 
     Object.keys($map).filter(function (k) {
