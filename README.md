@@ -1,10 +1,12 @@
 ## NPM-Link-Up
 
-<b>Disclaimer:</b> This tool currently works great with NPM v4 but not v5. <br> 
+<b>Disclaimer:</b> This tool uses NPM v4.6.1, and is only proven with this NPM version.<br> 
+
 NPM v5 has problems, and these are problems with NPM itself,
-not with this tool. I assume that NPM will fix the problems with version 5, and then this tool will eventually
-work with later v5 releases. In short, use this tool with v4, if you can. NPM version 4.6.1 is recommended.
-If you get it working with v5, please let me know which version you use, I am curious.
+not with this tool. Symlink and `npm link` behavior changed with NPM version 5,
+and many NPM bugs were introduced with NPM version 5. So this tool is currently
+married to NPM version 4.6.1 and that seems to be fine. To make everything easy,
+npm version 4.6.1 is simply bundled with this tool, so everything is easy-peezy.
 
 # About
 
