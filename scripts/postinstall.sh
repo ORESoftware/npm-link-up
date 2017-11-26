@@ -9,4 +9,10 @@ if [[ ! -f package.json ]]; then
     npm init -f
 fi
 
-npm install -S npm-link-up@latest
+if [[ "$oresoftware_env" === "alex" ]]; then
+    npm link npm-link-up -f
+else
+    npm install -S npm-link-up
+fi
+
+
