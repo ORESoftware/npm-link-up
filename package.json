@@ -10,7 +10,8 @@
   "types": "index.d.ts",
   "typings": "index.d.ts",
   "scripts": {
-    "test": "./scripts/test.sh"
+    "test": "./scripts/test.sh",
+    "postinstall": "./scripts/postinstall.sh"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,7 @@
     "chalk": "^1.1.3",
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
-    "npm": "^4.6.1",
+    "npm": "4.6.1",
     "residence": "latest",
     "treeify": "^1.0.1"
   },

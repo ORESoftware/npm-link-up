@@ -38,28 +38,15 @@ installation method instead (installs the dep in your $HOME dir):
 
 <p>
 
-```
- mkdir -p ~/.npmlinkup/global && cd ~/.npmlinkup/global && 
-  npm init -f && npm install -S npm-link-up@latest
-```
-
-then add this to your ~./bashrc file:
+Add this to your ~./bashrc file:
 
 ```bash
-export PATH=$PATH:~/.npmlinkup/global/node_modules/.bin
-
 function npmlinkup(){
-  command npmlinkup $@
-}
-
-# if you don't want to change your $PATH, you could do this:
-
-function npmlinkup(){
-   ~/.npmlinkup/global/node_modules/.bin/npmlinkup $@
+   "$HOME/.npmlinkup/global/node_modules/.bin/npmlinkup" $@
 }
 ```
 
-Finally, source your ~/.bashrc file in your current terminal session:
+Source your ~/.bashrc file in your current terminal session:
 
 ```bash
 source ~/.bashrc 
