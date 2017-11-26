@@ -390,6 +390,3 @@ fi
 ##     echo "source ~/.npmlinkup.completion" >> ~/.bashrc
 ##
 
-
- => NPM-Link-Up is exiting with code =>  0 
-
