@@ -56,28 +56,23 @@ To discover where npmlinkup is located, you can use all of the following:
 
 1. First try this:
 ```bash
-    $ type npmlink
+$ type npmlink
 
 ```
 2. Second try this:
 ```bash
-    # Turn on extended shell debugging
-    $ shopt -s extdebug
+$ shopt -s extdebug     # Turn on extended shell debugging
 
-    # Dump the function's name, line number and fully qualified source file
-    $ declare -F foo
+$ declare -F npmlinkup  # Dump the function's name, line number and fully qualified source file
 
-    # Turn off extended shell debugging
-    $ shopt -u extdebug
+$ shopt -u extdebug     # Turn off extended shell debugging
 ```
 
 3. Lastly, try this:
 
 ```bash
-    $ which npmlink
+$ which npmlink
 ```
-
- => npmlinkup is a long command name, but there is a thing called tab completion :)
 
 Be sure that your system is configured so that your bashrc file is sourced for all sessions/terminals.
 There is really no good reason to install this module locally to a project.
