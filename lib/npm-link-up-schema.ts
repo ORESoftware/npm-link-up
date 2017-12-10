@@ -65,4 +65,4 @@ NLU.prototype.toJSON = function toJSON() {
 };
 
 F.validateFrankenstopSchema(NLU);
-module.exports = NLU;
+export = NLU;

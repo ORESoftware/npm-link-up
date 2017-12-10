@@ -79,7 +79,7 @@ catch (e) {
     console.error('\n', e.stack || e, '\n');
     process.exit(1);
 }
-var NLU = require("./lib/npm-link-up-schemaa");
+var NLU = require("./lib/npm-link-up-schema");
 new NLU(conf, false).validate();
 var name = pkg.name;
 if (!name) {

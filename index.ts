@@ -141,7 +141,7 @@ catch (e) {
   process.exit(1);
 }
 
-import NLU = require('./lib/npm-link-up-schemaa');
+import NLU = require('./lib/npm-link-up-schema');
 new NLU(conf, false).validate();
 
 const name = pkg.name;
