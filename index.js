@@ -17,12 +17,12 @@ var streaming_1 = require("./lib/streaming");
 var find_projects_1 = require("./lib/find-projects");
 var map_paths_with_env_vars_1 = require("./lib/map-paths-with-env-vars");
 var cache_clean_1 = require("./lib/cache-clean");
-var always_ignore_1 = require("./lib/always-ignore");
 var logging_1 = require("./lib/logging");
 var handle_options_1 = require("./lib/handle-options");
 var cmd_line_opts_1 = require("./lib/cmd-line-opts");
 var run_link_1 = require("./lib/run-link");
 var create_visual_tree_1 = require("./lib/create-visual-tree");
+var get_clean_final_map_1 = require("./lib/get-clean-final-map");
 process.once('exit', function (code) {
     console.log('\n');
     logging_1.log.info('NPM-Link-Up is exiting with code => ', code, '\n');
@@ -83,11 +83,11 @@ var NLU = require("./lib/npm-link-up-schema");
 new NLU(conf, false).validate();
 var name = pkg.name;
 if (!name) {
-    console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
+    logging_1.log.error('Ummmm, your package.json file does not have a name property. Fatal.');
     process.exit(1);
 }
 console.log();
-logging_1.log.good("We are running the npm-link-up tool for your project named \"" + chalk.magenta(name) + "\".");
+logging_1.log.good("We are running the \"npm-link-up\" tool for your project named \"" + chalk.magenta(name) + "\".");
 var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
@@ -145,7 +145,7 @@ var totalList = new Map();
 list.forEach(function (l) {
     totalList.set(l, true);
 });
-var ignore = handle_options_1.getIgnore(conf, always_ignore_1.default);
+var ignore = handle_options_1.getIgnore(conf);
 console.log('\n');
 originalList.forEach(function (item) {
     logging_1.log.good("The following dep will be 'NPM linked' to this project => \"" + item + "\".");
@@ -208,7 +208,8 @@ async.autoInject({
         });
     },
     runUtility: function (findItems, cb) {
-        run_link_1.runNPMLink(map, totalList, opts, cb);
+        var cleanMap = get_clean_final_map_1.getCleanMap(name, map);
+        run_link_1.runNPMLink(cleanMap, totalList, opts, cb);
     }
 }, function (err, results) {
     if (err) {

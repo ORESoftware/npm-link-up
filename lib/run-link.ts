@@ -23,17 +23,8 @@ import {log} from './logging';
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function ($map: INPMLinkUpMap, totalList: Map<string, boolean>, opts: INPMLinkUpOpts, cb: Function): void {
-
-    const map = {} as INPMLinkUpMap;
-
-    Object.keys($map).filter(function (k) {
-      return totalList.get(String(k));
-    })
-    .forEach(function (k) {
-      map[k] = $map[k];
-    });
-
+  function (map: INPMLinkUpMap, totalList: Map<string, boolean>, opts: INPMLinkUpOpts, cb: Function): void {
+  
     const keys = Object.keys(map);
 
     if (keys.length < 1) {

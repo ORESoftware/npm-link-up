@@ -75,6 +75,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Map<string, b
             }
 
             if (stats.isFile()) {
+              
               let dirname = path.dirname(item);
               let filename = path.basename(item);
 
@@ -143,7 +144,7 @@ export const makeFindProject = function (q: AsyncQueue, totalList: Map<string, b
             else if (stats.isDirectory()) {
               if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
-                  log.warning('node_modules/.git path ignored => ', item);
+                  log.warning('path ignored => ', item);
                 }
                 cb();
               }

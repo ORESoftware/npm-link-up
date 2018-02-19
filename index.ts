@@ -24,12 +24,12 @@ import {stdoutStrm, stderrStrm} from './lib/streaming';
 import {makeFindProject} from './lib/find-projects';
 import {mapPaths} from './lib/map-paths-with-env-vars';
 import {cleanCache} from './lib/cache-clean';
-import alwaysIgnoreThese from './lib/always-ignore';
 import {log} from './lib/logging';
 import {getIgnore} from "./lib/handle-options";
 import options from './lib/cmd-line-opts';
 import {runNPMLink} from './lib/run-link';
 import {createTree} from './lib/create-visual-tree';
+import {getCleanMap} from './lib/get-clean-final-map';
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -147,12 +147,12 @@ new NLU(conf, false).validate();
 const name = pkg.name;
 
 if (!name) {
-  console.error(' => Ummmm, your package.json file does not have a name property. Fatal.');
+  log.error('Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
 
 console.log();
-log.good(`We are running the npm-link-up tool for your project named "${chalk.magenta(name)}".`);
+log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(name)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
 .concat(Object.keys(pkg.devDependencies || {}))
@@ -181,7 +181,7 @@ if (opts.search_root && opts.search_root.length > 0) {
   });
 }
 else {
-
+  
   if (!conf.searchRoots) {
     console.error(' => Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
       'NPM-Link-Up will therefore search through your entire home directory.');
@@ -193,7 +193,7 @@ else {
       process.exit(1);
     }
   }
-
+  
   searchRoots = (conf.searchRoots || []).concat(opts.search_root_append || [])
   .filter(function (item: string, i: number, arr: Array<string>) {
     return arr.indexOf(item) === i;  // get a unique list
@@ -201,6 +201,7 @@ else {
 }
 
 const inListButNotInDeps: Array<string> = [];
+
 const inListAndInDeps = list.filter(function (item: string) {
   if (!deps.includes(item)) {
     inListButNotInDeps.push(item);
@@ -226,12 +227,11 @@ list = list.filter(function (item: string, index: number) {
 
 const totalList = new Map();
 
-list.forEach(function(l: string){
-  totalList.set(l,true);
+list.forEach(function (l: string) {
+  totalList.set(l, true);
 });
 
-
-const ignore = getIgnore(conf, alwaysIgnoreThese);
+const ignore = getIgnore(conf);
 console.log('\n');
 
 originalList.forEach(function (item: string) {
@@ -251,16 +251,16 @@ if (opts.log) {
 const map: INPMLinkUpMap = {};
 
 async.autoInject({
-
+    
     npmCacheClean: function (cb: Function) {
-
+      
       if (!opts.clear_all_caches) {
         return process.nextTick(cb);
       }
-
+      
       cleanCache(cb);
     },
-
+    
     rimrafMainProject: function (cb: Function) {
       let nm = path.resolve(root + '/node_modules');
       cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
@@ -269,15 +269,15 @@ async.autoInject({
         cb(null);
       });
     },
-
+    
     mapSearchRoots: function (npmCacheClean: any, cb: Function) {
       mapPaths(searchRoots, cb);
     },
-
+    
     findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: Function) {
-
+      
       let searchRoots = mapSearchRoots.slice(0);
-
+      
       console.log('\n');
       log.info('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
       if (opts.verbosity > 1) {
@@ -285,15 +285,15 @@ async.autoInject({
         log.warning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
           'your original search roots, and these new directories will be searched as well.');
       }
-
+      
       console.log('\n');
-
+      
       const q = async.queue(function (task: Function, cb: Function) {
         task(cb);
       }, 2);
-
+      
       const findProject = makeFindProject(q, totalList, map, ignore, opts);
-
+      
       let callable = true;
       q.drain = function () {
         if (callable) {
@@ -301,33 +301,35 @@ async.autoInject({
           cb(null, {actuallyRan: true});
         }
       };
-
+      
       const createTask = function (searchRoot: string) {
         return function (cb: Function) {
           findProject(searchRoot, cb);
         }
       };
-
+      
       searchRoots.forEach(function (sr) {
         q.push(createTask(sr));
       });
-
+      
     },
-
+    
     runUtility: function (findItems: void, cb: Function) {
-      runNPMLink(map, totalList, opts, cb);
+      
+      const cleanMap = getCleanMap(name, map);
+      runNPMLink(cleanMap, totalList, opts, cb);
     }
   },
-
+  
   function (err: Error, results: Object) {
-
+    
     if (err) {
       console.error(err.stack || err);
       return process.exit(1);
     }
-
+    
     console.log('\n');
-
+    
     if (results.runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       const line = chalk.green.underline(' => NPM-Link-Up run was successful. All done.');
@@ -337,7 +339,7 @@ async.autoInject({
       console.log(line);
       console.log('\n');
     }
-
+    
     log.good('NPM-Link-Up results as a visual:\n');
     const treeObj = createTree(map, name, originalList);
     const treeString = treeify.asTree(treeObj, true);
@@ -347,11 +349,11 @@ async.autoInject({
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
     console.log(chalk.white(formattedStr.join('\n')));
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-
+    
     setTimeout(function () {
       process.exit(0);
     }, 100);
-
+    
   });
 
 
