@@ -9,7 +9,4 @@ coverage
 *.log
 *.DS_Store
 
-### files
-package-lock.json
-yarn.lock
 
