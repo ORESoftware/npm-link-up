@@ -38,10 +38,10 @@ installation method instead (installs the dep in your $HOME dir):
 
 <p>
 
-Add this to your ~./bashrc file:
+Add this to your ~/.bashrc file:
 
 ```bash
-function npmlinkup(){
+function npmlinkup {
    "$HOME/.npmlinkup/global/node_modules/.bin/npmlinkup" $@
 }
 ```
