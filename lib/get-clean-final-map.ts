@@ -7,7 +7,7 @@ export const getCleanMap = function (rootPackageName: string, map: INPMLinkUpMap
   
   const getRelevantItems = function(v: string){
     
-    if(map[v]){
+    if(map[v] && !newMap[v]){
       
       newMap[v] = map[v];
       
