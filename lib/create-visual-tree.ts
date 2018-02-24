@@ -16,37 +16,30 @@ export const createTree = function (map: INPMLinkUpMap, name: string, originalLi
     
     obj[key] = obj[key] || {};
     
-    if (map[key]) {
+    if (!(map[key] && Array.isArray(map[key].deps))) {
+      log.warning(`no key named "${key}" in map, or deps is not an array => ${util.inspect(map[key])}`);
+      return;
+    }
+    
+    map[key].deps.forEach(function (d: string) {
       
-      map[key].deps.forEach(function (d: string) {
-        
-        // console.log('key:', key);
-        // console.log('d:', d);
-        // console.log('the keys', keys);
-        
-        if (key !== d && keys.indexOf(d) < 0) {
-          keys.push(d);
-          let v2 = obj[key][d] = {};
-          createItem(d, v2, keys.slice(0));
-        }
-        else {
-          keys.push(d);
-          obj[key][d] = null;
-        }
-        
-      });
-    }
-    else {
-      log.warning(`no key named "${key}" in map.`);
-    }
+      if (key !== d && keys.indexOf(d) < 0) {
+        keys.push(d);
+        let v2 = obj[key][d] = {};
+        createItem(d, v2, keys.slice(0));
+      }
+      else {
+        keys.push(d);
+        obj[key][d] = null;
+      }
+      
+    });
     
   };
   
   originalList.forEach(function (k: string) {
     createItem(k, tree[name], [name]);
   });
-  
-  // console.log('the tree:', util.inspect(tree));
   
   let cleanTree = function (k: string, val: any) {
     
