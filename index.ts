@@ -249,6 +249,7 @@ if (opts.log) {
 }
 
 const map: INPMLinkUpMap = {};
+let cleanMap: INPMLinkUpMap;
 
 async.autoInject({
     
@@ -316,7 +317,7 @@ async.autoInject({
     
     runUtility: function (findItems: void, cb: Function) {
       
-      const cleanMap = getCleanMap(name, map);
+      cleanMap = getCleanMap(name, map);
       runNPMLink(cleanMap, totalList, opts, cb);
     }
   },
@@ -341,7 +342,7 @@ async.autoInject({
     }
     
     log.good('NPM-Link-Up results as a visual:\n');
-    const treeObj = createTree(map, name, originalList);
+    const treeObj = createTree(cleanMap, name, originalList);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;

@@ -159,6 +159,7 @@ if (opts.log) {
     streaming_1.stderrStrm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
 }
 var map = {};
+var cleanMap;
 async.autoInject({
     npmCacheClean: function (cb) {
         if (!opts.clear_all_caches) {
@@ -208,7 +209,7 @@ async.autoInject({
         });
     },
     runUtility: function (findItems, cb) {
-        var cleanMap = get_clean_final_map_1.getCleanMap(name, map);
+        cleanMap = get_clean_final_map_1.getCleanMap(name, map);
         run_link_1.runNPMLink(cleanMap, totalList, opts, cb);
     }
 }, function (err, results) {
@@ -226,7 +227,7 @@ async.autoInject({
         console.log('\n');
     }
     logging_1.log.good('NPM-Link-Up results as a visual:\n');
-    var treeObj = create_visual_tree_1.createTree(map, name, originalList);
+    var treeObj = create_visual_tree_1.createTree(cleanMap, name, originalList);
     var treeString = treeify.asTree(treeObj, true);
     var formattedStr = String(treeString).split('\n').map(function (line) {
         return '\t' + line;
