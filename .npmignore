@@ -9,9 +9,9 @@ test
 .tscmultiwatch
 media
 .vscode
+scripts
 
 ### matching files
-*.sh
 *.ts
 *.md
 *.txt
