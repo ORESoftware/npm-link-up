@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1017",
+  "version": "0.0.1018",
   "bin": {
     "npmlinkup": "cli/index.sh",
     "npmlinkup-global-npm": "index.js"
