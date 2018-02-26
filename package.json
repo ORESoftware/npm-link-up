@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1019",
+  "version": "0.0.1020",
   "bin": {
     "npmlinkup": "cli/index.sh",
     "npmlinkup-global-npm": "index.js"
@@ -44,7 +44,7 @@
     "treeify": "^1.0.1"
   },
   "devDependencies": {
-    "@types/async": "^2.0.40",
+    "@types/async": "latest",
     "@types/chalk": "^0.4.31",
     "@types/node": "^8.0.2",
     "mkdirp": "^0.5.1",
