@@ -40,8 +40,10 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
   let isIgnored = function (pth: string) {
     return ignore.some(function (r: RegExp) {
       if (r.test(pth)) {
-        opts.verbosity > 2 && log.warning(`\n=> Path with value ${pth} was
-        ignored because it matched the following regex:\n${r}`);
+        if (opts.verbosity > 2) {
+          log.warning(`Path with value "${pth}" was ignored because it matched the following regex:`);
+          log.warning(`${r}`);
+        }
         return true;
       }
     });
@@ -66,8 +68,8 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
     });
     
     if (match) {
-      if(opts.verbosity > 2){
-        log.good('path has already been covered:');
+      if (opts.verbosity > 2) {
+        log.good(chalk.blue('path has already been covered:'));
         log.good('new path:', chalk.bold(item));
         log.good('already searched path:', chalk.bold(goodPth));
       }
