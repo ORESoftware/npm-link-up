@@ -21,7 +21,7 @@ import chalk = require('chalk');
 // project
 import {stdoutStrm, stderrStrm} from './streaming';
 import {log} from './logging';
-import {INPMLinkUpMap, INPMLinkUpOpts} from "../index";
+import {INPMLinkUpMap, INPMLinkUpOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
@@ -40,9 +40,8 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
   let isIgnored = function (pth: string) {
     return ignore.some(function (r: RegExp) {
       if (r.test(pth)) {
-        if (opts.verbosity > 2) {
-          log.warning(`\n=> Path with value ${pth} was ignored because it matched the following regex:\n${r}`);
-        }
+        opts.verbosity > 2 && log.warning(`\n=> Path with value ${pth} was
+        ignored because it matched the following regex:\n${r}`);
         return true;
       }
     });
@@ -53,7 +52,7 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
     item = path.normalize(item);
     
     if (searchedPaths[item]) {
-      log.good('already searched this path, not searching again:', chalk.bold(item));
+      opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
       return process.nextTick(cb);
     }
     
@@ -67,9 +66,11 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
     });
     
     if (match) {
-      log.good('path has already been covered:');
-      log.good('new path:', item);
-      log.good('already searched path:', goodPth);
+      if(opts.verbosity > 2){
+        log.good('path has already been covered:');
+        log.good('new path:', chalk.bold(item));
+        log.good('already searched path:', chalk.bold(goodPth));
+      }
       return process.nextTick(cb);
     }
     

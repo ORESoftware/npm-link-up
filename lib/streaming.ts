@@ -1,3 +1,5 @@
+'use strict';
+
 import * as stream from 'stream';
 import {log} from './logging';
 

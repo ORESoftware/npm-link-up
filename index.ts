@@ -41,47 +41,6 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-export interface INPMLinkUpConf {
-  alwaysReinstall: boolean,
-  linkToItself: boolean,
-  searchRoots: Array<string>,
-  ignore: Array<string>,
-  list: Array<string>
-}
-
-export interface INPMLinkUpOpts {
-  search_root: Array<string>,
-  clear_all_caches: boolean,
-  verbosity: number,
-  version: string,
-  help: boolean,
-  completion: boolean,
-  install_all: boolean,
-  self_link_all: boolean,
-  treeify: boolean
-}
-
-export interface INPMLinkUpMapItem {
-  name: string,
-  hasNPMLinkUpJSONFile: boolean,
-  linkToItself: boolean,
-  runInstall: boolean,
-  hasAtLinkSh: boolean,
-  path: string,
-  deps: Array<string>
-  isLinked?: boolean
-}
-
-export interface INPMLinkUpMap {
-  [key: string]: INPMLinkUpMapItem
-}
-
-export interface INPMLinkUpVisualTree {
-  [key: string]: INPMLinkUpVisualTree
-}
-
-////////////////////////////////////////////////////////////////////
-
 let opts: INPMLinkUpOpts, parser = dashdash.createParser({options});
 
 try {
@@ -143,6 +102,7 @@ catch (e) {
 }
 
 import NLU = require('./lib/npm-link-up-schema');
+import {INPMLinkUpMap, INPMLinkUpOpts} from "./lib/npmlinkup";
 new NLU(conf, false).validate();
 
 const name = pkg.name;
@@ -162,7 +122,7 @@ const deps = Object.keys(pkg.dependencies || {})
 let list = conf.list;
 
 assert(Array.isArray(list),
-  ' => Your npm-link-up.json file must have a top-level list property that is an array of strings.');
+  'Your npm-link-up.json file must have a top-level "list" property that is an array of strings.');
 
 list = list.filter(function (item: string) {
   return !/###/.test(item);
@@ -184,13 +144,15 @@ if (opts.search_root && opts.search_root.length > 0) {
 else {
   
   if (!conf.searchRoots) {
-    console.error(' => Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
+    
+    log.error('Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
       'NPM-Link-Up will therefore search through your entire home directory.');
+    
     if (opts.force) {
       searchRoots = [path.resolve(process.env.HOME)];
     }
     else {
-      console.error(' => You must use --force to do this.');
+      log.error(' => But you must use --force at the command line to do this.');
       process.exit(1);
     }
   }
@@ -252,19 +214,32 @@ if (opts.log) {
 const map: INPMLinkUpMap = {};
 let cleanMap: INPMLinkUpMap;
 
+if (opts.treeify) {
+  log.warning('We are only printing a visual, not actually linking project.');
+}
+
 async.autoInject({
     
     npmCacheClean: function (cb: Function) {
       
+      if (opts.treeify) {
+        return process.nextTick(cb);
+      }
+      
       if (!opts.clear_all_caches) {
         return process.nextTick(cb);
       }
-  
+      
       log.info(`Cleaning the NPM cache.`);
       cleanCache(cb);
     },
     
     rimrafMainProject: function (cb: Function) {
+      
+      if (opts.treeify) {
+        return process.nextTick(cb);
+      }
+      
       log.info(`Deleting node_modules from your root project.`);
       let nm = path.resolve(root + '/node_modules');
       cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
@@ -311,9 +286,15 @@ async.autoInject({
     },
     
     runUtility: function (findItems: void, cb: Function) {
+      
+      cleanMap = getCleanMap(name, map);
+      
+      if (opts.treeify) {
+        return process.nextTick(cb);
+      }
+  
       console.log('\n');
       log.good('Beginning to actually link projects together...');
-      cleanMap = getCleanMap(name, map);
       runNPMLink(cleanMap, totalList, opts, cb);
     }
   },
@@ -327,7 +308,7 @@ async.autoInject({
     
     console.log('\n');
     
-    if (results.runUtility) {
+    if ((results as any).runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       const line = chalk.green.underline('NPM-Link-Up run was successful. All done.');
       stdoutStrm.write(line);
@@ -338,7 +319,7 @@ async.autoInject({
     }
     
     log.good('NPM-Link-Up results as a visual:\n');
-    const treeObj = createTree(cleanMap, name, originalList);
+    const treeObj = createTree(cleanMap, name, originalList, opts);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;

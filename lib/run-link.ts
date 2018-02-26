@@ -1,4 +1,6 @@
-import {INPMLinkUpMap, INPMLinkUpMapItem, INPMLinkUpOpts} from "../index";
+'use strict';
+
+import {INPMLinkUpMap, INPMLinkUpMapItem, INPMLinkUpOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
