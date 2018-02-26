@@ -21,7 +21,7 @@ const treeify = require('treeify');
 import {stdoutStrm, stderrStrm} from './lib/streaming';
 
 //project
-import {makeFindProject} from './lib/find-projects';
+import {makeFindProject, createTask} from './lib/find-projects';
 import {mapPaths} from './lib/map-paths-with-env-vars';
 import {cleanCache} from './lib/cache-clean';
 import {log} from './lib/logging';
@@ -30,6 +30,7 @@ import options from './lib/cmd-line-opts';
 import {runNPMLink} from './lib/run-link';
 import {createTree} from './lib/create-visual-tree';
 import {getCleanMap} from './lib/get-clean-final-map';
+import {q} from './lib/search-queue';
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -258,11 +259,13 @@ async.autoInject({
       if (!opts.clear_all_caches) {
         return process.nextTick(cb);
       }
-      
+  
+      log.info(`Cleaning the NPM cache.`);
       cleanCache(cb);
     },
     
     rimrafMainProject: function (cb: Function) {
+      log.info(`Deleting node_modules from your root project.`);
       let nm = path.resolve(root + '/node_modules');
       cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
         err && console.error(err.stack || err);
@@ -272,6 +275,7 @@ async.autoInject({
     },
     
     mapSearchRoots: function (npmCacheClean: any, cb: Function) {
+      log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
     
@@ -280,20 +284,17 @@ async.autoInject({
       let searchRoots = mapSearchRoots.slice(0);
       
       console.log('\n');
-      log.info('Initially, NPM-Link-Up will be searching these roots for relevant projects => \n', chalk.magenta(util.inspect(searchRoots)));
+      log.info('Beginning to search for NPM projects on your filesystem.');
+      log.info('NPM-Link-Up will be searching these roots for relevant projects:');
+      log.info(chalk.magenta(util.inspect(searchRoots)));
+      
       if (opts.verbosity > 1) {
-        console.log('\n');
-        log.warning('Note however that NPM-Link-Up may come across a project of yours that needs to search in directories not covered by\n' +
-          'your original search roots, and these new directories will be searched as well.');
+        log.warning('Note that NPM-Link-Up may come across a project of yours that needs to search in directories');
+        log.warning('not covered by your original search roots, and these new directories will be searched as well.');
       }
       
       console.log('\n');
-      
-      const q = async.queue(function (task: Function, cb: Function) {
-        task(cb);
-      }, 2);
-      
-      const findProject = makeFindProject(q, totalList, map, ignore, opts);
+      const findProject = makeFindProject(totalList, map, ignore, opts);
       
       let callable = true;
       q.drain = function () {
@@ -303,20 +304,15 @@ async.autoInject({
         }
       };
       
-      const createTask = function (searchRoot: string) {
-        return function (cb: Function) {
-          findProject(searchRoot, cb);
-        }
-      };
-      
       searchRoots.forEach(function (sr) {
-        q.push(createTask(sr));
+        q.push(createTask(sr, findProject));
       });
       
     },
     
     runUtility: function (findItems: void, cb: Function) {
-      
+      console.log('\n');
+      log.good('Beginning to actually link projects together...');
       cleanMap = getCleanMap(name, map);
       runNPMLink(cleanMap, totalList, opts, cb);
     }
@@ -325,7 +321,7 @@ async.autoInject({
   function (err: Error, results: Object) {
     
     if (err) {
-      console.error(err.stack || err);
+      log.error(err.stack || err);
       return process.exit(1);
     }
     
@@ -333,11 +329,11 @@ async.autoInject({
     
     if (results.runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
-      const line = chalk.green.underline(' => NPM-Link-Up run was successful. All done.');
+      const line = chalk.green.underline('NPM-Link-Up run was successful. All done.');
       stdoutStrm.write(line);
       stdoutStrm.end();
       stderrStrm.end();
-      console.log(line);
+      log.good(line);
       console.log('\n');
     }
     
@@ -347,6 +343,7 @@ async.autoInject({
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;
     });
+    
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
     console.log(chalk.white(formattedStr.join('\n')));
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
