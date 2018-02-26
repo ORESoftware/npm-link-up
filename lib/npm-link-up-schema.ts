@@ -1,7 +1,7 @@
 const util = require('util');
 const F = require('frankenstop').default;
 
-const NLU = F.bestow(function (obj, isPreValidate) {
+const NLU = F.bestow(function (obj: Object, isPreValidate: boolean) {
   this.config = obj;
   F.call(this, isPreValidate);
 });

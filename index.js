@@ -93,7 +93,7 @@ var deps = Object.keys(pkg.dependencies || {})
     .concat(Object.keys(pkg.devDependencies || {}))
     .concat(Object.keys(pkg.optionalDependencies || {}));
 var list = conf.list;
-assert(Array.isArray(list), ' => Your npm-link-up.json file must have a top-level list property that is an array of strings.');
+assert(Array.isArray(list), 'Your npm-link-up.json file must have a top-level "list" property that is an array of strings.');
 list = list.filter(function (item) {
     return !/###/.test(item);
 });
@@ -110,13 +110,13 @@ if (opts.search_root && opts.search_root.length > 0) {
 }
 else {
     if (!conf.searchRoots) {
-        console.error(' => Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
+        logging_1.log.error('Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
             'NPM-Link-Up will therefore search through your entire home directory.');
         if (opts.force) {
             searchRoots = [path.resolve(process.env.HOME)];
         }
         else {
-            console.error(' => You must use --force to do this.');
+            logging_1.log.error(' => But you must use --force at the command line to do this.');
             process.exit(1);
         }
     }
@@ -161,8 +161,14 @@ if (opts.log) {
 }
 var map = {};
 var cleanMap;
+if (opts.treeify) {
+    logging_1.log.warning('We are only printing a visual, not actually linking project.');
+}
 async.autoInject({
     npmCacheClean: function (cb) {
+        if (opts.treeify) {
+            return process.nextTick(cb);
+        }
         if (!opts.clear_all_caches) {
             return process.nextTick(cb);
         }
@@ -170,6 +176,9 @@ async.autoInject({
         cache_clean_1.cleanCache(cb);
     },
     rimrafMainProject: function (cb) {
+        if (opts.treeify) {
+            return process.nextTick(cb);
+        }
         logging_1.log.info("Deleting node_modules from your root project.");
         var nm = path.resolve(root + '/node_modules');
         cp.exec("cd " + root + " && rm -rf " + nm, function (err, stdout, stderr) {
@@ -206,9 +215,12 @@ async.autoInject({
         });
     },
     runUtility: function (findItems, cb) {
+        cleanMap = get_clean_final_map_1.getCleanMap(name, map);
+        if (opts.treeify) {
+            return process.nextTick(cb);
+        }
         console.log('\n');
         logging_1.log.good('Beginning to actually link projects together...');
-        cleanMap = get_clean_final_map_1.getCleanMap(name, map);
         run_link_1.runNPMLink(cleanMap, totalList, opts, cb);
     }
 }, function (err, results) {
@@ -226,7 +238,7 @@ async.autoInject({
         console.log('\n');
     }
     logging_1.log.good('NPM-Link-Up results as a visual:\n');
-    var treeObj = create_visual_tree_1.createTree(cleanMap, name, originalList);
+    var treeObj = create_visual_tree_1.createTree(cleanMap, name, originalList, opts);
     var treeString = treeify.asTree(treeObj, true);
     var formattedStr = String(treeString).split('\n').map(function (line) {
         return '\t' + line;
