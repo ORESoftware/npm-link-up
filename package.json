@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1021",
+  "version": "0.0.1022",
   "bin": {
     "npmlinkup": "cli/index.sh",
     "npmlinkup-global-npm": "index.js"
@@ -11,7 +11,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "test": "./scripts/test.sh",
-    "postinstall": "./scripts/postinstall.sh"
+    "postinstall": "./postinstall.sh"
   },
   "repository": {
     "type": "git",
