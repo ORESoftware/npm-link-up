@@ -51,12 +51,12 @@ export const runNPMLink =
     
     // log.good(chalk.green.bold(util.inspect(map)));
     
-    function isAllLinked() {
+    const isAllLinked = function () {
       //Object.values might not be available on all Node.js versions.
       return Object.keys(map).every(function (k) {
         return map[k].isLinked;
       });
-    }
+    };
     
     function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
@@ -113,8 +113,7 @@ export const runNPMLink =
     }
     
     function getCommandListOfLinked(name: string) {
-      return Object.keys(map)
-      .filter(function (k) {
+      return Object.keys(map).filter(function (k) {
         return map[k].isLinked && map[k].deps.includes(name);
       })
       .map(function (k) {
@@ -199,65 +198,57 @@ export const runNPMLink =
       k.once('exit', function (code) {
         
         if (code > 0 && /ERR/i.test(stderr)) {
-          
           console.log('\n');
           log.error(`Dep with name "${dep.name}" is done, but with an error.`);
+          return cb({code, dep, error: stderr});
+        }
+        
+        if (opts.verbosity > 1) {
+          log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
+        }
+        
+        dep.isLinked = map[dep.name].isLinked = true;
+        
+        const linkPreviouslyUnlinked = function (cb: Function) {
           
-          cb({
+          const cmds = getCommandListOfLinked(dep.name);
+          
+          if (!cmds.length) {
+            return process.nextTick(cb);
+          }
+          
+          const cmd = cmds.join(' && ');
+          stdoutStrm.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
+          
+          const k = cp.spawn('bash', [], {
+            env: Object.assign({}, process.env, {
+              NPM_LINK_UP: 'yes'
+            })
+          });
+          
+          k.stdin.write('\n' + cmd + '\n');
+          
+          k.stdout.setEncoding('utf8');
+          k.stderr.setEncoding('utf8');
+          k.stdout.pipe(stdoutStrm, {end: false});
+          k.stderr.pipe(stderrStrm, {end: false});
+          
+          process.nextTick(function () {
+            k.stdin.end();
+          });
+          
+          k.once('exit', cb);
+          
+        };
+        
+        linkPreviouslyUnlinked(function (err: Error) {
+          cb(err, {
             code: code,
             dep: dep,
             error: stderr
           });
-        }
-        else {
-          
-          if (opts.verbosity > 1) {
-            log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
-          }
-          
-          dep.isLinked = map[dep.name].isLinked = true;
-          
-          const linkPreviouslyUnlinked = function (cb: Function) {
-            
-            const cmds = getCommandListOfLinked(dep.name);
-            
-            if (!cmds.length) {
-              return process.nextTick(cb);
-            }
-            
-            const cmd = cmds.join(' && ');
-            stdoutStrm.write(`\n => Running this command for "${dep.name}" =>\n"${cmd}".\n\n\n`);
-            
-            const k = cp.spawn('bash', [], {
-              env: Object.assign({}, process.env, {
-                NPM_LINK_UP: 'yes'
-              })
-            });
-            
-            k.stdin.write('\n' + cmd + '\n');
-            
-            k.stdout.setEncoding('utf8');
-            k.stderr.setEncoding('utf8');
-            k.stdout.pipe(stdoutStrm, {end: false});
-            k.stderr.pipe(stderrStrm, {end: false});
-            
-            process.nextTick(function () {
-              k.stdin.end();
-            });
-            
-            k.once('exit', cb);
-            
-          };
-          
-          linkPreviouslyUnlinked(function (err: Error) {
-            cb(err, {
-              code: code,
-              dep: dep,
-              error: stderr
-            });
-          });
-          
-        }
+        });
+        
       });
       
     }, cb);
