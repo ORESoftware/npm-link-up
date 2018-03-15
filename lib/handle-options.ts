@@ -9,8 +9,7 @@ import {NLUDotJSON} from "./npmlinkup";
 
 export const getIgnore = function (conf: NLUDotJSON) {
 
-  const ignore = (conf.ignore || [])
-  .concat(alwaysIgnoreThese)
+  const ignore = (conf.ignore || []).concat(alwaysIgnoreThese)
   .filter(function (item: string, index: number, arr: Array<string>) {
     return arr.indexOf(item) === index;
   })
