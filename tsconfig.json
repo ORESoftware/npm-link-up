@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    "pretty":true,
+    "outDir": "dist",
     "declaration": true,
     "baseUrl": ".",
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
@@ -14,8 +16,7 @@
     ]
   },
   "compileOnSave": false,
-  "exclude": [
-    "test",
-    "node_modules"
+  "include":[
+    "lib"
   ]
 }
