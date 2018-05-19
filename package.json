@@ -1,10 +1,10 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1022",
+  "version": "0.0.1023",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh",
-    "npmlinkup-global-npm": "index.js"
+    "npmlinkup-global-npm": "dist/index.js"
   },
   "description": "Use this package to link your projects together for local development.",
   "main": "dist/index.js",
