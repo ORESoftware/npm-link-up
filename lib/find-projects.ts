@@ -1,7 +1,7 @@
 'use strict';
 
 //typescript
-import {AsyncQueue} from '@types/async';
+import {AsyncQueue} from 'async';
 
 //core
 import * as util from 'util';
@@ -16,7 +16,7 @@ import * as cp from 'child_process';
 const dashdash = require('dashdash');
 import async = require('async');
 const treeify = require('treeify');
-import chalk = require('chalk');
+import chalk from 'chalk';
 
 // project
 import {stdoutStrm, stderrStrm} from './streaming';
