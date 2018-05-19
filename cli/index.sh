@@ -14,7 +14,7 @@ export PATH="${more_path}:${PATH}";
 
 echo " => NPM version used by npmlinkup => $(npm -v)";
 
-node "${project_root}/index.js" $@;
+node "${project_root}/dist/index.js" $@;
 
 
 

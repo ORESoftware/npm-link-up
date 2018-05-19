@@ -2,13 +2,14 @@
   "name": "npm-link-up",
   "version": "0.0.1022",
   "bin": {
+    "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh",
     "npmlinkup-global-npm": "index.js"
   },
-  "description": "Use this package to link your complex projects together for local development.",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "typings": "index.d.ts",
+  "description": "Use this package to link your projects together for local development.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "./scripts/test.sh",
     "postinstall": "./postinstall.sh"
@@ -28,7 +29,7 @@
     "nodejs",
     "node.js"
   ],
-  "author": "Olegzandr",
+  "author": "Olegzandr VD",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ORESoftware/npm-link-up/issues"

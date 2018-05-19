@@ -18,19 +18,19 @@ const residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
-import {stdoutStrm, stderrStrm} from './lib/streaming';
+import {stdoutStrm, stderrStrm} from './streaming';
 
 //project
-import {makeFindProject, createTask} from './lib/find-projects';
-import {mapPaths} from './lib/map-paths-with-env-vars';
-import {cleanCache} from './lib/cache-clean';
-import {log} from './lib/logging';
-import {getIgnore} from "./lib/handle-options";
-import options from './lib/cmd-line-opts';
-import {runNPMLink} from './lib/run-link';
-import {createTree} from './lib/create-visual-tree';
-import {getCleanMap} from './lib/get-clean-final-map';
-import {q} from './lib/search-queue';
+import {makeFindProject, createTask} from './find-projects';
+import {mapPaths} from './map-paths-with-env-vars';
+import {cleanCache} from './cache-clean';
+import {log} from './logging';
+import {getIgnore} from "./handle-options";
+import options from './cmd-line-opts';
+import {runNPMLink} from './run-link';
+import {createTree} from './create-visual-tree';
+import {getCleanMap} from './get-clean-final-map';
+import {q} from './search-queue';
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -101,8 +101,8 @@ catch (e) {
   process.exit(1);
 }
 
-import NLU = require('./lib/npm-link-up-schema');
-import {INPMLinkUpMap, INPMLinkUpOpts} from "./lib/npmlinkup";
+import NLU = require('./npm-link-up-schema');
+import {INPMLinkUpMap, INPMLinkUpOpts} from "./npmlinkup";
 new NLU(conf, false).validate();
 
 const name = pkg.name;

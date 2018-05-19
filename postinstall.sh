@@ -2,26 +2,24 @@
 
 set -e;
 
-echo "npm-link-up postinstall routine has just started."
+if [ "$skip_npm_link_up_postinstall" == "yes" ]; then
+    echo "skipping nlu postinstall routine.";
+    exit 0;
+fi
 
+
+export skip_npm_link_up_postinstall="yes";
 mkdir -p "$HOME/.npmlinkup/global"
-
+source_dir="$PWD";
 
 (
-    # run this stuff in a subshell
     cd "$HOME/.npmlinkup/global"
-
-    echo "npm-link-up pwd: $(pwd)"
 
     if [[ ! -f package.json ]]; then
         npm init -f
     fi
 
-    if [[ "$oresoftware_env" == "alex" ]]; then
-        npm link npm-link-up -f
-    else
-        npm install -S npm-link-up@latest
-    fi
+    npm install "$source_dir" -f
 
 )
 
