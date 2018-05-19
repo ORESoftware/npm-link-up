@@ -6,9 +6,11 @@ node_modules
 .nyc_output
 coverage
 .vscode
+dist/*
 
 ### matching files
 *.log
 *.DS_Store
+!dist/README.md
 
 
