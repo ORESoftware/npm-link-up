@@ -1,4 +1,4 @@
-## NPM-Link-Up
+## NPM-Link-Up  (NLU)
 
 <b>Disclaimer:</b> This tool uses NPM v4.6.1, and is only proven with this NPM version.<br> 
 
@@ -95,6 +95,7 @@ The following is a simple npm-link-up.json file:
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
     "$HOME/vscode_projects"    // it's recommended to use something more specific than $HOME             
   ],
+  "comments":[],
   "ignore": [                // paths to skip; these will be converted to regex, using new RegExp(x)
     "/node_modules/",        // "any-match" style path pattern matching has always sucked IMO, this works better
     "/.git/"
