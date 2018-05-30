@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "pretty":true,
     "outDir": "dist",
     "declaration": true,
