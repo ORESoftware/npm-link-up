@@ -26,5 +26,9 @@ npmlinkup(){
       }
   fi
 
-  command nlu "$@"
+  command npmlinkup "$@"
 }
+
+
+export -f nlu;
+export -f npmlinkup;
