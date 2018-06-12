@@ -41,7 +41,7 @@ export default  [
   {
     names: ['install-all'],
     type: 'bool',
-    help: 'The "install" option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
+    help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
     'using npm instead of yarn is the default.'
   },
   {
@@ -66,6 +66,12 @@ export default  [
     type: 'bool',
     help: 'Link all projects to themselves; to have unique behavior per project, ' +
     'add a "self" property to each project\'s npm-link-up.json file.'
+  },
+  {
+    names: ['npm-shell-version','use-shell-version'],
+    type: 'bool',
+    help: 'Use the NPM version that is active in the shell.',
+    default: false
   },
   {
     names: ['clear-all-caches'],

@@ -1,7 +1,7 @@
 'use strict';
 
-import * as chalk from 'chalk';
-import {log} from './logging';
+import chalk from 'chalk';
+import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
 import {NLUDotJSON} from "./npmlinkup";
 

@@ -1,5 +1,7 @@
-import * as chalk from 'chalk';
-const name = ' [npm-link-up] ';
+'use strict';
+
+import  chalk from 'chalk';
+const name = '[npm-link-up]';
 
 export const log = {
   info: console.log.bind(console, name),
@@ -10,3 +12,4 @@ export const log = {
 };
 
 
+export default log;

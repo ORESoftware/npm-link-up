@@ -2,7 +2,7 @@
 
 import util = require('util');
 import {INPMLinkUpMap, INPMLinkUpOpts, INPMLinkUpVisualTree} from "./npmlinkup";
-import {log} from './logging';
+import log from './logging';
 
 /////////////////////////////////////////////////////////////////////////////////
 

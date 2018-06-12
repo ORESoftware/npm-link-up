@@ -1,12 +1,10 @@
-
 'use strict';
 
 //core
 import * as cp from 'child_process';
 
 //npm
-import  {stdoutStrm, stderrStrm} from './streaming';
-import {log} from './logging';
+import log from './logging';
 
 ///////////////////////////////////////////////////////////
 

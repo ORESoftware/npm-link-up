@@ -5,26 +5,22 @@
 import * as util from 'util';
 import * as assert from 'assert';
 import * as path from 'path';
-import * as EE from 'events';
-import * as fs from 'fs';
-import * as stream from 'stream';
 import * as cp from 'child_process';
 
 //npm
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 const dashdash = require('dashdash');
 const async = require('async');
 const residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
-import {stdoutStrm, stderrStrm} from './streaming';
 
 //project
 import {makeFindProject, createTask} from './find-projects';
 import {mapPaths} from './map-paths-with-env-vars';
 import {cleanCache} from './cache-clean';
-import {log} from './logging';
+import log from './logging';
 import {getIgnore} from "./handle-options";
 import options from './cmd-line-opts';
 import {runNPMLink} from './run-link';
@@ -201,15 +197,6 @@ originalList.forEach(function (item: string) {
   log.good(`The following dep will be 'NPM linked' to this project => "${item}".`);
 });
 
-if (opts.inherit_log) {
-  stdoutStrm.pipe(process.stdout);
-  stderrStrm.pipe(process.stderr);
-}
-
-if (opts.log) {
-  stdoutStrm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
-  stderrStrm.pipe(fs.createWriteStream(path.resolve(root + '/npm-link-up.log')));
-}
 
 const map: INPMLinkUpMap = {};
 let cleanMap: INPMLinkUpMap;
@@ -310,11 +297,7 @@ async.autoInject({
     
     if ((results as any).runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
-      const line = chalk.green.underline('NPM-Link-Up run was successful. All done.');
-      stdoutStrm.write(line);
-      stdoutStrm.end();
-      stderrStrm.end();
-      log.good(line);
+      log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
       console.log('\n');
     }
     
