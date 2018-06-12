@@ -179,7 +179,7 @@ if (opts.treeify) {
 
 async.autoInject({
     
-    npmCacheClean: function (cb: Function) {
+    npmCacheClean: function (cb: ErrorFirstCallback) {
       
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -193,7 +193,7 @@ async.autoInject({
       cleanCache(cb);
     },
     
-    rimrafMainProject: function (cb: Function) {
+    rimrafMainProject: function (cb: ErrorFirstCallback) {
       
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -218,7 +218,7 @@ async.autoInject({
       mapPaths(searchRoots, cb);
     },
     
-    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: Function) {
+    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: ErrorFirstCallback) {
       
       let searchRoots = mapSearchRoots.slice(0);
       
@@ -263,7 +263,7 @@ async.autoInject({
     }
   },
   
-  function (err: Error, results: Object) {
+  function (err: any, results: object) {
     
     if (err) {
       log.error(err.stack || err);
