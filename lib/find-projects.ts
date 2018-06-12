@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {INPMLinkUpMap, INPMLinkUpOpts} from "./npmlinkup";
+import {NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
@@ -24,8 +24,8 @@ export const createTask = function (searchRoot: string, findProject: any) {
   }
 };
 
-export const makeFindProject = function (totalList: Map<string, boolean>, map: INPMLinkUpMap,
-                                         ignore: Array<RegExp>, opts: INPMLinkUpOpts) {
+export const makeFindProject = function (totalList: Map<string, boolean>, map: NPMLinkUpMap,
+                                         ignore: Array<RegExp>, opts: NPMLinkUpOpts) {
   
   let isIgnored = function (pth: string) {
     return ignore.some(function (r: RegExp) {

@@ -37,7 +37,7 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-let opts: INPMLinkUpOpts, parser = dashdash.createParser({options});
+let opts: NPMLinkUpOpts, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
@@ -98,7 +98,7 @@ catch (e) {
 }
 
 import NLU = require('./npm-link-up-schema');
-import {INPMLinkUpMap, INPMLinkUpOpts} from "./npmlinkup";
+import {NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
 new NLU(conf, false).validate();
 
 const name = pkg.name;
@@ -198,8 +198,8 @@ originalList.forEach(function (item: string) {
 });
 
 
-const map: INPMLinkUpMap = {};
-let cleanMap: INPMLinkUpMap;
+const map: NPMLinkUpMap = {};
+let cleanMap: NPMLinkUpMap;
 
 if (opts.treeify) {
   log.warning('We are only printing a visual, not actually linking project.');

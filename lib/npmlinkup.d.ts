@@ -6,7 +6,7 @@ export interface INPMLinkUpConf {
   list: Array<string>
 }
 
-export interface INPMLinkUpOpts {
+export interface NPMLinkUpOpts {
   search_root: Array<string>,
   clear_all_caches: boolean,
   verbosity: number,
@@ -19,7 +19,7 @@ export interface INPMLinkUpOpts {
   force: boolean
 }
 
-export interface INPMLinkUpMapItem {
+export interface NPMLinkUpMapItem {
   name: string,
   hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
@@ -30,8 +30,8 @@ export interface INPMLinkUpMapItem {
   isLinked?: boolean
 }
 
-export interface INPMLinkUpMap {
-  [key: string]: INPMLinkUpMapItem
+export interface NPMLinkUpMap {
+  [key: string]: NPMLinkUpMapItem
 }
 
 export interface INPMLinkUpVisualTree {

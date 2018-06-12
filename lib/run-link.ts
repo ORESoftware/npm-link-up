@@ -1,6 +1,6 @@
 'use strict';
 
-import {INPMLinkUpMap, INPMLinkUpMapItem, INPMLinkUpOpts} from "./npmlinkup";
+import {NPMLinkUpMap, NPMLinkUpMapItem, NPMLinkUpOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
@@ -16,7 +16,7 @@ import log from './logging';
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function (map: INPMLinkUpMap, totalList: Map<string, boolean>, opts: INPMLinkUpOpts, cb: Function): void {
+  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NPMLinkUpOpts, cb: Function): void {
 
     const keys = Object.keys(map);
 
@@ -49,7 +49,7 @@ export const runNPMLink =
       });
     };
 
-    function getCountOfUnlinkedDeps(dep: INPMLinkUpMapItem) {
+    function getCountOfUnlinkedDeps(dep: NPMLinkUpMapItem) {
       return dep.deps.filter(function (d) {
         if (!map[d]) {
           log.warning(`there is no dependency named ${d} in the map.`);
@@ -83,7 +83,7 @@ export const runNPMLink =
       }
 
       if (!dep) {
-        console.error(' => Internal implementation error => no dep found,\nbut there should be at least one yet-to-be-linked dep.');
+        log.error('Internal implementation error => no dep found,\nbut there should be at least one yet-to-be-linked dep.');
         return process.exit(1);
       }
 
@@ -99,22 +99,35 @@ export const runNPMLink =
         return map[d] && map[d].isLinked;
       })
       .map(function (d: string) {
-        return ` npm link ${d} -f `;
+
+        const path = map[d].path;
+
+        // return ` npm link ${d} -f `;
+        return ` ln -s ${path} ${d}`;
       });
     }
 
     function getCommandListOfLinked(name: string) {
+
+      const path = map[name] && map[name].path;
+
+      if(!path){
+        log.error(`missing path for dependency with name "${name}"`);
+        return process.exit(1);
+      }
+
       return Object.keys(map).filter(function (k) {
         return map[k].isLinked && map[k].deps.includes(name);
       })
       .map(function (k) {
-        return ` cd ${map[k].path} && npm link ${name} -f `;
+        // return ` cd ${map[k].path} && npm link ${name} -f `;
+        return ` cd ${map[k].path} && ln -s "${path}" "${name}" `;
       });
     }
 
     console.log('\n');
 
-    function getInstallCommand(dep: INPMLinkUpMapItem) {
+    function getInstallCommand(dep: NPMLinkUpMapItem) {
       if (dep.runInstall || opts.install_all) {
         return ' && rm -rf node_modules && npm install --silent ';
         // return '&& rm -rf node_modules;';
@@ -127,9 +140,10 @@ export const runNPMLink =
     //   }
     // }
 
-    function getLinkToItselfCommand(dep: INPMLinkUpMapItem) {
+    function getLinkToItselfCommand(dep: NPMLinkUpMapItem) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
-        return `&& npm link ${String(dep.name).trim()} -f`
+        // return `&& npm link ${String(dep.name).trim()} -f`
+        return ` && ln -s "${dep.path}" "${dep.name}" `;
       }
     }
 
@@ -152,7 +166,7 @@ export const runNPMLink =
         `cd ${dep.path}`,
         getInstallCommand(dep),
         links,
-        '&& npm link -f',
+        // '&& npm link -f',
         getLinkToItselfCommand(dep)
       ]
       .filter(Boolean)

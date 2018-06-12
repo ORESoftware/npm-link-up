@@ -1,13 +1,13 @@
 'use strict';
 
 import util = require('util');
-import {INPMLinkUpMap, INPMLinkUpOpts, INPMLinkUpVisualTree} from "./npmlinkup";
+import {NPMLinkUpMap, NPMLinkUpOpts, INPMLinkUpVisualTree} from "./npmlinkup";
 import log from './logging';
 
 /////////////////////////////////////////////////////////////////////////////////
 
 export const createTree =
-  function (map: INPMLinkUpMap, name: string, originalList: Array<string>, opts: INPMLinkUpOpts) {
+  function (map: NPMLinkUpMap, name: string, originalList: Array<string>, opts: NPMLinkUpOpts) {
     
     let tree: INPMLinkUpVisualTree = {
       [name]: {}
