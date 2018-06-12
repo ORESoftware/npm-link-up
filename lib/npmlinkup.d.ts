@@ -7,6 +7,10 @@ export interface INPMLinkUpConf {
 }
 
 export interface NPMLinkUpOpts {
+  link_all: boolean,
+  link_main: boolean,
+  install_all:boolean,
+  install_main: boolean,
   search_root: Array<string>,
   clear_all_caches: boolean,
   verbosity: number,
@@ -21,6 +25,7 @@ export interface NPMLinkUpOpts {
 
 export interface NPMLinkUpMapItem {
   name: string,
+  isMainProject: boolean,
   hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
   runInstall: boolean,

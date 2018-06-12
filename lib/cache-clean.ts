@@ -16,11 +16,7 @@ export const cleanCache = function(cb: Function){
     })
   });
 
-  k.stdin.write('\n' + 'npm cache clean; yarn cache clean;' + '\n');
-
-  process.nextTick(function () {
-    k.stdin.end();
-  });
+  k.stdin.end('npm cache clean -f;');
 
   k.stdout.setEncoding('utf8');
   k.stderr.setEncoding('utf8');

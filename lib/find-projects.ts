@@ -24,9 +24,9 @@ export const createTask = function (searchRoot: string, findProject: any) {
   }
 };
 
-export const makeFindProject = function (totalList: Map<string, boolean>, map: NPMLinkUpMap,
+export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NPMLinkUpMap,
                                          ignore: Array<RegExp>, opts: NPMLinkUpOpts) {
-  
+
   let isIgnored = function (pth: string) {
     return ignore.some(function (r: RegExp) {
       if (r.test(pth)) {
@@ -38,25 +38,25 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: N
       }
     });
   };
-  
+
   return function findProject(item: string, cb: Function) {
-    
+
     item = path.normalize(item);
-    
+
     if (searchedPaths[item]) {
       opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
       return process.nextTick(cb);
     }
-    
+
     let goodPth, keys = Object.keys(searchedPaths);
-    
+
     const match = keys.some(function (pth) {
       if (String(item).indexOf(pth) === 0) {
         goodPth = pth;
         return true;
       }
     });
-    
+
     if (match) {
       if (opts.verbosity > 2) {
         log.good(chalk.blue('path has already been covered:'));
@@ -65,91 +65,91 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: N
       }
       return process.nextTick(cb);
     }
-    
+
     searchedPaths[item] = true;
     log.warning('new path being searched:', chalk.blue(item));
-    
+
     (function getMarkers(dir, cb) {
-      
+
       if (isIgnored(String(dir + '/'))) {
         if (opts.verbosity > 2) {
           log.warning('path ignored => ', dir);
         }
         return process.nextTick(cb);
       }
-      
+
       fs.readdir(dir, function (err: Error, items: Array<string>) {
-        
+
         if (err) {
           console.error(err.stack || err);
           return cb();
         }
-        
+
         items = items.map(function (item) {
           return path.resolve(dir, item);
         });
-        
+
         async.eachLimit(items as any, 3, function (item: string, cb: Function) {
-          
+
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
               log.warning('path ignored => ', item);
             }
             return process.nextTick(cb);
           }
-          
-          fs.stat(item, function (err, stats) {
-            
+
+          fs.lstat(item, function (err, stats) {
+
             if (err) {
               log.warning('warning => probably a symlink? => ', item);
               return cb();
             }
-            
+
             if (stats.isFile()) {
-              
+
               let dirname = path.dirname(item);
               let filename = path.basename(item);
-              
+
               if (String(filename) === 'package.json') {
-                
-                let pkg: Object;
-                
+
+                let pkg: any;
+
                 try {
                   pkg = require(item);
                 }
                 catch (err) {
                   return cb(err);
                 }
-                
+
                 let npmlinkup;
-                
+
                 try {
                   npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
                 }
                 catch (e) {
                   //ignore
                 }
-                
+
                 let isNodeModulesPresent = false;
-                
+
                 try {
-                  isNodeModulesPresent = fs.statSync(path.resolve(dirname + '/node_modules')).isDirectory();
+                  isNodeModulesPresent = fs.lstatSync(path.resolve(dirname + '/node_modules')).isDirectory();
                 }
                 catch (e) {
                   //ignore
                 }
-                
+
                 let isAtLinkShPresent = false;
-                
+
                 try {
                   isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
                 }
                 catch (e) {
                   //ignore
                 }
-                
+
                 let deps, searchRoots;
-                
+
                 if (npmlinkup && (deps = npmlinkup.list)) {
                   assert(Array.isArray(deps),
                     `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
@@ -157,56 +157,61 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: N
                     totalList.set(item, true);
                   });
                 }
-                
+
                 map[pkg.name] = {
                   name: pkg.name,
-                  hasNPMLinkUpJSONFile: !!npmlinkup,
-                  linkToItself: !!(npmlinkup && npmlinkup.linkToItself),
-                  runInstall: !isNodeModulesPresent || (npmlinkup && npmlinkup.alwaysReinstall),
+                  isMainProject: pkg.name === mainProjectName,
+                  hasNPMLinkUpJSONFile: Boolean(npmlinkup),
+                  linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
+                  runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
                   hasAtLinkSh: isAtLinkShPresent,
                   path: dirname,
                   deps: deps || []
                 };
-                
+
                 if (npmlinkup && (searchRoots = npmlinkup.searchRoots)) {
-                  assert(Array.isArray(npmlinkup.list),
-                    `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
-                  
-                  mapPaths(searchRoots, function (err: Error, roots: Array<string>) {
-                    
+
+                  try {
+                    assert(Array.isArray(npmlinkup.list),
+                      `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
+                  }
+                  catch (err) {
+                    return cb(err);
+                  }
+
+                  mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+
                     if (err) {
                       return cb(err);
                     }
-                    
+
                     roots.forEach(function (r) {
                       q.push(createTask(r, findProject));
                     });
-                    
+
                     cb(null);
-                    
+
                   });
-                  
+
                 }
                 else {
                   // no searchRoots, we can continue
-                  cb();
+                  cb(null);
                 }
-                
+
               }
               else {
                 // no package.json file, so move on
-                cb();
+                cb(null);
               }
-              
-              // TODO: push things onto the queue
-              
+
             }
             else if (stats.isDirectory()) {
               if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
                   log.warning('path ignored => ', item);
                 }
-                cb();
+                cb(null);
               }
               else {
                 // continue drilling down
@@ -217,16 +222,16 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: N
               if (opts.verbosity > 1) {
                 log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
-              cb();
+              cb(null);
             }
-            
+
           });
-          
+
         }, cb);
-        
+
       });
-      
+
     })(item, cb);
-    
+
   }
 };

@@ -21,7 +21,7 @@ import {makeFindProject, createTask} from './find-projects';
 import {mapPaths} from './map-paths-with-env-vars';
 import {cleanCache} from './cache-clean';
 import log from './logging';
-import {getIgnore} from "./handle-options";
+import {getIgnore, getSearchRoots} from "./handle-options";
 import options from './cmd-line-opts';
 import {runNPMLink} from './run-link';
 import {createTree} from './create-visual-tree';
@@ -101,15 +101,15 @@ import NLU = require('./npm-link-up-schema');
 import {NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
 new NLU(conf, false).validate();
 
-const name = pkg.name;
+const mainProjectName = pkg.name;
 
-if (!name) {
+if (!mainProjectName) {
   log.error('Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
 
 console.log();
-log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(name)}".`);
+log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 
 const deps = Object.keys(pkg.dependencies || {})
 .concat(Object.keys(pkg.devDependencies || {}))
@@ -130,35 +130,7 @@ if (list.length < 1) {
   process.exit(1);
 }
 
-let searchRoots: Array<string>;
-
-if (opts.search_root && opts.search_root.length > 0) {
-  searchRoots = opts.search_root.filter(function (item: string, i: number, arr: Array<string>) {
-    return arr.indexOf(item) === i;  // get a unique list
-  });
-}
-else {
-  
-  if (!conf.searchRoots) {
-    
-    log.error('Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
-      'NPM-Link-Up will therefore search through your entire home directory.');
-    
-    if (opts.force) {
-      searchRoots = [path.resolve(process.env.HOME)];
-    }
-    else {
-      log.error(' => But you must use --force at the command line to do this.');
-      process.exit(1);
-    }
-  }
-  
-  searchRoots = (conf.searchRoots || []).concat(opts.search_root_append || [])
-  .filter(function (item: string, i: number, arr: Array<string>) {
-    return arr.indexOf(item) === i;  // get a unique list
-  });
-}
-
+const searchRoots = getSearchRoots(opts, conf);
 const inListButNotInDeps: Array<string> = [];
 
 const inListAndInDeps = list.filter(function (item: string) {
@@ -178,7 +150,7 @@ inListButNotInDeps.forEach(function (item) {
 const originalList = list.slice(0);
 
 // always push the very project's name
-list.push(name);
+list.push(mainProjectName);
 
 list = list.filter(function (item: string, index: number) {
   return list.indexOf(item) === index;
@@ -226,8 +198,13 @@ async.autoInject({
       if (opts.treeify) {
         return process.nextTick(cb);
       }
+
+      if(true){
+        return process.nextTick(cb);
+      }
       
       log.info(`Deleting node_modules from your root project.`);
+
       let nm = path.resolve(root + '/node_modules');
       cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
         err && console.error(err.stack || err);
@@ -256,7 +233,7 @@ async.autoInject({
       }
       
       console.log('\n');
-      const findProject = makeFindProject(totalList, map, ignore, opts);
+      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts);
       
       let callable = true;
       q.drain = function () {
@@ -274,7 +251,7 @@ async.autoInject({
     
     runUtility: function (findItems: void, cb: Function) {
       
-      cleanMap = getCleanMap(name, map);
+      cleanMap = getCleanMap(mainProjectName, map);
       
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -302,7 +279,7 @@ async.autoInject({
     }
     
     log.good('NPM-Link-Up results as a visual:\n');
-    const treeObj = createTree(cleanMap, name, originalList, opts);
+    const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;
