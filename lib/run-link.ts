@@ -103,7 +103,7 @@ export const runNPMLink =
         const path = map[d].path;
 
         // return ` npm link ${d} -f `;
-        return ` ln -s ${path} ${d}`;
+        return `mkdir node_modules && ln -s "${path}" "node_modules/${d}"`;
       });
     }
 
@@ -121,7 +121,7 @@ export const runNPMLink =
       })
       .map(function (k) {
         // return ` cd ${map[k].path} && npm link ${name} -f `;
-        return ` cd ${map[k].path} && ln -s "${path}" "${name}" `;
+        return ` cd ${map[k].path} && mkdir node_modules && ln -s "${path}" "node_modules/${name}" `;
       });
     }
 
@@ -143,7 +143,7 @@ export const runNPMLink =
     function getLinkToItselfCommand(dep: NPMLinkUpMapItem) {
       if (opts.self_link_all || (dep.linkToItself !== false)) {
         // return `&& npm link ${String(dep.name).trim()} -f`
-        return ` && ln -s "${dep.path}" "${dep.name}" `;
+        return ` && mkdir node_modules && ln -s "${dep.path}" "node_modules/${dep.name}" `;
       }
     }
 
