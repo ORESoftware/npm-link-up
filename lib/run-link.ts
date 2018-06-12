@@ -1,6 +1,6 @@
 'use strict';
 
-import {NPMLinkUpMap, NPMLinkUpMapItem, NPMLinkUpOpts} from "./npmlinkup";
+import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpMapItem, NPMLinkUpOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
@@ -13,10 +13,12 @@ import async = require('async');
 //project
 import log from './logging';
 
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NPMLinkUpOpts, cb: Function): void {
+  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NPMLinkUpOpts, cb: ErrorFirstCallback): void {
 
     const keys = Object.keys(map);
 
@@ -157,7 +159,7 @@ export const runNPMLink =
       }
     };
 
-    async.until(isAllLinked, function (cb: Function) {
+    async.until(isAllLinked, function (cb: ErrorFirstCallback) {
 
       if (opts.verbosity > 2) {
         log.info(`Searching for next dep to run.`);
@@ -218,7 +220,7 @@ export const runNPMLink =
 
         dep.isLinked = map[dep.name].isLinked = true;
 
-        const linkPreviouslyUnlinked = function (cb: Function) {
+        const linkPreviouslyUnlinked = function (cb: ErrorFirstCallback) {
 
           const cmds = getCommandListOfLinked(dep.name);
 

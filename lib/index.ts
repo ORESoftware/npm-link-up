@@ -98,7 +98,7 @@ catch (e) {
 }
 
 import NLU = require('./npm-link-up-schema');
-import {NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
+import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
 new NLU(conf, false).validate();
 
 const mainProjectName = pkg.name;
@@ -249,7 +249,7 @@ async.autoInject({
       
     },
     
-    runUtility: function (findItems: void, cb: Function) {
+    runUtility: function (findItems: void, cb: ErrorFirstCallback) {
       
       cleanMap = getCleanMap(mainProjectName, map);
       

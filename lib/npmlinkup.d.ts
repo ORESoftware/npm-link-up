@@ -6,6 +6,8 @@ export interface INPMLinkUpConf {
   list: Array<string>
 }
 
+export type ErrorFirstCallback = (err? : any, val?: any) => void;
+
 export interface NPMLinkUpOpts {
   link_all: boolean,
   link_main: boolean,
