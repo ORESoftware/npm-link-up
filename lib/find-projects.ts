@@ -98,10 +98,15 @@ export const makeFindProject = function (totalList: Map<string, boolean>, map: I
             return process.nextTick(cb);
           }
           
-          fs.stat(item, function (err, stats) {
+          fs.lstat(item, function (err, stats) {
             
             if (err) {
-              log.warning('warning => probably a symlink? => ', item);
+              log.warning('warning => maybe a symlink? => ', item);
+              return cb();
+            }
+
+            if(stats.isSymbolicLink()){
+              log.warning('warning => looks like a symlink => ', item);
               return cb();
             }
             
