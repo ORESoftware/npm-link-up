@@ -1,26 +1,16 @@
 'use strict';
 
-//typescript
-import {AsyncQueue} from 'async';
-
 //core
-import * as util from 'util';
 import * as assert from 'assert';
 import * as path from 'path';
-import * as EE from 'events';
 import * as fs from 'fs';
-import * as stream from 'stream';
-import * as cp from 'child_process';
 
 //npm
-const dashdash = require('dashdash');
 import async = require('async');
-const treeify = require('treeify');
 import chalk from 'chalk';
 
 // project
-import {stdoutStrm, stderrStrm} from './streaming';
-import {log} from './logging';
+import log from './logging';
 import {INPMLinkUpMap, INPMLinkUpOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";

@@ -41,6 +41,7 @@
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
     "npm": "4.6.1",
+    "prepend-transform": "0.0.1016",
     "residence": "latest",
     "treeify": "^1.0.1"
   },
