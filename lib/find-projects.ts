@@ -50,6 +50,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
     let goodPth, keys = Object.keys(searchedPaths);
 
+    // important - note that this section is not merely checking for equality.
+    // it is instead checking to see if an existing search path is shorter
+    // than the new search path, and if so, we don't need to add the new one
+
     const match = keys.some(function (pth) {
       if (String(item).indexOf(pth) === 0) {
         goodPth = pth;
@@ -81,8 +85,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
       fs.readdir(dir, function (err: Error, items: Array<string>) {
 
         if (err) {
-          console.error(err.stack || err);
-          return cb();
+          log.error(err.stack || err);
+          return cb(err);
         }
 
         items = items.map(function (item) {
@@ -105,111 +109,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb();
             }
 
-            if (stats.isFile()) {
-
-              let dirname = path.dirname(item);
-              let filename = path.basename(item);
-
-              if (String(filename) === 'package.json') {
-
-                let pkg: any;
-
-                try {
-                  pkg = require(item);
-                }
-                catch (err) {
-                  return cb(err);
-                }
-
-                let npmlinkup;
-
-                try {
-                  npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
-                }
-                catch (e) {
-                  //ignore
-                }
-
-                let isNodeModulesPresent = false;
-
-                try {
-                  isNodeModulesPresent = fs.lstatSync(path.resolve(dirname + '/node_modules')).isDirectory();
-                }
-                catch (e) {
-                  //ignore
-                }
-
-                let isAtLinkShPresent = false;
-
-                try {
-                  isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
-                }
-                catch (e) {
-                  //ignore
-                }
-
-                let deps, searchRoots;
-
-                if (npmlinkup && (deps = npmlinkup.list)) {
-                  assert(Array.isArray(deps),
-                    `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
-                  deps.forEach(function (item: string) {
-                    totalList.set(item, true);
-                  });
-                }
-
-                map[pkg.name] = {
-                  name: pkg.name,
-                  isMainProject: pkg.name === mainProjectName,
-                  hasNPMLinkUpJSONFile: Boolean(npmlinkup),
-                  linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
-                  runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
-                  hasAtLinkSh: isAtLinkShPresent,
-                  path: dirname,
-                  deps: deps || []
-                };
-
-                if (npmlinkup && (searchRoots = npmlinkup.searchRoots)) {
-
-                  try {
-                    assert(Array.isArray(npmlinkup.list),
-                      `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
-                  }
-                  catch (err) {
-                    return cb(err);
-                  }
-
-                  mapPaths(searchRoots, function (err: any, roots: Array<string>) {
-
-                    if (err) {
-                      return cb(err);
-                    }
-
-                    roots.forEach(function (r) {
-                      q.push(createTask(r, findProject));
-                    });
-
-                    cb(null);
-
-                  });
-
-                }
-                else {
-                  // no searchRoots, we can continue
-                  cb(null);
-                }
-
-              }
-              else {
-                // no package.json file, so move on
-                cb(null);
-              }
-
-            }
-            else if (stats.isDirectory()) {
+            if (stats.isDirectory()) {
               if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
-                  log.warning('path ignored => ', item);
+                  log.warning('path ignored by settings/regex => ', item);
                 }
                 cb(null);
               }
@@ -217,11 +120,115 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 // continue drilling down
                 getMarkers(item, cb);
               }
+
+              return;
             }
-            else {
+
+            if (!stats.isFile()) {
               if (opts.verbosity > 2) {
                 log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
+              return cb(null);
+            }
+
+            let dirname = path.dirname(item);
+            let filename = path.basename(item);
+
+            if (String(filename) !== 'package.json') {
+              return cb(null);
+            }
+
+            let pkg: any;
+
+            try {
+              pkg = require(item);
+            }
+            catch (err) {
+              return cb(err);
+            }
+
+            let npmlinkup;
+
+            try {
+              npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
+            }
+            catch (e) {
+              //ignore
+            }
+
+            let isNodeModulesPresent = false;
+
+            try {
+              isNodeModulesPresent = fs.lstatSync(path.resolve(dirname + '/node_modules')).isDirectory();
+            }
+            catch (e) {
+              //ignore
+            }
+
+            let isAtLinkShPresent = false;
+
+            try {
+              isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
+            }
+            catch (e) {
+              //ignore
+            }
+
+            let deps, searchRoots;
+
+            if (npmlinkup && (deps = npmlinkup.list)) {
+
+              try{
+                assert(Array.isArray(deps),
+                  `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
+              }
+              catch(err){
+                return cb(err);
+              }
+
+              deps.forEach(function (item: string) {
+                totalList.set(item, true);
+              });
+            }
+
+            map[pkg.name] = {
+              name: pkg.name,
+              isMainProject: pkg.name === mainProjectName,
+              hasNPMLinkUpJSONFile: Boolean(npmlinkup),
+              linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
+              runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
+              hasAtLinkSh: isAtLinkShPresent,
+              path: dirname,
+              deps: deps || []
+            };
+
+            if (npmlinkup && (searchRoots = npmlinkup.searchRoots)) {
+
+              try {
+                assert(Array.isArray(searchRoots),
+                  `the 'searchRoots' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
+              }
+              catch (err) {
+                return cb(err);
+              }
+
+              mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+
+                if (err) {
+                  return cb(err);
+                }
+
+                roots.forEach(function (r) {
+                  q.push(createTask(r, findProject));
+                });
+
+                cb(null);
+
+              });
+
+            }
+            else {
+              // no searchRoots, we can continue
               cb(null);
             }
 

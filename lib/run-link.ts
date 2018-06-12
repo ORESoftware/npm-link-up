@@ -182,7 +182,7 @@ export const runNPMLink =
       .filter(Boolean)
       .join(' ');
 
-      log.info(`Script is => "${script}"`);
+      log.info(`first-pass script is => "${chalk.blueBright.bold(script)}"`);
 
       const k = cp.spawn('bash', [], {
         env: Object.assign({}, process.env, {
