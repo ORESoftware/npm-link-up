@@ -219,7 +219,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               }
             }
             else {
-              if (opts.verbosity > 1) {
+              if (opts.verbosity > 2) {
                 log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
               cb(null);
