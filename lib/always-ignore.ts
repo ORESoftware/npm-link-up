@@ -5,5 +5,7 @@ export default  [
   '/bower_components/',
   '/coverage/',
   '/.nyc_output/',
-  '/.vscode/'
+  '/.vscode/',
+  '/.nvm/',
+  '/.npm/'
 ];
