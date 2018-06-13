@@ -126,7 +126,7 @@ export const runNPMLink =
       }
 
       if(typeof bin === 'string'){
-        return ` && ln -s "${path}/${bin}" "node_modules/.bin/${name}"`
+        return ` && ln -s "${path}/${bin}" "node_modules/.bin/${name}" `
       }
 
       const keys = Object.keys(bin);
@@ -158,7 +158,7 @@ export const runNPMLink =
         // return ` cd ${map[k].path} && npm link ${name} -f `;
         return ` cd ${map[k].path} && mkdir -p "node_modules/${name}" ` +
           ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` +
-          ` ${getBinMap(bin, path, name)}`;
+          ` ${getBinMap(bin, path, name)} `;
       });
     };
 
@@ -173,7 +173,9 @@ export const runNPMLink =
     const getLinkToItselfCommand = function (dep: NPMLinkUpMapItem) {
       if (opts.self_link_all || dep.linkToItself === true) {
         // return `&& npm link ${String(dep.name).trim()} -f`
-        return ` && mkdir -p "node_modules/${dep.name}" && rm -rf "node_modules/${dep.name}" && ln -s "${dep.path}" "node_modules/${dep.name}" `;
+        return ` && mkdir -p "node_modules/${dep.name}" ` +
+          ` && rm -rf "node_modules/${dep.name}" ` +
+          ` && ln -s "${dep.path}" "node_modules/${dep.name}" `;
       }
     };
 
