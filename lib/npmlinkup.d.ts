@@ -22,11 +22,13 @@ export interface NPMLinkUpOpts {
   install_all: boolean,
   self_link_all: boolean,
   treeify: boolean,
-  force: boolean
+  force: boolean,
+  search_root_append: string
 }
 
 export interface NPMLinkUpMapItem {
   name: string,
+  bin: string | {[key:string]: string},
   isMainProject: boolean,
   hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,

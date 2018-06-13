@@ -13,7 +13,9 @@ import async = require('async');
 //project
 import log from './logging';
 
-
+interface BinFieldObject{
+  [key: string]: string
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +66,7 @@ export const runNPMLink =
         .length;
     };
 
-    function findNextDep() {
+    const findNextDep = function () {
       // not anymore: this routine finds the next dep, that has no deps or no unlinked dependencies
       // this routine finds the next dep with the fewest number of unlinked dependencies
 
@@ -93,7 +95,7 @@ export const runNPMLink =
       }
 
       return dep;
-    }
+    };
 
     const getNPMLinkList = (deps: Array<string>) => {
 
@@ -107,16 +109,42 @@ export const runNPMLink =
       .map(function (d: string) {
 
         const path = map[d].path;
+        const bin = map[d].bin;
 
         // return ` npm link ${d} -f `;
-        return `mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" && ln -s "${path}" "node_modules/${d}"`;
+        return `mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" `+
+          ` && ln -s "${path}" "node_modules/${d}" ` +
+          ` ${getBinMap(bin,path,d)}`;
       });
 
+    };
+
+    const getBinMap = function(bin: string | BinFieldObject, path: string, name: string){
+
+      if(!bin){
+        return '';
+      }
+
+      if(typeof bin === 'string'){
+        return ` && ln -s "${path}/${bin}" "node_modules/.bin/${name}"`
+      }
+
+      const keys = Object.keys(bin);
+
+      if(keys.length < 1){
+        return '';
+      }
+
+      return ` && ` + keys.map(function(k){
+        return ` ln -sf "${path}/${bin[k]}" "node_modules/.bin/${k}" `
+      })
+      .join(' && ');
     };
 
     const getCommandListOfLinked = function (name: string) {
 
       const path = map[name] && map[name].path;
+      const bin = map[name] && map[name].bin;
 
       if (!path) {
         log.error(`missing path for dependency with name "${name}"`);
@@ -128,7 +156,9 @@ export const runNPMLink =
       })
       .map(function (k) {
         // return ` cd ${map[k].path} && npm link ${name} -f `;
-        return ` cd ${map[k].path} && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" `;
+        return ` cd ${map[k].path} && mkdir -p "node_modules/${name}" ` +
+          ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` +
+          ` ${getBinMap(bin, path, name)}`;
       });
     };
 
@@ -140,12 +170,6 @@ export const runNPMLink =
       }
     };
 
-    // function getInstallCommand(dep: INPMLinkUpMapItem) {
-    //   if (dep.runInstall || opts.install_all) {
-    //     return '&& rm -rf node_modules';  // we do not need to run npm install, npm link already does this
-    //   }
-    // }
-
     const getLinkToItselfCommand = function (dep: NPMLinkUpMapItem) {
       if (opts.self_link_all || dep.linkToItself === true) {
         // return `&& npm link ${String(dep.name).trim()} -f`
@@ -154,7 +178,7 @@ export const runNPMLink =
     };
 
     const getGlobalLinkCommand = function (dep: NPMLinkUpMapItem) {
-      if(opts.link_all || (dep.isMainProject && opts.link_main)){
+      if (opts.link_all || (dep.isMainProject && opts.link_main)) {
         return ' && mkdir -p node_modules && npm link -f ';
       }
     };
@@ -192,7 +216,7 @@ export const runNPMLink =
         })
       });
 
-      k.stdin.end('\n' + script + '\n');
+      k.stdin.end(script);
 
       k.stdout.setEncoding('utf8');
       k.stderr.setEncoding('utf8');
@@ -216,7 +240,6 @@ export const runNPMLink =
           log.error(`Dep with name "${dep.name}" is done, but with an error.`);
           return cb({code, dep, error: stderr});
         }
-
 
         dep.isLinked = map[dep.name].isLinked = true;
 
@@ -247,17 +270,14 @@ export const runNPMLink =
             k.stderr.pipe(process.stderr, {end: false});
           }
 
-          process.nextTick(function () {
-            k.stdin.end();
-          });
-
+          k.stdin.end();
           k.once('exit', cb);
 
         };
 
         linkPreviouslyUnlinked(function (err: any) {
 
-          if(err){
+          if (err) {
             log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
           }
           else {

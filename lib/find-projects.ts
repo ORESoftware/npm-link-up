@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
+import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
@@ -39,7 +39,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     });
   };
 
-  return function findProject(item: string, cb: Function) {
+  return function findProject(item: string, cb: ErrorFirstCallback) {
 
     item = path.normalize(item);
 
@@ -93,7 +93,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items as any, 3, function (item: string, cb: Function) {
+        async.eachLimit(items as any, 3, function (item: string, cb: ErrorFirstCallback) {
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
@@ -193,6 +193,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
             map[pkg.name] = {
               name: pkg.name,
+              bin: pkg.bin || null,
               isMainProject: pkg.name === mainProjectName,
               hasNPMLinkUpJSONFile: Boolean(npmlinkup),
               linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
