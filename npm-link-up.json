@@ -1,8 +1,7 @@
 {
-  "linkToItself": true,
-  "comments":[
-
+  "comments": [
   ],
+  "linkToItself": true,
   "searchRoots": [
     "$HOME/WebstormProjects/oresoftware"
   ],
