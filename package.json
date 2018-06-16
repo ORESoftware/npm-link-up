@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1024",
+  "version": "0.0.1025",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh"
