@@ -1,6 +1,6 @@
 'use strict';
 
-import  chalk from 'chalk';
+import chalk from 'chalk';
 const name = '[npm-link-up]';
 
 export const log = {

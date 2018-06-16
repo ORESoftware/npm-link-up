@@ -57,5 +57,6 @@ export const mapPaths = function (searchRoots: Array<string>, cb: Function) {
     });
 
     cb(null, pths);
+
   });
 };

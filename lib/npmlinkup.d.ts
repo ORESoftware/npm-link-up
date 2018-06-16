@@ -6,7 +6,13 @@ export interface INPMLinkUpConf {
   list: Array<string>
 }
 
-export interface INPMLinkUpOpts {
+export type ErrorFirstCallback = (err? : any, val?: any) => void;
+
+export interface NPMLinkUpOpts {
+  link_all: boolean,
+  link_main: boolean,
+  install_all:boolean,
+  install_main: boolean,
   search_root: Array<string>,
   clear_all_caches: boolean,
   verbosity: number,
@@ -16,11 +22,14 @@ export interface INPMLinkUpOpts {
   install_all: boolean,
   self_link_all: boolean,
   treeify: boolean,
-  force: boolean
+  force: boolean,
+  search_root_append: string
 }
 
-export interface INPMLinkUpMapItem {
+export interface NPMLinkUpMapItem {
   name: string,
+  bin: string | {[key:string]: string},
+  isMainProject: boolean,
   hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
   runInstall: boolean,
@@ -30,8 +39,8 @@ export interface INPMLinkUpMapItem {
   isLinked?: boolean
 }
 
-export interface INPMLinkUpMap {
-  [key: string]: INPMLinkUpMapItem
+export interface NPMLinkUpMap {
+  [key: string]: NPMLinkUpMapItem
 }
 
 export interface INPMLinkUpVisualTree {

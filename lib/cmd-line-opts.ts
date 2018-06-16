@@ -21,12 +21,6 @@ export default  [
     help: 'Log a tree representation of your project\'s npm-link-up dependencies and exit. This is cool.',
   },
   {
-    names: ['log'],
-    type: 'bool',
-    help: 'Write to output log in project.',
-    default: true
-  },
-  {
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',
@@ -45,9 +39,20 @@ export default  [
     'using npm instead of yarn is the default.'
   },
   {
-    names: ['inherit-log'],
+    names: ['link-all'],
     type: 'bool',
-    help: 'Send child process stdout/stderr to stdout.'
+    help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
+    'using npm instead of yarn is the default.'
+  },
+  {
+    names: ['install-main'],
+    type: 'bool',
+    help: 'This option will tell NPM Link Up to run "npm install" on the main project.'
+  },
+  {
+    names: ['link-main'],
+    type: 'bool',
+    help: 'This option will tell NPM Link Up to run "npm link" on the main project.'
   },
   {
     names: ['search-root'],
