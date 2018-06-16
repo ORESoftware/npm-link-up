@@ -1,6 +1,8 @@
 {
-  "$id": "http://example.com/example.json",
+  "title": "JSON schema for NLU (npm-link-up) library.",
   "type": "object",
+  "additionalProperties": true,
+  "required": [ "list" ],
   "definitions": {},
   "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
@@ -26,7 +28,8 @@
         "title": "The 0th Schema ",
         "default": "",
         "examples": [
-          "$HOME/WebstormProjects/oresoftware"
+          "$HOME/WebstormProjects/xyz",
+          "$HOME/vscode_projects/foobar"
         ]
       }
     },
