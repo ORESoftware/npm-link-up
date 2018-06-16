@@ -12,17 +12,16 @@ media
 scripts
 
 ### matching files
-*.ts
 *.md
 *.txt
 *.log
-*.json
+tsconfig*.json
 *.yml
-*.DS_Store
 
 ### files
 .gitignore
 .npmignore
+.npmrc
 .gitattributes
 suman.conf.js
 .editorconfig
@@ -30,5 +29,3 @@ suman.conf.js
 .dockerignore
 yarn.lock
 
-### negation
-!*.d.ts
