@@ -10,8 +10,8 @@ nlu(){
 
         echo "Installing the npm-link-up package globaly..."
         npm i -s -g "npm-link-up"  || {
-          echo -e "Could not install 'npm-link-up' globally.";
-          echo -e "Please check your permissions to install NPM packages globally.";
+          echo -e "Could not install 'npm-link-up' globally." >&2;
+          echo -e "Please check your permissions to install NPM packages globally."  >&2;
           return 1;
       }
   fi
@@ -27,8 +27,8 @@ npmlinkup(){
         echo "Installing the npm-link-up package globaly..."
         npm i -s -g "npm-link-up"  || {
 
-          echo -e "Could not install 'npm-link-up' globally.";
-          echo -e "Please check your permissions to install NPM packages globally.";
+          echo -e "Could not install 'npm-link-up' globally."  >&2;
+          echo -e "Please check your permissions to install NPM packages globally."  >&2;
           return 1;
       }
   fi
