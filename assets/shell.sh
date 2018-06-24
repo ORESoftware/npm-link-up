@@ -21,19 +21,7 @@ nlu(){
 
 
 npmlinkup(){
-
-  if ! type -f npmlinkup &> /dev/null || ! which npmlinkup &> /dev/null; then
-
-        echo "Installing the npm-link-up package globaly..."
-        npm i -s -g "npm-link-up"  || {
-
-          echo -e "Could not install 'npm-link-up' globally."  >&2;
-          echo -e "Please check your permissions to install NPM packages globally."  >&2;
-          return 1;
-      }
-  fi
-
-  command npmlinkup $@
+   nlu $@;
 }
 
 
