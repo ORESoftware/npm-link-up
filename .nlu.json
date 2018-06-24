@@ -1,18 +1,15 @@
 {
   "npm-link-up": true,
+  "linkToItself": false,
   "comments": [
+    "your comments go here"
   ],
-  "linkToItself": true,
   "searchRoots": [
-    "$HOME/WebstormProjects/oresoftware"
+    "$HOME/foobar"
   ],
   "ignore": [
     "/node_modules/",
     "/.git/"
   ],
-  "list": [
-    "@oresoftware/shell",
-    "residence",
-    "frankenstop"
-  ]
+  "list": []
 }

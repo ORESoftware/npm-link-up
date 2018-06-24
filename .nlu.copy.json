@@ -1,0 +1,18 @@
+{
+  "npm-link-up": true,
+  "comments": [
+  ],
+  "linkToItself": true,
+  "searchRoots": [
+    "$HOME/WebstormProjects/oresoftware"
+  ],
+  "ignore": [
+    "/node_modules/",
+    "/.git/"
+  ],
+  "list": [
+    "@oresoftware/shell",
+    "residence",
+    "frankenstop"
+  ]
+}

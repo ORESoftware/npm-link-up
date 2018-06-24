@@ -16,7 +16,7 @@ export default  [
   },
   {
     names: ['search-root','search'],
-    type: 'arrOfString',
+    type: 'arrayOfString',
     help: 'Search roots to search for other NPM projects.',
   },
   {

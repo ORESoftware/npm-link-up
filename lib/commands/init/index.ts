@@ -12,12 +12,13 @@ import residence = require('residence');
 
 //project
 import options from "./cmd-line-opts";
-import {EVCb, NLUInitOpts, NLURunOpts} from "../../npmlinkup";
+import {EVCb, NLUInitOpts} from "../../npmlinkup";
 import log from '../../logging';
-import npmLinkUpPkg = require('../../../package.json');
+const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
-import defaultNluJSON = require('./default.nlu.json');
+const defaultNluJSON = require('../../../assets/default.nlu.json');
+
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './init-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
@@ -27,7 +28,9 @@ if (!root) {
   process.exit(1);
 }
 
-let opts: any, parser = dashdash.createParser({options});
+
+
+let opts: NLUInitOpts, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
@@ -69,8 +72,9 @@ let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
 try {
   nluJSON = require(nluJSONPath);
   log.error('Looks like your project already has an .nlu.json file.');
-  log.warn(nluJSON);
-  log.error(`If you want npm-link-up to update this file, use 'nlu update'. Exiting.`);
+  log.error(chalk.gray('Here is the existing file on your file system:'));
+  console.log(nluJSON);
+  log.error(chalk.bold(`If you want npm-link-up to update this file, use 'nlu update'. Exiting.`), '\n');
   process.exit(0);
 }
 catch (err) {
@@ -82,18 +86,31 @@ let searchRoots = opts.search_root;
 if (!(searchRoots && searchRoots.length > 0)) {
   log.warn(`Using $HOME to search for related projects. To limit your fs search, use the --search=<path> option.`);
   searchRoots = [process.env.HOME];
+  if(!opts.search_from_home){
+    log.warn('Please use --search=<path> to confine your project search to something less wide as user home.');
+    log.warn('If you wish to use $HOME as the search root, use --search-from-home,',
+      'but be aware that it can take a long time to search through user home.');
+    process.exit(1);
+  }
+}
+else{
+  if(opts.search_from_home){
+    log.error('You passed the --search-from-home option along with --search/--search-root.');
+    process.exit(1);
+  }
 }
 
 const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 .filter((item, index, arr) => arr.indexOf(item) === index)
 .map(item => new RegExp(item));
 
-const theirDeps = [
+const theirDeps = Object.assign({},
   pkgJSON.dependencies,
   pkgJSON.devDependencies,
   pkgJSON.optionalDependencies
-]
-.reduce(Object.assign, {});
+);
+
+log.info('Here are the deps in your package.json:', theirDeps);
 
 async.autoInject({
 
@@ -116,11 +133,17 @@ async.autoInject({
         task(cb);
       });
 
+      log.info('Search roots are:', searchRoots);
+
       searchRoots.forEach((v: string) => {
         q.push(function (cb: EVCb) {
           findProjects(v, cb);
         });
       });
+
+      if (q.idle()) {
+        return process.nextTick(cb, new Error('For some reason no items ended up on the search queue.'));
+      }
 
       let first = true;
 
@@ -136,13 +159,28 @@ async.autoInject({
 
     writeNLUJSON(getMatchingProjects: any, cb: EVCb) {
 
+      const list = Object.keys(getMatchingProjects);
+      const newNluJSON = Object.assign({}, defaultNluJSON);
+      newNluJSON.list = list;
+      const newNluJSONstr = JSON.stringify(defaultNluJSON, null, 2);
+      fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
+
     }
 
   },
 
-  function (err, results) {
+  function (err: any, results: any) {
+
+    if (err) {
+      log.error('There was an error when running "nlu init".');
+      log.error('Here were arguments:', process.argv);
+      log.error(err.message || err, '\n');
+      return process.exit(1);
+    }
+
+    log.veryGood('Looks like the nlu init routine succeeded. ' +
+      'Check your new .nlu.json file in the root of your project.');
+    process.exit(0);
 
   });
 
-log.error('No option was recognized, exiting with 1.');
-process.exit(1);

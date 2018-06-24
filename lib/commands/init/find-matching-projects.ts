@@ -50,8 +50,8 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
       fs.readdir(dir, function (err, items) {
 
         if (err) {
-          log.error(err.stack || err);
-          return cb(err);
+          log.error(err.message || err);
+          return cb(null);
         }
 
         items = items.map(function (item) {
@@ -70,19 +70,19 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
           fs.lstat(item, function (err, stats) {
 
             if (err) {
-              log.warning('warning => maybe a symlink? => ', item);
-              return cb();
+              opts.verbosity > 2 && log.warning('warning => maybe a symlink? => ', err.message || err);
+              return cb(null);
             }
 
             if (stats.isSymbolicLink()) {
-              log.warning('warning => looks like a symlink => ', item);
+              opts.verbosity > 2 && log.warning('warning => looks like a symlink => ', item);
               return cb();
             }
 
             if (stats.isDirectory()) {
               if (isIgnored(String(item + '/'))) {
                 if (opts.verbosity > 2) {
-                  log.warning('path ignored by settings/regex => ', item);
+                  opts.verbosity > 2 && log.warning('path ignored by settings/regex => ', item);
                 }
                 cb(null);
               }
@@ -95,9 +95,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
             }
 
             if (!stats.isFile()) {
-              if (opts.verbosity > 2) {
-                log.warning('Not a directory or file (maybe a symlink?) => ', item);
-              }
+              opts.verbosity > 2 && log.warning('Not a directory or file (maybe a symlink?) => ', item);
               return cb(null);
             }
 
@@ -126,9 +124,12 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
               //ignore
             }
 
-            if(theirDeps[pkg.name]){
+            if (theirDeps[pkg.name]) {
 
-              if(map[pkg.name]){
+              log.warn('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+
+              if (map[pkg.name]) {
+                // this pkg.name is already in the map!
                 log.warn('The following package name exists in multiple package.json files on your fs:', pkg.name);
               }
 
@@ -139,7 +140,6 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                 path: dirname,
               };
             }
-
 
             cb(null);
 
