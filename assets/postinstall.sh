@@ -16,14 +16,12 @@ mkdir -p "$HOME/.oresoftware" || {
 }
 
 
-(
-    mkdir -p "$HOME/.oresoftware/bash" && {
-      cat "assets/nlu.sh" > "$HOME/.oresoftware/bash/nlu.sh" || {
-        echo "Could not copy nlu.sh file to .oresoftware/bash dir.";
-        exit 1;
-      }
-    }
-)
+mkdir -p "$HOME/.oresoftware/bash" && {
+  cat "assets/shell.sh" > "$HOME/.oresoftware/bash/nlu.sh" || {
+    echo "Could not copy nlu.sh file to ~/.oresoftware/bash dir.";
+    exit 1;
+  }
+}
 
 
 (
@@ -42,9 +40,9 @@ mkdir -p "$HOME/.oresoftware" || {
 
 
 echo "";
-echo -e "${r2g_green}r2g was installed successfully.${r2g_no_color}";
+echo -e "${ores_green}nlu was installed successfully.${ores_no_color}";
 echo -e "Add the following line to your .bashrc/.bash_profile files:";
-echo -e "${r2g_cyan} . \"\$HOME/.oresoftware/shell.sh\"${r2g_no_color}";
+echo -e "${ores_cyan} . \"\$HOME/.oresoftware/shell.sh\"${ores_no_color}";
 echo "";
 
 

@@ -10,6 +10,7 @@
     "/.git/"
   ],
   "list": [
+    "@oresoftware/shell",
     "residence",
     "frankenstop"
   ]

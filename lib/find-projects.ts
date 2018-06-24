@@ -28,7 +28,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                                          ignore: Array<RegExp>, opts: NPMLinkUpOpts) {
 
   let isIgnored = function (pth: string) {
-    return ignore.some(function (r: RegExp) {
+    return ignore.some(r => {
       if (r.test(pth)) {
         if (opts.verbosity > 2) {
           log.warning(`Path with value "${pth}" was ignored because it matched the following regex:`);
@@ -102,7 +102,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             return process.nextTick(cb);
           }
 
-
           fs.lstat(item, function (err, stats) {
 
             if (err) {
@@ -110,7 +109,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb();
             }
 
-            if(stats.isSymbolicLink()){
+            if (stats.isSymbolicLink()) {
               log.warning('warning => looks like a symlink => ', item);
               return cb();
             }
@@ -184,11 +183,11 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
             if (npmlinkup && (deps = npmlinkup.list)) {
 
-              try{
+              try {
                 assert(Array.isArray(deps),
                   `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
               }
-              catch(err){
+              catch (err) {
                 return cb(err);
               }
 
