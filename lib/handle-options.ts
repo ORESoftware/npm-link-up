@@ -47,7 +47,7 @@ export const getSearchRoots = function (opts: NPMLinkUpOpts, conf: INPMLinkUpCon
 
     if (!conf.searchRoots) {
 
-      log.error('Warning => no "searchRoots" property provided in npm-link-up.json file. ' +
+      log.error('Warning => no "searchRoots" property provided in .nlu.json file. ' +
         'NPM-Link-Up will therefore search through your entire home directory.');
 
       if (opts.force) {

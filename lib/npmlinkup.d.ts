@@ -33,7 +33,6 @@ export interface NPMLinkUpMapItem {
   hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
   runInstall: boolean,
-  hasAtLinkSh: boolean,
   path: string,
   deps: Array<string>
   isLinked?: boolean

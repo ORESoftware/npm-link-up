@@ -17,16 +17,16 @@ const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
 
 //project
-import {makeFindProject, createTask} from './find-projects';
-import {mapPaths} from './map-paths-with-env-vars';
-import {cleanCache} from './cache-clean';
-import log from './logging';
-import {getIgnore, getSearchRoots} from "./handle-options";
+import {makeFindProject, createTask} from '../../find-projects';
+import {mapPaths} from '../../map-paths-with-env-vars';
+import {cleanCache} from '../../cache-clean';
+import log from '../../logging';
+import {getIgnore, getSearchRoots} from "../../handle-options";
 import options from './cmd-line-opts';
-import {runNPMLink} from './run-link';
-import {createTree} from './create-visual-tree';
-import {getCleanMap} from './get-clean-final-map';
-import {q} from './search-queue';
+import {runNPMLink} from '../../run-link';
+import {createTree} from '../../create-visual-tree';
+import {getCleanMap} from '../../get-clean-final-map';
+import {q} from '../../search-queue';
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -88,17 +88,17 @@ catch (e) {
 }
 
 try {
-  conf = require(path.resolve(root + '/npm-link-up.json'));
+  conf = require(path.resolve(root + '/.nlu.json'));
 }
 catch (e) {
-  log.error('You do not have an "npm-link-up.json" file in the root of your project. ' +
+  log.error('You do not have an ".nlu.json" file in the root of your project. ' +
     'You need this config file for npmlinkup to do it\'s thing.');
   console.error('\n', e.stack || e, '\n');
   process.exit(1);
 }
 
-import NLU = require('./npm-link-up-schema');
-import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
+import NLU = require('../../npm-link-up-schema');
+import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "../../npmlinkup";
 new NLU(conf, false).validate();
 
 const mainProjectName = pkg.name;
@@ -118,14 +118,14 @@ const deps = Object.keys(pkg.dependencies || {})
 let list = conf.list;
 
 assert(Array.isArray(list),
-  'Your npm-link-up.json file must have a top-level "list" property that is an array of strings.');
+  'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
 
 list = list.filter(function (item: string) {
   return !/###/.test(item);
 });
 
 if (list.length < 1) {
-  console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your npm-link-up.json file.'));
+  console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
   console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));
   process.exit(1);
 }
@@ -142,7 +142,7 @@ const inListAndInDeps = list.filter(function (item: string) {
 });
 
 inListButNotInDeps.forEach(function (item) {
-  log.warning('warning, the following item was listed in your npm-link-up.json file, ' +
+  log.warning('warning, the following item was listed in your .nlu.json file, ' +
     'but is not listed in your package.json dependencies => "' + item + '".');
 });
 

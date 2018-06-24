@@ -1,7 +1,7 @@
 'use strict';
 
 import chalk from 'chalk';
-const name = '[npm-link-up]';
+const name = '[nlu/npm-link-up]';
 
 export const log = {
   info: console.log.bind(console, name),

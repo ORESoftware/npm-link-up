@@ -155,7 +155,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             let npmlinkup;
 
             try {
-              npmlinkup = require(path.resolve(dirname + '/npm-link-up.json'));
+              npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
             }
             catch (e) {
               //ignore
@@ -170,14 +170,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               //ignore
             }
 
-            let isAtLinkShPresent = false;
-
-            try {
-              isAtLinkShPresent = fs.statSync(path.resolve(dirname + '/@link.sh')).isFile();
-            }
-            catch (e) {
-              //ignore
-            }
 
             let deps, searchRoots;
 
@@ -185,7 +177,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
               try {
                 assert(Array.isArray(deps),
-                  `the 'list' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
+                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`);
               }
               catch (err) {
                 return cb(err);
@@ -203,7 +195,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               hasNPMLinkUpJSONFile: Boolean(npmlinkup),
               linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
               runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
-              hasAtLinkSh: isAtLinkShPresent,
               path: dirname,
               deps: deps || []
             };
@@ -212,7 +203,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
               try {
                 assert(Array.isArray(searchRoots),
-                  `the 'searchRoots' property in an npm-link-up.json file is not an Array instance for '${filename}'.`);
+                  `the 'searchRoots' property in an .nlu.json file is not an Array instance for '${filename}'.`);
               }
               catch (err) {
                 return cb(err);

@@ -26,7 +26,7 @@ integrity, so this tool is not trival by any means.
 
 See: https://github.com/sumanjs
 The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
-Just look for the `npm-link-up.json` file in the root of each project.
+Just look for the `.nlu.json` file in the root of each project.
 https://github.com/sumanjs/suman is the "root" project.
 
 ## &#9658; Installation
@@ -81,16 +81,17 @@ So one of the two above install methods should be sufficient.
 
 ## &#9658; Usage
 
-Create a file called ```npm-link-up.json``` in the root of your project (we will call it "project X"). The reason
+Create a file called ```.nlu.json``` in the root of your project (we will call it "project X"). The reason
 you are using this CLI tool, of course, is because there are other local projects that
-are dependencies of project X. Your other local projects may have their own `npm-link-up.json` files, which in turn,
+are dependencies of project X. Your other local projects may have their own `.nlu.json` files, which in turn,
 declare their own dependencies. That is expected of course, and this tool is designed to link up all dependencies for 
 every project in the hierarchy.
 
-The following is a simple npm-link-up.json file:
+The following is a simple .nlu.json file:
 
 ```js
 {
+  "npm-link-up": true,
   "searchRoots": [   
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
     "$HOME/vscode_projects"    // it's recommended to use something more specific than $HOME             
@@ -143,7 +144,7 @@ Well, imagine we have this dependency structure, and these projects are on our l
 
 
 1. Using the "searchRoots" directory/ies, the tool looks for the NPM package roots that match 
-the names in the "list" property in the npm-link-up.json file. This is nice because you can move projects around
+the names in the "list" property in the .nlu.json file. This is nice because you can move projects around
 on your filesystem at will, and the tool still works; it also requires less configuration, and fewer command line 
 arguments, etc.
 
