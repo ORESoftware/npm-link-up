@@ -1,3 +1,5 @@
+'use strict';
+
 export default  [
 
   {
@@ -12,7 +14,7 @@ export default  [
     help: 'Verbosity level is an integer between 1 and 3, inclusive.',
     default: 2
   },
-  
+
   {
     names: ['treeify'],
     type: 'bool',

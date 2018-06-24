@@ -1,4 +1,8 @@
+'use strict';
+
+
 export default [
+
   {
     names: ['version', 'vn'],
     type: 'bool',
@@ -26,7 +30,7 @@ export default [
   },
 
   {
-    names: ['completion'],
+    names: ['bash-completion','completion'],
     type: 'bool',
     help: 'Generate bash-completion code.',
     hidden: true

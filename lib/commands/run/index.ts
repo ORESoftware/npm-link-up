@@ -10,8 +10,8 @@ import * as cp from 'child_process';
 //npm
 import chalk from 'chalk';
 const dashdash = require('dashdash');
-const async = require('async');
-const residence = require('residence');
+import async = require('async');
+import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
@@ -46,11 +46,6 @@ try {
   process.exit(1);
 }
 
-if (opts.version) {
-  let npmLinkUpPkg = require('./package.json');
-  console.log(npmLinkUpPkg.version);
-  process.exit(0);
-}
 
 if (opts.help) {
   let help = parser.help({includeEnv: true}).trimRight();
@@ -60,15 +55,6 @@ if (opts.help) {
   process.exit(0);
 }
 
-if (opts.completion) {
-  let generatedBashCode = dashdash.bashCompletionFromOptions({
-    name: 'npmlinkup',
-    options: options,
-    includeHidden: true
-  });
-  console.log(generatedBashCode);
-  process.exit(0);
-}
 
 if (!root) {
   console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +

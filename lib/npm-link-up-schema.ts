@@ -19,6 +19,10 @@ NLU.getSchema = function () {
         type: 'object',
         required: true,
         properties: {
+          "npm-link-up": {
+            type: 'boolean',
+            required: true
+          },
           "alwaysRelink":{
             type: 'boolean',
             required: false

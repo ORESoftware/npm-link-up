@@ -27,6 +27,9 @@ if nlu_match_arg "--shell-version" "${my_args[@]}"; then
   use_shell_version="yes"
 fi
 
+if nlu_match_arg "--use-shell-version" "${my_args[@]}"; then
+  use_shell_version="yes"
+fi
 
 
 dir_name="$(dirname "$0")";
@@ -48,17 +51,15 @@ echo " => NLU is using NPM version => $(npm --version)";
 
 if [ "$first_arg" == "init" ]; then
 
-    shift 1;
-    node "${project_root}/dist/init.js" "$@";
+    shift 1; node "${project_root}/dist/commands/init" "$@";
 
 elif [ "$first_arg" == "run" ]; then
 
-    shift 1;
-    node "${project_root}/dist/index.js" "$@";
+    shift 1; node "${project_root}/dist/commands/run" "$@";
 
 else
 
-    node "${project_root}/dist/index.js" "$@";
+    node "${project_root}/dist/commands/basic" "$@";
 
 fi
 
