@@ -27,6 +27,7 @@ import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
 import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
+import npmLinkUpPkg = require('../../../package.json');
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +38,7 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-let opts: NPMLinkUpOpts, parser = dashdash.createParser({options});
+let opts: NLURunOpts, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
@@ -46,19 +47,17 @@ try {
   process.exit(1);
 }
 
-
 if (opts.help) {
   let help = parser.help({includeEnv: true}).trimRight();
-  console.log('usage: node foo.js [OPTIONS]\n'
+  console.log('usage: nlu run [OPTIONS]\n'
     + 'options:\n'
     + help);
   process.exit(0);
 }
 
-
 if (!root) {
-  console.error(' => NPM-Link-Up => You do not appear to be within an NPM project (no package.json could be found).\n' +
-    ' => Your present working directory is =>\n' + chalk.magenta.bold(cwd));
+  log.error('You do not appear to be within an NPM project (no package.json could be found).');
+  log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
   process.exit(1);
 }
 
@@ -84,7 +83,7 @@ catch (e) {
 }
 
 import NLU = require('../../npm-link-up-schema');
-import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "../../npmlinkup";
+import {EVCb, NPMLinkUpMap, NLURunOpts} from "../../npmlinkup";
 new NLU(conf, false).validate();
 
 const mainProjectName = pkg.name;
@@ -155,7 +154,6 @@ originalList.forEach(function (item: string) {
   log.good(`The following dep will be 'NPM linked' to this project => "${item}".`);
 });
 
-
 const map: NPMLinkUpMap = {};
 let cleanMap: NPMLinkUpMap;
 
@@ -164,31 +162,31 @@ if (opts.treeify) {
 }
 
 async.autoInject({
-    
-    npmCacheClean: function (cb: ErrorFirstCallback) {
-      
-      if (opts.treeify) {
-        return process.nextTick(cb);
-      }
-      
-      if (!opts.clear_all_caches) {
-        return process.nextTick(cb);
-      }
-      
-      log.info(`Cleaning the NPM cache.`);
-      cleanCache(cb);
-    },
-    
-    rimrafMainProject: function (cb: ErrorFirstCallback) {
-      
+
+    npmCacheClean: function (cb: EVCb) {
+
       if (opts.treeify) {
         return process.nextTick(cb);
       }
 
-      if(true){
+      if (!opts.clear_all_caches) {
         return process.nextTick(cb);
       }
-      
+
+      log.info(`Cleaning the NPM cache.`);
+      cleanCache(cb);
+    },
+
+    rimrafMainProject: function (cb: EVCb) {
+
+      if (opts.treeify) {
+        return process.nextTick(cb);
+      }
+
+      if (true) {
+        return process.nextTick(cb);
+      }
+
       log.info(`Deleting node_modules from your root project.`);
 
       let nm = path.resolve(root + '/node_modules');
@@ -198,29 +196,29 @@ async.autoInject({
         cb(null);
       });
     },
-    
+
     mapSearchRoots: function (npmCacheClean: any, cb: Function) {
       log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
-    
-    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: ErrorFirstCallback) {
-      
+
+    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
+
       let searchRoots = mapSearchRoots.slice(0);
-      
+
       console.log('\n');
       log.info('Beginning to search for NPM projects on your filesystem.');
       log.info('NPM-Link-Up will be searching these roots for relevant projects:');
       log.info(chalk.magenta(util.inspect(searchRoots)));
-      
+
       if (opts.verbosity > 1) {
         log.warning('Note that NPM-Link-Up may come across a project of yours that needs to search in directories');
         log.warning('not covered by your original search roots, and these new directories will be searched as well.');
       }
-      
+
       console.log('\n');
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts);
-      
+
       let callable = true;
       q.drain = function () {
         if (callable) {
@@ -228,57 +226,57 @@ async.autoInject({
           cb(null, {actuallyRan: true});
         }
       };
-      
+
       searchRoots.forEach(function (sr) {
         q.push(createTask(sr, findProject));
       });
-      
+
     },
-    
-    runUtility: function (findItems: void, cb: ErrorFirstCallback) {
-      
+
+    runUtility: function (findItems: void, cb: EVCb) {
+
       cleanMap = getCleanMap(mainProjectName, map);
-      
+
       if (opts.treeify) {
         return process.nextTick(cb);
       }
-  
+
       console.log('\n');
       log.good('Beginning to actually link projects together...');
       runNPMLink(cleanMap, totalList, opts, cb);
     }
   },
-  
+
   function (err: any, results: object) {
-    
+
     if (err) {
       log.error(err.stack || err);
       return process.exit(1);
     }
-    
+
     console.log('\n');
-    
+
     if ((results as any).runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
       console.log('\n');
     }
-    
+
     log.good('NPM-Link-Up results as a visual:\n');
     const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;
     });
-    
+
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
     console.log(chalk.white(formattedStr.join('\n')));
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-    
+
     setTimeout(function () {
       process.exit(0);
     }, 100);
-    
+
   });
 
 

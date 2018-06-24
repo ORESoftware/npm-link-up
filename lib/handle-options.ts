@@ -7,7 +7,7 @@ import * as path from 'path';
 import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
-import {INPMLinkUpConf, NLUDotJSON, NPMLinkUpOpts} from "./npmlinkup";
+import {INPMLinkUpConf, NLUDotJSON, NLURunOpts} from "./npmlinkup";
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@ export const getIgnore = function (conf: NLUDotJSON) {
 };
 
 
-export const getSearchRoots = function (opts: NPMLinkUpOpts, conf: INPMLinkUpConf) : Array<string>{
+export const getSearchRoots = function (opts: NLURunOpts, conf: INPMLinkUpConf) : Array<string>{
 
   let searchRoots;
 

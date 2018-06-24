@@ -1,6 +1,6 @@
 'use strict';
 
-import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpMapItem, NPMLinkUpOpts} from "./npmlinkup";
+import {EVCb, NPMLinkUpMap, NPMLinkUpMapItem, NLURunOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
@@ -20,7 +20,7 @@ interface BinFieldObject{
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 export const runNPMLink =
-  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NPMLinkUpOpts, cb: ErrorFirstCallback): void {
+  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NLURunOpts, cb: EVCb): void {
 
     const keys = Object.keys(map);
 
@@ -185,7 +185,7 @@ export const runNPMLink =
       }
     };
 
-    async.until(isAllLinked, function (cb: ErrorFirstCallback) {
+    async.until(isAllLinked, function (cb: EVCb) {
 
       if (opts.verbosity > 2) {
         log.info(`Searching for next dep to run.`);
@@ -245,7 +245,7 @@ export const runNPMLink =
 
         dep.isLinked = map[dep.name].isLinked = true;
 
-        const linkPreviouslyUnlinked = function (cb: ErrorFirstCallback) {
+        const linkPreviouslyUnlinked = function (cb: EVCb) {
 
           const cmds = getCommandListOfLinked(dep.name);
 

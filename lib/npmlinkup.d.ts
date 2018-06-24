@@ -6,9 +6,9 @@ export interface INPMLinkUpConf {
   list: Array<string>
 }
 
-export type ErrorFirstCallback = (err? : any, val?: any) => void;
+export type EVCb = (err? : any, val?: any) => void;
 
-export interface NPMLinkUpOpts {
+export interface NLURunOpts {
   link_all: boolean,
   link_main: boolean,
   install_all:boolean,
@@ -16,14 +16,26 @@ export interface NPMLinkUpOpts {
   search_root: Array<string>,
   clear_all_caches: boolean,
   verbosity: number,
-  version: string,
   help: boolean,
-  completion: boolean,
   install_all: boolean,
   self_link_all: boolean,
   treeify: boolean,
   force: boolean,
   search_root_append: string
+}
+
+export interface NLUInitOpts {
+  search_root: Array<string>,
+  verbosity: number,
+  help: boolean,
+  force: boolean,
+}
+
+export interface NLUBasicOpts {
+  bash_completion: boolean,
+  verbosity: number,
+  help: boolean,
+  force: boolean,
 }
 
 export interface NPMLinkUpMapItem {

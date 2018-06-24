@@ -15,6 +15,11 @@ export default  [
     default: 2
   },
   {
+    names: ['search-root','search'],
+    type: 'arrOfString',
+    help: 'Search roots to search for other NPM projects.',
+  },
+  {
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',

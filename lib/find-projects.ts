@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {ErrorFirstCallback, NPMLinkUpMap, NPMLinkUpOpts} from "./npmlinkup";
+import {EVCb, NPMLinkUpMap, NLURunOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
@@ -25,7 +25,7 @@ export const createTask = function (searchRoot: string, findProject: any) {
 };
 
 export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NPMLinkUpMap,
-                                         ignore: Array<RegExp>, opts: NPMLinkUpOpts) {
+                                         ignore: Array<RegExp>, opts: NLURunOpts) {
 
   let isIgnored = function (pth: string) {
     return ignore.some(r => {
@@ -39,7 +39,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     });
   };
 
-  return function findProject(item: string, cb: ErrorFirstCallback) {
+  return function findProject(item: string, cb: EVCb) {
 
     item = path.normalize(item);
 
@@ -93,7 +93,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items as any, 3, function (item: string, cb: ErrorFirstCallback) {
+        async.eachLimit(items as any, 3, function (item: string, cb: EVCb) {
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {

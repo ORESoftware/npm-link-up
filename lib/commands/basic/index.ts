@@ -3,9 +3,17 @@
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import options from "./cmd-line-opts";
-import {NPMLinkUpOpts} from "../../npmlinkup";
+import {NLURunOpts} from "../../npmlinkup";
 import log from '../../logging';
 import npmLinkUpPkg = require('../../../package.json');
+import residence = require('residence');
+const cwd = process.cwd();
+const root = residence.findProjectRoot(cwd);
+
+if(!root){
+  log.error('Cannot find a project root given your current working directory:', chalk.magenta(cwd));
+  process.exit(1);
+}
 
 let opts: any, parser = dashdash.createParser({options});
 
