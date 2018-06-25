@@ -25,7 +25,17 @@ export interface NLURunOpts {
 }
 
 export interface NLUInitOpts {
+  search_from_home: boolean,
+  interactive: boolean,
   search_root: Array<string>,
+  verbosity: number,
+  help: boolean,
+  force: boolean,
+}
+
+export interface NLUAddOpts {
+  search_root: Array<string>,
+  search_from_home: boolean,
   verbosity: number,
   help: boolean,
   force: boolean,

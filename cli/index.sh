@@ -54,6 +54,21 @@ if [ "$first_arg" == "init" ]; then
 
     shift 1; node "${project_root}/dist/commands/init" "$@";
 
+elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
+
+
+  npm i -s "$@" || {
+    echo "npm install command failed.";
+    exit 1;
+  }
+
+  nlu run --install-main
+
+
+elif [ "$first_arg" == "add" ]; then
+
+    shift 1; node "${project_root}/dist/commands/add" "$@";
+
 elif [ "$first_arg" == "run" ]; then
 
     shift 1; node "${project_root}/dist/commands/run" "$@";

@@ -32,6 +32,8 @@ if (opts.version) {
 if (opts.help) {
   let help = parser.help({includeEnv: true}).trimRight();
   console.log('usage: nlu [OPTIONS]\n' + 'options:\n' + help);
+  log.info('To get help for "nlu init", use:', chalk.blueBright.bold('npm init --help'));
+  log.info('To get help for "nlu run", use:', chalk.blueBright.bold('npm run --help'));
   process.exit(0);
 }
 
@@ -44,11 +46,10 @@ if (opts.bash_completion) {
   });
 
   console.log(generatedBashCode);
-
   process.exit(0);
 }
 
 
-log.warn('Original command:', process.argv);
+log.warn('The original command:', process.argv);
 log.warn('No option was recognized, exiting with 1.');
 process.exit(1);
