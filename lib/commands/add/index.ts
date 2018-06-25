@@ -149,7 +149,7 @@ async.autoInject({
     getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb) {
 
       const map = {}, status = {searching: true};
-      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, projectsToAdd, status);
+      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, projectsToAdd.slice(0), status);
 
       const q = async.queue(function (task: any, cb) {
         task(cb);
@@ -188,9 +188,18 @@ async.autoInject({
 
     runUtility(getMatchingProjects: any, cb: EVCb) {
 
-      let cleanMap;
+      console.log('nluJSON.list before:', nluJSON.list);
 
-      log.info('here is the unclean map:', getMatchingProjects);
+      try {
+        nluJSON.list = nluJSON.list.concat(projectsToAdd)
+        .map(v => String(v || '').trim()).filter((v,i,a) => a.indexOf(v) === i);
+      }
+      catch (e) {
+        return process.nextTick(cb, e);
+      }
+
+      console.log('projects to add:',projectsToAdd);
+      console.log('nlu list:', nluJSON.list);
 
       getMatchingProjects[mainProjectName] = {
         name: mainProjectName,
@@ -202,12 +211,18 @@ async.autoInject({
         deps: nluJSON.list
       };
 
+      let cleanMap;
+
+      console.log('the unclean map keys:', Object.keys(getMatchingProjects));
+
       try {
         cleanMap = getCleanMap(mainProjectName, getMatchingProjects);
       }
       catch (err) {
         return process.nextTick(cb, err);
       }
+
+      console.log('the clean map:', Object.keys(cleanMap));
 
       console.log('\n');
       log.good('Beginning to actually link projects together...');
@@ -216,9 +231,9 @@ async.autoInject({
 
     addToNLUJSON(runUtility: any, cb: EVCb) {
 
-      nluJSON.list = Object.keys(projectsToAdd)
-      .concat(nluJSON.list)
-      .filter((v, i, a) => a.indexOf(v) === i);
+      // nluJSON.list = Object.keys(projectsToAdd)
+      // .concat(nluJSON.list)
+      // .filter((v, i, a) => a.indexOf(v) === i);
 
       const newNluJSONstr = JSON.stringify(nluJSON, null, 2);
       fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);

@@ -15,6 +15,7 @@
     "@oresoftware/shell",
     "frankenstop",
     "prepend-transform",
-    "residence"
+    "residence",
+    "suman"
   ]
 }
