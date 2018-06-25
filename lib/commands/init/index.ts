@@ -28,8 +28,6 @@ if (!root) {
   process.exit(1);
 }
 
-
-
 let opts: NLUInitOpts, parser = dashdash.createParser({options});
 
 try {
@@ -64,7 +62,7 @@ if (!mainProjectName) {
   log.error('That is weird.');
 }
 else {
-  log.info('Your project name is:', mainProjectName);
+  log.info('Your project name is:', chalk.bold.gray(mainProjectName));
 }
 
 let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
@@ -86,15 +84,15 @@ let searchRoots = opts.search_root;
 if (!(searchRoots && searchRoots.length > 0)) {
   log.warn(`Using $HOME to search for related projects. To limit your fs search, use the --search=<path> option.`);
   searchRoots = [process.env.HOME];
-  if(!opts.search_from_home){
+  if (!opts.search_from_home) {
     log.warn('Please use --search=<path> to confine your project search to something less wide as user home.');
     log.warn('If you wish to use $HOME as the search root, use --search-from-home,',
       'but be aware that it can take a long time to search through user home.');
     process.exit(1);
   }
 }
-else{
-  if(opts.search_from_home){
+else {
+  if (opts.search_from_home) {
     log.error('You passed the --search-from-home option along with --search/--search-root.');
     process.exit(1);
   }
@@ -126,8 +124,8 @@ async.autoInject({
           new Error('Looks like your project already has an .nlu.json file, although it may be malformed.'));
       }
 
-      const map = {};
-      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps);
+      const map = {}, status = {searching: true};
+      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps, status);
 
       const q = async.queue(function (task: any, cb) {
         task(cb);
@@ -148,11 +146,19 @@ async.autoInject({
       let first = true;
 
       q.drain = q.error = function (err?: any) {
-        err && q.kill();
+
+        if (err) {
+          status.searching = false;
+          first && q.kill();
+          log.error(chalk.magenta('There was a search queue processing error.'));
+          log.error(err.message || err);
+        }
+
         if (first) {
-          first = false;
           cb(err, map);
         }
+
+        first = false;
       };
 
     },
@@ -173,8 +179,9 @@ async.autoInject({
 
     if (err) {
       log.error('There was an error when running "nlu init".');
-      log.error('Here were arguments:', process.argv);
-      log.error(err.message || err, '\n');
+      log.error('Here were your arguments:', process.argv);
+      log.error(err.message || err);
+      log.error('exiting...');
       return process.exit(1);
     }
 

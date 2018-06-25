@@ -16,7 +16,7 @@ import {EVCb, NLUInitOpts, NPMLinkUpMap} from "../../npmlinkup";
 ////////////////////////////////////////////////////////////////
 
 export const makeFindProjects = function (mainProjectName: string, ignore: Array<RegExp>,
-                                          opts: NLUInitOpts, map: any, theirDeps: any) {
+                                          opts: NLUInitOpts, map: any, theirDeps: any, status: any) {
 
   const totalList = new Map<string, boolean>();
 
@@ -36,9 +36,14 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
     item = path.normalize(item);
 
-    log.warning('new path being searched:', chalk.blue(item));
+    log.good('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
+
+      if(status.searching === false){
+        opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+        return process.nextTick(cb);
+      }
 
       if (isIgnored(String(dir + '/'))) {
         if (opts.verbosity > 2) {
@@ -47,11 +52,12 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
         return process.nextTick(cb);
       }
 
+
       fs.readdir(dir, function (err, items) {
 
         if (err) {
-          log.error(err.message || err);
-          return cb(null);
+          log.error('Could not read a directory at path:', dir);
+          return cb(err);
         }
 
         items = items.map(function (item) {
@@ -59,6 +65,11 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
         });
 
         async.eachLimit(items, 3, function (item: string, cb: EVCb) {
+
+          if(status.searching === false){
+            opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+            return process.nextTick(cb);
+          }
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
@@ -126,7 +137,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
             if (theirDeps[pkg.name]) {
 
-              log.warn('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+              log.good('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
 
               if (map[pkg.name]) {
                 // this pkg.name is already in the map!

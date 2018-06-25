@@ -71,7 +71,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     }
 
     searchedPaths[item] = true;
-    log.warning('new path being searched:', chalk.blue(item));
+    log.good('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
