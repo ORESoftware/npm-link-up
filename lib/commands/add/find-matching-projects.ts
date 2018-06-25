@@ -143,18 +143,15 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
               //ignore
             }
 
-
-            let isAdd = false;
             const index = toAdd.indexOf(pkg.name);
-
-            if((isAdd = (index > -1))){
-              // remove that index
-              toAdd.splice(index,1);
-            }
+            const isAdd = index > -1;
 
             if (isAdd && nluIsLink1 && nluIsLink2) {
 
-              if(toAdd.length < 1){
+              // remove the item, because we found it
+              toAdd.splice(index, 1);
+
+              if (toAdd.length < 1) {
                 // we are done searching
                 status.searching = false;
               }
