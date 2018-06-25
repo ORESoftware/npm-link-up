@@ -10,7 +10,7 @@ dist/*
 
 ### matching files
 *.log
-*.DS_Store
+*.tgz
 !dist/README.md
 
 
