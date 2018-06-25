@@ -22,6 +22,7 @@ const defaultNluJSON = require('../../../assets/default.nlu.json');
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './add-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
+import {mapPaths} from "../../map-paths-with-env-vars";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code);
@@ -89,19 +90,27 @@ let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
 
 try {
   nluJSON = require(nluJSONPath);
-  log.warn('Looks like your project already has an .nlu.json file.');
-  if (opts.verbosity > 2) {
-    log.warn(chalk.gray('Here is the existing file on your file system:'));
-    console.log(nluJSON);
-  }
-  log.warn(chalk.gray(`If you want npm-link-up to update this file, use ${chalk.bold('nlu update')}.`));
-  process.exit(1);
 }
 catch (err) {
-  // ignore
+  log.error('Cannot find an .nlu.json config file in your project.');
+  log.error('Your project path is:', root);
+  throw err.message;
 }
 
-let searchRoots = opts.search_root;
+let searchRoots = nluJSON.searchRoots;
+
+if(opts.search_from_home && opts.search_root){
+  log.error('You passed the --search-from-home option along with --search/--search-root.');
+  process.exit(1);
+}
+
+if(opts.search_from_home){
+  searchRoots = [process.env.HOME];
+}
+
+if(opts.search_root){
+  searchRoots = flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
+}
 
 if (!(searchRoots && searchRoots.length > 0)) {
   log.warn(`Using $HOME to search for related projects. To limit your fs search, use the --search=<path> option.`);
@@ -125,75 +134,34 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 .filter((item, index, arr) => arr.indexOf(item) === index)
 .map(item => new RegExp(item));
 
-const theirDeps = Object.assign({},
-  pkgJSON.dependencies,
-  pkgJSON.devDependencies,
-  pkgJSON.optionalDependencies
-);
-
-if (opts.verbosity > 2) {
-  log.info('Here are the deps in your package.json:', Object.keys(theirDeps));
-}
 
 async.autoInject({
 
-    checkForNluJSONFile(cb: EVCb) {
-      fs.stat(nluJSONPath, (err, stats) => cb(null, stats));
+    mapSearchRoots: function (cb: EVCb) {
+      log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
+      mapPaths(searchRoots, cb);
     },
 
-    askUserAboutSearchRoots(cb: EVCb) {
 
-      if(!opts.interactive){
-        return process.nextTick(cb, null, '');
-      }
-
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-
-      process.nextTick(function () {
-        console.log();
-        console.log(chalk.gray(` => To skip this, input "skip" or use --skip at command line.`));
-        console.log(chalk.gray(` => Separate multiple paths with ":"`));
-        console.log(chalk.gray(` => Use env variables like $HOME instead of hardcoding dirs, where possible.`));
-        console.log(chalk.gray(` => Valid input might be: $HOME/WebstormProjects:$HOME/vscode_projects.`));
-      });
-
-      console.log();
-
-      rl.question(chalk.bold(`What folder(s) do local dependencies of this project '${chalk.blueBright(mainProjectName)}' reside in?`), a => {
-        cb(null, a);
-        rl.close();
-      });
-
-    },
-
-    getMatchingProjects(askUserAboutSearchRoots: any, checkForNluJSONFile: any, cb: EVCb) {
-      // given package.json, we can find local projects
-
-      if (checkForNluJSONFile) {
-        return process.nextTick(cb,
-          new Error('Looks like your project already has an .nlu.json file, although it may be malformed.'));
-      }
+    getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb) {
 
       const map = {}, status = {searching: true};
-      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps, status);
+      const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, projectsToAdd, status);
 
       const q = async.queue(function (task: any, cb) {
         task(cb);
       });
 
-      log.info('Search roots are:', searchRoots);
+      log.info('Search roots are:', mapSearchRoots);
 
-      searchRoots.forEach((v: string) => {
+      mapSearchRoots.forEach((v: string) => {
         q.push(function (cb: EVCb) {
           findProjects(v, cb);
         });
       });
 
       if (q.idle()) {
-        return process.nextTick(cb, new Error('For some reason no items ended up on the search queue.'));
+        return process.nextTick(cb, new Error('For some reason no items/paths ended up on the search queue.'));
       }
 
       let first = true;
@@ -215,19 +183,9 @@ async.autoInject({
 
     },
 
-    writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb) {
+    linkNewPackages(getMatchingProjects: any, cb: EVCb) {
 
-      const searchRoots = String(askUserAboutSearchRoots || '')
-      .split(':')
-      .map(v => String(v || '').trim())
-      .filter(Boolean);
 
-      const list = Object.keys(getMatchingProjects);
-      const newNluJSON = Object.assign({}, defaultNluJSON);
-      newNluJSON.searchRoots = searchRoots || '$HOME/foobar';
-      newNluJSON.list = list;
-      const newNluJSONstr = JSON.stringify(newNluJSON, null, 2);
-      fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
 
     }
 

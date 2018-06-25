@@ -9,6 +9,7 @@ export interface INPMLinkUpConf {
 export type EVCb = (err? : any, val?: any) => void;
 
 export interface NLURunOpts {
+  _args: Array<string>,
   link_all: boolean,
   link_main: boolean,
   install_all:boolean,
@@ -25,6 +26,7 @@ export interface NLURunOpts {
 }
 
 export interface NLUInitOpts {
+  _args: Array<string>,
   search_from_home: boolean,
   interactive: boolean,
   search_root: Array<string>,
@@ -34,6 +36,7 @@ export interface NLUInitOpts {
 }
 
 export interface NLUAddOpts {
+  _args: Array<string>,
   search_root: Array<string>,
   search_from_home: boolean,
   verbosity: number,
@@ -42,6 +45,7 @@ export interface NLUAddOpts {
 }
 
 export interface NLUBasicOpts {
+  _args: Array<string>,
   bash_completion: boolean,
   verbosity: number,
   help: boolean,

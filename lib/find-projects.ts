@@ -25,7 +25,7 @@ export const createTask = function (searchRoot: string, findProject: any) {
 };
 
 export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NPMLinkUpMap,
-                                         ignore: Array<RegExp>, opts: NLURunOpts) {
+                                         ignore: Array<RegExp>, opts: NLURunOpts, status: any) {
 
   let isIgnored = function (pth: string) {
     return ignore.some(r => {
@@ -82,11 +82,21 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
         return process.nextTick(cb);
       }
 
+      if (status.searching === false) {
+        opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+        return process.nextTick(cb);
+      }
+
       fs.readdir(dir, function (err: Error, items: Array<string>) {
 
         if (err) {
-          log.error(err.stack || err);
+          log.error(err.message || err);
           return cb(err);
+        }
+
+        if (status.searching === false) {
+          opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+          return process.nextTick(cb);
         }
 
         items = items.map(function (item) {
@@ -107,6 +117,11 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             if (err) {
               log.warning('warning => maybe a symlink? => ', item);
               return cb();
+            }
+
+            if (status.searching === false) {
+              opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+              return process.nextTick(cb);
             }
 
             if (stats.isSymbolicLink()) {
@@ -160,16 +175,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             catch (e) {
               //ignore
             }
-
-            let isNodeModulesPresent = false;
-
-            try {
-              isNodeModulesPresent = fs.lstatSync(path.resolve(dirname + '/node_modules')).isDirectory();
-            }
-            catch (e) {
-              //ignore
-            }
-
+            
 
             let deps, searchRoots;
 

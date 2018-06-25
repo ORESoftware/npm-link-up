@@ -5,13 +5,17 @@ import * as cp from 'child_process';
 
 //npm
 import log from './logging';
+import {EVCb} from "./npmlinkup";
 
 ///////////////////////////////////////////////////////////////////////
 
-export const mapPaths = function (searchRoots: Array<string>, cb: Function) {
+export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
 
-  const mappedRoots = searchRoots.map(function (v) {
-    return `echo "${v}";`;
+  const mappedRoots = searchRoots
+  .map(v => String(v || '').trim())
+  .filter(Boolean)
+  .map(function (v) {
+    return `echo "${v}"`;
   });
 
   const k = cp.spawn('bash', [], {
@@ -20,40 +24,34 @@ export const mapPaths = function (searchRoots: Array<string>, cb: Function) {
     })
   });
 
-  k.stdin.write('\n' + mappedRoots.join(' ') + '\n');
-
-  process.nextTick(function () {
-    k.stdin.end();
-  });
-
+  k.stdin.end(mappedRoots.join(';'));
   const data: Array<string> = [];
 
   k.stdout.setEncoding('utf8');
   k.stderr.setEncoding('utf8');
   k.stderr.pipe(process.stderr);
 
-  k.stdout.on('data', function (d: string) {
+  k.stdout.on('data', (d: string) => {
     data.push(d);
   });
 
-  k.once('error', function (e) {
+  k.once('error',  (e) => {
     log.error(e.stack || e);
+    cb(e, []);
   });
 
-  k.once('close', function (code: number) {
+  k.once('exit', (code: number) => {
 
     if (code > 0) {
-      return cb({
-        code: code
-      });
+      return cb({code: code});
     }
 
-    const pths = data.map(function (d) {
+    const pths = data.map((d) => {
       return String(d).trim();
     })
-    .filter(function (item, index, array) {
+    .filter((item, i, a) => {
       // grab a unique list only
-      return array.indexOf(item) === index;
+      return a.indexOf(item) === i;
     });
 
     cb(null, pths);

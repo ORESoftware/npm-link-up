@@ -197,7 +197,7 @@ async.autoInject({
       });
     },
 
-    mapSearchRoots: function (npmCacheClean: any, cb: Function) {
+    mapSearchRoots: function (npmCacheClean: any, cb: EVCb) {
       log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
@@ -217,19 +217,34 @@ async.autoInject({
       }
 
       console.log('\n');
-      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts);
-
-      let callable = true;
-      q.drain = function () {
-        if (callable) {
-          callable = false;
-          cb(null, {actuallyRan: true});
-        }
-      };
+      const status = {searching: true};
+      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status);
 
       searchRoots.forEach(function (sr) {
         q.push(createTask(sr, findProject));
       });
+
+      if (q.idle()) {
+        return process.nextTick(cb,
+          new Error('For some reason no paths/items went onto the search queue.'));
+      }
+
+      let first = true;
+
+      q.error = q.drain = function (err?: any) {
+
+        if (err) {
+          status.searching = false;
+          log.error(chalk.magenta('There was a search queue processing error.'));
+        }
+
+        if (first) {
+          q.kill();
+          cb(err, {actuallyRan: true});
+        }
+
+        first = false;
+      };
 
     },
 
