@@ -170,6 +170,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                 isMainProject: pkg.name === mainProjectName,
                 hasNPMLinkUpJSONFile: Boolean(npmlinkup),
                 path: dirname,
+                deps: npmlinkup && npmlinkup.list || []
               };
             }
 

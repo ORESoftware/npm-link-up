@@ -163,7 +163,7 @@ if (opts.treeify) {
 
 async.autoInject({
 
-    npmCacheClean: function (cb: EVCb) {
+    npmCacheClean (cb: EVCb) {
 
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -177,7 +177,7 @@ async.autoInject({
       cleanCache(cb);
     },
 
-    rimrafMainProject: function (cb: EVCb) {
+    rimrafMainProject (cb: EVCb) {
 
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -197,12 +197,12 @@ async.autoInject({
       });
     },
 
-    mapSearchRoots: function (npmCacheClean: any, cb: EVCb) {
+    mapSearchRoots (npmCacheClean: any, cb: EVCb) {
       log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
-    findItems: function (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
+    findItems (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
 
       let searchRoots = mapSearchRoots.slice(0);
 
@@ -248,9 +248,14 @@ async.autoInject({
 
     },
 
-    runUtility: function (findItems: void, cb: EVCb) {
+    runUtility (findItems: void, cb: EVCb) {
 
-      cleanMap = getCleanMap(mainProjectName, map);
+      try {
+        cleanMap = getCleanMap(mainProjectName, map);
+      }
+      catch (err) {
+        return process.nextTick(cb, err);
+      }
 
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -258,7 +263,7 @@ async.autoInject({
 
       console.log('\n');
       log.good('Beginning to actually link projects together...');
-      runNPMLink(cleanMap, totalList, opts, cb);
+      runNPMLink(cleanMap, opts, cb);
     }
   },
 

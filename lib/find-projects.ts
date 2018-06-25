@@ -175,7 +175,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             catch (e) {
               //ignore
             }
-            
+
 
             let deps, searchRoots;
 

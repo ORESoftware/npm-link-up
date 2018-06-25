@@ -5,7 +5,7 @@
     "your comments go here"
   ],
   "searchRoots": [
-    "hae"
+    "$HOME/WebstormProjects/oresoftware"
   ],
   "ignore": [
     "/node_modules/",

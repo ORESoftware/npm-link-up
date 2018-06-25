@@ -17,7 +17,7 @@ export const getCleanMap = function (rootPackageName: string, map: NPMLinkUpMap)
       const list = map[v].deps;
       
       if (!Array.isArray(list)) {
-        throw new Error('list should be an array, but is not a array type: ' + JSON.stringify(map[v]));
+        throw new Error('list should be an array, but is not an array type: ' + JSON.stringify(map[v]));
       }
       
       list.forEach(function (l) {

@@ -15,14 +15,14 @@ import residence = require('residence');
 import options from "./cmd-line-opts";
 import {EVCb, NLUAddOpts, NLUInitOpts} from "../../npmlinkup";
 import log from '../../logging';
-const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
-const defaultNluJSON = require('../../../assets/default.nlu.json');
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './add-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
 import {mapPaths} from "../../map-paths-with-env-vars";
+import {runNPMLink} from "../../run-link";
+import {getCleanMap} from "../../get-clean-final-map";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code);
@@ -60,7 +60,7 @@ catch (err) {
   process.exit(1);
 }
 
-const flattenDeep =  function(arr1: Array<any>) : Array<any>  {
+const flattenDeep = function (arr1: Array<any>): Array<any> {
   return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
 };
 
@@ -68,8 +68,13 @@ const projectsToAdd = flattenDeep([opts._args]).map(v => String(v || '').trim())
 
 const absolutePaths = projectsToAdd.filter(v => path.isAbsolute(v));
 
-if(absolutePaths.length > 0){
+if (absolutePaths.length > 0) {
   throw `NLU cannot currently handle file paths. Instead, use 'nlu add one two three', and nlu will find them on your fs.`;
+}
+
+if (projectsToAdd.length < 1) {
+  log.error('You did not pass any projects to add. Try: nlu add foo');
+  process.exit(1);
 }
 
 projectsToAdd.forEach(v => {
@@ -99,16 +104,16 @@ catch (err) {
 
 let searchRoots = nluJSON.searchRoots;
 
-if(opts.search_from_home && opts.search_root){
+if (opts.search_from_home && opts.search_root) {
   log.error('You passed the --search-from-home option along with --search/--search-root.');
   process.exit(1);
 }
 
-if(opts.search_from_home){
+if (opts.search_from_home) {
   searchRoots = [process.env.HOME];
 }
 
-if(opts.search_root){
+if (opts.search_root) {
   searchRoots = flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
 }
 
@@ -134,14 +139,12 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 .filter((item, index, arr) => arr.indexOf(item) === index)
 .map(item => new RegExp(item));
 
-
 async.autoInject({
 
-    mapSearchRoots: function (cb: EVCb) {
+    mapSearchRoots(cb: EVCb) {
       log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
-
 
     getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb) {
 
@@ -183,24 +186,54 @@ async.autoInject({
 
     },
 
-    linkNewPackages(getMatchingProjects: any, cb: EVCb) {
+    runUtility(getMatchingProjects: any, cb: EVCb) {
 
+      let cleanMap;
 
+      log.info('here is the unclean map:', getMatchingProjects);
 
-    }
+      getMatchingProjects[mainProjectName] = {
+        name: mainProjectName,
+        bin: pkgJSON.bin || null,
+        isMainProject: true,
+        linkToItself: Boolean(nluJSON.linkToItself),
+        runInstall: Boolean(nluJSON.alwaysReinstall),
+        path: root,
+        deps: nluJSON.list
+      };
+
+      try {
+        cleanMap = getCleanMap(mainProjectName, getMatchingProjects);
+      }
+      catch (err) {
+        return process.nextTick(cb, err);
+      }
+
+      console.log('\n');
+      log.good('Beginning to actually link projects together...');
+      runNPMLink(cleanMap, opts, cb);
+    },
+
+    addToNLUJSON(runUtility: any, cb: EVCb) {
+
+      nluJSON.list = Object.keys(projectsToAdd)
+      .concat(nluJSON.list)
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+      const newNluJSONstr = JSON.stringify(nluJSON, null, 2);
+      fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
+
+    },
 
   },
 
   function (err: any, results: any) {
 
     if (err) {
-      log.error('There was an error when running "nlu init".');
-      log.error('Here were your arguments:', process.argv);
+      log.error('There was an error when running "nlu add".');
+      log.error('Here were your command line arguments used:');
+      process.argv.forEach((v, i) => log.info(chalk.gray.bold(String(i)), chalk.gray(v)));
       log.error(err.message || err);
-      if (String(err.message || err).match(/scandir/)) {
-        log.warn(chalk.bold('To ignore errors related to reading directories for which ' +
-          'you may not have permission, use --ignore-scandir-errors.'));
-      }
       return process.exit(1);
     }
 

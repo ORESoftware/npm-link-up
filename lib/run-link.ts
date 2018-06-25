@@ -1,6 +1,6 @@
 'use strict';
 
-import {EVCb, NPMLinkUpMap, NPMLinkUpMapItem, NLURunOpts} from "./npmlinkup";
+import {EVCb, NPMLinkUpMap, NPMLinkUpMapItem, NLURunOpts, NLUAddOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
@@ -19,8 +19,9 @@ interface BinFieldObject{
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-export const runNPMLink =
-  function (map: NPMLinkUpMap, totalList: Map<string, boolean>, opts: NLURunOpts, cb: EVCb): void {
+type optsType =  NLURunOpts | NLUAddOpts;
+
+export const runNPMLink = (map: NPMLinkUpMap, opts: any, cb: EVCb) => {
 
     const keys = Object.keys(map);
 
@@ -45,8 +46,6 @@ export const runNPMLink =
       console.log(chalk.green.bold(util.inspect(map[k])));
       console.log();
     });
-
-    // log.good(chalk.green.bold(util.inspect(map)));
 
     const isAllLinked = function () {
       //Object.values might not be available on all Node.js versions.
@@ -101,7 +100,7 @@ export const runNPMLink =
 
       return deps.filter(function (d) {
         if (!map[d]) {
-          log.warning('Map for key ="' + d + '" is not defined.');
+          log.warning('Map for key => "' + d + '" is not defined.');
           return false;
         }
         return map[d] && map[d].isLinked;
