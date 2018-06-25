@@ -1,15 +1,19 @@
 
 # NPM-Link-Up / NLU
 
+<br>
+
 ### Caveats + Disclaimer
 
 >
 > This will not work with MS Windows. Only MacOS and *nix.
 >
 
+<br>
+
 ## About
 
-Use the CLI interface to link your local projects together for rapid and pain-free local
+Use the CLI interface to link your local projects together for rapid and pain-free local <br>
 development. This tool automatically link your local projects together using symlinks, <br>
 using declarative config and a CLI.
 
@@ -22,7 +26,9 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 ## Installation
 
-### ```npm i -g npm-link-up```
+#### ```npm i -g npm-link-up```
+
+<br>
 
  => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile:
 
@@ -32,17 +38,23 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 <br>
 
-# Real-world Example Usage
+### Real-world usage example:
+
+<br>
 
 See: https://github.com/sumanjs
-The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
-Just look for the `.nlu.json` file in the root of each project.
-https://github.com/sumanjs/suman is the "root" project.
 
-### Terminology
+<br>
 
-"Locally developed packages" are packages that may already be published to NPM, but are nevertheless
-still in active development on your local machine. These packages can be selectively linked together
+The majority of the projects in the sumanjs org are linked together using `npm-link-up`. <br>
+Just look for the `.nlu.json` file in the root of each project. https://github.com/sumanjs/suman is the "root" project.
+
+<br>
+
+## Terminology
+
+"Locally developed packages" are packages that may already be published to NPM, but are nevertheless <br>
+still in active development on your local machine. These packages can be selectively linked together <br>
 on your local machine using NLU.
 
 ## Usage
@@ -55,10 +67,10 @@ For newcomers, you can use:
 nlu init --interactive   # run this from within project x
 ```
 
-The reason you are using this CLI tool, of course, is because there are other local projects that
-are dependencies of project X. Your other local projects might have their own `.nlu.json` files, which in turn,
-declare their own local dependencies. That is expected of course, and this tool is designed to link up all dependencies for
-every project in the hierarchy.
+The reason you are using this CLI tool, of course, is because there are other local projects that <br>
+are dependencies of project X. Your other local projects might have their own `.nlu.json` files, which in turn, <br>
+declare their own local dependencies. That is expected of course, and this tool is designed to link up <br>
+all dependencies for every project in the hierarchy.
 
 The following is a simple .nlu.json file:
 
