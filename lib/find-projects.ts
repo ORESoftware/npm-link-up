@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NPMLinkUpMap, NLURunOpts} from "./npmlinkup";
+import {EVCb, NluMap, NLURunOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
@@ -24,7 +24,7 @@ export const createTask = function (searchRoot: string, findProject: any) {
   }
 };
 
-export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NPMLinkUpMap,
+export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NluMap,
                                          ignore: Array<RegExp>, opts: NLURunOpts, status: any) {
 
   let isIgnored = function (pth: string) {

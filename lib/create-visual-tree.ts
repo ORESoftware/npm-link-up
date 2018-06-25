@@ -1,19 +1,19 @@
 'use strict';
 
 import util = require('util');
-import {NPMLinkUpMap, NLURunOpts, INPMLinkUpVisualTree} from "./npmlinkup";
+import {NluMap, NLURunOpts, NluVisualTree} from "./npmlinkup";
 import log from './logging';
 
 /////////////////////////////////////////////////////////////////////////////////
 
 export const createTree =
-  function (map: NPMLinkUpMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
+  function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
     
-    let tree: INPMLinkUpVisualTree = {
+    let tree: NluVisualTree = {
       [name]: {}
     };
     
-    let createItem = function (key: string, obj: INPMLinkUpVisualTree, keys: Array<string>) {
+    let createItem = function (key: string, obj: NluVisualTree, keys: Array<string>) {
       
       obj[key] = obj[key] || {};
       

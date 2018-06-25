@@ -36,6 +36,7 @@
   "homepage": "https://github.com/ORESoftware/npm-link-up#readme",
   "dependencies": {
     "@oresoftware/shell": "latest",
+    "ajv": "^6.5.1",
     "async": "^2.3.0",
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",

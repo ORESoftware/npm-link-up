@@ -1,12 +1,12 @@
 'use strict';
 
-import {NPMLinkUpMap} from "./npmlinkup";
+import {NluMap} from "./npmlinkup";
 
 ////////////////////////////////////////////////////////////////////////////
 
-export const getCleanMap = function (rootPackageName: string, map: NPMLinkUpMap): NPMLinkUpMap {
+export const getCleanMap = function (rootPackageName: string, map: NluMap): NluMap {
   
-  const newMap: NPMLinkUpMap = {};
+  const newMap: NluMap = {};
   
   const getRelevantItems = function (v: string) {
     

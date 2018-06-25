@@ -13,7 +13,7 @@ import residence = require('residence');
 
 //project
 import options from "./cmd-line-opts";
-import {EVCb, NLUAddOpts, NLUInitOpts} from "../../npmlinkup";
+import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../npmlinkup";
 import log from '../../logging';
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
@@ -23,6 +23,7 @@ import alwaysIgnoreThese from "../../always-ignore";
 import {mapPaths} from "../../map-paths-with-env-vars";
 import {runNPMLink} from "../../run-link";
 import {getCleanMap} from "../../get-clean-final-map";
+import {validateConfigFile} from "../../utils";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code);
@@ -91,7 +92,7 @@ else {
   log.info('Your project name is:', chalk.bold.gray(mainProjectName));
 }
 
-let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
+let nluJSON: NluConf, nluJSONPath = path.resolve(root + '/.nlu.json');
 
 try {
   nluJSON = require(nluJSONPath);
@@ -100,6 +101,13 @@ catch (err) {
   log.error('Cannot find an .nlu.json config file in your project.');
   log.error('Your project path is:', root);
   throw err.message;
+}
+
+if(!validateConfigFile(nluJSON)){
+  log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
+  if(!opts.override){
+    process.exit(1);
+  }
 }
 
 let searchRoots = nluJSON.searchRoots;
@@ -188,8 +196,6 @@ async.autoInject({
 
     runUtility(getMatchingProjects: any, cb: EVCb) {
 
-      console.log('nluJSON.list before:', nluJSON.list);
-
       try {
         nluJSON.list = nluJSON.list.concat(projectsToAdd)
         .map(v => String(v || '').trim()).filter((v,i,a) => a.indexOf(v) === i);
@@ -198,8 +204,6 @@ async.autoInject({
         return process.nextTick(cb, e);
       }
 
-      console.log('projects to add:',projectsToAdd);
-      console.log('nlu list:', nluJSON.list);
 
       getMatchingProjects[mainProjectName] = {
         name: mainProjectName,

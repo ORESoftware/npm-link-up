@@ -1,6 +1,6 @@
 'use strict';
 
-import {EVCb, NPMLinkUpMap, NPMLinkUpMapItem, NLURunOpts, NLUAddOpts} from "./npmlinkup";
+import {EVCb, NluMap, NluMapItem, NLURunOpts, NLUAddOpts} from "./npmlinkup";
 
 //core
 import * as util from 'util';
@@ -21,7 +21,7 @@ interface BinFieldObject{
 
 type optsType =  NLURunOpts | NLUAddOpts;
 
-export const runNPMLink = (map: NPMLinkUpMap, opts: any, cb: EVCb) => {
+export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
     const keys = Object.keys(map);
 
@@ -54,7 +54,7 @@ export const runNPMLink = (map: NPMLinkUpMap, opts: any, cb: EVCb) => {
       });
     };
 
-    const getCountOfUnlinkedDeps = function (dep: NPMLinkUpMapItem) {
+    const getCountOfUnlinkedDeps = function (dep: NluMapItem) {
       return dep.deps.filter(function (d) {
         if (!map[d]) {
           log.warning(`there is no dependency named ${d} in the map.`);
@@ -163,13 +163,13 @@ export const runNPMLink = (map: NPMLinkUpMap, opts: any, cb: EVCb) => {
 
     console.log('\n');
 
-    const getInstallCommand = function (dep: NPMLinkUpMapItem) {
+    const getInstallCommand = function (dep: NluMapItem) {
       if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
         return ' && mkdir -p node_modules && rm -rf node_modules && npm install --loglevel=warn ';
       }
     };
 
-    const getLinkToItselfCommand = function (dep: NPMLinkUpMapItem) {
+    const getLinkToItselfCommand = function (dep: NluMapItem) {
       if (opts.self_link_all || dep.linkToItself === true) {
         // return `&& npm link ${String(dep.name).trim()} -f`
         return ` && mkdir -p "node_modules/${dep.name}" ` +
@@ -178,7 +178,7 @@ export const runNPMLink = (map: NPMLinkUpMap, opts: any, cb: EVCb) => {
       }
     };
 
-    const getGlobalLinkCommand = function (dep: NPMLinkUpMapItem) {
+    const getGlobalLinkCommand = function (dep: NluMapItem) {
       if (opts.link_all || (dep.isMainProject && opts.link_main)) {
         return ' && mkdir -p node_modules && npm link -f ';
       }

@@ -49,7 +49,10 @@ if (opts.bash_completion) {
   process.exit(0);
 }
 
-
-log.warn('The original command:', process.argv);
+log.warn('FUCK YOU BITCH');
+log.warn('The original command:');
+Object.keys(process.argv).forEach((v,i) => {
+  log.warn(chalk.gray(String(i)),chalk.green(v));
+});
 log.warn('No option was recognized, exiting with 1.');
 process.exit(1);

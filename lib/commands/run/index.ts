@@ -28,12 +28,14 @@ import {createTree} from '../../create-visual-tree';
 import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 import npmLinkUpPkg = require('../../../package.json');
+import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
+import {validateConfigFile} from "../../utils";
 
 //////////////////////////////////////////////////////////////////////////
 
 process.once('exit', function (code) {
   console.log('\n');
-  log.info('NPM-Link-Up is exiting with code => ', code, '\n');
+  log.info('NLU is exiting with code:', code, '\n');
 });
 
 //////////////////////////////////////////////////////////////
@@ -68,7 +70,8 @@ try {
 }
 catch (e) {
   log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
-  console.error('\n', e.stack || e, '\n');
+  log.error('Your project root is supposedly here:', chalk.magenta(root));
+  log.error(e.message);
   process.exit(1);
 }
 
@@ -78,13 +81,20 @@ try {
 catch (e) {
   log.error('You do not have an ".nlu.json" file in the root of your project. ' +
     'You need this config file for npmlinkup to do its thing.');
-  console.error('\n', e.stack || e, '\n');
+  log.error('Your project root is supposedly here:', chalk.magenta(root));
+  log.error(e.message);
   process.exit(1);
 }
 
-import NLU = require('../../npm-link-up-schema');
-import {EVCb, NPMLinkUpMap, NLURunOpts} from "../../npmlinkup";
-new NLU(conf, false).validate();
+// import NLU = require('../../npm-link-up-schema');
+// new NLU(conf, false).validate();
+
+if(!validateConfigFile(conf)){
+  log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
+  if(!opts.override){
+    process.exit(1);
+  }
+}
 
 const mainProjectName = pkg.name;
 
@@ -154,8 +164,8 @@ originalList.forEach(function (item: string) {
   log.good(`The following dep will be 'NPM linked' to this project => "${item}".`);
 });
 
-const map: NPMLinkUpMap = {};
-let cleanMap: NPMLinkUpMap;
+const map: NluMap = {};
+let cleanMap: NluMap;
 
 if (opts.treeify) {
   log.warning('We are only printing a visual, not actually linking project.');

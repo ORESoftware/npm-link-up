@@ -1,4 +1,8 @@
-export interface INPMLinkUpConf {
+
+
+export interface NluConf {
+  'npm-link-up': boolean,
+  comments: Array<string>,
   alwaysReinstall: boolean,
   linkToItself: boolean,
   searchRoots: Array<string>,
@@ -10,9 +14,9 @@ export type EVCb = (err? : any, val?: any) => void;
 
 export interface NLURunOpts {
   _args: Array<string>,
+  override: boolean,
   link_all: boolean,
   link_main: boolean,
-  install_all:boolean,
   install_main: boolean,
   search_root: Array<string>,
   clear_all_caches: boolean,
@@ -37,6 +41,7 @@ export interface NLUInitOpts {
 
 export interface NLUAddOpts {
   _args: Array<string>,
+  override: boolean,
   search_root: Array<string>,
   search_from_home: boolean,
   verbosity: number,
@@ -46,13 +51,14 @@ export interface NLUAddOpts {
 
 export interface NLUBasicOpts {
   _args: Array<string>,
+  override: boolean,
   bash_completion: boolean,
   verbosity: number,
   help: boolean,
   force: boolean,
 }
 
-export interface NPMLinkUpMapItem {
+export interface NluMapItem {
   name: string,
   bin: string | {[key:string]: string},
   isMainProject: boolean,
@@ -64,12 +70,12 @@ export interface NPMLinkUpMapItem {
   isLinked?: boolean
 }
 
-export interface NPMLinkUpMap {
-  [key: string]: NPMLinkUpMapItem
+export interface NluMap {
+  [key: string]: NluMapItem
 }
 
-export interface INPMLinkUpVisualTree {
-  [key: string]: INPMLinkUpVisualTree
+export interface NluVisualTree {
+  [key: string]: NluVisualTree
 }
 
 export interface NLUDotJSON {

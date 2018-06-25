@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "alwaysReinstall": {
+      "type": "boolean"
+    },
+    "comments": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "ignore": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "linkToItself": {
+      "type": "boolean"
+    },
+    "list": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "npm-link-up": {
+      "type": "boolean"
+    },
+    "searchRoots": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}
