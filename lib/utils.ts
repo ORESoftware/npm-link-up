@@ -12,7 +12,9 @@ export const validateConfigFile = function (data: NluConf) {
   try{
     const ajv = new Ajv({allErrors: false}); // options can be passed, e.g. {allErrors: true}
     const validate = ajv.compile(schema);
-    return validate(data);
+    const valid = validate(data);
+    if(!valid) console.error(validate.errors);
+    return valid;
   }
   catch(err){
     log.error(err.message);

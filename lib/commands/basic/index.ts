@@ -20,7 +20,7 @@ let opts: any, parser = dashdash.createParser({options});
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(' => CLI parsing error:', e.message);
+  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 
@@ -49,9 +49,8 @@ if (opts.bash_completion) {
   process.exit(0);
 }
 
-log.warn('FUCK YOU BITCH');
 log.warn('The original command:');
-Object.keys(process.argv).forEach((v,i) => {
+process.argv.forEach((v,i) => {
   log.warn(chalk.gray(String(i)),chalk.green(v));
 });
 log.warn('No option was recognized, exiting with 1.');

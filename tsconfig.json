@@ -3,7 +3,6 @@
     "skipLibCheck": true,
     "pretty":true,
     "outDir": "dist",
-    "resolveJsonModule": true,
     "sourceMap": false,
     "declaration": true,
     "baseUrl": ".",

@@ -34,7 +34,6 @@ import {validateConfigFile} from "../../utils";
 //////////////////////////////////////////////////////////////////////////
 
 process.once('exit', function (code) {
-  console.log('\n');
   log.info('NLU is exiting with code:', code, '\n');
 });
 
@@ -45,7 +44,7 @@ let opts: NLURunOpts, parser = dashdash.createParser({options});
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  console.error(' => CLI parsing error: %s', e.message);
+  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 

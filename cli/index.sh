@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+echo;
 my_args=( "$@" );
 first_arg="$1"
 

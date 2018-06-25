@@ -37,7 +37,7 @@ let opts: NLUInitOpts, parser = dashdash.createParser({options});
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(' => CLI parsing error:', e.message);
+  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 

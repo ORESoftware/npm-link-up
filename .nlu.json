@@ -1,7 +1,8 @@
 {
   "npm-link-up": true,
   "linkToItself": false,
-  "comments": [
+  "comments":5,
+  "comment": [
     "your comments go here"
   ],
   "searchRoots": [
