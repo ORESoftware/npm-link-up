@@ -2,8 +2,9 @@
 
 
 my_args=( "$@" );
-
 first_arg="$1"
+
+export nlu_name="[nlu/npm-link-up]"
 
 nlu_match_arg(){
     # checks to see if the first arg, is among the remaining args
@@ -41,12 +42,12 @@ npm_root_bin="${project_root}/node_modules/.bin";
 
 
 if [ "$use_shell_version" != "yes" ]; then
-    echo " => NLU is addding local 'node_modules/.bin' executables to the PATH.";
+    echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
     export PATH="${npm_root_bin}:${PATH}";
 fi
 
 
-echo " => NLU is using NPM version => $(npm --version)";
+echo "$nlu_name NLU is using NPM version => $(npm --version)";
 
 
 if [ "$first_arg" == "init" ]; then
@@ -56,6 +57,13 @@ if [ "$first_arg" == "init" ]; then
 elif [ "$first_arg" == "run" ]; then
 
     shift 1; node "${project_root}/dist/commands/run" "$@";
+
+elif [ "$first_arg" == "update" ]; then
+
+    shift 1;
+    echo "$nlu_name 'nlu update' is not implemented.";
+    echo "$nlu_name You should manually update your .nlu.json files.";
+    exit 1;
 
 else
 

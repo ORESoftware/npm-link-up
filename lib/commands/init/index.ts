@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 //npm
+import readline = require('readline');
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import async = require('async');
@@ -18,10 +19,13 @@ const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const defaultNluJSON = require('../../../assets/default.nlu.json');
-
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './init-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
+
+process.once('exit', code => {
+  log.info('Exiting with code:', code);
+});
 
 if (!root) {
   log.error('Cannot find a project root given your current working directory:', chalk.magenta(cwd));
@@ -69,11 +73,13 @@ let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
 
 try {
   nluJSON = require(nluJSONPath);
-  log.error('Looks like your project already has an .nlu.json file.');
-  log.error(chalk.gray('Here is the existing file on your file system:'));
-  console.log(nluJSON);
-  log.error(chalk.bold(`If you want npm-link-up to update this file, use 'nlu update'. Exiting.`), '\n');
-  process.exit(0);
+  log.warn('Looks like your project already has an .nlu.json file.');
+  if (opts.verbosity > 2) {
+    log.warn(chalk.gray('Here is the existing file on your file system:'));
+    console.log(nluJSON);
+  }
+  log.warn(chalk.gray(`If you want npm-link-up to update this file, use ${chalk.bold('nlu update')}.`));
+  process.exit(1);
 }
 catch (err) {
   // ignore
@@ -86,8 +92,9 @@ if (!(searchRoots && searchRoots.length > 0)) {
   searchRoots = [process.env.HOME];
   if (!opts.search_from_home) {
     log.warn('Please use --search=<path> to confine your project search to something less wide as user home.');
-    log.warn('If you wish to use $HOME as the search root, use --search-from-home,',
-      'but be aware that it can take a long time to search through user home.');
+    log.warn('For multiple search roots, you can use --search more than once.');
+    log.warn(`If you wish to use $HOME as the search root, use ${chalk.bold('--search-from-home')},`,
+      `but be aware that it can take a long time to search through user home.`);
     process.exit(1);
   }
 }
@@ -108,7 +115,9 @@ const theirDeps = Object.assign({},
   pkgJSON.optionalDependencies
 );
 
-log.info('Here are the deps in your package.json:', theirDeps);
+if (opts.verbosity > 2) {
+  log.info('Here are the deps in your package.json:', Object.keys(theirDeps));
+}
 
 async.autoInject({
 
@@ -116,7 +125,35 @@ async.autoInject({
       fs.stat(nluJSONPath, (err, stats) => cb(null, stats));
     },
 
-    getMatchingProjects(checkForNluJSONFile: any, cb: EVCb) {
+    askUserAboutSearchRoots(cb: EVCb) {
+
+      if(!opts.interactive){
+        return process.nextTick(cb, null, '');
+      }
+
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+
+      process.nextTick(function () {
+        console.log();
+        console.log(chalk.gray(` => To skip this, input "skip" or use --skip at command line.`));
+        console.log(chalk.gray(` => Separate multiple paths with ":"`));
+        console.log(chalk.gray(` => Use env variables like $HOME instead of hardcoding dirs, where possible.`));
+        console.log(chalk.gray(` => Valid input might be: $HOME/WebstormProjects:$HOME/vscode_projects.`));
+      });
+
+      console.log();
+
+      rl.question(chalk.bold(`What folder(s) do local dependencies of this project '${chalk.blueBright(mainProjectName)}' reside in?`), a => {
+        cb(null, a);
+        rl.close();
+      });
+
+    },
+
+    getMatchingProjects(askUserAboutSearchRoots: any, checkForNluJSONFile: any, cb: EVCb) {
       // given package.json, we can find local projects
 
       if (checkForNluJSONFile) {
@@ -149,12 +186,11 @@ async.autoInject({
 
         if (err) {
           status.searching = false;
-          first && q.kill();
           log.error(chalk.magenta('There was a search queue processing error.'));
-          log.error(err.message || err);
         }
 
         if (first) {
+          q.kill();
           cb(err, map);
         }
 
@@ -163,12 +199,18 @@ async.autoInject({
 
     },
 
-    writeNLUJSON(getMatchingProjects: any, cb: EVCb) {
+    writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb) {
+
+      const searchRoots = String(askUserAboutSearchRoots || '')
+      .split(':')
+      .map(v => String(v || '').trim())
+      .filter(Boolean);
 
       const list = Object.keys(getMatchingProjects);
       const newNluJSON = Object.assign({}, defaultNluJSON);
+      newNluJSON.searchRoots = searchRoots || '$HOME/foobar';
       newNluJSON.list = list;
-      const newNluJSONstr = JSON.stringify(defaultNluJSON, null, 2);
+      const newNluJSONstr = JSON.stringify(newNluJSON, null, 2);
       fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
 
     }
@@ -181,7 +223,10 @@ async.autoInject({
       log.error('There was an error when running "nlu init".');
       log.error('Here were your arguments:', process.argv);
       log.error(err.message || err);
-      log.error('exiting...');
+      if (String(err.message || err).match(/scandir/)) {
+        log.warn(chalk.bold('To ignore errors related to reading directories for which ' +
+          'you may not have permission, use --ignore-scandir-errors.'));
+      }
       return process.exit(1);
     }
 

@@ -40,7 +40,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
     (function getMarkers(dir, cb) {
 
-      if(status.searching === false){
+      if (status.searching === false) {
         opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
         return process.nextTick(cb);
       }
@@ -52,12 +52,17 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
         return process.nextTick(cb);
       }
 
-
       fs.readdir(dir, function (err, items) {
 
         if (err) {
           log.error('Could not read a directory at path:', dir);
+          if (String(err.message || err).match(/scandir/)) {
+            log.warn(err.message || err);
+            return cb(null);
+          }
+
           return cb(err);
+
         }
 
         items = items.map(function (item) {
@@ -66,7 +71,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
         async.eachLimit(items, 3, function (item: string, cb: EVCb) {
 
-          if(status.searching === false){
+          if (status.searching === false) {
             opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
             return process.nextTick(cb);
           }

@@ -7,5 +7,6 @@ export default  [
   '/.nyc_output/',
   '/.vscode/',
   '/.nvm/',
-  '/.npm/'
+  '/.npm/',
+  '/.cache/'
 ];

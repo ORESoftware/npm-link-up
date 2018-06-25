@@ -5,11 +5,16 @@
     "your comments go here"
   ],
   "searchRoots": [
-    "$HOME/foobar"
+    "hae"
   ],
   "ignore": [
     "/node_modules/",
     "/.git/"
   ],
-  "list": []
+  "list": [
+    "@oresoftware/shell",
+    "frankenstop",
+    "prepend-transform",
+    "residence"
+  ]
 }
