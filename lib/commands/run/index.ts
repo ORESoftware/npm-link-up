@@ -77,7 +77,7 @@ try {
 }
 catch (e) {
   log.error('You do not have an ".nlu.json" file in the root of your project. ' +
-    'You need this config file for npmlinkup to do it\'s thing.');
+    'You need this config file for npmlinkup to do its thing.');
   console.error('\n', e.stack || e, '\n');
   process.exit(1);
 }
