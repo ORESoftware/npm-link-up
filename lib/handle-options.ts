@@ -11,7 +11,7 @@ import {NluConf, NLUDotJSON, NLURunOpts} from "./npmlinkup";
 
 /////////////////////////////////////////////////////////////////////////////////
 
-export const getIgnore = function (conf: NLUDotJSON) {
+export const getIgnore = function (conf: NLUDotJSON, opts: any) {
 
   const ignore = (conf.ignore || []).concat(alwaysIgnoreThese)
   .filter(function (item: string, index: number, arr: Array<string>) {
@@ -22,10 +22,9 @@ export const getIgnore = function (conf: NLUDotJSON) {
   });
 
   if (ignore.length > 0) {
-    console.log('\n');
-    log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions => '));
+    opts.verbosity > 1 && log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions => '));
     ignore.forEach(function (item: RegExp) {
-      log.warning(`ignored => ${item}`);
+      opts.verbosity > 1 && log.warning(`ignored => ${item}`);
     });
   }
 

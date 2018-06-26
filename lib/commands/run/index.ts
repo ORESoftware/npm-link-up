@@ -29,7 +29,7 @@ import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 import npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
-import {validateConfigFile} from "../../utils";
+import {validateConfigFile, validateOptions} from "../../utils";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -85,12 +85,17 @@ catch (e) {
   process.exit(1);
 }
 
+if (!validateOptions(opts)) {
+  log.error(chalk.bold('Your command line arguments were invalid, try:', chalk.magentaBright('nlu run --help')));
+  process.exit(1);
+}
+
 // import NLU = require('../../npm-link-up-schema');
 // new NLU(conf, false).validate();
 
-if(!validateConfigFile(conf)){
+if (!validateConfigFile(conf)) {
   log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
-  if(!opts.override){
+  if (!opts.override) {
     process.exit(1);
   }
 }
@@ -101,9 +106,9 @@ if (!mainProjectName) {
   log.error('Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
-
-console.log();
-log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
+if(opts.verbosity > 0){
+  log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
+}
 
 const deps = Object.keys(pkg.dependencies || {})
 .concat(Object.keys(pkg.devDependencies || {}))
@@ -119,8 +124,8 @@ list = list.filter(function (item: string) {
 });
 
 if (list.length < 1) {
-  console.error('\n', chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
-  console.log('\n\n', chalk.cyan.bold(util.inspect(conf)));
+  log.error(chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
+  log.error(chalk.cyan.bold(util.inspect(conf)));
   process.exit(1);
 }
 
@@ -136,8 +141,10 @@ const inListAndInDeps = list.filter(function (item: string) {
 });
 
 inListButNotInDeps.forEach(function (item) {
-  log.warning('warning, the following item was listed in your .nlu.json file, ' +
-    'but is not listed in your package.json dependencies => "' + item + '".');
+  if (opts.verbosity > 1) {
+    log.warning('warning, the following item was listed in your .nlu.json file, ' +
+      'but is not listed in your package.json dependencies => "' + item + '".');
+  }
 });
 
 // we need to store a version of the list without the top level package's name
@@ -156,11 +163,12 @@ list.forEach(function (l: string) {
   totalList.set(l, true);
 });
 
-const ignore = getIgnore(conf);
-console.log('\n');
+const ignore = getIgnore(conf, opts);
 
 originalList.forEach(function (item: string) {
-  log.good(`The following dep will be 'NPM linked' to this project => "${item}".`);
+  if(opts.verbosity > 0){
+    log.good(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
+  }
 });
 
 const map: NluMap = {};
@@ -170,9 +178,22 @@ if (opts.treeify) {
   log.warning('We are only printing a visual, not actually linking project.');
 }
 
+// add the main project to the map
+// when we search for projects, we ignore any projects where package.json name is "mainProjectName"
+map[mainProjectName] = {
+  name: mainProjectName,
+  bin: conf.bin || null,
+  isMainProject: true,
+  linkToItself: conf.linkToItself,
+  runInstall: conf.alwaysReinstall,
+  hasNPMLinkUpJSONFile: true,
+  path: root,
+  deps: conf.list
+};
+
 async.autoInject({
 
-    npmCacheClean (cb: EVCb) {
+    npmCacheClean(cb: EVCb) {
 
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -186,7 +207,7 @@ async.autoInject({
       cleanCache(cb);
     },
 
-    rimrafMainProject (cb: EVCb) {
+    rimrafMainProject(cb: EVCb) {
 
       if (opts.treeify) {
         return process.nextTick(cb);
@@ -206,26 +227,29 @@ async.autoInject({
       });
     },
 
-    mapSearchRoots (npmCacheClean: any, cb: EVCb) {
-      log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
+    mapSearchRoots(npmCacheClean: any, cb: EVCb) {
+      opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
-    findItems (rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
+    findItems(rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
 
       let searchRoots = mapSearchRoots.slice(0);
 
-      console.log('\n');
-      log.info('Beginning to search for NPM projects on your filesystem.');
-      log.info('NPM-Link-Up will be searching these roots for relevant projects:');
-      log.info(chalk.magenta(util.inspect(searchRoots)));
+      if(opts.verbosity > 1){
+        log.info('Beginning to search for NPM projects on your filesystem.');
+      }
+
+      if (opts.verbosity > 3) {
+        log.info('NPM-Link-Up will be searching these roots for relevant projects:');
+        log.info(chalk.magenta(util.inspect(searchRoots)));
+      }
 
       if (opts.verbosity > 1) {
         log.warning('Note that NPM-Link-Up may come across a project of yours that needs to search in directories');
         log.warning('not covered by your original search roots, and these new directories will be searched as well.');
       }
 
-      console.log('\n');
       const status = {searching: true};
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status);
 
@@ -235,7 +259,7 @@ async.autoInject({
 
       if (q.idle()) {
         return process.nextTick(cb,
-          new Error('For some reason no paths/items went onto the search queue.'));
+          new Error('For some reason, no paths/items went onto the search queue.'));
       }
 
       let first = true;
@@ -257,7 +281,7 @@ async.autoInject({
 
     },
 
-    runUtility (findItems: void, cb: EVCb) {
+    runUtility(findItems: void, cb: EVCb) {
 
       try {
         cleanMap = getCleanMap(mainProjectName, map);
@@ -270,7 +294,6 @@ async.autoInject({
         return process.nextTick(cb);
       }
 
-      console.log('\n');
       log.good('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, cb);
     }
@@ -283,24 +306,23 @@ async.autoInject({
       return process.exit(1);
     }
 
-    console.log('\n');
-
     if ((results as any).runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
-      console.log('\n');
     }
 
-    log.good('NPM-Link-Up results as a visual:\n');
     const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
     const treeString = treeify.asTree(treeObj, true);
     const formattedStr = String(treeString).split('\n').map(function (line) {
       return '\t' + line;
     });
 
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-    console.log(chalk.white(formattedStr.join('\n')));
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    if (opts.verbosity > 1) {
+      log.good('NPM-Link-Up results as a visual:\n');
+      console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+      console.log(chalk.white(formattedStr.join('\n')));
+      console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    }
 
     setTimeout(function () {
       process.exit(0);

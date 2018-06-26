@@ -10,7 +10,11 @@ import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 
-if(!root){
+process.once('exit', code => {
+  log.info('Exiting with code:', code,'\n');
+});
+
+if (!root) {
   log.error('Cannot find a project root given your current working directory:', chalk.magenta(cwd));
   process.exit(1);
 }
@@ -50,8 +54,10 @@ if (opts.bash_completion) {
 }
 
 log.warn('The original command:');
-process.argv.forEach((v,i) => {
-  log.warn(chalk.gray(String(i)),chalk.green(v));
+
+process.argv.forEach((v, i) => {
+  log.warn(chalk.gray(String(i)), chalk.green(v));
 });
-log.warn('No option was recognized, exiting with 1.');
+
+log.warn(chalk.bold.italic('No command line option was recognized.'));
 process.exit(1);

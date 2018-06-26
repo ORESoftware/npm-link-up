@@ -12,8 +12,8 @@ export default [
   {
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
-    help: 'Verbosity level is an integer between 1 and 3, inclusive.',
-    default: 2
+    help: 'Verbosity level is an integer between 1 and 4, inclusive.',
+    default: 3
   },
 
   {

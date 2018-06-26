@@ -150,7 +150,7 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 async.autoInject({
 
     mapSearchRoots(cb: EVCb) {
-      log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
+      opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
@@ -217,8 +217,6 @@ async.autoInject({
 
       let cleanMap;
 
-      console.log('the unclean map keys:', Object.keys(getMatchingProjects));
-
       try {
         cleanMap = getCleanMap(mainProjectName, getMatchingProjects);
       }
@@ -226,10 +224,7 @@ async.autoInject({
         return process.nextTick(cb, err);
       }
 
-      console.log('the clean map:', Object.keys(cleanMap));
-
-      console.log('\n');
-      log.good('Beginning to actually link projects together...');
+      opts.verbosity > 1 && log.good('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, cb);
     },
 

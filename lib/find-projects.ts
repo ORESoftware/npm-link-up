@@ -120,12 +120,12 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
 
             if (status.searching === false) {
-              opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
+              opts.verbosity > 1 && log.error('There was an error so we short-circuited search.');
               return process.nextTick(cb);
             }
 
             if (stats.isSymbolicLink()) {
-              log.warning('warning => looks like a symlink => ', item);
+              opts.verbosity > 1 && log.warning('warning => looks like a symlink => ', item);
               return cb();
             }
 
@@ -145,7 +145,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
 
             if (!stats.isFile()) {
-              if (opts.verbosity > 2) {
+              if (opts.verbosity > 1) {
                 log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
               return cb(null);
@@ -167,6 +167,12 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(err);
             }
 
+
+            if(pkg.name === mainProjectName){
+              opts.verbosity > 1 && log.info('Another project has your main projects package.json name, at path:', dirname);
+              return cb(null);
+            }
+
             let npmlinkup;
 
             try {
@@ -178,7 +184,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
 
             let deps, searchRoots;
-
             if (npmlinkup && (deps = npmlinkup.list)) {
 
               try {
