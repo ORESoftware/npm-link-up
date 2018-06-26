@@ -37,12 +37,12 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
     return process.nextTick(cb);
   }
 
-  if (opts.verbosity > 1) {
+  if (opts.verbosity > 2) {
     log.good('Dependency map:');
   }
 
   Object.keys(map).forEach(function (k) {
-    if (opts.verbosity > 1) {
+    if (opts.verbosity > 2) {
       log.info('Info for project:', chalk.bold(k));
       console.log(chalk.green.bold(util.inspect(map[k])));
       console.log();

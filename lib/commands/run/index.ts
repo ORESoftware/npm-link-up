@@ -108,11 +108,13 @@ if (!mainProjectName) {
   log.error('Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
-if(opts.verbosity > 0){
+if (opts.verbosity > 0) {
   log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 }
 
-const deps = Object.keys(pkg.dependencies || {})
+const depsKeys = Object.keys(pkg.dependencies || {});
+
+const deps = depsKeys
 .concat(Object.keys(pkg.devDependencies || {}))
 .concat(Object.keys(pkg.optionalDependencies || {}));
 
@@ -168,7 +170,7 @@ list.forEach(function (l: string) {
 const ignore = getIgnore(conf, opts);
 
 originalList.forEach(function (item: string) {
-  if(opts.verbosity > 0){
+  if (opts.verbosity > 0) {
     log.good(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
   }
 });
@@ -195,15 +197,40 @@ map[mainProjectName] = {
 
 async.autoInject({
 
-    checkIfNodeModulesPresent(cb: EVCb){
-       fs.stat(path.resolve(root + '/node_modules'), err => {
-         cb(null, err);
-       });
+    readNodeModulesFolders( cb: EVCb) {
+
+      fs.readdir(path.resolve(root + '/node_modules'), (err, items) => {
+
+        if (err || !Array.isArray(items)) {
+          // if there is an error, node_modules probably does not exist
+          opts.install_main = true;
+          opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not seem to exist.');
+          return cb(null, err || true);
+        }
+
+        if (items.length <= depsKeys.length) {
+          // if there number of folders in node_modules is less than deps count, we def need to reinstall
+          opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not have enough folders.');
+          opts.install_main = true;
+        }
+
+        const allThere = depsKeys.every(d => {
+           return items.indexOf(d) >=0;
+        });
+
+        if(!allThere){
+          // if not all deps in package.json are folders in node_modules, we need to reinstall
+          opts.verbosity > 1 && log.warn('Reinstalling because not all package.json dependencies exist in node_modules.');
+          opts.install_main = true;
+        }
+
+        cb(null);
+      });
     },
 
-    ensureNodeModules(checkIfNodeModulesPresent: any, cb: EVCb){
+    ensureNodeModules(readNodeModulesFolders: any, cb: EVCb) {
 
-      if(!checkIfNodeModulesPresent){
+      if (!readNodeModulesFolders) {
         // no error reading node_modules dir
         return process.nextTick(cb);
       }
@@ -227,36 +254,16 @@ async.autoInject({
       cleanCache(cb);
     },
 
-    rimrafMainProject(cb: EVCb) {
-
-      if (opts.dry_run) {
-        return process.nextTick(cb);
-      }
-
-      if (true) {
-        return process.nextTick(cb);
-      }
-
-      log.info(`Deleting node_modules from your root project.`);
-
-      let nm = path.resolve(root + '/node_modules');
-      cp.exec(`cd ${root} && rm -rf ${nm}`, function (err, stdout, stderr) {
-        err && console.error(err.stack || err);
-        (stderr = String(stderr).trim()) && console.error(stderr);
-        cb(null);
-      });
-    },
-
     mapSearchRoots(npmCacheClean: any, cb: EVCb) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
-    findItems(rimrafMainProject: any, mapSearchRoots: Array<string>, cb: EVCb) {
+    findItems(mapSearchRoots: Array<string>, cb: EVCb) {
 
       let searchRoots = mapSearchRoots.slice(0);
 
-      if(opts.verbosity > 1){
+      if (opts.verbosity > 1) {
         log.info('Beginning to search for NPM projects on your filesystem.');
       }
 
