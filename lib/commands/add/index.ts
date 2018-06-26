@@ -5,7 +5,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 //npm
-import readline = require('readline');
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import async = require('async');

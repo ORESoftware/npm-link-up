@@ -195,7 +195,21 @@ map[mainProjectName] = {
 
 async.autoInject({
 
-    ensureNodeModules(cb: EVCb){
+    checkIfNodeModulesPresent(cb: EVCb){
+       fs.stat(path.resolve(root + '/node_modules'), err => {
+         cb(null, err);
+       });
+    },
+
+    ensureNodeModules(checkIfNodeModulesPresent: any, cb: EVCb){
+
+      if(!checkIfNodeModulesPresent){
+        // no error reading node_modules dir
+        return process.nextTick(cb);
+      }
+
+      opts.install_main = true;
+      // we have to install, because node_modules does not exist
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
 
