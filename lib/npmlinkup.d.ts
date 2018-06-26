@@ -24,7 +24,7 @@ export interface NLURunOpts {
   help: boolean,
   install_all: boolean,
   self_link_all: boolean,
-  treeify: boolean,
+  dry_run: boolean,
   force: boolean,
   search_root_append: string
 }
@@ -43,6 +43,7 @@ export interface NLUAddOpts {
   _args: Array<string>,
   override: boolean,
   search_root: Array<string>,
+  dry_run: boolean,
   search_from_home: boolean,
   verbosity: number,
   help: boolean,

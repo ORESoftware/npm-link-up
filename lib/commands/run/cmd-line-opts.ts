@@ -12,13 +12,20 @@ export default  [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 3
+    default: 2
   },
 
   {
     names: ['treeify'],
     type: 'bool',
     help: 'Log a tree representation of your project\'s npm-link-up dependencies and exit. This is cool.',
+  },
+
+  {
+    names: ['dry-run','dry'],
+    type: 'bool',
+    help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',
+    default: false
   },
 
   {

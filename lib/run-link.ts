@@ -30,7 +30,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
       ' perhaps broaden your search using searchRoots.'));
   }
 
-  if (opts.treeify) {
+  if (opts.dry_run) {
     log.warning('given the --treeify option passed at the command line, npm-link-up will only print out the dependency tree and exit.');
     log.veryGood('the following is a complete list of recursively related dependencies:\n');
     log.veryGood(util.inspect(Object.keys(map)));

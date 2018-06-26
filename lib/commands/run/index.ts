@@ -6,6 +6,7 @@ import * as util from 'util';
 import * as assert from 'assert';
 import * as path from 'path';
 import * as cp from 'child_process';
+import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
@@ -15,6 +16,7 @@ import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
+import mkdirp = require('mkdirp');
 
 //project
 import {makeFindProject, createTask} from '../../find-projects';
@@ -174,8 +176,8 @@ originalList.forEach(function (item: string) {
 const map: NluMap = {};
 let cleanMap: NluMap;
 
-if (opts.treeify) {
-  log.warning('We are only printing a visual, not actually linking project.');
+if (opts.dry_run) {
+  log.warning(chalk.bold.gray('Because --dry-run was used, we are not actually linking projects together.'));
 }
 
 // add the main project to the map
@@ -193,9 +195,13 @@ map[mainProjectName] = {
 
 async.autoInject({
 
+    ensureNodeModules(cb: EVCb){
+      mkdirp(path.resolve(root + '/node_modules'), cb);
+    },
+
     npmCacheClean(cb: EVCb) {
 
-      if (opts.treeify) {
+      if (opts.dry_run) {
         return process.nextTick(cb);
       }
 
@@ -209,7 +215,7 @@ async.autoInject({
 
     rimrafMainProject(cb: EVCb) {
 
-      if (opts.treeify) {
+      if (opts.dry_run) {
         return process.nextTick(cb);
       }
 
@@ -245,7 +251,7 @@ async.autoInject({
         log.info(chalk.magenta(util.inspect(searchRoots)));
       }
 
-      if (opts.verbosity > 1) {
+      if (opts.verbosity > 2) {
         log.warning('Note that NPM-Link-Up may come across a project of yours that needs to search in directories');
         log.warning('not covered by your original search roots, and these new directories will be searched as well.');
       }
@@ -290,7 +296,7 @@ async.autoInject({
         return process.nextTick(cb, err);
       }
 
-      if (opts.treeify) {
+      if (opts.dry_run) {
         return process.nextTick(cb);
       }
 
@@ -318,7 +324,7 @@ async.autoInject({
     });
 
     if (opts.verbosity > 1) {
-      log.good('NPM-Link-Up results as a visual:\n');
+      log.good(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
       console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       console.log(chalk.white(formattedStr.join('\n')));
       console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');

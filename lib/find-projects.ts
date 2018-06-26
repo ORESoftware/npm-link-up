@@ -24,28 +24,28 @@ export const createTask = function (searchRoot: string, findProject: any) {
   }
 };
 
+//////////////////////////////////////////////////////////////////////
+
 export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NluMap,
                                          ignore: Array<RegExp>, opts: NLURunOpts, status: any) {
 
-  let isIgnored = function (pth: string) {
-    return ignore.some(r => {
-      if (r.test(pth)) {
-        if (opts.verbosity > 2) {
-          log.warning(`Path with value "${pth}" was ignored because it matched the following regex:`);
-          log.warning(`${r}`);
-        }
-        return true;
-      }
-    });
-  };
 
-  return function findProject(item: string, cb: EVCb) {
+  ////////////////////////////////////////////////////////////////////////
+
+  const isPathNotSearchable = function (item: string) {
+
+    // if a path is not searchable, this returns true
+    // iow, if a path is searchable, this returns falsy
 
     item = path.normalize(item);
 
+    if (!path.isAbsolute(item)) {
+      throw new Error('Path to be searched is not absolute:' + item);
+    }
+
     if (searchedPaths[item]) {
       opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
-      return process.nextTick(cb);
+      return true;
     }
 
     let goodPth, keys = Object.keys(searchedPaths);
@@ -67,6 +67,31 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
         log.good('new path:', chalk.bold(item));
         log.good('already searched path:', chalk.bold(goodPth));
       }
+      return true;
+    }
+  };
+
+  /////////////////////////////////////////////////////////////////////////
+
+  const isIgnored = function (pth: string) {
+    return ignore.some(r => {
+      if (r.test(pth)) {
+        if (opts.verbosity > 2) {
+          log.warning(`Path with value "${pth}" was ignored because it matched the following regex:`);
+          log.warning(`${r}`);
+        }
+        return true;
+      }
+    });
+  };
+
+  ///////////////////////////////////////////////////////////////////////////
+
+  return function findProject(item: string, cb: EVCb) {
+
+    item = path.normalize(item);
+
+    if (isPathNotSearchable(item)) {
       return process.nextTick(cb);
     }
 
@@ -74,6 +99,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     log.good('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
+
+      // if (isPathNotSearchable(item)) {
+      //   return process.nextTick(cb);
+      // }
 
       if (isIgnored(String(dir + '/'))) {
         if (opts.verbosity > 2) {
@@ -125,7 +154,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
 
             if (stats.isSymbolicLink()) {
-              opts.verbosity > 1 && log.warning('warning => looks like a symlink => ', item);
+              opts.verbosity > 2 && log.warning('warning => looks like a symlink => ', item);
               return cb();
             }
 
@@ -145,7 +174,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
 
             if (!stats.isFile()) {
-              if (opts.verbosity > 1) {
+              if (opts.verbosity > 2) {
                 log.warning('Not a directory or file (maybe a symlink?) => ', item);
               }
               return cb(null);
@@ -167,9 +196,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(err);
             }
 
-
-            if(pkg.name === mainProjectName){
-              opts.verbosity > 1 && log.info('Another project has your main projects package.json name, at path:', dirname);
+            if (pkg.name === mainProjectName) {
+              opts.verbosity > 1 && log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
               return cb(null);
             }
 
@@ -181,7 +209,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             catch (e) {
               //ignore
             }
-
 
             let deps, searchRoots;
             if (npmlinkup && (deps = npmlinkup.list)) {

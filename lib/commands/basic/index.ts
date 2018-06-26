@@ -19,12 +19,19 @@ if (!root) {
   process.exit(1);
 }
 
+const commands = [
+  'npm run',
+  'npm init',
+  'npm add'
+];
+
 let opts: any, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
   log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.warn(chalk.gray('Perhaps you meant to use on of these commands instead:', chalk.gray.bold(commands.join(', '))));
   process.exit(1);
 }
 
@@ -60,4 +67,5 @@ process.argv.forEach((v, i) => {
 });
 
 log.warn(chalk.bold.italic('No command line option was recognized.'));
+log.warn(chalk.gray('Perhaps you meant to use one of these commands instead:', chalk.gray.bold(commands.join(', '))));
 process.exit(1);

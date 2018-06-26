@@ -10,6 +10,7 @@ import chalk from 'chalk';
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
+import mkdirp = require('mkdirp');
 
 //project
 import options from "./cmd-line-opts";
@@ -149,6 +150,10 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 
 async.autoInject({
 
+    ensureNodeModules(cb: EVCb){
+      mkdirp(path.resolve(root + '/node_modules'), cb);
+    },
+
     mapSearchRoots(cb: EVCb) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
@@ -194,7 +199,7 @@ async.autoInject({
 
     },
 
-    runUtility(getMatchingProjects: any, cb: EVCb) {
+    runUtility(ensureNodeModules: any, getMatchingProjects: any, cb: EVCb) {
 
       try {
         nluJSON.list = nluJSON.list.concat(projectsToAdd)

@@ -24,6 +24,13 @@ export default [
   },
 
   {
+    names: ['dry-run','dry'],
+    type: 'bool',
+    help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',
+    default: false
+  },
+
+  {
     names: ['npm-shell-version', 'use-shell-version', 'shell-version'],
     type: 'bool',
     help: 'Use the NPM version that is active in the shell.',
