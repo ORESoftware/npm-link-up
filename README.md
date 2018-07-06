@@ -14,8 +14,8 @@
 ## About
 
 Use the CLI interface to link your local projects together for rapid and pain-free local
-development. This tool automatically link your local projects together using symlinks,
-using declarative config. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
+development. This tool links your local projects together using symlinks,
+using declarative config files. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
 In the modest opinion of Olegzandr Von Denman, NPM packages should remain 1:1 wrt to package.json/node_modules/.git, etc. This keeps things simple.
 
 <br>
@@ -34,11 +34,11 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 ## Installation
 
-#### ```npm i -g npm-link-up```
+#### ``` $ npm i -g npm-link-up ```
 
 <br>
 
- => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile:
+<sub> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </sub>
 
 ```
 . "$HOME/.oresoftware/shell.sh"
@@ -56,7 +56,7 @@ Using NLU, we can link the primary project to other projects too, in the linking
 
 The basic command:
 
-```bash
+```js
 $ nlu run
 ```
 >
