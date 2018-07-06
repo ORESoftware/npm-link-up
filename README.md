@@ -53,7 +53,7 @@ $ nlu run
 > * this is the most common command you will run
 
 ```bash
-$ nlu run --dry      # or "nlu run --dry-run"
+$ nlu run --dry      # alias: --dry-run
 ```
 >
 > * will do all the reads but none of the writes from (1)...will generate a tree and display it in the console so you can see what the linked projects will look like.
@@ -69,7 +69,7 @@ $ nlu run --install
 
 
 ```bash
-$ nlu run --install:all
+$ nlu run --install:all  # alias --install-all
 ```
 >
 > * will re-install all projects, including the primary project, and then do (1)
@@ -84,20 +84,18 @@ $ nlu run --link
 
 
 ```bash
-$ nlu run --link:all
+$ nlu run --link:all     # alias --link-all
 ```
 >
 > * will re-link all projects (npm link will be run from the root of every project), including the primary project, and then do (1)
 > * this is only useful if you have new commands to put on the $PATH in the global space, for multiple projects.
 
 
-
-
 ### Complete real-world usage example:
 See: https://github.com/sumanjs
 
 The majority of the projects in the sumanjs org are linked together using `npm-link-up`. <br>
-Just look for the `.nlu.json` file in the root of each project. https://github.com/sumanjs/suman is the "root" project.
+Just look for the `.nlu.json` file in the root of each project. https://github.com/sumanjs/suman is the "root/main/primary" project.
 
 <br>
 
@@ -157,9 +155,8 @@ nlu run   # run this from within project x
 ## How it works in detail
 
 >
-> See: docs/in-detail.md
+> See: `docs/in-detail.md`
 >
-
 
 <br>
 
