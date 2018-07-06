@@ -8,7 +8,7 @@ nlu(){
 
   if ! type -f nlu &> /dev/null || ! which nlu &> /dev/null; then
 
-        echo "Installing the npm-link-up package globaly..."
+        echo "Installing the npm-link-up package globally..."
         npm i -s -g "npm-link-up"  || {
           echo -e "Could not install 'npm-link-up' globally." >&2;
           echo -e "Please check your permissions to install NPM packages globally."  >&2;
@@ -16,12 +16,12 @@ nlu(){
       }
   fi
 
-  command nlu $@
+  command nlu "$@";
 }
 
 
 npmlinkup(){
-   nlu $@;
+   nlu "$@";
 }
 
 

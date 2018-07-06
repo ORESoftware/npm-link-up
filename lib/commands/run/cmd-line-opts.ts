@@ -36,50 +36,43 @@ export default  [
   },
 
   {
-    names: ['install-all'],
+    names: ['install-all','install:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
     'using npm instead of yarn is the default.'
   },
 
   {
-    names: ['link-all'],
+    names: ['link-all', 'link:all'],
     type: 'bool',
-    help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
+    help: 'This option will tell NPM Link Up to run either "npm link" or "yarn link" in each project; ' +
     'using npm instead of yarn is the default.'
   },
 
   {
-    names: ['install-main'],
+    names: ['install-main', 'install:main', 'install'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run "npm install" on the main project.'
   },
 
   {
-    names: ['link-main'],
+    names: ['link-main', 'link:main', 'link'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run "npm link" on the main project.'
   },
 
   {
-    names: ['search-root'],
+    names: ['search-root', 'search'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; overrides config. ' +
     'To add multiple search-root\'s, use "--search-root x --search-root y".'
   },
 
   {
-    names: ['search-root-append'],
+    names: ['search-root-append','append-search', 'search-append'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
     'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
-  },
-
-  {
-    names: ['self-link-all'],
-    type: 'bool',
-    help: 'Link all projects to themselves; to have unique behavior per project, ' +
-    'add a "self" property to each project\'s .nlu.json file.'
   },
 
   {
@@ -97,7 +90,7 @@ export default  [
   },
 
   {
-    names: ['clear-all-caches'],
+    names: ['clear-all-caches', 'clear-caches'],
     type: 'bool',
     help: 'Clear all relevant NPM / Yarn / etc caches.',
     default: false

@@ -38,13 +38,63 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 <br>
 
-### Real-world usage example:
+## Quick reference
 
-<br>
+Note, command line options override settings in .nlu.json files, as is typical.
+Also note that the primary project, or root project, is known as primary/main/root, but the docs will refer to it as primary most often.
+Using nlu, we can link the primary projects to other projects too, in the linking process, as nlu handles circular dependencies easily.
 
+
+```bash
+$ nlu run
+```
+>
+> * will link up the current project with the packages defined by "list" in the local .nlu.json file (1)
+> * this is the most common command you will run
+
+```bash
+$ nlu run --dry      # or "nlu run --dry-run"
+```
+>
+> * will do all the reads but none of the writes from (1)...will generate a tree and display it in the console so you can see what the linked projects will look like.
+>
+
+
+```bash
+$ nlu run --install
+```
+>
+> * will re-install the primary project, and then do (1)
+>
+
+
+```bash
+$ nlu run --install:all
+```
+>
+> * will re-install all projects, including the primary project, and then do (1)
+>
+
+```bash
+$ nlu run --link
+```
+>
+> * will re-link (npm link) the primary project, and then do (1)
+> * this is only useful if you have new commands to put on the $PATH in the global space
+
+
+```bash
+$ nlu run --link:all
+```
+>
+> * will re-link all projects (npm link will be run from the root of every project), including the primary project, and then do (1)
+> * this is only useful if you have new commands to put on the $PATH in the global space, for multiple projects.
+
+
+
+
+### Complete real-world usage example:
 See: https://github.com/sumanjs
-
-<br>
 
 The majority of the projects in the sumanjs org are linked together using `npm-link-up`. <br>
 Just look for the `.nlu.json` file in the root of each project. https://github.com/sumanjs/suman is the "root" project.
@@ -92,7 +142,7 @@ The following is a simple .nlu.json file:
     "lodash"
   ],
   "install": "yarn",     // we give specific instructions (a bash script) on how to install, ("npm install" is default)
-  "linkToItself": true   // if true, we link this project to itself, true is the default. Linking a project to itself is useful for testing.
+  "linkToItself": true   // if true, we link this project to itself; true is the default. Linking a project to itself is useful for testing.
 }
 ```
 

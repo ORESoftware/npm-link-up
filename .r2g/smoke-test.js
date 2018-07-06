@@ -29,6 +29,8 @@ const os = require('os');
 const fs = require('fs');
 const EE = require('events');
 
+console.error('here we go');
+process.exit(1);
 
 
 // your test goes here

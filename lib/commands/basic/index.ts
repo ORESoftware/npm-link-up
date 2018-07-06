@@ -43,8 +43,9 @@ if (opts.version) {
 if (opts.help) {
   let help = parser.help({includeEnv: true}).trimRight();
   console.log('usage: nlu [OPTIONS]\n' + 'options:\n' + help);
-  log.info('To get help for "nlu init", use:', chalk.blueBright.bold('npm init --help'));
-  log.info('To get help for "nlu run", use:', chalk.blueBright.bold('npm run --help'));
+  console.log();
+  log.info('To get help for "nlu init", use:', chalk.blueBright.bold('nlu init --help'));
+  log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu run --help'));
   process.exit(0);
 }
 

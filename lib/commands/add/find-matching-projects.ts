@@ -18,7 +18,6 @@ import {EVCb, NLUAddOpts} from "../../npmlinkup";
 export const makeFindProjects = function (mainProjectName: string, ignore: Array<RegExp>,
                                           opts: NLUAddOpts, map: any, toAdd: Array<string>, status: any) {
 
-  const totalList = new Map<string, boolean>();
 
   let isIgnored = function (pth: string) {
     return ignore.some(r => {
