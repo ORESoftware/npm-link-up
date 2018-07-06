@@ -13,9 +13,9 @@
 
 ## About
 
-Use the CLI interface to link your local projects together for rapid and pain-free local <br>
-development. This tool automatically link your local projects together using symlinks, <br>
-using declarative config. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement. <br>
+Use the CLI interface to link your local projects together for rapid and pain-free local
+development. This tool automatically link your local projects together using symlinks,
+using declarative config. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
 In the modest opinion of Olegzandr Von Denman, NPM packages should remain 1:1 wrt to package.json/node_modules/.git, etc. This keeps things simple.
 
 <br>
@@ -99,20 +99,23 @@ $ nlu run --link:all     # alias --link-all
 > * will re-link all projects (npm link will be run from the root of every project), including the primary project, and then do (1)
 > * this is only useful if you have new commands to put on the $PATH in the global space, for multiple projects.
 
+<br>
 
 ### Complete real-world usage example:
 See: https://github.com/sumanjs
 
-The majority of the projects in the sumanjs org are linked together using `npm-link-up`. <br>
-Just look for the `.nlu.json` file in the root of each project. https://github.com/sumanjs/suman is the "root/main/primary" project.
+The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
+Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
 
 <br>
 
 ## Terminology
 
-"Locally developed packages" are packages that may already be published to NPM, but are nevertheless <br>
-still in active development on your local machine. These packages can be selectively linked together <br>
+"Locally developed packages" are packages that may already be published to NPM, but are nevertheless
+still in active development on your local machine. These packages can be selectively linked together
 on your local machine using NLU.
+
+<br>
 
 ## Usage
 
@@ -154,10 +157,11 @@ The following is a simple .nlu.json file:
 ```
 
 
-_Then you run the CLI tool like so:_
+After creating an .nlu.json file in the root of your project that's all you need to do, and then run:
+
 
 ```bash
-nlu run   # run this from within project x
+$ nlu run   # run this from within project x
 ```
 
 
