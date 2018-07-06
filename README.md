@@ -6,7 +6,7 @@
 ### Caveats + Disclaimer
 
 >
-> This will not work with MS Windows. Only MacOS and *nix.
+> This will not work with MS Windows. Only MacOS and *nix. If you are interested in getting to work on Windows, pls file a ticket.
 >
 
 <br>
@@ -15,9 +15,17 @@
 
 Use the CLI interface to link your local projects together for rapid and pain-free local <br>
 development. This tool automatically link your local projects together using symlinks, <br>
-using declarative config and a CLI.
+using declarative config. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement. <br>
+In the modest opinion of Olegzandr Von Denman, NPM packages should remain 1:1 wrt to package.json/node_modules/.git, etc. This keeps things simple.
 
-Should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and 
+<br>
+
+NLU uses an `.nlu.json` file, which is a like a smaller package.json file in the root of your project,
+which tells NLU about other local dependencies, and how to link your project up.
+
+<br>
+
+NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
 Mono-repos are crap. Be lean and mean and use npm-link-up.
@@ -40,10 +48,13 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 ## Quick reference
 
-Note, command line options override settings in .nlu.json files, as is typical.
-Also note that the primary project, or root project, is known as primary/main/root, but the docs will refer to it as primary most often.
-Using nlu, we can link the primary projects to other projects too, in the linking process, as nlu handles circular dependencies easily.
+Note, command line options override the settings in `.nlu.json` files, as is typical.
+Also note that the primary project, or root project, is known as primary/main/root, but the docs will strive to refer to it as "primary" most often.
+Using NLU, we can link the primary project to other projects too, in the linking process, as nlu handles circular dependencies easily.
 
+<br>
+
+The basic command:
 
 ```bash
 $ nlu run
@@ -59,14 +70,12 @@ $ nlu run --dry      # alias: --dry-run
 > * will do all the reads but none of the writes from (1)...will generate a tree and display it in the console so you can see what the linked projects will look like.
 >
 
-
 ```bash
 $ nlu run --install
 ```
 >
 > * will re-install the primary project, and then do (1)
 >
-
 
 ```bash
 $ nlu run --install:all  # alias --install-all
