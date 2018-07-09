@@ -32,7 +32,11 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
   k.stderr.pipe(process.stderr);
 
   k.stdout.on('data', (d: string) => {
-    data.push(d);
+    String(d || '').split('\n')
+    .map(v => String(v || '').trim())
+    .filter(Boolean).forEach(v => {
+      data.push(v);
+    });
   });
 
   k.once('error',  (e) => {
