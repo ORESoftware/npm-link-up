@@ -57,7 +57,7 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
     .forEach(v => {
 
       const s = !pths.some(p => {
-        return p.startsWith(v);
+        return p.startsWith(v + '/');
       });
 
       if (s) {
