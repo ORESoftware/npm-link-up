@@ -25,7 +25,7 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
   });
 
   k.stdin.end(mappedRoots.join(';'));
-  const data: Array<string> = [];
+  const results: Array<string> = [];
 
   k.stdout.setEncoding('utf8');
   k.stderr.setEncoding('utf8');
@@ -35,13 +35,12 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
     String(d || '').split('\n')
     .map(v => String(v || '').trim())
     .filter(Boolean).forEach(v => {
-      data.push(v);
+      results.push(v);
     });
   });
 
-  k.once('error',  (e) => {
-    log.error(e.stack || e);
-    cb(e, []);
+  k.once('error', (e) => {
+    cb(e || new Error('Missing error - error was mia.'));
   });
 
   k.once('exit', (code: number) => {
@@ -50,12 +49,20 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
       return cb({code: code});
     }
 
-    const pths = data.map((d) => {
-      return String(d).trim();
-    })
-    .filter((item, i, a) => {
-      // grab a unique list only
-      return a.indexOf(item) === i;
+    const pths: Array<string> = [];
+
+    results.map(d => String(d || '').trim())
+    .filter(Boolean)
+    .sort((a, b) => (a.length - b.length))
+    .forEach(v => {
+
+      const s = !pths.some(p => {
+        return p.startsWith(v);
+      });
+
+      if (s) {
+        pths.push(v);
+      }
     });
 
     cb(null, pths);
