@@ -119,15 +119,18 @@ on your local machine using NLU.
 
 <br>
 
-## Usage
+## Getting Started
 
 Create a config file called ```.nlu.json``` in the root of your project (we will call it "project X"). <br>
 
-For newcomers, you can use:
+For newcomers, you can use the following command to generate a proper .nlu.json file:
 
 ```bash
-nlu init --interactive   # run this from within project x
+nlu init   # run this from within project x
 ```
+
+Follow the instructions in `$ nlu init`.
+
 
 The reason you are using this CLI tool, of course, is because there are other local projects that <br>
 are dependencies of project X. Your other local projects might have their own `.nlu.json` files, which in turn, <br>
