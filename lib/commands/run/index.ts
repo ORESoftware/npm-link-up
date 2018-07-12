@@ -19,7 +19,7 @@ const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
 //project
-import {makeFindProject, createTask} from '../../find-projects';
+import {makeFindProject} from '../../find-projects';
 import {mapPaths} from '../../map-paths-with-env-vars';
 import {cleanCache} from '../../cache-clean';
 import log from '../../logging';
@@ -92,9 +92,6 @@ if (!validateOptions(opts)) {
   process.exit(1);
 }
 
-// import NLU = require('../../npm-link-up-schema');
-// new NLU(conf, false).validate();
-
 if (!validateConfigFile(conf)) {
   log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
   if (!opts.override) {
@@ -111,6 +108,11 @@ if (!mainProjectName) {
 if (opts.verbosity > 0) {
   log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 }
+
+if(Array.isArray(conf.searchRoots)){
+  if(conf.searchRoots.length)
+}
+
 
 const depsKeys = Object.keys(pkg.dependencies || {});
 
@@ -134,14 +136,19 @@ if (list.length < 1) {
 }
 
 const searchRoots = getSearchRoots(opts, conf);
-const inListButNotInDeps: Array<string> = [];
 
-const inListAndInDeps = list.filter(function (item: string) {
-  if (!deps.includes(item)) {
-    inListButNotInDeps.push(item);
-    return false;
-  }
-  return true;
+if(searchRoots.length < 1){
+  log.error(chalk.red('No search-roots provided.'));
+  log.error('You should either update your .nlu.json config to have a searchRoots array.');
+  log.error('Or you can use the --search-root=X option at the command line.');
+  log.error(chalk.bold('Conveniently, you may include environment variables in your search root strings.'));
+  log.error('For example, to search everything starting from $HOME, you can use --search-root=$HOME option at the command line.');
+  log.error('However, it is highly recommended to choose a subdirectory from $HOME, since searching that many files can take some time.');
+  process.exit(1);
+}
+
+const inListButNotInDeps: Array<string> = list.filter((item: string) => {
+  return !deps.includes(item);
 });
 
 inListButNotInDeps.forEach(function (item) {
@@ -197,34 +204,71 @@ map[mainProjectName] = {
 
 async.autoInject({
 
-    readNodeModulesFolders( cb: EVCb) {
+    readNodeModulesFolders(cb: EVCb) {
 
-      fs.readdir(path.resolve(root + '/node_modules'), (err, items) => {
+      const nm = path.resolve(root + '/node_modules');
 
-        if (err || !Array.isArray(items)) {
+      fs.readdir(nm, (err, originalItemsInNodeModules) => {
+
+        if (err || !Array.isArray(originalItemsInNodeModules)) {
           // if there is an error, node_modules probably does not exist
           opts.install_main = true;
           opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not seem to exist.');
-          return cb(null, err || true);
+          return cb(null, err || new Error('Items was not an array in node_modules -> might have been empty.'));
         }
 
-        if (items.length <= depsKeys.length) {
-          // if there number of folders in node_modules is less than deps count, we def need to reinstall
-          opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not have enough folders.');
-          opts.install_main = true;
-        }
-
-        const allThere = depsKeys.every(d => {
-           return items.indexOf(d) >=0;
+        const orgItems = originalItemsInNodeModules.filter(v => {
+          return String(v).startsWith('@')
         });
 
-        if(!allThere){
-          // if not all deps in package.json are folders in node_modules, we need to reinstall
-          opts.verbosity > 1 && log.warn('Reinstalling because not all package.json dependencies exist in node_modules.');
-          opts.install_main = true;
-        }
+        async.eachLimit(orgItems, 3, (item, cb) => {
 
-        cb(null);
+          fs.readdir(path.resolve(nm + '/' + item), (err, orgtems) => {
+
+            if (err) {
+              return cb(err);
+            }
+
+            orgtems.forEach(v => {
+              originalItemsInNodeModules.push(item + '/' + v)
+            });
+
+            cb(null);
+
+          });
+
+        }, (err) => {
+
+          if (err) {
+            return cb(err);
+          }
+
+          if (originalItemsInNodeModules.length <= depsKeys.length) {
+            // if there number of folders in node_modules is less than deps count, we def need to reinstall
+            opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not have enough folders.');
+            opts.install_main = true;
+            return cb(null, true);
+          }
+
+
+          const allThere = depsKeys.every(d => {
+            if (originalItemsInNodeModules.indexOf(d) < 0) {
+              log.warn('The following dep in package.json', d, 'did not appear to be in node_modules.');
+              return false
+            }
+            return true;
+          });
+
+          if (!allThere) {
+            // if not all deps in package.json are folders in node_modules, we need to reinstall
+            opts.verbosity > 1 && log.warn('Reinstalling because not all package.json dependencies exist in node_modules.');
+            opts.install_main = true;
+          }
+
+          cb(null);
+
+        });
+
       });
     },
 
@@ -281,12 +325,13 @@ async.autoInject({
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status);
 
       searchRoots.forEach(function (sr) {
-        q.push(createTask(sr, findProject));
+        q.push(function (cb) {
+          findProject(sr, cb);
+        });
       });
 
       if (q.idle()) {
-        return process.nextTick(cb,
-          new Error('For some reason, no paths/items went onto the search queue.'));
+        return process.nextTick(cb, new Error('For some reason, no paths/items went onto the search queue.'));
       }
 
       let first = true;

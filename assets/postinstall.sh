@@ -23,6 +23,12 @@ mkdir -p "$HOME/.oresoftware/bash" && {
   }
 }
 
+mkdir -p "$HOME/.oresoftware/bash" && {
+  cat "assets/completion.sh" > "$HOME/.oresoftware/bash/nlu.completion.sh" || {
+    echo "Could not copy completion.sh file to ~/.oresoftware/bash dir.";
+    exit 1;
+  }
+}
 
 (
     cat "node_modules/@oresoftware/shell/assets/shell.sh" > "$HOME/.oresoftware/shell.sh" && {

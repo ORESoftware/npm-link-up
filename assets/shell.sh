@@ -6,7 +6,44 @@ get_latest_source_nlu(){
 
 nlu(){
 
-  if ! type -f nlu &> /dev/null || ! which nlu &> /dev/null; then
+   local first_arg="$1";
+
+   if [ "$first_arg" == "set" ]; then
+
+      local second_arg="$2";
+      local third_arg="$3";
+
+     if [ -z "$second_arg" ]; then
+        echo >&2 "'nlu set a b', requires that a be defined/non-empty."
+        return 1
+     fi
+
+     if [ -z "$third_arg" ]; then
+        third_arg="";
+        echo >&2 "warning, wrt: 'nlu set a b', b will be an empty variable, according to your most recent command."
+     fi
+
+      export "nlu_setting_$second_arg"="$third_arg";
+      return 0;
+   fi
+
+
+    if [ "$first_arg" == "get" ]; then
+
+      local second_arg="$2";
+
+      if [ -z "$second_arg" ]; then
+        echo >&2 "'\$ nlu get foo', requires that 'foo' be defined/non-empty."
+        return 1
+      fi
+
+      local z="nlu_setting_$second_arg";
+      echo "${!z}"  # "this is called "indirection", see: Evaluating indirect/reference variables"
+      return 0;
+   fi
+
+
+   if ! type -f nlu &> /dev/null || ! which nlu &> /dev/null; then
 
         echo "Installing the npm-link-up package globally..."
         npm i -s -g "npm-link-up"  || {
@@ -14,9 +51,9 @@ nlu(){
           echo -e "Please check your permissions to install NPM packages globally."  >&2;
           return 1;
       }
-  fi
+   fi
 
-  command nlu "$@";
+   command nlu "$@";
 }
 
 

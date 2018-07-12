@@ -2,10 +2,11 @@
   "npm-link-up": true,
   "linkToItself": false,
   "comments": [
-    "your comments go here"
+    "your comments go here",
+    "$HOME/WebstormProjects/oresoftware"
   ],
   "searchRoots": [
-    "$HOME/WebstormProjects/oresoftware"
+
   ],
   "ignore": [
     "/node_modules/",

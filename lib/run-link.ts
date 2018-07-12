@@ -19,8 +19,6 @@ interface BinFieldObject {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-type optsType = NLURunOpts | NLUAddOpts;
-
 export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
   const keys = Object.keys(map);
@@ -166,7 +164,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
   const getInstallCommand = function (dep: NluMapItem) {
     if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
-      return ' && mkdir -p node_modules && rm -rf node_modules && npm install --loglevel=warn ';
+      const installProd = opts.production ? ' --production ' : '';
+      return ` && mkdir -p node_modules && rm -rf node_modules && npm install --loglevel=warn ${installProd}`;
     }
   };
 
@@ -181,7 +180,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
   const getGlobalLinkCommand = function (dep: NluMapItem) {
     if (opts.link_all || (dep.isMainProject && opts.link_main)) {
-      return ' && mkdir -p node_modules && npm link -f ';
+      const installProd = opts.production ? ' --production ' : '';
+      return ` && mkdir -p node_modules && npm link -f ${installProd}`;
     }
   };
 

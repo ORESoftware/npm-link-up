@@ -14,6 +14,7 @@ export type EVCb = (err? : any, val?: any) => void;
 
 export interface NLURunOpts {
   _args: Array<string>,
+  search_from_home: boolean,
   override: boolean,
   link_all: boolean,
   link_main: boolean,

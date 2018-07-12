@@ -38,11 +38,13 @@ Mono-repos are crap. Be lean and mean and use npm-link-up.
 
 <br>
 
-<sub> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </sub>
+<i> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </i>
 
 ```
 . "$HOME/.oresoftware/shell.sh"
 ```
+
+<i> => You will also get bash completion for NLU, if you source the above. </i>
 
 <br>
 
@@ -172,6 +174,13 @@ $ nlu run   # run this from within project x
 >
 
 <br>
+
+
+## Tips and tricks:
+
+* If you want to use a particular yarn or npm version to link your project, you can install npm or yarn as a local dependency of your primary project, and NLU will pick that up.
+* The above is the case, because by default NLU adds local node_modules/.bin items to the $PATH.
+
 
 ### Screenshots:
 

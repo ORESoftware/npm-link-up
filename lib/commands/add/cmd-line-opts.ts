@@ -31,10 +31,17 @@ export default [
   },
 
   {
-    names: ['npm-shell-version', 'use-shell-version', 'shell-version'],
+    names: ['search-from-home'],
     type: 'bool',
-    help: 'Use the NPM version that is active in the shell.',
+    help: 'Make $HOME your search root; this will override any other search roots.',
     default: false
-  }
+  },
+
+  {
+    names: ['no-use-local','no-local'],
+    type: 'bool',
+    help: 'Do not add local node_modules/.bin to the $PATH.',
+    default: false
+  },
 
 ];

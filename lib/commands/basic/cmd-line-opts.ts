@@ -1,6 +1,5 @@
 'use strict';
 
-
 export default [
 
   {
@@ -30,7 +29,7 @@ export default [
   },
 
   {
-    names: ['bash-completion','completion'],
+    names: ['bash-completion', 'completion'],
     type: 'bool',
     help: 'Generate bash-completion code.',
     hidden: true

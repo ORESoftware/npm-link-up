@@ -78,7 +78,6 @@ try {
     log.warn(chalk.gray('Here is the existing file on your file system:'));
     console.log(nluJSON);
   }
-  log.warn(chalk.gray(`If you want npm-link-up to update this file, use ${chalk.bold('nlu update')}.`));
   process.exit(1);
 }
 catch (err) {

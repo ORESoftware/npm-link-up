@@ -9,9 +9,12 @@ import npmLinkUpPkg = require('../../../package.json');
 import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
+import addOpts from '../add/cmd-line-opts';
+import initOpts from '../init/cmd-line-opts';
+import runOpts from '../run/cmd-line-opts';
 
 process.once('exit', code => {
-  log.info('Exiting with code:', code,'\n');
+  log.info('Exiting with code:', code, '\n');
 });
 
 if (!root) {
@@ -49,12 +52,18 @@ if (opts.help) {
   process.exit(0);
 }
 
+const flattenDeep = function (arr1: Array<any>): Array<any> {
+  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+};
+
 if (opts.bash_completion) {
 
+  const allOpts = flattenDeep([addOpts, initOpts, runOpts, options]);
+
   let generatedBashCode = dashdash.bashCompletionFromOptions({
-    name: 'npmlinkup',
-    options: options,
-    includeHidden: true
+    name: 'nlu',
+    options: allOpts,
+    includeHidden: false
   });
 
   console.log(generatedBashCode);

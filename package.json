@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.0.1026",
+  "version": "0.1.002",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh"
@@ -24,9 +24,7 @@
     "local",
     "development",
     "modules",
-    "modularization",
-    "nodejs",
-    "node.js"
+    "modularization"
   ],
   "author": "Olegzandr VD",
   "license": "MIT",
@@ -37,11 +35,10 @@
   "dependencies": {
     "@oresoftware/shell": "latest",
     "ajv": "^6.5.1",
-    "async": "^2.3.0",
+    "async": "^2.6.1",
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
-    "npm": "4.6.1",
     "prepend-transform": "0.0.1016",
     "residence": "latest",
     "treeify": "^1.0.1",
@@ -53,11 +50,11 @@
     "@types/node": "10.3.5",
     "rimraf": "^2.6.1"
   },
-  "r2g":{
-    "test":"echo 'nlu test is a noop ftm.'"
+  "r2g": {
+    "test": "echo 'nlu test is a noop ftm.'"
   },
   "nlu": {
-    "test":"echo 'nlu test is a noop ftm.'",
+    "test": "echo 'nlu test is a noop ftm.'",
     "linkable": true
   }
 }

@@ -19,18 +19,15 @@ nlu_match_arg(){
     return 1;
 }
 
-use_shell_version="nope";
+use_local="yes";
 
-if nlu_match_arg "--npm-shell-version" "${my_args[@]}"; then
-  use_shell_version="yes"
+if nlu_match_arg "--no-use-local" "${my_args[@]}"; then
+  use_local="nope"
 fi
 
-if nlu_match_arg "--shell-version" "${my_args[@]}"; then
-  use_shell_version="yes"
-fi
 
-if nlu_match_arg "--use-shell-version" "${my_args[@]}"; then
-  use_shell_version="yes"
+if nlu_match_arg "--no-local" "${my_args[@]}"; then
+  use_local="nope"
 fi
 
 
@@ -39,12 +36,13 @@ read_link="$(readlink "$0")";
 exec_dir="$(dirname $(dirname "$read_link"))";
 my_path="$dir_name/$exec_dir";
 project_root="$(cd $(dirname ${my_path}) && pwd)/$(basename ${my_path})";
-npm_root_bin="${project_root}/node_modules/.bin";
+npm_local_bin="${project_root}/node_modules/.bin";
 
 
-if [ "$use_shell_version" != "yes" ]; then
+if [ "$use_local" == "yes" ]; then
     echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
-    export PATH="${npm_root_bin}:${PATH}";
+    echo "To not add local command line tools to the PATH, use the --no-local option.";
+    export PATH="${npm_local_bin}:${PATH}";
 fi
 
 

@@ -1,16 +1,14 @@
 'use strict';
 
 import chalk from 'chalk';
-const name = '[nlu/npm-link-up]';
 
 export const log = {
-  info: console.log.bind(console, chalk.gray(name)),
-  good: console.log.bind(console, chalk.cyan(name)),
-  veryGood: console.log.bind(console, chalk.green(name)),
-  warning: console.log.bind(console, chalk.yellow.bold(name)),
-  warn: console.log.bind(console, chalk.yellow.bold(name)),
-  error: console.log.bind(console, chalk.magenta(name))
+  info: console.log.bind(console, chalk.gray('[nlu/npm-link-up info]')),
+  good: console.log.bind(console, chalk.cyan('[nlu/npm-link-up info]')),
+  veryGood: console.log.bind(console, chalk.green('[nlu/npm-link-up info]')),
+  warning: console.log.bind(console, chalk.yellow.bold('[nlu/npm-link-up warn]')),
+  warn: console.log.bind(console, chalk.yellow.bold('[nlu/npm-link-up warn]')),
+  error: console.log.bind(console, chalk.magenta('[nlu/npm-link-up error]'))
 };
-
 
 export default log;

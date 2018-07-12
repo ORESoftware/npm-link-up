@@ -32,38 +32,40 @@ export const getIgnore = function (conf: NLUDotJSON, opts: any) {
 
 };
 
+const flattenDeep = function (arr1: Array<any>): Array<any> {
+  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+};
 
-export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf) : Array<string>{
+export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<string> {
 
-  let searchRoots;
+  let searchRoots: Array<string | Array<string>> = [];
+
+  if (opts.search_from_home) {
+    searchRoots.push(path.resolve(process.env.HOME));
+  }
 
   if (opts.search_root && opts.search_root.length > 0) {
-    searchRoots = opts.search_root.filter(function (item: string, i: number, arr: Array<string>) {
-      return arr.indexOf(item) === i;  // get a unique list
-    });
+    searchRoots.push(opts.search_root);
   }
-  else {
 
-    if (!conf.searchRoots) {
 
-      log.error('Warning => no "searchRoots" property provided in .nlu.json file. ' +
-        'NPM-Link-Up will therefore search through your entire home directory.');
+  searchRoots.push([].concat(conf.searchRoots || []).concat(opts.search_root_append || []));
 
-      if (opts.force) {
-        searchRoots = [path.resolve(process.env.HOME)];
-      }
-      else {
-        log.error(' => But you must use --force at the command line to do this.');
-        process.exit(1);
-      }
+  const searchRootsReduced: Array<string> = [];
+
+  // here we flatten and get rid of dupes and reduce to the most common paths
+  flattenDeep(searchRoots).map(d => String(d || '').trim()).filter(Boolean)
+  .sort((a, b) => (a.length - b.length))
+  .filter((v, i, a) => {
+    const s = !a.some(p => {
+      return p.startsWith(v + '/');
+    });
+
+    if (s) {
+      searchRootsReduced.push(v);
     }
+  });
 
-    searchRoots = (conf.searchRoots || []).concat(opts.search_root_append || [])
-    .filter(function (item: string, i: number, arr: Array<string>) {
-      return arr.indexOf(item) === i;  // get a unique list
-    });
-  }
-
-  return searchRoots;
+  return searchRootsReduced;
 
 };

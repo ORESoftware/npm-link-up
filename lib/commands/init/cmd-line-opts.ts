@@ -20,28 +20,19 @@ export default  [
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
     default: 3
   },
-  {
-    names: ['search-root','search'],
-    type: 'arrayOfString',
-    help: 'Search roots to search for other NPM projects.',
-  },
-  {
-    names: ['search-from-home'],
-    type: 'bool',
-    help: 'Make $HOME your search root.',
-    default: false
-  },
+
   {
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',
     default: false
   },
+
   {
-    names: ['npm-shell-version', 'use-shell-version', 'shell-version'],
+    names: ['no-use-local','no-local'],
     type: 'bool',
-    help: 'Use the NPM version that is active in the shell.',
+    help: 'Do not add local node_modules/.bin to the $PATH.',
     default: false
-  }
+  },
 
 ];

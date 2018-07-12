@@ -1,6 +1,6 @@
 'use strict';
 
-export default  [
+export default [
 
   {
     names: ['help', 'h'],
@@ -22,7 +22,7 @@ export default  [
   },
 
   {
-    names: ['dry-run','dry'],
+    names: ['dry-run', 'dry'],
     type: 'bool',
     help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',
     default: false
@@ -36,7 +36,7 @@ export default  [
   },
 
   {
-    names: ['install-all','install:all'],
+    names: ['install-all', 'install:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
     'using npm instead of yarn is the default.'
@@ -69,16 +69,23 @@ export default  [
   },
 
   {
-    names: ['search-root-append','append-search', 'search-append'],
+    names: ['search-root-append', 'append-search', 'search-append'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
     'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
   },
 
   {
-    names: ['npm-shell-version', 'use-shell-version', 'shell-version'],
+    names: ['search-from-home'],
     type: 'bool',
-    help: 'Use the NPM version that is active in the shell.',
+    help: 'Make $HOME your search root; this will override any other search roots.',
+    default: false
+  },
+
+  {
+    names: ['no-use-local','no-local'],
+    type: 'bool',
+    help: 'Do not add local node_modules/.bin to the $PATH.',
     default: false
   },
 
@@ -90,6 +97,14 @@ export default  [
   },
 
   {
+    names: ['production', 'prod'],
+    type: 'bool',
+    help: 'Use the --production flag with npm install / npm link; only applies when using using --install or --link options.',
+    default: false,
+    env: ['nlu_setting_prod', 'nlu_setting_production']
+  },
+
+  {
     names: ['clear-all-caches', 'clear-caches'],
     type: 'bool',
     help: 'Clear all relevant NPM / Yarn / etc caches.',
@@ -97,11 +112,10 @@ export default  [
   },
 
   {
-    names: ['manager-all'],
-    type: 'string',
-    help: 'Choose between "npm" and "yarn", to manage packages; this option will affect ' +
-    'all your relevant local projects; to have unique behavior per project,' +
-    'add a "manager" property to the .nlu.json file in a given project.',
-    default: 'npm'
+    names: ['yarn'],
+    type: 'bool',
+    help: 'Use yarn for installs and linking.',
+    env: 'nlu_setting_yarn',
+    default: false
   }
 ];

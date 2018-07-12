@@ -16,14 +16,6 @@ import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 const searchedPaths = {} as { [key: string]: true };
 
-////////////////////////////////////////////////////////////////
-
-export const createTask = function (searchRoot: string, findProject: any) {
-  return function (cb: Function) {
-    findProject(searchRoot, cb);
-  }
-};
-
 //////////////////////////////////////////////////////////////////////
 
 export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NluMap,
@@ -31,6 +23,21 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
 
   ////////////////////////////////////////////////////////////////////////
+
+  const isPathSearchableBasic = function (item: string) {
+    item = path.normalize(item);
+
+    if (!path.isAbsolute(item)) {
+      throw new Error('Path to be searched is not absolute:' + item);
+    }
+
+    if (searchedPaths[item]) {
+      opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
+      return false;
+    }
+
+    return true;
+  };
 
   const isPathSearchable = function (item: string) {
 
@@ -48,29 +55,27 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
       return false;
     }
 
-    let goodPth, keys = Object.keys(searchedPaths);
-
-    return true;
+    let goodPth = '';
+    const keys = Object.keys(searchedPaths);
 
     // important - note that this section is not merely checking for equality.
     // it is instead checking to see if an existing search path is shorter
     // than the new search path, and if so, we don't need to add the new one
 
-    // const match = keys.some(function (pth) {
-    //   if (String(item).indexOf(pth) === 0) {
-    //     goodPth = pth;
-    //     return true;
-    //   }
-    // });
-    //
-    // if (match) {
-    //   if (opts.verbosity > 1) {
-    //     log.good(chalk.blue('path has already been covered:'));
-    //     log.good('new path:', chalk.bold(item));
-    //     log.good('already searched path:', chalk.bold(goodPth));
-    //   }
-    //   return true;
-    // }
+    const match = keys.some(function (pth) {
+      if (String(item).startsWith(pth)) {
+        goodPth = pth;
+        return true;
+      }
+    });
+
+    if (match && opts.verbosity > 1) {
+      log.good(chalk.blue('path has already been covered:'));
+      log.good('new path:', chalk.bold(item));
+      log.good('already searched path:', chalk.bold(goodPth));
+    }
+
+    return match;
   };
 
   /////////////////////////////////////////////////////////////////////////
@@ -93,7 +98,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
     item = path.normalize(item);
 
-    if (!isPathSearchable(item)) {
+    if (!isPathSearchableBasic(item)) {
       return process.nextTick(cb);
     }
 
@@ -114,13 +119,15 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
         return process.nextTick(cb);
       }
 
-
       searchedPaths[dir] = true;
 
       fs.readdir(dir, function (err: Error, items: Array<string>) {
 
         if (err) {
           log.error(err.message || err);
+          if (String(err.message || err).match(/permission denied/)) {
+            return cb(null);
+          }
           return cb(err);
         }
 
@@ -161,7 +168,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
             if (stats.isDirectory()) {
 
-              if (!isPathSearchable(item)) {
+              if (!isPathSearchableBasic(item)) {
                 return cb(null);
               }
 
@@ -203,7 +210,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
 
             if (pkg.name === mainProjectName) {
-              if(opts.verbosity > 1){
+              if (opts.verbosity > 1) {
                 log.info('Another project on your fs has your main projects package.json name, at path:',
                   chalk.yellow.bold(dirname));
               }
@@ -238,7 +245,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             map[pkg.name] = {
               name: pkg.name,
               bin: pkg.bin || null,
-              isMainProject: pkg.name === mainProjectName,
+              isMainProject: false,
               hasNPMLinkUpJSONFile: Boolean(npmlinkup),
               linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
               runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
@@ -263,7 +270,11 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 }
 
                 roots.forEach(function (r) {
-                  q.push(createTask(r, findProject));
+                  if (isPathSearchable(r)) {
+                    q.push(function (cb) {
+                      findProject(r, cb);
+                    });
+                  }
                 });
 
                 cb(null);
