@@ -46,7 +46,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
       }
 
       if (isIgnored(String(dir + '/'))) {
-        if (opts.verbosity > 2) {
+        if (opts.verbosity > 3) {
           log.warning('path ignored => ', dir);
         }
         return process.nextTick(cb);
@@ -56,13 +56,11 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
         if (err) {
           log.error('Could not read a directory at path:', dir);
-          if (String(err.message || err).match(/scandir/)) {
-            log.warn(err.message || err);
+          log.warn(err.message || err);
+          if (String(err.message || err).match(/permission denied/)) {
             return cb(null);
           }
-
           return cb(err);
-
         }
 
         items = items.map(function (item) {

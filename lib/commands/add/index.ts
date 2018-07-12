@@ -89,7 +89,7 @@ if (!mainProjectName) {
   log.error('That is weird.');
 }
 else {
-  log.info('Your project name is:', chalk.bold.gray(mainProjectName));
+  log.info('Your project name is:', chalk.bold.blueBright(mainProjectName));
 }
 
 let nluJSON: NluConf, nluJSONPath = path.resolve(root + '/.nlu.json');
@@ -255,7 +255,7 @@ async.autoInject({
       return process.exit(1);
     }
 
-    log.veryGood('Looks like the nlu init routine succeeded. ' +
+    log.veryGood(chalk.green('Looks like the nlu init routine succeeded. ') +
       'Check your new .nlu.json file in the root of your project.');
     process.exit(0);
 

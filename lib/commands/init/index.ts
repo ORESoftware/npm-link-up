@@ -22,6 +22,7 @@ const defaultNluJSON = require('../../../assets/default.nlu.json');
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './init-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
+import {mapPaths} from "../../map-paths-with-env-vars";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code);
@@ -66,15 +67,15 @@ if (!mainProjectName) {
   log.error('That is weird.');
 }
 else {
-  log.info('Your project name is:', chalk.bold.gray(mainProjectName));
+  log.info('Your project name is:', chalk.bold.blueBright(mainProjectName));
 }
 
 let nluJSON: any, nluJSONPath = path.resolve(root + '/.nlu.json');
 
 try {
   nluJSON = require(nluJSONPath);
-  log.warn('Looks like your project already has an .nlu.json file.');
-  if (opts.verbosity > 2) {
+  log.warn(chalk.magenta('Looks like your project already has an .nlu.json file.'));
+  if (opts.verbosity > 3) {
     log.warn(chalk.gray('Here is the existing file on your file system:'));
     console.log(nluJSON);
   }
@@ -84,25 +85,7 @@ catch (err) {
   // ignore
 }
 
-let searchRoots = opts.search_root;
-
-if (!(searchRoots && searchRoots.length > 0)) {
-  log.warn(`Using $HOME to search for related projects. To limit your fs search, use the --search=<path> option.`);
-  searchRoots = [process.env.HOME];
-  if (!opts.search_from_home) {
-    log.warn('Please use --search=<path> to confine your project search to something less wide as user home.');
-    log.warn('For multiple search roots, you can use --search more than once.');
-    log.warn(`If you wish to use $HOME as the search root, use ${chalk.bold('--search-from-home')},`,
-      `but be aware that it can take a long time to search through user home.`);
-    process.exit(1);
-  }
-}
-else {
-  if (opts.search_from_home) {
-    log.error('You passed the --search-from-home option along with --search/--search-root.');
-    process.exit(1);
-  }
-}
+const searchRoots: Array<string> = [];
 
 const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 .filter((item, index, arr) => arr.indexOf(item) === index)
@@ -114,7 +97,7 @@ const theirDeps = Object.assign({},
   pkgJSON.optionalDependencies
 );
 
-if (opts.verbosity > 2) {
+if (opts.verbosity > 3) {
   log.info('Here are the deps in your package.json:', Object.keys(theirDeps));
 }
 
@@ -126,10 +109,6 @@ async.autoInject({
 
     askUserAboutSearchRoots(cb: EVCb) {
 
-      if(!opts.interactive){
-        return process.nextTick(cb, null, '');
-      }
-
       const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
@@ -137,22 +116,48 @@ async.autoInject({
 
       process.nextTick(function () {
         console.log();
-        console.log(chalk.gray(` => To skip this, input "skip" or use --skip at command line.`));
+        console.log(chalk.gray(` => To skip this, hit return with no input.`));
         console.log(chalk.gray(` => Separate multiple paths with ":"`));
         console.log(chalk.gray(` => Use env variables like $HOME instead of hardcoding dirs, where possible.`));
-        console.log(chalk.gray(` => Valid input might be: $HOME/WebstormProjects:$HOME/vscode_projects.`));
+        console.log(chalk.bold(` => Valid input might be:`), `$HOME/WebstormProjects:$HOME/vscode_projects.`);
       });
 
       console.log();
 
       rl.question(chalk.bold(`What folder(s) do local dependencies of this project '${chalk.blueBright(mainProjectName)}' reside in?`), a => {
-        cb(null, a);
+
+        String(a || '').trim()
+        .split(':')
+        .map(v => String(v || '').trim())
+        .filter(Boolean)
+        .forEach(v => {
+
+          const s = !searchRoots.some(p => {
+            return p.startsWith(v + '/');
+          });
+
+          if (s) {
+            searchRoots.push(v);
+          }
+
+        });
+
+        if (searchRoots.length < 1) {
+          searchRoots.push('$HOME');
+        }
+
+        cb(null);
+
         rl.close();
       });
 
     },
 
-    getMatchingProjects(askUserAboutSearchRoots: any, checkForNluJSONFile: any, cb: EVCb) {
+    mapSearchRoots(askUserAboutSearchRoots: any, cb: EVCb) {
+         mapPaths(searchRoots, cb);
+    },
+
+    getMatchingProjects(askUserAboutSearchRoots: string, mapSearchRoots: Array<string>, checkForNluJSONFile: any, cb: EVCb) {
       // given package.json, we can find local projects
 
       if (checkForNluJSONFile) {
@@ -163,14 +168,13 @@ async.autoInject({
       const map = {}, status = {searching: true};
       const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps, status);
 
-      const q = async.queue(function (task: any, cb) {
-        task(cb);
-      });
+      type Task = (cb: EVCb) => void;
+      const q = async.queue<Task, any>((task, cb) => task(cb));
 
-      log.info('Search roots are:', searchRoots);
+      log.info('Your search roots are:', mapSearchRoots);
 
-      searchRoots.forEach((v: string) => {
-        q.push(function (cb: EVCb) {
+      mapSearchRoots.forEach((v: string) => {
+        q.push(function (cb) {
           findProjects(v, cb);
         });
       });
@@ -199,19 +203,12 @@ async.autoInject({
     },
 
     writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb) {
-
-      const searchRoots = String(askUserAboutSearchRoots || '')
-      .split(':')
-      .map(v => String(v || '').trim())
-      .filter(Boolean);
-
       const list = Object.keys(getMatchingProjects);
       const newNluJSON = Object.assign({}, defaultNluJSON);
-      newNluJSON.searchRoots = searchRoots || '$HOME/foobar';
+      newNluJSON.searchRoots = searchRoots;
       newNluJSON.list = list;
       const newNluJSONstr = JSON.stringify(newNluJSON, null, 2);
       fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
-
     }
 
   },
@@ -220,16 +217,12 @@ async.autoInject({
 
     if (err) {
       log.error('There was an error when running "nlu init".');
-      log.error('Here were your arguments:', process.argv);
+      opts.verbosity > 3 && log.error('Here were your arguments:\n', process.argv);
       log.error(err.message || err);
-      if (String(err.message || err).match(/scandir/)) {
-        log.warn(chalk.bold('To ignore errors related to reading directories for which ' +
-          'you may not have permission, use --ignore-scandir-errors.'));
-      }
       return process.exit(1);
     }
 
-    log.veryGood('Looks like the nlu init routine succeeded. ' +
+    log.veryGood(chalk.green('Looks like the nlu init routine succeeded. ') +
       'Check your new .nlu.json file in the root of your project.');
     process.exit(0);
 

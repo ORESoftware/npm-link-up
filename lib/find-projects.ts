@@ -83,7 +83,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
   const isIgnored = function (pth: string) {
     return ignore.some(r => {
       if (r.test(pth)) {
-        if (opts.verbosity > 2) {
+        if (opts.verbosity > 3) {
           log.warning(`Path with value "${pth}" was ignored because it matched the following regex:`);
           log.warning(`${r}`);
         }

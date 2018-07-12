@@ -54,8 +54,8 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
         if (err) {
           log.error('Could not read a directory at path:', dir);
-          if (String(err.message || err).match(/scandir/)) {
-            log.warn(err.message || err);
+          log.warn(err.message || err);
+          if (String(err.message || err).match(/permission denied/)) {
             return cb(null);
           }
 

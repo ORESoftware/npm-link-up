@@ -8,12 +8,7 @@ export default  [
     type: 'bool',
     help: 'Print help info for `nlu init`, and exit 0.'
   },
-  {
-    names: ['interactive'],
-    type: 'bool',
-    help: 'Use an interactive mode.',
-    default: false
-  },
+
   {
     names: ['verbosity', 'v'],
     type: 'positiveInteger',

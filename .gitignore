@@ -8,6 +8,10 @@ coverage
 .vscode
 dist/*
 
+### files
+path
+assert
+
 ### matching files
 *.log
 *.tgz
