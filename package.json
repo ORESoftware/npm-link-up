@@ -3,7 +3,8 @@
   "version": "0.1.311",
   "bin": {
     "nlu": "cli/index.sh",
-    "npmlinkup": "cli/index.sh"
+    "npmlinkup": "cli/index.sh",
+    "realpath": "cli/realpath"
   },
   "description": "Use this package to link your projects together for local development.",
   "main": "dist/index.js",
@@ -51,7 +52,7 @@
     "rimraf": "^2.6.1"
   },
   "r2g": {
-    "test": "echo 'nlu test is a noop ftm.'"
+    "test": "node .r2g/smoke-test.js"
   },
   "nlu": {
     "test": "echo 'nlu test is a noop ftm.'",

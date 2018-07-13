@@ -75,6 +75,7 @@ const exec = function(command, cwd, cb){
   k.stderr.pipe(process.stderr);
   k.stdin.end(`${command}`);
   k.once('exit', cb);
+  return k;
 };
 
 const mkdirp = function(dir){
@@ -109,9 +110,19 @@ const runNLU = function (dir) {
   });
 };
 
+
+const whichNLU = function () {
+  return getProm(function(cb){
+   const k = exec(`which nlu`, null, cb);
+    console.log("Discovering the path of (which nlu)");
+    k.stdout.pipe(process.stdout);
+  });
+};
+
 const runTest = function (file) {
   return getProm(function(cb){
-    exec(`node ${file}`, null, cb);
+   const k = exec(`node ${file}`, null, cb);
+   k.stdout.pipe(process.stdout);
   });
 };
 
@@ -121,8 +132,8 @@ const proj = path.resolve(tempDir + `/${name}`);
 
 const order = shuffle(['rolo','cholo','yolo']);
 
-
-rimraf(tempDir)
+whichNLU()
+.then(v => rimraf(tempDir))
 .then(v => mkdirp(tempDir))
 .then(v => cloneProject(tempDir))
 .then(v => {
@@ -161,7 +172,3 @@ rimraf(tempDir)
   return p;
 
 });
-
-
-
-// your test goes here

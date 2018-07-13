@@ -19,7 +19,7 @@ interface BinFieldObject {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
+export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
 
   const keys = Object.keys(map);
 
@@ -112,8 +112,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
       // return ` npm link ${d} -f `;
       return ` mkdir -p node_modules && rm -rf "node_modules/${d}" && mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
-        ` && ln -s "${path}" "node_modules/${d}" ` +
-        ` ${getBinMap(bin, path, d)}`;
+        ` && ln -s "${path}" "node_modules/${d}" ` + ` ${getBinMap(bin, path, d)}`;
     });
 
   };
@@ -156,8 +155,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
     .map(function (k) {
       const p = `${map[k].path}`;
       return ` cd ${p} && mkdir -p node_modules && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
-        ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` +
-        ` ${getBinMap(bin, path, name)} `;
+        ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)} `;
     });
   };
 
