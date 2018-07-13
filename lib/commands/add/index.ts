@@ -149,16 +149,16 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 
 async.autoInject({
 
-    ensureNodeModules(cb: EVCb){
+    ensureNodeModules(cb: EVCb<any>){
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
 
-    mapSearchRoots(cb: EVCb) {
+    mapSearchRoots(cb: EVCb<Array<string>>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
-    getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb) {
+    getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb<any>) {
 
       const map = {}, status = {searching: true};
       const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, projectsToAdd.slice(0), status);
@@ -170,7 +170,7 @@ async.autoInject({
       log.info('Search roots are:', mapSearchRoots);
 
       mapSearchRoots.forEach((v: string) => {
-        q.push(function (cb: EVCb) {
+        q.push(function (cb: EVCb<any>) {
           findProjects(v, cb);
         });
       });
@@ -198,7 +198,7 @@ async.autoInject({
 
     },
 
-    runUtility(ensureNodeModules: any, getMatchingProjects: any, cb: EVCb) {
+    runUtility(ensureNodeModules: any, getMatchingProjects: any, cb: EVCb<any>) {
 
       try {
         nluJSON.list = nluJSON.list.concat(projectsToAdd)
@@ -232,7 +232,7 @@ async.autoInject({
       runNPMLink(cleanMap, opts, cb);
     },
 
-    addToNLUJSON(runUtility: any, cb: EVCb) {
+    addToNLUJSON(runUtility: any, cb: EVCb<any>) {
 
       // nluJSON.list = Object.keys(projectsToAdd)
       // .concat(nluJSON.list)

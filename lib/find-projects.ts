@@ -246,7 +246,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               name: pkg.name,
               bin: pkg.bin || null,
               isMainProject: false,
-              hasNPMLinkUpJSONFile: Boolean(npmlinkup),
               linkToItself: Boolean(npmlinkup && npmlinkup.linkToItself),
               runInstall: Boolean(npmlinkup && npmlinkup.alwaysReinstall),
               path: dirname,

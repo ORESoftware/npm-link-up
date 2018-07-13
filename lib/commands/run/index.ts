@@ -31,7 +31,7 @@ import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 import npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
-import {validateConfigFile, validateOptions} from "../../utils";
+import {determineIfReinstallIsNeeded, validateConfigFile, validateOptions} from "../../utils";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -109,14 +109,10 @@ if (opts.verbosity > 0) {
   log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 }
 
-if(Array.isArray(conf.searchRoots)){
-  if(conf.searchRoots.length)
-}
 
+const productionDepsKeys = Object.keys(pkg.dependencies || {});
 
-const depsKeys = Object.keys(pkg.dependencies || {});
-
-const deps = depsKeys
+const allDepsKeys = productionDepsKeys
 .concat(Object.keys(pkg.devDependencies || {}))
 .concat(Object.keys(pkg.optionalDependencies || {}));
 
@@ -148,7 +144,7 @@ if(searchRoots.length < 1){
 }
 
 const inListButNotInDeps: Array<string> = list.filter((item: string) => {
-  return !deps.includes(item);
+  return !allDepsKeys.includes(item);
 });
 
 inListButNotInDeps.forEach(function (item) {
@@ -197,7 +193,6 @@ map[mainProjectName] = {
   isMainProject: true,
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
-  hasNPMLinkUpJSONFile: true,
   path: root,
   deps: conf.list
 };
@@ -207,69 +202,23 @@ async.autoInject({
     readNodeModulesFolders(cb: EVCb) {
 
       const nm = path.resolve(root + '/node_modules');
+      const keys = opts.production ? productionDepsKeys: allDepsKeys;
 
-      fs.readdir(nm, (err, originalItemsInNodeModules) => {
+      determineIfReinstallIsNeeded(nm, keys, opts, (err, val) =>{
 
-        if (err || !Array.isArray(originalItemsInNodeModules)) {
-          // if there is an error, node_modules probably does not exist
-          opts.install_main = true;
-          opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not seem to exist.');
-          return cb(null, err || new Error('Items was not an array in node_modules -> might have been empty.'));
+        if(err){
+          return cb(err);
         }
 
-        const orgItems = originalItemsInNodeModules.filter(v => {
-          return String(v).startsWith('@')
-        });
+        if(val === true){
+          opts.install_main = true;
+        }
 
-        async.eachLimit(orgItems, 3, (item, cb) => {
-
-          fs.readdir(path.resolve(nm + '/' + item), (err, orgtems) => {
-
-            if (err) {
-              return cb(err);
-            }
-
-            orgtems.forEach(v => {
-              originalItemsInNodeModules.push(item + '/' + v)
-            });
-
-            cb(null);
-
-          });
-
-        }, (err) => {
-
-          if (err) {
-            return cb(err);
-          }
-
-          if (originalItemsInNodeModules.length <= depsKeys.length) {
-            // if there number of folders in node_modules is less than deps count, we def need to reinstall
-            opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not have enough folders.');
-            opts.install_main = true;
-            return cb(null, true);
-          }
-
-
-          const allThere = depsKeys.every(d => {
-            if (originalItemsInNodeModules.indexOf(d) < 0) {
-              log.warn('The following dep in package.json', d, 'did not appear to be in node_modules.');
-              return false
-            }
-            return true;
-          });
-
-          if (!allThere) {
-            // if not all deps in package.json are folders in node_modules, we need to reinstall
-            opts.verbosity > 1 && log.warn('Reinstalling because not all package.json dependencies exist in node_modules.');
-            opts.install_main = true;
-          }
-
-          cb(null);
-
-        });
+        cb(null);
 
       });
+
+
     },
 
     ensureNodeModules(readNodeModulesFolders: any, cb: EVCb) {

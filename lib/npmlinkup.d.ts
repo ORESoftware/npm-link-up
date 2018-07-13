@@ -10,7 +10,7 @@ export interface NluConf {
   list: Array<string>
 }
 
-export type EVCb = (err? : any, val?: any) => void;
+export type EVCb<T> = (err? : any, val?: T) => void;
 
 export interface NLURunOpts {
   _args: Array<string>,
@@ -27,7 +27,8 @@ export interface NLURunOpts {
   self_link_all: boolean,
   dry_run: boolean,
   force: boolean,
-  search_root_append: string
+  search_root_append: string,
+  production: boolean
 }
 
 export interface NLUInitOpts {
@@ -64,7 +65,6 @@ export interface NluMapItem {
   name: string,
   bin: string | {[key:string]: string},
   isMainProject: boolean,
-  hasNPMLinkUpJSONFile: boolean,
   linkToItself: boolean,
   runInstall: boolean,
   path: string,
