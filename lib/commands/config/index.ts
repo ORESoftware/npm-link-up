@@ -12,12 +12,8 @@ const root = residence.findProjectRoot(cwd);
 import addOpts from '../add/cmd-line-opts';
 import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
-import get from './get';
-import set from './set';
 import * as path from 'path';
 import {globalConfigFilePath} from "../../utils";
-import clear from "./clear";
-import del from './delete';
 
 process.once('exit', code => {
   console.log();
@@ -71,32 +67,69 @@ const k = String(opts._args[1] || '').toLowerCase().replace(/[^a-zA-Z]+/g ,'_');
 const v = String(opts._args[2] || '').toLowerCase().replace(/[^a-zA-Z]+/g ,'_');
 
 
-const values = <any>{
+const importGlobal = function(val: string){
+  import(`./global/${val}`).then(v =>{
+    v.default(opts, conf, k, v)
+  });
+};
+
+const globalValues = <any>{
 
   delete(){
-    del(opts, conf, k);
+    importGlobal('delete');
   },
 
   clear(){
-    clear(opts, conf);
+    importGlobal('clear');
   },
 
   get(){
-    get(opts, conf, k);
+    importGlobal('get');
   },
 
   set(){
-    set(opts, conf, k, v);
+    importGlobal('set');
   }
 };
 
 
+const importLocal = function(val: string){
+   import(`./local/${val}`).then(v =>{
+      v.default(opts, conf, k, v)
+   });
+};
 
-if(values[firstArg]){
-  values[firstArg]();
+const localValues = <any>{
+
+  delete(){
+    importLocal('delete');
+  },
+
+  clear(){
+    importLocal('clear');
+  },
+
+  get(){
+    importLocal('get');
+  },
+
+  set(){
+    importLocal('set');
+  }
+};
+
+
+let container = localValues;
+
+if(opts.global){
+  container = globalValues;
+}
+
+if(container[firstArg]){
+  container[firstArg]();
 }
 else{
-  log.error('No nlu config subcommand was recognized. To get all keys from the config, simply run "$ nlu config get"');
+  log.error('No "nlu config" subcommand was recognized. Your subcommand was:', firstArg);
   process.exit(1);
 }
 
