@@ -18,6 +18,8 @@ nlu(){
         return 1
      fi
 
+     second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";
+
      if [ -z "$third_arg" ]; then
         third_arg="";
         echo >&2 "warning, wrt: 'nlu set a b', b will be an empty variable, according to your most recent command."
@@ -36,6 +38,8 @@ nlu(){
         echo >&2 "'\$ nlu get foo', requires that 'foo' be defined/non-empty."
         return 1
       fi
+
+      second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";
 
       local z="nlu_setting_$second_arg";
       echo "${!z}"  # "this is called "indirection", see: Evaluating indirect/reference variables"

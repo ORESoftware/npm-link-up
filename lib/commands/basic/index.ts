@@ -3,9 +3,8 @@
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import options from "./cmd-line-opts";
-import {NLURunOpts} from "../../npmlinkup";
 import log from '../../logging';
-import npmLinkUpPkg = require('../../../package.json');
+const npmLinkUpPkg = require('../../../package.json');
 import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
@@ -24,9 +23,9 @@ if (!root) {
 }
 
 const commands = [
-  'npm run',
-  'npm init',
-  'npm add'
+  'nlu run',
+  'nlu init',
+  'nlu add'
 ];
 
 let opts: any, parser = dashdash.createParser({options});
@@ -50,6 +49,8 @@ if (opts.help) {
   console.log();
   log.info('To get help for "nlu init", use:', chalk.blueBright.bold('nlu init --help'));
   log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu run --help'));
+  log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu add --help'));
+  log.info('Etc.')
   process.exit(0);
 }
 
@@ -71,11 +72,6 @@ if (opts.bash_completion) {
   process.exit(0);
 }
 
-log.warn('The original command:');
-
-process.argv.forEach((v, i) => {
-  log.warn(chalk.gray(String(i)), chalk.green(v));
-});
 
 log.warn(chalk.bold.italic('No command line option was recognized.'));
 log.warn(chalk.gray('Perhaps you meant to use one of these commands instead:', chalk.gray.bold(commands.join(', '))));

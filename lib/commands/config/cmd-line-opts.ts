@@ -29,6 +29,20 @@ export default [
   },
 
   {
+    names: ['global','g'],
+    type: 'bool',
+    help: 'Tells NLU to make changes to global config, not the local config.',
+    default: false
+  },
+
+  {
+    names: ['json'],
+    type: 'bool',
+    help: 'Use JSON for command line output.',
+    default: false
+  },
+
+  {
     names: ['debug', 'd'],
     type: 'bool',
     help: 'Show debug logging.',
@@ -41,13 +55,6 @@ export default [
     type: 'bool',
     help: 'Allow unknown/unrecognized options at the command line.',
     default: false,
-    hidden: true
-  },
-
-  {
-    names: ['bash-completion', 'completion'],
-    type: 'bool',
-    help: 'Generate bash-completion code.',
     hidden: true
   }
 

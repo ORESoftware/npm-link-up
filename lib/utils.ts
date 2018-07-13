@@ -2,7 +2,7 @@
 
 import * as assert from 'assert';
 import Ajv = require('ajv');
-import schema = require('../assets/nlu.schema.json');
+const schema = require('../assets/nlu.schema.json');
 import log from "./logging";
 import {EVCb, NluConf, NLURunOpts} from "./npmlinkup";
 import chalk from 'chalk';
@@ -11,6 +11,9 @@ import * as path from 'path';
 import async = require('async');
 
 ////////////////////////////////////////////////////////////////////
+
+
+export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/global/settings.json');
 
 export const validateConfigFile = function (data: NluConf) {
 

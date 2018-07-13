@@ -163,7 +163,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
   const getInstallCommand = function (dep: NluMapItem) {
     if (!opts.no_install && (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main))) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && rm -rf node_modules && npm install --loglevel=warn ${installProd}`;
+      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn ${installProd}`;
     }
   };
 
@@ -179,7 +179,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
   const getGlobalLinkCommand = function (dep: NluMapItem) {
     if (!opts.no_link && (opts.link_all || (dep.isMainProject && opts.link_main))) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && mkdir -p node_modules/.bin && npm link -f ${installProd}`;
+      return ` && mkdir -p node_modules/.bin && npm link --cache-min 999999 -f ${installProd}`;
     }
   };
 

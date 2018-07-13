@@ -29,9 +29,17 @@ import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
 import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
-import npmLinkUpPkg = require('../../../package.json');
+const npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
-import {determineIfReinstallIsNeeded, getDevKeys, getProdKeys, validateConfigFile, validateOptions} from "../../utils";
+import {
+  globalConfigFilePath,
+  determineIfReinstallIsNeeded,
+  getDevKeys,
+  getProdKeys,
+  validateConfigFile,
+  validateOptions
+} from "../../utils";
+import {NluGlobalSettingsConf} from "../config";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +49,7 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-let opts: NLURunOpts, parser = dashdash.createParser({options});
+let opts: NLURunOpts, globalConf: NluGlobalSettingsConf, parser = dashdash.createParser({options});
 
 try {
   opts = parser.parse(process.argv);
@@ -57,6 +65,25 @@ if (opts.help) {
     + help);
   process.exit(0);
 }
+
+try{
+  globalConf = require(globalConfigFilePath);
+}
+catch(err){
+  log.warn('Could not load global config');
+  globalConf = {};
+}
+
+if(!(globalConf && typeof globalConf === 'object')){
+  globalConf = {};
+}
+
+if(Array.isArray(globalConf)){
+  globalConf = {};
+}
+
+opts = Object.assign({}, globalConf, opts);
+
 
 if (!root) {
   log.error('You do not appear to be within an NPM project (no package.json could be found).');

@@ -40,10 +40,11 @@
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
+    "json-stdio": "0.0.1017",
+    "mkdirp": "^0.5.1",
     "prepend-transform": "0.0.1016",
     "residence": "latest",
-    "treeify": "^1.0.1",
-    "mkdirp": "^0.5.1"
+    "treeify": "^1.0.1"
   },
   "devDependencies": {
     "@types/async": "latest",

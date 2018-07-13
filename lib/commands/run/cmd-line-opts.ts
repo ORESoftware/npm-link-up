@@ -28,7 +28,8 @@ export default [
     type: 'bool',
     help: 'Allow unknown/unrecognized options at the command line.',
     default: false,
-    hidden: true
+    hidden: true,
+    env: 'nlu_setting_allow_unknown'
   },
 
   {
@@ -51,13 +52,15 @@ export default [
     names: ['treeify'],
     type: 'bool',
     help: 'Log a tree representation of your project\'s npm-link-up dependencies and exit. This is cool.',
+    env: 'nlu_setting_treeify'
   },
 
   {
     names: ['dry-run', 'dry'],
     type: 'bool',
     help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',
-    default: false
+    default: false,
+    env: 'nlu_setting_dry_run'
   },
 
   {
@@ -71,26 +74,30 @@ export default [
     names: ['install-all', 'install:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
-    'using npm instead of yarn is the default.'
+    'using npm instead of yarn is the default.',
+    env: 'nlu_setting_install_all'
   },
 
   {
     names: ['link-all', 'link:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm link" or "yarn link" in each project; ' +
-    'using npm instead of yarn is the default.'
+    'using npm instead of yarn is the default.',
+    env: 'nlu_setting_link_all'
   },
 
   {
     names: ['install-main', 'install:main', 'install'],
     type: 'bool',
-    help: 'This option will tell NPM Link Up to run "npm install" on the main project.'
+    help: 'This option will tell NPM Link Up to run "npm install" on the main project.',
+    env: 'nlu_setting_install_main'
   },
 
   {
     names: ['link-main', 'link:main', 'link'],
     type: 'bool',
-    help: 'This option will tell NPM Link Up to run "npm link" on the main project.'
+    help: 'This option will tell NPM Link Up to run "npm link" on the main project.',
+    env: 'nlu_setting_link_main'
   },
 
   {
@@ -115,10 +122,11 @@ export default [
   },
 
   {
-    names: ['no-use-local','no-local'],
+    names: ['no-use-local', 'no-local-bin', 'no-local'],
     type: 'bool',
     help: 'Do not add local node_modules/.bin to the $PATH.',
-    default: false
+    default: false,
+    env: ['nlu_setting_no_local_bin']
   },
 
   {

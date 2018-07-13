@@ -54,18 +54,21 @@ npm_local_bin="${project_root}/node_modules/.bin";
 
 
 if [ "$use_local" == "yes" ]; then
+   if false; then
     echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
     echo "To not add local command line tools to the PATH, use the --no-local option.";
+    fi
     export PATH="${npm_local_bin}:${PATH}";
 fi
 
-
-echo "$nlu_name NLU is using NPM version => $(npm --version)";
-
+if false; then
+    echo "$nlu_name NLU is using NPM version => $(npm --version)";
+fi
 
 if [ "$first_arg" == "init" ]; then
 
-    shift 1; node "${project_root}/dist/commands/init" "$@";
+    shift 1;
+    node "${project_root}/dist/commands/init" "$@";
 
 elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
 
@@ -77,14 +80,21 @@ elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
 
   nlu run --install-main
 
+elif [ "$first_arg" == "config" ]; then
+
+    shift 1;
+    mkdir -p "$HOME/.nlu/global"
+    node "${project_root}/dist/commands/config" "$@";
 
 elif [ "$first_arg" == "add" ]; then
 
-    shift 1; node "${project_root}/dist/commands/add" "$@";
+    shift 1;
+    node "${project_root}/dist/commands/add" "$@";
 
 elif [ "$first_arg" == "run" ]; then
 
-    shift 1; node "${project_root}/dist/commands/run" "$@";
+    shift 1;
+    node "${project_root}/dist/commands/run" "$@";
 
 elif [ "$first_arg" == "update" ]; then
 
