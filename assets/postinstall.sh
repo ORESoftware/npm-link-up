@@ -16,6 +16,22 @@ mkdir -p "$HOME/.oresoftware" || {
 }
 
 
+if [[ "$(uname -s)" == "Linux" ]]; then
+
+   if [ ! -f "$HOME/.oresoftware/bin/realpath" ]; then
+      (
+        curl --silent -o- https://raw.githubusercontent.com/oresoftware/realpath/master/assets/install.sh | bash || {
+           echo "Could not install realpath on your system.";
+           exit 1;
+        }
+      )
+   fi
+fi
+
+
+
+
+
 mkdir -p "$HOME/.oresoftware/bash" && {
   cat "assets/shell.sh" > "$HOME/.oresoftware/bash/nlu.sh" || {
     echo "Could not copy nlu.sh file to ~/.oresoftware/bash dir.";
@@ -43,6 +59,8 @@ mkdir -p "$HOME/.oresoftware/bash" && {
        exit 1;
     }
 )
+
+wait;
 
 
 echo "";
