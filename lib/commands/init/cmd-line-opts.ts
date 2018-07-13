@@ -17,6 +17,22 @@ export default  [
   },
 
   {
+    names: ['debug', 'd'],
+    type: 'bool',
+    help: 'Show debug logging.',
+    default: false,
+    hidden: true
+  },
+
+  {
+    names: ['allow-unknown'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
+  {
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',

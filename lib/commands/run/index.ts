@@ -31,7 +31,7 @@ import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 import npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
-import {determineIfReinstallIsNeeded, validateConfigFile, validateOptions} from "../../utils";
+import {determineIfReinstallIsNeeded, getDevKeys, getProdKeys, validateConfigFile, validateOptions} from "../../utils";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -110,11 +110,8 @@ if (opts.verbosity > 0) {
 }
 
 
-const productionDepsKeys = Object.keys(pkg.dependencies || {});
-
-const allDepsKeys = productionDepsKeys
-.concat(Object.keys(pkg.devDependencies || {}))
-.concat(Object.keys(pkg.optionalDependencies || {}));
+const productionDepsKeys = getProdKeys(pkg);
+const allDepsKeys = getDevKeys(pkg);
 
 let list = conf.list;
 

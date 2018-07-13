@@ -16,6 +16,22 @@ export default [
   },
 
   {
+    names: ['debug', 'd'],
+    type: 'bool',
+    help: 'Show debug logging.',
+    default: false,
+    hidden: true
+  },
+
+  {
+    names: ['allow-unknown'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
+  {
     names: ['treeify'],
     type: 'bool',
     help: 'Log a tree representation of your project\'s npm-link-up dependencies and exit. This is cool.',

@@ -85,5 +85,8 @@ export interface NLUDotJSON {
   list: Array<string>,
   comments: Array<string>,
   searchRoots: Array<string>
-  linkToItself: boolean
+  linkToItself: boolean,
+  alwaysReinstall: boolean
+  'npm-link-up': true,
+  linkable: boolean
 }

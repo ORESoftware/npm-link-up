@@ -11,14 +11,15 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NluMap, NLURunOpts} from "./npmlinkup";
+import {EVCb, NLUDotJSON, NluMap, NLURunOpts} from "./npmlinkup";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
+import {determineIfReinstallIsNeeded, getDevKeys, getProdKeys} from "./utils";
 const searchedPaths = {} as { [key: string]: true };
 
 //////////////////////////////////////////////////////////////////////
 
-export const makeFindProject = function (mainProjectName: string, totalList: Map<string, boolean>, map: NluMap,
+export const makeFindProject = function (mainProjectName: string, totalList: Map<string, true>, map: NluMap,
                                          ignore: Array<RegExp>, opts: NLURunOpts, status: any) {
 
 
@@ -94,7 +95,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
   ///////////////////////////////////////////////////////////////////////////
 
-  return function findProject(item: string, cb: EVCb) {
+  return function findProject(item: string, cb: EVCb<any>) {
 
     item = path.normalize(item);
 
@@ -140,7 +141,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items as any, 3, function (item: string, cb: EVCb) {
+        async.eachLimit(items as any, 3, function (item: string, cb: EVCb<any>) {
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
@@ -200,7 +201,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(null);
             }
 
-            let pkg: any;
+            let pkg: any, linkable = null;
 
             try {
               pkg = require(item);
@@ -209,21 +210,35 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(err);
             }
 
-            if (pkg.name === mainProjectName) {
+            try {
+              linkable = pkg.nlu.linkable;
+            }
+            catch (err) {
+              //ignore
+            }
+
+            if (linkable === false) {
+              return cb(null);
+            }
+
+            if (pkg.name === mainProjectName && linkable !== true) {
               if (opts.verbosity > 1) {
-                log.info('Another project on your fs has your main projects package.json name, at path:',
-                  chalk.yellow.bold(dirname));
+                log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
               }
               return cb(null);
             }
 
-            let npmlinkup;
+            let npmlinkup: NLUDotJSON;
 
             try {
               npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
             }
             catch (e) {
               //ignore
+            }
+
+            if (npmlinkup && npmlinkup.linkable === false) {
+              return cb(null);
             }
 
             let deps, searchRoots;
@@ -242,7 +257,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               });
             }
 
-            map[pkg.name] = {
+            const m = map[pkg.name] = {
               name: pkg.name,
               bin: pkg.bin || null,
               isMainProject: false,
@@ -252,39 +267,66 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               deps: deps || []
             };
 
-            if (npmlinkup && (searchRoots = npmlinkup.searchRoots)) {
+            const nm = path.resolve(dirname + '/node_modules');
+            const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
 
-              try {
-                assert(Array.isArray(searchRoots),
-                  `the 'searchRoots' property in an .nlu.json file is not an Array instance for '${filename}'.`);
-              }
-              catch (err) {
-                return cb(err);
-              }
+            async.autoInject({
 
-              mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+              reinstall(cb: EVCb<any>) {
 
-                if (err) {
+                if (!totalList.get(pkg.name)) {
+                  return process.nextTick(cb);
+                }
+
+                determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
+                  m.runInstall = val === true;
+                  if (val === true) {
+                    log.debug(chalk.red('the following project needs reinstall:'), dirname);
+                  }
+                  cb(err);
+                });
+              },
+
+              addToSearchRoots(cb: EVCb<any>) {
+
+                searchRoots = npmlinkup && npmlinkup.searchRoots;
+
+                if (!searchRoots) {
+                  return cb(null);
+                }
+
+                if (!Array.isArray(searchRoots)) {
+                  return cb(new Error('The "searchRoots" property is not an array in .nlu.json file at path: ' + dirname));
+                }
+
+                try {
+                  assert(Array.isArray(searchRoots),
+                    `the 'searchRoots' property in an .nlu.json file is not an Array instance for '${filename}'.`);
+                }
+                catch (err) {
                   return cb(err);
                 }
 
-                roots.forEach(function (r) {
-                  if (isPathSearchable(r)) {
-                    q.push(function (cb) {
-                      findProject(r, cb);
-                    });
+                mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+
+                  if (err) {
+                    return cb(err);
                   }
+
+                  roots.forEach(function (r) {
+                    if (isPathSearchable(r)) {
+                      q.push(function (cb) {
+                        findProject(r, cb);
+                      });
+                    }
+                  });
+
+                  cb(null);
+
                 });
+              }
 
-                cb(null);
-
-              });
-
-            }
-            else {
-              // no searchRoots, we can continue
-              cb(null);
-            }
+            }, cb);
 
           });
 

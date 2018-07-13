@@ -23,6 +23,23 @@ export default [
     default: false
   },
 
+
+  {
+    names: ['debug', 'd'],
+    type: 'bool',
+    help: 'Show debug logging.',
+    default: false,
+    hidden: true
+  },
+
+  {
+    names: ['allow-unknown'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
   {
     names: ['dry-run','dry'],
     type: 'bool',
