@@ -37,7 +37,7 @@ import {
   getDevKeys,
   getProdKeys,
   validateConfigFile,
-  validateOptions
+  validateOptions, mapConfigObject
 } from "../../utils";
 import {NluGlobalSettingsConf} from "../config";
 
@@ -82,8 +82,6 @@ if(Array.isArray(globalConf)){
   globalConf = {};
 }
 
-opts = Object.assign({}, globalConf, opts);
-
 
 if (!root) {
   log.error('You do not appear to be within an NPM project (no package.json could be found).');
@@ -113,6 +111,23 @@ catch (e) {
   log.error(e.message);
   process.exit(1);
 }
+
+
+conf.localSettings = conf.localSettings || {};
+
+if(!(conf.localSettings && typeof conf.localSettings === 'object')){
+  conf.localSettings = {}
+}
+
+if(Array.isArray(conf.localSettings)){
+  conf.localSettings = {};
+}
+
+
+opts = Object.assign({}, mapConfigObject(globalConf), mapConfigObject(conf.localSettings), opts);
+
+console.log('the opts!!!', opts);
+
 
 if (!validateOptions(opts)) {
   log.error(chalk.bold('Your command line arguments were invalid, try:', chalk.magentaBright('nlu run --help')));

@@ -57,6 +57,13 @@ export const validateOptions = function (opts: any) {
 };
 
 
+export const mapConfigObject = function(obj: any){
+  return Object.keys(obj).reduce((a,b) => {
+    const key = String(b).replace(/[^a-zA-z]+/g,'_').toLowerCase();
+    return (a[key] = obj[b], a);
+  }, {} as any);
+};
+
 
 export const determineIfReinstallIsNeeded = (nodeModulesPath: string, depsKeys: Array<string>, opts: NLURunOpts, cb: EVCb<boolean>) => {
 

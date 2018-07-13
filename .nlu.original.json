@@ -17,8 +17,5 @@
     "prepend-transform",
     "residence",
     "json-stdio"
-  ],
-  "localSettings": {
-    "foo": "big"
-  }
+  ]
 }

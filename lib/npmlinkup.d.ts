@@ -1,6 +1,20 @@
 
 
+export interface NLUDotJSON {
+  localSettings?: {[key:string]: any}
+  ignore: Array<string>,
+  list: Array<string>,
+  comments: Array<string>,
+  searchRoots: Array<string>
+  linkToItself: boolean,
+  alwaysReinstall: boolean
+  'npm-link-up': true,
+  linkable: boolean
+}
+
 export interface NluConf {
+  localSettings?: {[key:string]: any}
+  linkable: true,
   'npm-link-up': boolean,
   comments: Array<string>,
   alwaysReinstall: boolean,
@@ -10,7 +24,7 @@ export interface NluConf {
   list: Array<string>
 }
 
-export type EVCb<T> = (err? : any, val?: T) => void;
+export type EVCb<T> = (err?: any, val?: T) => void;
 
 export interface NLURunOpts {
   _args: Array<string>,
@@ -63,7 +77,7 @@ export interface NLUBasicOpts {
 
 export interface NluMapItem {
   name: string,
-  bin: string | {[key:string]: string},
+  bin: string | { [key: string]: string },
   isMainProject: boolean,
   linkToItself: boolean,
   runInstall: boolean,
@@ -80,13 +94,4 @@ export interface NluVisualTree {
   [key: string]: NluVisualTree
 }
 
-export interface NLUDotJSON {
-  ignore: Array<string>,
-  list: Array<string>,
-  comments: Array<string>,
-  searchRoots: Array<string>
-  linkToItself: boolean,
-  alwaysReinstall: boolean
-  'npm-link-up': true,
-  linkable: boolean
-}
+

@@ -1,14 +1,14 @@
 'use strict';
 
-import {NluGlobalSettingsConf} from "./index";
+import {NluGlobalSettingsConf} from "../index";
 import * as fs from 'fs';
-import log from "../../logging";
+import log from "../../../logging";
 import chalk from "chalk";
-import {globalConfigFilePath} from "../../utils";
 
-export default function (opts: any, conf: NluGlobalSettingsConf) {
 
-  fs.writeFile(globalConfigFilePath, '{}', err => {
+export default function (opts: any, confPath: string, conf: NluGlobalSettingsConf) {
+
+  fs.writeFile(confPath, '{}', err => {
 
     if (err) {
       log.error('Could not write out global config.');
