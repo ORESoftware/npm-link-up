@@ -58,48 +58,76 @@ Using NLU, we can link the primary project to other projects too, in the linking
 
 The basic command:
 
-```js
-$ nlu run
-```
+>
+>```js
+>$ nlu run
+>```
 >
 > * will link up the current project with the packages defined by "list" in the local .nlu.json file (1)
 > * this is the most common command you will run
+>
 
-```bash
-$ nlu run --dry      # alias: --dry-run
-```
+<br>
+
+>
+>```bash
+>$ nlu run --dry      # alias: --dry-run
+>```
 >
 > * will do all the reads but none of the writes from (1)...will generate a tree and display it in the console so you can see what the linked projects will look like.
 >
 
-```bash
-$ nlu run --install
-```
+<br>
+
+>
+>```bash
+>$ nlu run --install
+>```
 >
 > * will re-install the primary project, and then do (1)
 >
 
-```bash
-$ nlu run --install:all  # alias --install-all
-```
+<br>
+
+>
+>```bash
+>$ nlu run --install:all
+>```
 >
 > * will re-install all projects, including the primary project, and then do (1)
 >
 
-```bash
-$ nlu run --link
-```
+<br>
+
+>
+>```bash
+>$ nlu run --link
+>```
 >
 > * will re-link (npm link) the primary project, and then do (1)
 > * this is only useful if you have new commands to put on the $PATH in the global space
 
 
-```bash
-$ nlu run --link:all     # alias --link-all
-```
+<br>
+
+>
+>```bash
+>$ nlu run --link:all
+>```
 >
 > * will re-link all projects (npm link will be run from the root of every project), including the primary project, and then do (1)
 > * this is only useful if you have new commands to put on the $PATH in the global space, for multiple projects.
+
+<br>
+
+>
+>```bash
+>$ nlu init
+>```
+>
+> * will generate an .nlu.json file for your working project.
+> * Use `nlu init -f` to skip the interactive part, and use dirname of the working directory as the searchRoot.
+>
 
 <br>
 
@@ -126,10 +154,10 @@ Create a config file called ```.nlu.json``` in the root of your project (we will
 For newcomers, you can use the following command to generate a proper .nlu.json file:
 
 ```bash
-nlu init   # run this from within project x
+ $ nlu init   # run this from within project x
 ```
 
-Follow the instructions in `$ nlu init`.
+Follow the instructions in `nlu init`. After you get better with NLU, you can just run `nlu init -f` to skip the interactive bit, or just create `.nlu.json` files by hand.
 
 
 The reason you are using this CLI tool, of course, is because there are other local projects that <br>
@@ -142,6 +170,7 @@ The following is a simple .nlu.json file:
 ```js
 {
   "npm-link-up": true,
+  "linkable": true,
   "searchRoots": [   
     "$HOME/WebstormProjects",  // the tool will search for npm packages within these dirs
     "$HOME/vscode_projects"
