@@ -104,11 +104,18 @@ if (opts.verbosity > 3) {
 
 async.autoInject({
 
-    checkForNluJSONFile(cb: EVCb) {
+    checkForNluJSONFile(cb: EVCb<any>) {
       fs.stat(nluJSONPath, (err, stats) => cb(null, stats));
     },
 
-    askUserAboutSearchRoots(cb: EVCb) {
+    askUserAboutSearchRoots(cb: EVCb<any>) {
+
+      if(opts.force){
+        const dirname = path.dirname(cwd);
+        const defaultSearchRoot = String(dirname).replace(String(process.env.HOME),'$HOME');
+        searchRoots.push(defaultSearchRoot);
+        return process.nextTick(cb);
+      }
 
       const rl = readline.createInterface({
         input: process.stdin,
