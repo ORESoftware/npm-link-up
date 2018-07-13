@@ -40,7 +40,16 @@ fi
 #rp=`realpath $0`;
 #echo "rp => $rp";
 
-project_root="$(dirname $(dirname $(/usr/local/bin/realpath $0)))";
+
+project_root="";
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    project_root="$(dirname $(dirname $("$HOME/.oresoftware/bin/realpath" $0)))";
+
+else
+    project_root="$(dirname $(dirname $(realpath $0)))";
+fi
+
 npm_local_bin="${project_root}/node_modules/.bin";
 
 
