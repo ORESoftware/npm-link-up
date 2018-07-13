@@ -21,7 +21,6 @@
 
 */
 
-
 const assert = require('assert');
 const path = require('path');
 const cp = require('child_process');
@@ -29,8 +28,140 @@ const os = require('os');
 const fs = require('fs');
 const EE = require('events');
 
-console.error('here we go');
-process.exit(0);
+process.on('unhandledRejection', (reason, p) => {
+  console.error(reason);
+  process.exit(1);
+});
+
+const name = 'rolo-cholo-yolo';
+const cloneable = 'https://github.com/ORESoftware/rolo-cholo-yolo.git';
+
+const shuffle = function (array) {
+
+  array = array.slice(0);
+
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
+
+const getProm = function (fn) {
+  return new Promise((resolve, reject) => {
+    fn((err, val) => {
+      err ? reject(err) : resolve(val);
+    })
+  });
+};
+
+
+const exec = function(command, cwd, cb){
+  const k = cp.spawn('bash', [], {
+    cwd: cwd || process.cwd()
+  });
+  k.stderr.pipe(process.stderr);
+  k.stdin.end(`${command}`);
+  k.once('exit', cb);
+};
+
+const mkdirp = function(dir){
+   return getProm(function(cb){
+     exec(`mkdir -p ${dir}`, null, cb);
+   });
+};
+
+const rimraf = function (dir) {
+  return getProm(function(cb){
+    exec(`rm -rf ${dir}`, null, cb);
+  });
+};
+
+const cloneProject = function (dir) {
+  return getProm(function(cb){
+     exec(`git clone ${cloneable} ${name}`, dir, cb);
+  });
+};
+
+
+const initNLU = function (dir) {
+  return getProm(function(cb){
+     exec(`nlu init -f`, dir, cb);
+  });
+};
+
+
+const runNLU = function (dir) {
+  return getProm(function(cb){
+    exec(`nlu run --no-install`, dir, cb);
+  });
+};
+
+const runTest = function (file) {
+  return getProm(function(cb){
+    exec(`node ${file}`, null, cb);
+  });
+};
+
+
+const tempDir = path.resolve(process.env.HOME + '/.nlu/temp');
+const proj = path.resolve(tempDir + `/${name}`);
+
+const order = shuffle(['rolo','cholo','yolo']);
+
+
+rimraf(tempDir)
+.then(v => mkdirp(tempDir))
+.then(v => cloneProject(tempDir))
+.then(v => {
+  const first = order[0];
+  const p = path.resolve(proj + '/' + first);
+  return initNLU(p).then(v => p);
+})
+.then(first => {
+  return runNLU(first);
+})
+.then(v => {
+  const second = order[1];
+  const p = path.resolve(proj + '/' + second);
+  return initNLU(p).then(v => p);
+})
+.then(second => {
+  return runNLU(second);
+})
+.then(v => {
+  const third = order[2];
+  const p = path.resolve(proj + '/' + third);
+  return initNLU(p).then(v => p);
+})
+.then(third => {
+  return runNLU(third);
+})
+.then(v => {
+
+  let p = Promise.resolve(null);
+
+  for(let i = 0; i < order.length; i++){
+    let file = path.resolve(proj + '/' + order[i] + '/test.js');
+    p = p.then(v => runTest(file));
+  }
+
+  return p;
+
+});
+
 
 
 // your test goes here
