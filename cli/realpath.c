@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main (int argc, char* argv[])
-{
+int main (int argc, char* argv[]){
   if (argc > 1) {
     for (int argIter = 1; argIter < argc; ++argIter) {
       char *resolved_path_buffer = NULL;

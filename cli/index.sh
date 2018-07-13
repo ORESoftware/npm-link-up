@@ -40,7 +40,7 @@ fi
 #rp=`realpath $0`;
 #echo "rp => $rp";
 
-project_root="$(dirname $(dirname $(realpath $0)))";
+project_root="$(dirname $(dirname $(/usr/local/bin/realpath $0)))";
 npm_local_bin="${project_root}/node_modules/.bin";
 
 
