@@ -30,7 +30,8 @@ import {createTree} from '../../create-visual-tree';
 import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 const npmLinkUpPkg = require('../../../package.json');
-import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
+import {EVCb, NluMap, NLURunOpts} from "../../index";
+
 import {
   globalConfigFilePath,
   determineIfReinstallIsNeeded,
@@ -39,7 +40,9 @@ import {
   validateConfigFile,
   validateOptions, mapConfigObject
 } from "../../utils";
-import {NluGlobalSettingsConf} from "../config";
+
+
+import {NluGlobalSettingsConf} from "../../index";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -124,9 +127,11 @@ if(Array.isArray(conf.localSettings)){
 }
 
 
-opts = Object.assign({}, mapConfigObject(globalConf), mapConfigObject(conf.localSettings), opts);
-
-console.log('the opts!!!', opts);
+opts = Object.assign({},
+  mapConfigObject(globalConf),
+  mapConfigObject(conf.localSettings),
+  opts
+);
 
 
 if (!validateOptions(opts)) {

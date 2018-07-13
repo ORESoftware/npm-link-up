@@ -13,6 +13,7 @@ import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
 import * as path from 'path';
 import {globalConfigFilePath} from "../../utils";
+import {NluGlobalSettingsConf} from "../../index";
 const root = residence.findProjectRoot(cwd);
 
 process.once('exit', code => {
@@ -30,9 +31,6 @@ try {
   process.exit(1);
 }
 
-export interface NluGlobalSettingsConf {
-  [key:string]: string | null | undefined | boolean | number
-}
 
 
 let conf : NluGlobalSettingsConf= null, confPath : string = null;
