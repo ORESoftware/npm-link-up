@@ -41,6 +41,21 @@ export default [
   },
 
   {
+    names: ['no-install'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
+  {
+    names: ['no-link'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+  {
     names: ['dry-run','dry'],
     type: 'bool',
     help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',

@@ -111,7 +111,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
       const bin = map[d].bin;
 
       // return ` npm link ${d} -f `;
-      return `mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
+      return ` mkdir -p node_modules && rm -rf "node_modules/${d}" && mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
         ` && ln -s "${path}" "node_modules/${d}" ` +
         ` ${getBinMap(bin, path, d)}`;
     });
@@ -125,7 +125,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
     }
 
     if (typeof bin === 'string') {
-      return ` && ln -s "${path}/${bin}" "node_modules/.bin/${name}" `
+      return ` && mkdir -p "node_modules/.bin" && ln -s "${path}/${bin}" "node_modules/.bin/${name}" `
     }
 
     const keys = Object.keys(bin);
@@ -135,7 +135,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
     }
 
     return ` && ` + keys.map(function (k) {
-      return ` ln -sf "${path}/${bin[k]}" "node_modules/.bin/${k}" `
+      return ` mkdir -p node_modules/.bin && ln -sf "${path}/${bin[k]}" "node_modules/.bin/${k}" `
     })
     .join(' && ');
   };
@@ -154,8 +154,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
       return map[k].isLinked && map[k].deps.includes(name);
     })
     .map(function (k) {
-      // return ` cd ${map[k].path} && npm link ${name} -f `;
-      return ` cd ${map[k].path} && mkdir -p "node_modules/${name}" ` +
+      const p = `${map[k].path}`;
+      return ` cd ${p} && mkdir -p node_modules && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
         ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` +
         ` ${getBinMap(bin, path, name)} `;
     });
@@ -163,29 +163,29 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
 
 
   const getInstallCommand = function (dep: NluMapItem) {
-    if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
+    if (!opts.no_install && (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main))) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && mkdir -p node_modules && rm -rf node_modules && npm install --loglevel=warn ${installProd}`;
+      return ` && rm -rf node_modules && npm install --loglevel=warn ${installProd}`;
     }
   };
 
   const getLinkToItselfCommand = function (dep: NluMapItem) {
-    if (opts.self_link_all || dep.linkToItself === true) {
+    if (!opts.no_link && (opts.self_link_all || dep.linkToItself === true)) {
       // return `&& npm link ${String(dep.name).trim()} -f`
-      return ` && mkdir -p "node_modules/${dep.name}" ` +
+      return ` && mkdir -p node_modules && rm -rf "node_modules/${dep.name}" && mkdir -p "node_modules/${dep.name}" ` +
         ` && rm -rf "node_modules/${dep.name}" ` +
         ` && ln -s "${dep.path}" "node_modules/${dep.name}" `;
     }
   };
 
   const getGlobalLinkCommand = function (dep: NluMapItem) {
-    if (opts.link_all || (dep.isMainProject && opts.link_main)) {
+    if (!opts.no_link && (opts.link_all || (dep.isMainProject && opts.link_main))) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && mkdir -p node_modules && npm link -f ${installProd}`;
+      return ` && mkdir -p node_modules/.bin && npm link -f ${installProd}`;
     }
   };
 
-  async.until(isAllLinked, function (cb: EVCb) {
+  async.until(isAllLinked, function (cb: EVCb<any>) {
 
     if (opts.verbosity > 2) {
       log.info(`Searching for next dep to run.`);
@@ -225,9 +225,10 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
     k.stdout.setEncoding('utf8');
     k.stderr.setEncoding('utf8');
 
+    k.stderr.pipe(process.stderr);
+
     if (opts.verbosity > 2) {
-      k.stdout.pipe(process.stdout, {end: false});
-      k.stderr.pipe(process.stderr, {end: false});
+      k.stdout.pipe(process.stdout);
     }
 
     let stderr = '';
@@ -271,9 +272,10 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb) => {
         k.stdout.setEncoding('utf8');
         k.stderr.setEncoding('utf8');
 
+        k.stderr.pipe(process.stderr, {end: false});
+
         if (opts.verbosity > 2) {
           k.stdout.pipe(process.stdout, {end: false});
-          k.stderr.pipe(process.stderr, {end: false});
         }
 
         k.stdin.end();

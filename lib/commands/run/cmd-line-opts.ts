@@ -32,6 +32,22 @@ export default [
   },
 
   {
+    names: ['no-install'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
+  {
+    names: ['no-link'],
+    type: 'bool',
+    help: 'Allow unknown/unrecognized options at the command line.',
+    default: false,
+    hidden: true
+  },
+
+  {
     names: ['treeify'],
     type: 'bool',
     help: 'Log a tree representation of your project\'s npm-link-up dependencies and exit. This is cool.',

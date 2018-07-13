@@ -26,11 +26,12 @@ import {getCleanMap} from "../../get-clean-final-map";
 import {validateConfigFile} from "../../utils";
 
 process.once('exit', code => {
-  log.info('Exiting with code:', code);
+  log.info('Exiting with code:', code,'\n');
 });
 
 if (!root) {
   log.error('Cannot find a project root given your current working directory:', chalk.magenta(cwd));
+  log.error(' => NLU could not find a package.json file within your cwd.');
   process.exit(1);
 }
 

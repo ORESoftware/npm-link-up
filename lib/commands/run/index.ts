@@ -196,7 +196,7 @@ map[mainProjectName] = {
 
 async.autoInject({
 
-    readNodeModulesFolders(cb: EVCb) {
+    readNodeModulesFolders(cb: EVCb<any>) {
 
       const nm = path.resolve(root + '/node_modules');
       const keys = opts.production ? productionDepsKeys: allDepsKeys;
@@ -218,7 +218,7 @@ async.autoInject({
 
     },
 
-    ensureNodeModules(readNodeModulesFolders: any, cb: EVCb) {
+    ensureNodeModules(readNodeModulesFolders: any, cb: EVCb<any>) {
 
       if (!readNodeModulesFolders) {
         // no error reading node_modules dir
@@ -230,7 +230,7 @@ async.autoInject({
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
 
-    npmCacheClean(cb: EVCb) {
+    npmCacheClean(cb: EVCb<any>) {
 
       if (opts.dry_run) {
         return process.nextTick(cb);
@@ -244,12 +244,12 @@ async.autoInject({
       cleanCache(cb);
     },
 
-    mapSearchRoots(npmCacheClean: any, cb: EVCb) {
+    mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, cb);
     },
 
-    findItems(mapSearchRoots: Array<string>, cb: EVCb) {
+    findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
 
       let searchRoots = mapSearchRoots.slice(0);
 
@@ -299,7 +299,7 @@ async.autoInject({
 
     },
 
-    runUtility(findItems: void, cb: EVCb) {
+    runUtility(findItems: void, cb: EVCb<any>) {
 
       try {
         cleanMap = getCleanMap(mainProjectName, map);

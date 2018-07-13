@@ -19,6 +19,7 @@ process.once('exit', code => {
 
 if (!root) {
   log.error('Cannot find a project root given your current working directory:', chalk.magenta(cwd));
+  log.error(' => NLU could not find a package.json file within your cwd.');
   process.exit(1);
 }
 
