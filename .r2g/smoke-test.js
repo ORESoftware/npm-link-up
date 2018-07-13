@@ -68,6 +68,12 @@ const getProm = function (fn) {
 };
 
 
+const logCommand = function(cmd){
+  console.log('Now running command:', cmd);
+  return cmd;
+};
+
+
 const exec = function(command, cwd, cb){
   const k = cp.spawn('bash', [], {
     cwd: cwd || process.cwd()
@@ -80,40 +86,40 @@ const exec = function(command, cwd, cb){
 
 const mkdirp = function(dir){
    return getProm(function(cb){
-     exec(`mkdir -p ${dir}`, null, cb);
+     exec(logCommand(`mkdir -p ${dir}`), null, cb);
    });
 };
 
 const rimraf = function (dir) {
   return getProm(function(cb){
-    exec(`rm -rf ${dir}`, null, cb);
+    exec(logCommand(`rm -rf ${dir}`), null, cb);
   });
 };
 
 const cloneProject = function (dir) {
   return getProm(function(cb){
-     exec(`git clone ${cloneable} ${name}`, dir, cb);
+     exec(logCommand(`git clone ${cloneable} ${name}`), dir, cb);
   });
 };
 
 
 const initNLU = function (dir) {
   return getProm(function(cb){
-     exec(`nlu init -f`, dir, cb);
+     exec(logCommand(`nlu init -f`), dir, cb);
   });
 };
 
 
 const runNLU = function (dir) {
   return getProm(function(cb){
-    exec(`nlu run --no-install`, dir, cb);
+    exec(logCommand(`nlu run --no-install`), dir, cb);
   });
 };
 
 
 const whichNLU = function () {
   return getProm(function(cb){
-   const k = exec(`which nlu`, null, cb);
+   const k = exec(logCommand(`which nlu`), null, cb);
     console.log("Discovering the path of (which nlu)");
     k.stdout.pipe(process.stdout);
   });
@@ -121,7 +127,7 @@ const whichNLU = function () {
 
 const runTest = function (file) {
   return getProm(function(cb){
-   const k = exec(`node ${file}`, null, cb);
+   const k = exec(logCommand(`node ${file}`), null, cb);
    k.stdout.pipe(process.stdout);
   });
 };
