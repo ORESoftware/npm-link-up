@@ -13,7 +13,7 @@ import residence = require('residence');
 
 //project
 import options from "./cmd-line-opts";
-import {EVCb, NLUInitOpts} from "../../npmlinkup";
+import {EVCb, NLUInitOpts} from "../../index";
 import log from '../../logging';
 const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();

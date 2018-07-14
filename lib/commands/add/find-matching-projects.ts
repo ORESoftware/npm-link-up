@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from '../../logging';
-import {EVCb, NLUAddOpts} from "../../npmlinkup";
+import {EVCb, NLUAddOpts} from "../../index";
 
 ////////////////////////////////////////////////////////////////
 
