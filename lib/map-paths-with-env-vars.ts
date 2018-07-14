@@ -5,11 +5,11 @@ import * as cp from 'child_process';
 
 //npm
 import log from './logging';
-import {EVCb} from "./npmlinkup";
+import {EVCb} from "./index";
 
 ///////////////////////////////////////////////////////////////////////
 
-export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
+export const mapPaths = (searchRoots: Array<string>, cb: EVCb<Array<string>>) => {
 
   const mappedRoots = searchRoots
   .map(v => String(v || '').trim())

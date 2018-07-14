@@ -11,6 +11,11 @@ exports.default = {
 
   searchRoot: path.resolve(process.env.MY_DOCKER_R2G_SEARCH_ROOT),
   tests: '',
-  packages: {}
+  packages: {
+    "@oresoftware/shell": true,
+    "prepend-transform": true,
+    "residence": true,
+    "json-stdio": true
+  }
 
 };

@@ -1,22 +1,30 @@
 
-ARG base_image
-FROM $base_image
+#ARG base_image
+#FROM $base_image
+
+FROM node:10
 
 ENV ores_bash_utils "https://raw.githubusercontent.com/oresoftware/npm.bash.utils"
 ENV r2g_tarballs_base_url="https://raw.githubusercontent.com/oresoftware/tarballs"
 ENV FORCE_COLOR=1
 ENV docker_r2g_in_container=yes
-ENV MY_DOCKER_R2G_SEARCH_ROOT="/home/node"
+ENV MY_DOCKER_R2G_SEARCH_ROOT="/root"
 
 RUN  curl -sS -o- "$ores_bash_utils/master/assets/install-basics.sh" | bash
 RUN sudo echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-USER node
-ENV USER="node"
-ENV HOME="/home/node"
-RUN mkdir -p /home/node/.docker_r2g_cache
-RUN mkdir -p /home/node/app/node_modules
-WORKDIR /home/node/app
+#USER node
+#ENV USER="node"
+#ENV HOME="/home/node"
+#RUN mkdir -p /home/node/.docker_r2g_cache
+#RUN mkdir -p /home/node/app/node_modules
+#WORKDIR /home/node/app
+
+ENV USER="root"
+ENV HOME="/root"
+RUN mkdir -p  $HOME/.docker_r2g_cache
+RUN mkdir -p $HOME/app/node_modules
+WORKDIR /app
 
 RUN sudo chmod -R 777  /home/node
 
