@@ -7,7 +7,7 @@ import * as path from 'path';
 import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
-import {NluConf, NLUDotJSON, NLURunOpts} from "./npmlinkup";
+import {NluConf, NLUDotJSON, NLURunOpts} from "./index";
 
 /////////////////////////////////////////////////////////////////////////////////
 

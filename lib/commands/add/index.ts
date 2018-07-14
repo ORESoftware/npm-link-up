@@ -13,7 +13,7 @@ import mkdirp = require('mkdirp');
 
 //project
 import options from "./cmd-line-opts";
-import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../npmlinkup";
+import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../index";
 import log from '../../logging';
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
@@ -35,7 +35,9 @@ if (!root) {
   process.exit(1);
 }
 
-let opts: NLUAddOpts, parser = dashdash.createParser({options});
+
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: NLUAddOpts, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);
