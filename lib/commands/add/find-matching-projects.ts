@@ -31,7 +31,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
     });
   };
 
-  return function findProject(item: string, cb: EVCb) {
+  return function findProject(item: string, cb: EVCb<any>) {
 
     item = path.normalize(item);
 
@@ -70,7 +70,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items, 3, function (item: string, cb: EVCb) {
+        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {

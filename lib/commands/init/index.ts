@@ -161,11 +161,11 @@ async.autoInject({
 
     },
 
-    mapSearchRoots(askUserAboutSearchRoots: any, cb: EVCb) {
+    mapSearchRoots(askUserAboutSearchRoots: any, cb: EVCb<any>) {
          mapPaths(searchRoots, cb);
     },
 
-    getMatchingProjects(askUserAboutSearchRoots: string, mapSearchRoots: Array<string>, checkForNluJSONFile: any, cb: EVCb) {
+    getMatchingProjects(askUserAboutSearchRoots: string, mapSearchRoots: Array<string>, checkForNluJSONFile: any, cb: EVCb<any>) {
       // given package.json, we can find local projects
 
       if (checkForNluJSONFile) {
@@ -176,7 +176,7 @@ async.autoInject({
       const map = {}, status = {searching: true};
       const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps, status);
 
-      type Task = (cb: EVCb) => void;
+      type Task = (cb: EVCb<any>) => void;
       const q = async.queue<Task, any>((task, cb) => task(cb));
 
       log.info('Your search roots are:', mapSearchRoots);
@@ -210,7 +210,7 @@ async.autoInject({
 
     },
 
-    writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb) {
+    writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb<any>) {
       const list = Object.keys(getMatchingProjects);
       const newNluJSON = Object.assign({}, defaultNluJSON);
       newNluJSON.searchRoots = searchRoots;

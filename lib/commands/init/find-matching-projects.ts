@@ -32,7 +32,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
     });
   };
 
-  return function findProject(item: string, cb: EVCb) {
+  return function findProject(item: string, cb: EVCb<any>) {
 
     item = path.normalize(item);
 
@@ -67,7 +67,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items, 3, function (item: string, cb: EVCb) {
+        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
           if (status.searching === false) {
             opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');

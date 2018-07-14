@@ -1,6 +1,6 @@
 'use strict';
 
-import {NluGlobalSettingsConf} from "../index";
+import {NluGlobalSettingsConf} from "../../../index";
 
 export default function (opts: any, confPath: string, conf: NluGlobalSettingsConf, key: string, value?: string) {
 
