@@ -26,7 +26,7 @@ if ! contains "$branch_type" "${arr[@]}"; then
 fi
 
 
-git fetch origin dev;
+git fetch origin;
 
 time_seconds=`node -e 'console.log(String(Date.now()).slice(0,-3))'`;
 
@@ -35,5 +35,6 @@ new_branch="${USER}/${branch_type}/${time_seconds}"
 
 echo "New branch name: $new_branch";
 
-git checkout -b "${new_branch}" "origin/dev"
+git branch --no-track "${new_branch}" "remotes/origin/dev"
+git checkout "${new_branch}"
 git push -u origin HEAD  # makes sure git is tracking this branch on the primary remote
