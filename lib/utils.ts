@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import Ajv = require('ajv');
 const schema = require('../assets/nlu.schema.json');
 import log from "./logging";
-import {EVCb, NluConf, NLURunOpts} from "./npmlinkup";
+import {EVCb, NluConf, NLURunOpts} from "./index";
 import chalk from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';

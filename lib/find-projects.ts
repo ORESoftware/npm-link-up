@@ -307,7 +307,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                   return cb(err);
                 }
 
-                mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+                mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
 
                   if (err) {
                     return cb(err);

@@ -30,17 +30,6 @@ if nlu_match_arg "--no-local" "${my_args[@]}"; then
   use_local="nope"
 fi
 
-
-#dir_name="$(dirname "$0")";
-#read_link="$(readlink "$0")";
-#exec_dir="$(dirname $(dirname "$read_link"))";
-#my_path="$dir_name/$exec_dir";
-#project_root="$(cd $(dirname ${my_path}) && pwd)/$(basename ${my_path})";
-
-#rp=`realpath $0`;
-#echo "rp => $rp";
-
-
 project_root="";
 
 if [[ "$(uname -s)" == "Darwin" ]]; then

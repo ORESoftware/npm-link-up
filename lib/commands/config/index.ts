@@ -3,7 +3,7 @@
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import options from "./cmd-line-opts";
-import {NLURunOpts} from "../../npmlinkup";
+import {NLURunOpts} from "../../index";
 import log from '../../logging';
 const npmLinkUpPkg = require('../../../package.json');
 import residence = require('residence');
@@ -21,8 +21,8 @@ process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
 });
 
-
-let opts: any, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: any, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);

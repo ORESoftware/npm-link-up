@@ -28,7 +28,8 @@ const commands = [
   'nlu add'
 ];
 
-let opts: any, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: any, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);

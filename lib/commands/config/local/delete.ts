@@ -1,6 +1,6 @@
 'use strict';
 
-import {NluGlobalSettingsConf} from "../index";
+import {NluGlobalSettingsConf} from "../../../index";
 import * as fs from 'fs';
 import log from "../../../logging";
 import chalk from "chalk";

@@ -1,10 +1,10 @@
 'use strict';
 
-import {NluGlobalSettingsConf} from "../index";
+import {NluGlobalSettingsConf} from "../../../index";
 import * as fs from 'fs';
 import log from "../../../logging";
 import chalk from "chalk";
-import {NluConf} from "../../../npmlinkup";
+import {NluConf} from "../../../index";
 
 export default function (opts: any, confPath: string, conf: NluConf, key: string, value?: string) {
 
