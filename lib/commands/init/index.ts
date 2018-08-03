@@ -163,7 +163,7 @@ async.autoInject({
     },
 
     mapSearchRoots(askUserAboutSearchRoots: any, cb: EVCb<any>) {
-         mapPaths(searchRoots, cb);
+         mapPaths(searchRoots, root, cb);
     },
 
     getMatchingProjects(askUserAboutSearchRoots: string, mapSearchRoots: Array<string>, checkForNluJSONFile: any, cb: EVCb<any>) {

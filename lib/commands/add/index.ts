@@ -6,6 +6,7 @@ import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
+
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
@@ -15,6 +16,7 @@ import mkdirp = require('mkdirp');
 import options from "./cmd-line-opts";
 import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../index";
 import log from '../../logging';
+
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 import {makeFindProjects} from "./find-matching-projects";
@@ -26,7 +28,7 @@ import {getCleanMap} from "../../get-clean-final-map";
 import {validateConfigFile} from "../../utils";
 
 process.once('exit', code => {
-  log.info('Exiting with code:', code,'\n');
+  log.info('Exiting with code:', code, '\n');
 });
 
 if (!root) {
@@ -34,7 +36,6 @@ if (!root) {
   log.error(' => NLU could not find a package.json file within your cwd.');
   process.exit(1);
 }
-
 
 const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
 let opts: NLUAddOpts, parser = dashdash.createParser({options, allowUnknown});
@@ -106,9 +107,9 @@ catch (err) {
   throw err.message;
 }
 
-if(!validateConfigFile(nluJSON)){
+if (!validateConfigFile(nluJSON)) {
   log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
-  if(!opts.override){
+  if (!opts.override) {
     process.exit(1);
   }
 }
@@ -152,13 +153,13 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 
 async.autoInject({
 
-    ensureNodeModules(cb: EVCb<any>){
+    ensureNodeModules(cb: EVCb<any>) {
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
 
     mapSearchRoots(cb: EVCb<Array<string>>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, cb);
+      mapPaths(searchRoots, root, cb);
     },
 
     getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb<any>) {
@@ -173,7 +174,7 @@ async.autoInject({
       log.info('Search roots are:', mapSearchRoots);
 
       mapSearchRoots.forEach((v: string) => {
-        q.push(function (cb: EVCb<any>) {
+        q.push((cb: EVCb<any>) => {
           findProjects(v, cb);
         });
       });
@@ -205,7 +206,7 @@ async.autoInject({
 
       try {
         nluJSON.list = nluJSON.list.concat(projectsToAdd)
-        .map(v => String(v || '').trim()).filter((v,i,a) => a.indexOf(v) === i);
+        .map(v => String(v || '').trim()).filter((v, i, a) => a.indexOf(v) === i);
       }
       catch (e) {
         return process.nextTick(cb, e);

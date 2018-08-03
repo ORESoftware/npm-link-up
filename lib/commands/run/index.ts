@@ -162,9 +162,7 @@ const productionDepsKeys = getProdKeys(pkg);
 const allDepsKeys = getDevKeys(pkg);
 
 let list = conf.list;
-
-assert(Array.isArray(list),
-  'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
+assert(Array.isArray(list), 'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
 
 list = list.filter(function (item: string) {
   return !/###/.test(item);
@@ -294,7 +292,7 @@ async.autoInject({
 
     mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, cb);
+      mapPaths(searchRoots, root, cb);
     },
 
     findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
