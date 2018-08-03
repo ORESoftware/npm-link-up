@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap, NLURunOpts} from "./npmlinkup";
+import {EVCb, NLUDotJSON, NluMap, NLURunOpts} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths-with-env-vars";
 import {determineIfReinstallIsNeeded, getDevKeys, getProdKeys} from "./utils";
@@ -307,7 +307,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                   return cb(err);
                 }
 
-                mapPaths(searchRoots, function (err: any, roots: Array<string>) {
+                mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
 
                   if (err) {
                     return cb(err);

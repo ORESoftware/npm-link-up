@@ -1,6 +1,6 @@
 'use strict';
 
-import {EVCb, NluMap, NluMapItem, NLURunOpts, NLUAddOpts} from "./npmlinkup";
+import {EVCb, NluMap, NluMapItem, NLURunOpts, NLUAddOpts} from "./index";
 
 //core
 import * as util from 'util';
@@ -245,7 +245,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
 
       dep.isLinked = map[dep.name].isLinked = true;
 
-      const linkPreviouslyUnlinked = function (cb: EVCb) {
+      const linkPreviouslyUnlinked = function (cb: EVCb<any>) {
 
         const cmds = getCommandListOfLinked(dep.name);
 

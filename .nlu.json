@@ -13,7 +13,6 @@
   ],
   "list": [
     "@oresoftware/shell",
-    "frankenstop",
     "prepend-transform",
     "residence",
     "json-stdio"

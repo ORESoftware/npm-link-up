@@ -3,7 +3,7 @@
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import options from "./cmd-line-opts";
-import {NLURunOpts} from "../../npmlinkup";
+import {NLURunOpts} from "../../index";
 import log from '../../logging';
 const npmLinkUpPkg = require('../../../package.json');
 import residence = require('residence');
@@ -13,6 +13,7 @@ import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
 import * as path from 'path';
 import {globalConfigFilePath} from "../../utils";
+import {NluGlobalSettingsConf} from "../../index";
 const root = residence.findProjectRoot(cwd);
 
 process.once('exit', code => {
@@ -20,8 +21,8 @@ process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
 });
 
-
-let opts: any, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: any, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);
@@ -30,9 +31,6 @@ try {
   process.exit(1);
 }
 
-export interface NluGlobalSettingsConf {
-  [key:string]: string | null | undefined | boolean | number
-}
 
 
 let conf : NluGlobalSettingsConf= null, confPath : string = null;

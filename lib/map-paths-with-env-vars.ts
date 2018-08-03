@@ -5,11 +5,12 @@ import * as cp from 'child_process';
 
 //npm
 import log from './logging';
-import {EVCb} from "./npmlinkup";
+import {EVCb} from "./index";
+import * as path from "path";
 
 ///////////////////////////////////////////////////////////////////////
 
-export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
+export const mapPaths = (searchRoots: Array<string>, dirname: string, cb: EVCb<Array<string>>) => {
 
   const mappedRoots = searchRoots
   .map(v => String(v || '').trim())
@@ -31,7 +32,7 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
   k.stderr.setEncoding('utf8');
   k.stderr.pipe(process.stderr);
 
-  k.stdout.on('data', (d: string) => {
+  k.stdout.on('data', d => {
     String(d || '').split('\n')
     .map(v => String(v || '').trim())
     .filter(Boolean).forEach(v => {
@@ -39,11 +40,11 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
     });
   });
 
-  k.once('error', (e) => {
+  k.once('error', e => {
     cb(e || new Error('Missing error - error was mia.'));
   });
 
-  k.once('exit', (code: number) => {
+  k.once('exit', code => {
 
     if (code > 0) {
       return cb({code: code});
@@ -65,7 +66,7 @@ export const mapPaths = (searchRoots: Array<string>, cb: EVCb) => {
       }
     });
 
-    cb(null, pths);
+    cb(null, pths.map(p => path.isAbsolute(p) ? p : path.resolve(dirname + '/' + p)));
 
   });
 };

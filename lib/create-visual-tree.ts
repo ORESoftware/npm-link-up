@@ -1,13 +1,12 @@
 'use strict';
 
 import util = require('util');
-import {NluMap, NLURunOpts, NluVisualTree} from "./npmlinkup";
+import {NluMap, NLURunOpts, NluVisualTree} from "./index";
 import log from './logging';
 
 /////////////////////////////////////////////////////////////////////////////////
 
-export const createTree =
-  function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
+export const createTree = function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
     
     let tree: NluVisualTree = {
       [name]: {}

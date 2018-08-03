@@ -30,7 +30,8 @@ import {createTree} from '../../create-visual-tree';
 import {getCleanMap} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 const npmLinkUpPkg = require('../../../package.json');
-import {EVCb, NluMap, NLURunOpts} from "../../npmlinkup";
+import {EVCb, NluMap, NLURunOpts} from "../../index";
+
 import {
   globalConfigFilePath,
   determineIfReinstallIsNeeded,
@@ -39,7 +40,9 @@ import {
   validateConfigFile,
   validateOptions, mapConfigObject
 } from "../../utils";
-import {NluGlobalSettingsConf} from "../config";
+
+
+import {NluGlobalSettingsConf} from "../../index";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +52,8 @@ process.once('exit', function (code) {
 
 //////////////////////////////////////////////////////////////
 
-let opts: NLURunOpts, globalConf: NluGlobalSettingsConf, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: NLURunOpts, globalConf: NluGlobalSettingsConf, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);
@@ -124,9 +128,11 @@ if(Array.isArray(conf.localSettings)){
 }
 
 
-opts = Object.assign({}, mapConfigObject(globalConf), mapConfigObject(conf.localSettings), opts);
-
-console.log('the opts!!!', opts);
+opts = Object.assign({},
+  mapConfigObject(globalConf),
+  mapConfigObject(conf.localSettings),
+  opts
+);
 
 
 if (!validateOptions(opts)) {
@@ -156,9 +162,7 @@ const productionDepsKeys = getProdKeys(pkg);
 const allDepsKeys = getDevKeys(pkg);
 
 let list = conf.list;
-
-assert(Array.isArray(list),
-  'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
+assert(Array.isArray(list), 'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
 
 list = list.filter(function (item: string) {
   return !/###/.test(item);
@@ -288,7 +292,7 @@ async.autoInject({
 
     mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, cb);
+      mapPaths(searchRoots, root, cb);
     },
 
     findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
