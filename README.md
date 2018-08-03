@@ -59,7 +59,7 @@ Using NLU, we can link the primary project to other projects too, in the linking
 The basic command:
 
 >
->```js
+>```bash
 >$ nlu run
 >```
 >
@@ -131,11 +131,39 @@ The basic command:
 
 <br>
 
-### Complete real-world usage example:
-See: https://github.com/sumanjs
+### The .nlu.json configuration file
 
-The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
-Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
+Your primary project needs an `.nlu.json` file, which can be auto-generated using `nlu init` (see below, for instructions.)
+
+<br>
+
+The two most important fields in the `.nlu.json` file are `"searchRoots"` and `"list"`.
+
+```js
+{
+  "searchRoots": [     // the tool will search for npm packages within these dirs
+    "$HOME/WebstormProjects", 
+    "../socket.io",
+    "../../mongoose"
+  ],
+  "list": [        // list the local packages that you want to symlink to this project, here. NPM package name only, no paths needed.
+    "socket.io",   // (these are just examples using well-known NPM packages, you will be using packages that you develop locally.)
+    "mongoose",
+    "lodash"
+  ]
+}
+```
+
+<br>
+
+The `"list"` field, is an array of the package names - these need to match the package.json name field for whatever packages you want to link
+to your primary project.
+
+<br>
+
+The `"searchRoots"` field is an array of places to search for packages on your filesystem. You can use relative paths, or alternatively,
+just use a grandparent directory which contains all of your projects. Using the latter technique is highly recommended.
+Using relative paths is more error-prone and requires more maintenance, and is more verbose. *You can use env variables in your searchRoots paths*.
 
 <br>
 
@@ -185,14 +213,12 @@ The following is a simple .nlu.json file:
     "mongoose",
     "lodash"
   ],
-  "install": "yarn",     // we give specific instructions (a bash script) on how to install, ("npm install" is default)
   "linkToItself": true   // if true, we link this project to itself; true is the default. Linking a project to itself is useful for testing.
 }
 ```
 
 
 After creating an .nlu.json file in the root of your project that's all you need to do, and then run:
-
 
 ```bash
 $ nlu run   # run this from within project x
@@ -207,12 +233,19 @@ $ nlu run   # run this from within project x
 
 <br>
 
-
 ## Tips and tricks:
 
 * If you want to use a particular yarn or npm version to link your project, you can install npm or yarn as a local dependency of your primary project, and NLU will pick that up.
 * The above is the case, because by default NLU adds local node_modules/.bin items to the $PATH.
 
+
+### Complete real-world usage example:
+See: https://github.com/sumanjs
+
+The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
+Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
+
+<br>
 
 ### Screenshots:
 
