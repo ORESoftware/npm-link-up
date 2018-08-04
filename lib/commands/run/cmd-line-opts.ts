@@ -35,9 +35,10 @@ export default [
   {
     names: ['no-install'],
     type: 'bool',
-    help: 'Allow unknown/unrecognized options at the command line.',
+    help: 'Do not run "npm install" at any time.',
     default: false,
-    hidden: true
+    hidden: true,
+    env: 'nlu_setting_no_install'
   },
 
   {
@@ -45,7 +46,8 @@ export default [
     type: 'bool',
     help: 'Allow unknown/unrecognized options at the command line.',
     default: false,
-    hidden: true
+    hidden: true,
+    env: 'nlu_setting_no_link'
   },
 
   {
@@ -67,7 +69,8 @@ export default [
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',
-    default: false
+    default: false,
+    env: 'nlu_setting_force'
   },
 
   {
@@ -75,7 +78,7 @@ export default [
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
     'using npm instead of yarn is the default.',
-    env: 'nlu_setting_install_all'
+    env: 'nlu_setting_install_all',
   },
 
   {

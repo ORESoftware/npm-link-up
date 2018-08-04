@@ -3,8 +3,7 @@
   "version": "0.1.313",
   "bin": {
     "nlu": "cli/index.sh",
-    "npmlinkup": "cli/index.sh",
-    "realpath": "cli/realpath"
+    "npmlinkup": "cli/index.sh"
   },
   "description": "Use this package to link your projects together for local development.",
   "main": "dist/index.js",

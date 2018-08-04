@@ -20,9 +20,13 @@ nlu(){
 
      second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";
 
+     if [ "$third_arg" == "false" ]; then
+        third_arg="0";
+     fi
+
      if [ -z "$third_arg" ]; then
         third_arg="";
-        echo >&2 "warning, wrt: 'nlu set a b', b will be an empty variable, according to your most recent command."
+        echo >&2 "warning: 'nlu set a b', b will be an empty variable, according to your most recent command."
      fi
 
       export "nlu_setting_$second_arg"="$third_arg";

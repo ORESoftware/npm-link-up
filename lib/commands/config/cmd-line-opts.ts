@@ -25,21 +25,24 @@ export default [
     names: ['force'],
     type: 'bool',
     help: 'Force execution at hand.',
-    default: false
+    default: false,
+    env: 'nlu_setting_force'
   },
 
   {
     names: ['global','g'],
     type: 'bool',
     help: 'Tells NLU to make changes to global config, not the local config.',
-    default: false
+    default: false,
+    env: 'nlu_setting_global'
   },
 
   {
     names: ['json'],
     type: 'bool',
     help: 'Use JSON for command line output.',
-    default: false
+    default: false,
+    env: 'nlu_setting_json'
   },
 
   {
