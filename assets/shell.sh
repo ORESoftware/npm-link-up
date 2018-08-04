@@ -38,9 +38,11 @@ nlu(){
 
       local second_arg="$2";
 
-      if [ -z "$second_arg" ]; then
-        echo >&2 "'\$ nlu get foo', requires that 'foo' be defined/non-empty."
-        return 1
+      if [ -z "$second_arg" ] || [ "$second_arg" == "*" ]; then
+        compgen -A variable | grep "nlu_setting_" | while read v; do
+                echo "$v = ${!v}";
+        done
+        return 0;
       fi
 
       second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";
