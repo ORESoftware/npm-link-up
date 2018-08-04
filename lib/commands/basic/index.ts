@@ -51,7 +51,7 @@ if (opts.help) {
   log.info('To get help for "nlu init", use:', chalk.blueBright.bold('nlu init --help'));
   log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu run --help'));
   log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu add --help'));
-  log.info('Etc.')
+  log.info('Etc.');
   process.exit(0);
 }
 

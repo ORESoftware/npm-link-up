@@ -26,7 +26,9 @@ RUN mkdir -p  $HOME/.docker_r2g_cache
 RUN mkdir -p $HOME/app/node_modules
 WORKDIR /app
 
-RUN sudo chmod -R 777  /home/node
+#RUN sudo chmod -R 777  /home/node
+
+RUN sudo chmod -R 777  /app
 
 RUN  curl -sS -o- "$ores_bash_utils/master/assets/run-non-root-chown.sh" | bash
 RUN  curl -sS -o- "$ores_bash_utils/master/assets/run-npm-config-settings.sh" | bash
@@ -43,7 +45,8 @@ RUN npm i -g "$r2g_tarballs_base_url/master/tgz/oresoftware/docker.r2g.tgz?$(dat
 
 COPY . .
 
-RUN sudo chmod -R 777  /home/node
+#RUN sudo chmod -R 777  /home/node
+RUN sudo chmod -R 777  /app
 
 # RUN npm i -s -g "."
 # RUN npm link

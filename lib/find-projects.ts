@@ -26,6 +26,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
   ////////////////////////////////////////////////////////////////////////
 
   const isPathSearchableBasic = function (item: string) {
+
     item = path.normalize(item);
 
     if (!path.isAbsolute(item)) {
