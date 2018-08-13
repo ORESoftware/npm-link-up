@@ -25,7 +25,7 @@ import alwaysIgnoreThese from "../../always-ignore";
 import {mapPaths} from "../../map-paths";
 import {runNPMLink} from "../../run-link";
 import {getCleanMap} from "../../get-clean-final-map";
-import {validateConfigFile} from "../../utils";
+import * as nluUtils from "../../utils";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
@@ -65,11 +65,8 @@ catch (err) {
   process.exit(1);
 }
 
-const flattenDeep = function (arr1: Array<any>): Array<any> {
-  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
-};
 
-const projectsToAdd = flattenDeep([opts._args]).map(v => String(v || '').trim()).filter(Boolean);
+const projectsToAdd = nluUtils.flattenDeep([opts._args]).map(v => String(v || '').trim()).filter(Boolean);
 
 const absolutePaths = projectsToAdd.filter(v => path.isAbsolute(v));
 
@@ -107,7 +104,7 @@ catch (err) {
   throw err.message;
 }
 
-if (!validateConfigFile(nluJSON)) {
+if (!nluUtils.validateConfigFile(nluJSON)) {
   console.error();
   if (!opts.override) {
     log.error(chalk.redBright('Your .nlu.json config file appears to be invalid. To override this, use --override.'));
@@ -115,7 +112,7 @@ if (!validateConfigFile(nluJSON)) {
   }
 }
 
-let searchRoots = nluJSON.searchRoots;
+let searchRoots = nluUtils.flattenDeep([nluJSON.searchRoots, nluJSON.searchRoot]);
 
 if (opts.search_from_home && opts.search_root) {
   log.error('You passed the --search-from-home option along with --search/--search-root.');
@@ -127,7 +124,7 @@ if (opts.search_from_home) {
 }
 
 if (opts.search_root) {
-  searchRoots = flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
+  searchRoots = nluUtils.flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
 }
 
 if (!(searchRoots && searchRoots.length > 0)) {

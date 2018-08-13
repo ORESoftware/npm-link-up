@@ -12,14 +12,7 @@
     "/node_modules/",
     "/.git/"
   ],
-  "deps": [
-    "foo"
-  ],
   "list": [
     "foo"
-  ],
-  "packages": {
-    "foo": true,
-    "bar": false
-  }
+  ]
 }

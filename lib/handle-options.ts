@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
 import {NluConf, NLUDotJSON, NLURunOpts} from "./index";
+import * as nluUtils from './utils';
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -32,9 +33,8 @@ export const getIgnore = function (conf: NLUDotJSON, opts: any) {
 
 };
 
-const flattenDeep = function (arr1: Array<any>): Array<any> {
-  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
-};
+
+
 
 export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<string> {
 
@@ -43,20 +43,25 @@ export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<
   if (opts.search_from_home) {
     searchRoots.push(path.resolve(process.env.HOME));
   }
-
-  if (opts.search_root && opts.search_root.length > 0) {
+  else if (opts.search_root && opts.search_root.length > 0) {
     searchRoots.push(opts.search_root);
   }
-
-
-  searchRoots.push([].concat(conf.searchRoots || []).concat(opts.search_root_append || []));
-
+  else{
+    searchRoots.push(conf.searchRoots);
+    searchRoots.push(opts.search_root_append);
+    searchRoots.push(conf.searchRoot);
+  }
+  
+  
   const searchRootsReduced: Array<string> = [];
 
   // here we flatten and get rid of dupes and reduce to the most common paths
-  flattenDeep(searchRoots).map(d => String(d || '').trim()).filter(Boolean)
+  nluUtils.getUniqueList(nluUtils.flattenDeep(searchRoots))
+  .map(d => String(d || '').trim())
+  .filter(Boolean)
   .sort((a, b) => (a.length - b.length))
   .filter((v, i, a) => {
+    
     const s = !a.some(p => {
       return p.startsWith(v + '/');
     });
