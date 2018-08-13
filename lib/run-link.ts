@@ -36,7 +36,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
   }
 
   if (opts.verbosity > 2) {
-    log.good('Dependency map:');
+    log.info('Dependency map:');
   }
 
   Object.keys(map).forEach(function (k) {
@@ -192,7 +192,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
     const dep = findNextDep();
 
     if (opts.verbosity > 1) {
-      log.good(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
+      log.info(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
     }
 
     const deps = getNPMLinkList(dep.deps);

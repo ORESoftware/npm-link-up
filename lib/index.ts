@@ -16,6 +16,10 @@ export interface NLUDotJSON {
   linkable: boolean
 }
 
+export interface PackagesMap {
+  [key: string]: any
+}
+
 export interface NluConf {
   localSettings?: { [key: string]: any }
   linkable: true,
@@ -25,7 +29,9 @@ export interface NluConf {
   linkToItself: boolean,
   searchRoots: Array<string>,
   ignore: Array<string>,
-  list: Array<string>
+  list?: Array<string>,
+  deps?: Array<string>,
+  packages: PackagesMap
 }
 
 export type EVCb<T> = (err?: any, val?: T) => void;

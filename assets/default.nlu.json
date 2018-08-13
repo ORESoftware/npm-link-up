@@ -12,5 +12,14 @@
     "/node_modules/",
     "/.git/"
   ],
-  "list": []
+  "deps": [
+    "foo"
+  ],
+  "list": [
+    "foo"
+  ],
+  "packages": {
+    "foo": true,
+    "bar": false
+  }
 }

@@ -13,7 +13,7 @@ import chalk from 'chalk';
 import log from './logging';
 import {EVCb, NLUDotJSON, NluMap, NLURunOpts} from "./index";
 import {q} from './search-queue';
-import {mapPaths} from "./map-paths-with-env-vars";
+import {mapPaths} from "./map-paths";
 import {determineIfReinstallIsNeeded, getDevKeys, getProdKeys} from "./utils";
 const searchedPaths = {} as { [key: string]: true };
 
@@ -34,7 +34,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     }
 
     if (searchedPaths[item]) {
-      opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
+      opts.verbosity > 2 && log.info('already searched this path, not searching again:', chalk.bold(item));
       return false;
     }
 
@@ -53,7 +53,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     }
 
     if (searchedPaths[item]) {
-      opts.verbosity > 2 && log.good('already searched this path, not searching again:', chalk.bold(item));
+      opts.verbosity > 2 && log.info('already searched this path, not searching again:', chalk.bold(item));
       return false;
     }
 
@@ -72,9 +72,9 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     });
 
     if (match && opts.verbosity > 1) {
-      log.good(chalk.blue('path has already been covered:'));
-      log.good('new path:', chalk.bold(item));
-      log.good('already searched path:', chalk.bold(goodPth));
+      log.info(chalk.blue('path has already been covered:'));
+      log.info('potential new path:', chalk.bold(item));
+      log.info('already searched path:', chalk.bold(goodPth));
     }
 
     return match;
@@ -82,7 +82,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
   /////////////////////////////////////////////////////////////////////////
 
-  const isIgnored = function (pth: string) {
+  const isIgnored =  (pth: string) : boolean => {
     return ignore.some(r => {
       if (r.test(pth)) {
         if (opts.verbosity > 3) {
@@ -96,7 +96,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
   ///////////////////////////////////////////////////////////////////////////
 
-  return function findProject(item: string, cb: EVCb<any>) {
+  return function findProject(item: string, cb: EVCb<any>) : void {
 
     item = path.normalize(item);
 
@@ -105,7 +105,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     }
 
     searchedPaths[item] = true;
-    log.good('new path being searched:', chalk.blue(item));
+    log.info('New path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
@@ -316,6 +316,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
                   roots.forEach(function (r) {
                     if (isPathSearchable(r)) {
+                      log.info(chalk.cyan('Given the .nlu.json file at this path:'), chalk.bold(dirname));
+                      log.info(chalk.cyan('We are adding this to the search queue:'), chalk.bold(r));
                       q.push(function (cb) {
                         findProject(r, cb);
                       });

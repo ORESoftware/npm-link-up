@@ -36,7 +36,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
     item = path.normalize(item);
 
-    log.good('new path being searched:', chalk.blue(item));
+    log.info('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
@@ -140,7 +140,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
             if (theirDeps[pkg.name]) {
 
-              log.good('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+              log.info('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
 
               if (map[pkg.name]) {
                 // this pkg.name is already in the map!
