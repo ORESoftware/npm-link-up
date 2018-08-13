@@ -261,7 +261,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(err);
             }
             
-            deps.forEach(function (item: string) {
+            deps.forEach(item => {
               totalList.set(item, true);
             });
             
