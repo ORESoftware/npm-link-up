@@ -1,4 +1,5 @@
 {
+  "$schema": "./assets/nlu.schema.json",
   "npm-link-up": true,
   "linkToItself": false,
   "comments": [
@@ -18,6 +19,7 @@
     "json-stdio"
   ],
   "localSettings": {
-    "foo": "big"
+    "bar": "2",
+    "foo": "eeee"
   }
 }

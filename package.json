@@ -3,8 +3,7 @@
   "version": "0.1.313",
   "bin": {
     "nlu": "cli/index.sh",
-    "npmlinkup": "cli/index.sh",
-    "realpath": "cli/realpath"
+    "npmlinkup": "cli/index.sh"
   },
   "description": "Use this package to link your projects together for local development.",
   "main": "dist/index.js",
@@ -42,7 +41,7 @@
     "frankenstop": "latest",
     "json-stdio": "latest",
     "mkdirp": "^0.5.1",
-    "prepend-transform": "latest",
+    "prepend-transform": "0.0.1017",
     "residence": "latest",
     "treeify": "^1.0.1"
   },
