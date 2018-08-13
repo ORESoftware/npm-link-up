@@ -11,4 +11,4 @@ fi
 
 # to use this redirect output to assets/nlu.schema.json
 
-typescript-json-schema --ignoreErrors 'lib/npmlinkup.d.ts' NluConf
+typescript-json-schema --ignoreErrors 'lib/index.ts' NluConf

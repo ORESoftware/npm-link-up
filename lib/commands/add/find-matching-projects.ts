@@ -35,7 +35,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
     item = path.normalize(item);
 
-    log.good('new path being searched:', chalk.blue(item));
+    log.info('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
@@ -155,7 +155,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                 status.searching = false;
               }
 
-              log.good('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+              log.info('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
               const helpLink = 'https://github.com/ORESoftware/npm-link-up/tree/master/docs/easy-duplicate-package-mitigation.md';
 
               if (map[pkg.name]) {

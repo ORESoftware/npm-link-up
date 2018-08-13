@@ -4,9 +4,8 @@ export const r2gSmokeTest = function () {
   return true;
 };
 
-
 export interface NLUDotJSON {
-  localSettings?: {[key:string]: any}
+  localSettings?: { [key: string]: any }
   ignore: Array<string>,
   list: Array<string>,
   comments: Array<string>,
@@ -17,8 +16,12 @@ export interface NLUDotJSON {
   linkable: boolean
 }
 
+export interface PackagesMap {
+  [key: string]: any
+}
+
 export interface NluConf {
-  localSettings?: {[key:string]: any}
+  localSettings?: { [key: string]: any }
   linkable: true,
   'npm-link-up': boolean,
   comments: Array<string>,
@@ -26,14 +29,15 @@ export interface NluConf {
   linkToItself: boolean,
   searchRoots: Array<string>,
   ignore: Array<string>,
-  list: Array<string>
+  list?: Array<string>,
+  deps?: Array<string>,
+  packages: PackagesMap
 }
 
 export type EVCb<T> = (err?: any, val?: T) => void;
 
-
 export interface NluGlobalSettingsConf {
-  [key:string]: string | null | undefined | boolean | number
+  [key: string]: string | null | undefined | boolean | number
 }
 
 export interface NLURunOpts {

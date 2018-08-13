@@ -22,7 +22,7 @@ const defaultNluJSON = require('../../../assets/default.nlu.json');
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './init-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
-import {mapPaths} from "../../map-paths-with-env-vars";
+import {mapPaths} from "../../map-paths";
 
 process.once('exit', code => {
   log.info('Exiting with code:', code,'\n');

@@ -20,7 +20,7 @@ import mkdirp = require('mkdirp');
 
 //project
 import {makeFindProject} from '../../find-projects';
-import {mapPaths} from '../../map-paths-with-env-vars';
+import {mapPaths} from '../../map-paths';
 import {cleanCache} from '../../cache-clean';
 import log from '../../logging';
 import {getIgnore, getSearchRoots} from "../../handle-options";
@@ -141,8 +141,9 @@ if (!validateOptions(opts)) {
 }
 
 if (!validateConfigFile(conf)) {
-  log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
+  console.error();
   if (!opts.override) {
+    log.error(chalk.redBright('Your .nlu.json config file appears to be invalid. To override this, use --override.'));
     process.exit(1);
   }
 }
@@ -154,7 +155,7 @@ if (!mainProjectName) {
   process.exit(1);
 }
 if (opts.verbosity > 0) {
-  log.good(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
+  log.info(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 }
 
 
@@ -217,7 +218,7 @@ const ignore = getIgnore(conf, opts);
 
 originalList.forEach(function (item: string) {
   if (opts.verbosity > 0) {
-    log.good(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
+    log.info(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
   }
 });
 
@@ -358,7 +359,7 @@ async.autoInject({
         return process.nextTick(cb);
       }
 
-      log.good('Beginning to actually link projects together...');
+      log.info('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, cb);
     }
   },
@@ -382,7 +383,7 @@ async.autoInject({
     });
 
     if (opts.verbosity > 1) {
-      log.good(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
+      log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
       console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       console.log(chalk.white(formattedStr.join('\n')));
       console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');

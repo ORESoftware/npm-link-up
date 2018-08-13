@@ -20,9 +20,13 @@ nlu(){
 
      second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";
 
+     if [ "$third_arg" == "false" ]; then
+        third_arg="0";
+     fi
+
      if [ -z "$third_arg" ]; then
         third_arg="";
-        echo >&2 "warning, wrt: 'nlu set a b', b will be an empty variable, according to your most recent command."
+        echo >&2 "warning: 'nlu set a b', b will be an empty variable, according to your most recent command."
      fi
 
       export "nlu_setting_$second_arg"="$third_arg";
@@ -34,9 +38,11 @@ nlu(){
 
       local second_arg="$2";
 
-      if [ -z "$second_arg" ]; then
-        echo >&2 "'\$ nlu get foo', requires that 'foo' be defined/non-empty."
-        return 1
+      if [ -z "$second_arg" ] || [ "$second_arg" == "*" ]; then
+        compgen -A variable | grep "nlu_setting_" | while read v; do
+                echo "$v = ${!v}";
+        done
+        return 0;
       fi
 
       second_arg="$(echo "$second_arg" | sed -r 's/[^[:alnum:]]/_/g')";

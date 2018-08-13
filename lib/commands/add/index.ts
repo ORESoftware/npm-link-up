@@ -22,7 +22,7 @@ const root = residence.findProjectRoot(cwd);
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './add-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
-import {mapPaths} from "../../map-paths-with-env-vars";
+import {mapPaths} from "../../map-paths";
 import {runNPMLink} from "../../run-link";
 import {getCleanMap} from "../../get-clean-final-map";
 import {validateConfigFile} from "../../utils";
@@ -108,8 +108,9 @@ catch (err) {
 }
 
 if (!validateConfigFile(nluJSON)) {
-  log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
+  console.error();
   if (!opts.override) {
+    log.error(chalk.redBright('Your .nlu.json config file appears to be invalid. To override this, use --override.'));
     process.exit(1);
   }
 }
@@ -232,7 +233,7 @@ async.autoInject({
         return process.nextTick(cb, err);
       }
 
-      opts.verbosity > 1 && log.good('Beginning to actually link projects together...');
+      opts.verbosity > 1 && log.info('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, cb);
     },
 
