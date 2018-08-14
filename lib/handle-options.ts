@@ -12,49 +12,43 @@ import * as nluUtils from './utils';
 
 /////////////////////////////////////////////////////////////////////////////////
 
-export const getIgnore = function (conf: NLUDotJSON, opts: any) {
-
-  const ignore = (conf.ignore || []).concat(alwaysIgnoreThese)
-  .filter(function (item: string, index: number, arr: Array<string>) {
-    return arr.indexOf(item) === index;
-  })
-  .map(function (item: string) {
-    return new RegExp(item);
-  });
-
+export const getIgnore = (conf: NLUDotJSON, opts: any): Array<RegExp> => {
+  
+  const ignore = nluUtils.getUniqueList(nluUtils.flattenDeep([conf.ignore, alwaysIgnoreThese]))
+  .map(d => String(d || '').trim())
+  .filter(Boolean)
+  .map((item: string) => new RegExp(item));
+  
   if (ignore.length > 0) {
-    opts.verbosity > 1 && log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions => '));
-    ignore.forEach(function (item: RegExp) {
+    opts.verbosity > 1 &&
+    log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions => '));
+    ignore.forEach((item: RegExp) => {
       opts.verbosity > 1 && log.warning(`ignored => ${item}`);
     });
   }
-
+  
   return ignore;
-
+  
 };
 
-
-
-
 export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<string> {
-
+  
   let searchRoots: Array<string | Array<string>> = [];
-
+  
   if (opts.search_from_home) {
     searchRoots.push(path.resolve(process.env.HOME));
   }
   else if (opts.search_root && opts.search_root.length > 0) {
     searchRoots.push(opts.search_root);
   }
-  else{
+  else {
     searchRoots.push(conf.searchRoots);
     searchRoots.push(opts.search_root_append);
     searchRoots.push(conf.searchRoot);
   }
   
-  
   const searchRootsReduced: Array<string> = [];
-
+  
   // here we flatten and get rid of dupes and reduce to the most common paths
   nluUtils.getUniqueList(nluUtils.flattenDeep(searchRoots))
   .map(d => String(d || '').trim())
@@ -65,12 +59,12 @@ export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<
     const s = !a.some(p => {
       return p.startsWith(v + '/');
     });
-
+    
     if (s) {
       searchRootsReduced.push(v);
     }
   });
-
+  
   return searchRootsReduced;
-
+  
 };
