@@ -77,3 +77,17 @@ export default [
   },
 
 ];
+
+
+export interface NLUAddOptions {
+  search_from_home: boolean,
+  no_use_local: boolean,
+  dry_run: boolean,
+  no_link:boolean,
+  no_install: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}

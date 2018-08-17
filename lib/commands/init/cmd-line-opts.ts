@@ -36,13 +36,15 @@ export default [
     type: 'bool',
     help: 'Force execution at hand.',
     default: false
-  },
-
-  {
-    names: ['no-use-local', 'no-local'],
-    type: 'bool',
-    help: 'Do not add local node_modules/.bin to the $PATH.',
-    default: false
-  },
+  }
 
 ];
+
+
+export interface NLUAddOptions {
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}
