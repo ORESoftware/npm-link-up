@@ -51,17 +51,21 @@ NLU is part of multi-pronged attack to make multi-repos easier to manage with NP
 
 ## Installation
 
-#### ```$ npm i -g npm-link-up```
+<br>
+
+```bash
+$ npm i -g npm-link-up
+```
 
 <br>
 
-<i> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </i>
+If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile:
 
-```
+```bash
 . "$HOME/.oresoftware/shell.sh"
 ```
 
-<i> => You will also get bash completion for NLU, if you source the above. </i>
+<i> => Note, you will also get bash completion for NLU, if you source the above. </i>
 
 <br>
 

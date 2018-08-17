@@ -38,7 +38,7 @@ import {
   getDevKeys,
   getProdKeys,
   validateConfigFile,
-  validateOptions, mapConfigObject
+  validateOptions, mapConfigObject, getDepsListFromNluJSON
 } from "../../utils";
 
 
@@ -105,12 +105,13 @@ catch (e) {
   process.exit(1);
 }
 
+const nluFilePath = path.resolve(root + '/.nlu.json');
+
 try {
-  conf = require(path.resolve(root + '/.nlu.json'));
+  conf = require(nluFilePath);
 }
 catch (e) {
-  log.error('You do not have an ".nlu.json" file in the root of your project. ' +
-    'You need this config file for npmlinkup to do its thing.');
+  log.error('Could not load your .nlu.json file at this path:', nluFilePath);
   log.error('Your project root is supposedly here:', chalk.magenta(root));
   log.error(e.message);
   process.exit(1);
@@ -161,13 +162,7 @@ if (opts.verbosity > 0) {
 
 const productionDepsKeys = getProdKeys(pkg);
 const allDepsKeys = getDevKeys(pkg);
-
-let list = conf.list;
-assert(Array.isArray(list), 'Your .nlu.json file must have a top-level "list" property that is an array of strings.');
-
-list = list.filter(function (item: string) {
-  return !/###/.test(item);
-});
+const list = getDepsListFromNluJSON(conf);
 
 if (list.length < 1) {
   log.error(chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
@@ -201,12 +196,10 @@ inListButNotInDeps.forEach(function (item) {
 // we need to store a version of the list without the top level package's name
 const originalList = list.slice(0);
 
-// always push the very project's name
-list.push(mainProjectName);
-
-list = list.filter(function (item: string, index: number) {
-  return list.indexOf(item) === index;
-});
+if(!list.includes(mainProjectName)){
+  // always include the very project's name
+  list.push(mainProjectName);
+}
 
 const totalList = new Map();
 
@@ -238,7 +231,7 @@ map[mainProjectName] = {
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
   path: root,
-  deps: conf.list
+  deps: list
 };
 
 async.autoInject({
