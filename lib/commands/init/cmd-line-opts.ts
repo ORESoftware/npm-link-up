@@ -41,7 +41,7 @@ export default [
 ];
 
 
-export interface NLUAddOptions {
+export interface NLUAddOpts {
   debug: boolean,
   allow_unknown: boolean,
   force: boolean,

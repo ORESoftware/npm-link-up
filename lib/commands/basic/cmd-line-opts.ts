@@ -54,7 +54,7 @@ export default [
 ];
 
 
-export interface NLUBasicOptions {
+export interface NLUBasicOpts {
   bash_completion: boolean,
   version: boolean,
   debug: boolean,

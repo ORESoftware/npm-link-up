@@ -58,7 +58,7 @@ export default [
 ];
 
 
-export interface NLUConfigOptions {
+export interface NLUConfigOpts {
   global: boolean,
   json: boolean,
   debug: boolean,
