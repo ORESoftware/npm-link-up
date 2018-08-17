@@ -11,6 +11,7 @@ const root = residence.findProjectRoot(cwd);
 import addOpts from '../add/cmd-line-opts';
 import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
+import * as nluUtils from '../../utils';
 
 process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
@@ -55,13 +56,10 @@ if (opts.help) {
   process.exit(0);
 }
 
-const flattenDeep = function (arr1: Array<any>): Array<any> {
-  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
-};
 
 if (opts.bash_completion) {
 
-  const allOpts = flattenDeep([addOpts, initOpts, runOpts, options]);
+  const allOpts = nluUtils.flattenDeep([addOpts, initOpts, runOpts, options]);
 
   let generatedBashCode = dashdash.bashCompletionFromOptions({
     name: 'nlu',

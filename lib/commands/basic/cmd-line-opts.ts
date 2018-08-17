@@ -52,3 +52,14 @@ export default [
   }
 
 ];
+
+
+export interface NLUBasicOpts {
+  bash_completion: boolean,
+  version: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}

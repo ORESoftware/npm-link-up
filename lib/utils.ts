@@ -2,6 +2,7 @@
 
 import * as assert from 'assert';
 import Ajv = require('ajv');
+
 const schema = require('../assets/nlu.schema.json');
 import log from "./logging";
 import {EVCb, NluConf, NLURunOpts} from "./index";
@@ -12,11 +13,10 @@ import async = require('async');
 
 ////////////////////////////////////////////////////////////////////
 
-
 export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/global/settings.json');
 
 export const validateConfigFile = function (data: NluConf) {
-
+  
   try {
     const ajv = new Ajv({allErrors: false}); // options can be passed, e.g. {allErrors: true}
     const validate = ajv.compile(schema);
@@ -28,7 +28,71 @@ export const validateConfigFile = function (data: NluConf) {
     log.error(err.message);
     return false;
   }
+  
+};
 
+export const getUniqueList = (a: Array<any>): Array<any> => {
+  
+  const set = new Set<any>();
+  
+  for (let i = 0; i < a.length; i++) {
+    if (!set.has(a[i])) {
+      set.add(a[i]);
+    }
+  }
+  
+  return Array.from(set.values());
+  
+};
+
+export const getDepsListFromNluJSON = (nluJSON: NluConf): Array<string> => {
+  
+  let list, deps, packages;
+  
+  if ('list' in nluJSON) {
+    assert(Array.isArray(nluJSON.list));
+    list = nluJSON.list;
+  }
+  
+  if ('deps' in nluJSON) {
+    assert(Array.isArray(nluJSON.deps));
+    deps = nluJSON.deps;
+  }
+  
+  if ('packages' in nluJSON) {
+    packages = Object.keys(nluJSON.packages).filter(v => nluJSON.packages[v]);
+  }
+  
+  return getUniqueList(flattenDeep([list, packages, deps]).filter(Boolean));
+  
+};
+
+export const getSearchRootsFromNluConf = (nluJSON: NluConf): Array<string> => {
+  
+  let searchRoots: Array<string | Array<string>> = [nluJSON.searchRoots, nluJSON.searchRoot];
+  const searchRootsReduced: Array<string> = [];
+  
+  getUniqueList(flattenDeep(searchRoots))
+  .map(d => String(d || '').trim())
+  .filter(Boolean)
+  .sort((a, b) => (a.length - b.length))
+  .filter((v, i, a) => {
+    
+    const s = !a.some(p => {
+      return p.startsWith(v + '/');
+    });
+    
+    if (s) {
+      searchRootsReduced.push(v);
+    }
+  });
+  
+  return searchRootsReduced;
+  
+};
+
+export const flattenDeep = function (a: Array<any>): Array<any> {
+  return a.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
 };
 
 export const getProdKeys = function (pkg: any) {
@@ -42,7 +106,7 @@ export const getDevKeys = function (pkg: any) {
 };
 
 export const validateOptions = function (opts: any) {
-
+  
   try {
     assert(opts.verbosity >= 1, chalk.magenta('Verbosity must be an integer between 1 and 4, inclusive'));
     assert(opts.verbosity <= 4, chalk.magenta('Verbosity must be an integer between 1 and 4, inclusive'));
@@ -51,56 +115,54 @@ export const validateOptions = function (opts: any) {
     log.error(err.message);
     return false;
   }
-
+  
   return true;
-
+  
 };
 
-
-export const mapConfigObject = function(obj: any){
-  return Object.keys(obj).reduce((a,b) => {
-    const key = String(b).replace(/[^a-zA-z]+/g,'_').toLowerCase();
+export const mapConfigObject = function (obj: any) {
+  return Object.keys(obj).reduce((a, b) => {
+    const key = String(b).replace(/[^a-zA-z]+/g, '_').toLowerCase();
     return (a[key] = obj[b], a);
   }, {} as any);
 };
 
-
 export const determineIfReinstallIsNeeded = (nodeModulesPath: string, depsKeys: Array<string>, opts: NLURunOpts, cb: EVCb<boolean>) => {
-
+  
   fs.readdir(nodeModulesPath, (err, originalItemsInNodeModules) => {
-
+    
     if (err || !Array.isArray(originalItemsInNodeModules)) {
       // if there is an error, node_modules probably does not exist
       opts.verbosity > 1 && log.warn('Reinstalling because node_modules dir does not seem to exist in dir: ', nodeModulesPath);
       return cb(null, true);
     }
-
+    
     const orgItems = originalItemsInNodeModules.filter(v => {
       return String(v).startsWith('@')
     });
-
+    
     async.eachLimit(orgItems, 3, (item, cb) => {
-
+      
       fs.readdir(path.resolve(nodeModulesPath + '/' + item), (err, orgtems) => {
-
+        
         if (err) {
           return cb(err);
         }
-
+        
         orgtems.forEach(v => {
           originalItemsInNodeModules.push(item + '/' + v)
         });
-
+        
         cb(null);
-
+        
       });
-
+      
     }, (err) => {
-
+      
       if (err) {
         return cb(err);
       }
-
+      
       //
       // * this method was not accurate in determining whether a reinstall was needed, so it's commented out *
       //
@@ -110,7 +172,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, depsKeys: 
       //   opts.verbosity > 1 && log.warn();
       //   return cb(null, true);
       // }
-
+      
       const allThere = depsKeys.every(d => {
         if (originalItemsInNodeModules.indexOf(d) < 0) {
           opts.verbosity > 1 && log.info('The following dep in package.json', d, 'did not appear to be in node_modules located here:', nodeModulesPath);
@@ -118,17 +180,17 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, depsKeys: 
         }
         return true;
       });
-
+      
       if (!allThere) {
         // if not all deps in package.json are folders in node_modules, we need to reinstall
         opts.verbosity > 1 && log.warn('Reinstalling because not all package.json dependencies exist in node_modules:', nodeModulesPath);
         return cb(null, true);
       }
-
+      
       cb(null, false);
-
+      
     });
-
+    
   });
-
+  
 };

@@ -7,6 +7,7 @@ import * as fs from 'fs';
 //npm
 import readline = require('readline');
 import chalk from 'chalk';
+
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
@@ -15,6 +16,7 @@ import residence = require('residence');
 import options from "./cmd-line-opts";
 import {EVCb, NLUInitOpts} from "../../index";
 import log from '../../logging';
+
 const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
@@ -25,7 +27,7 @@ import alwaysIgnoreThese from "../../always-ignore";
 import {mapPaths} from "../../map-paths";
 
 process.once('exit', code => {
-  log.info('Exiting with code:', code,'\n');
+  log.info('Exiting with code:', code, '\n');
 });
 
 if (!root) {
@@ -104,113 +106,113 @@ if (opts.verbosity > 3) {
 }
 
 async.autoInject({
-
+    
     checkForNluJSONFile(cb: EVCb<any>) {
       fs.stat(nluJSONPath, (err, stats) => cb(null, stats));
     },
-
+    
     askUserAboutSearchRoots(cb: EVCb<any>) {
-
-      if(opts.force){
+      
+      if (opts.force) {
         const dirname = path.dirname(cwd);
-        const defaultSearchRoot = String(dirname).replace(String(process.env.HOME),'$HOME');
+        const defaultSearchRoot = String(dirname).replace(String(process.env.HOME), '$HOME');
         searchRoots.push(defaultSearchRoot);
         return process.nextTick(cb);
       }
-
+      
       const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
       });
-
-      process.nextTick(function () {
+      
+      process.nextTick(() => {
         console.log();
         console.log(chalk.gray(` => To skip this, hit return with no input.`));
         console.log(chalk.gray(` => Separate multiple paths with ":"`));
         console.log(chalk.gray(` => Use env variables like $HOME instead of hardcoding dirs, where possible.`));
-        console.log(chalk.bold(` => Valid input might be:`), `$HOME/WebstormProjects:$HOME/vscode_projects.`);
+        console.log(chalk.bold(` => Valid input might be:`), `$HOME/WebstormProjects:$HOME/vscode_projects`);
       });
-
+      
       console.log();
-
-      rl.question(chalk.bold(`What folder(s) do local dependencies of this project '${chalk.blueBright(mainProjectName)}' reside in?`), a => {
-
+      
+      rl.question(chalk.bold(`What folder(s) do local dependencies of this project '${chalk.blueBright(mainProjectName)}' reside in?\n`), a => {
+        
         String(a || '').trim()
         .split(':')
         .map(v => String(v || '').trim())
         .filter(Boolean)
         .forEach(v => {
-
+          
           const s = !searchRoots.some(p => {
             return p.startsWith(v + '/');
           });
-
+          
           if (s) {
             searchRoots.push(v);
           }
-
+          
         });
-
+        
         if (searchRoots.length < 1) {
           searchRoots.push('$HOME');
         }
-
+        
         cb(null);
-
+        
         rl.close();
       });
-
+      
     },
-
+    
     mapSearchRoots(askUserAboutSearchRoots: any, cb: EVCb<any>) {
-         mapPaths(searchRoots, root, cb);
+      mapPaths(searchRoots, root, cb);
     },
-
+    
     getMatchingProjects(askUserAboutSearchRoots: string, mapSearchRoots: Array<string>, checkForNluJSONFile: any, cb: EVCb<any>) {
       // given package.json, we can find local projects
-
+      
       if (checkForNluJSONFile) {
         return process.nextTick(cb,
           new Error('Looks like your project already has an .nlu.json file, although it may be malformed.'));
       }
-
+      
       const map = {}, status = {searching: true};
       const findProjects = makeFindProjects(mainProjectName, ignore, opts, map, theirDeps, status);
-
+      
       type Task = (cb: EVCb<any>) => void;
       const q = async.queue<Task, any>((task, cb) => task(cb));
-
+      
       log.info('Your search roots are:', mapSearchRoots);
-
+      
       mapSearchRoots.forEach((v: string) => {
         q.push(function (cb) {
           findProjects(v, cb);
         });
       });
-
+      
       if (q.idle()) {
         return process.nextTick(cb, new Error('For some reason no items ended up on the search queue.'));
       }
-
+      
       let first = true;
-
+      
       q.drain = q.error = function (err?: any) {
-
+        
         if (err) {
           status.searching = false;
           log.error(chalk.magenta('There was a search queue processing error.'));
         }
-
+        
         if (first) {
           q.kill();
           cb(err, map);
         }
-
+        
         first = false;
       };
-
+      
     },
-
+    
     writeNLUJSON(askUserAboutSearchRoots: string, getMatchingProjects: any, cb: EVCb<any>) {
       const list = Object.keys(getMatchingProjects);
       const newNluJSON = Object.assign({}, defaultNluJSON);
@@ -219,21 +221,21 @@ async.autoInject({
       const newNluJSONstr = JSON.stringify(newNluJSON, null, 2);
       fs.writeFile(nluJSONPath, newNluJSONstr, 'utf8', cb);
     }
-
+    
   },
-
-  function (err: any, results: any) {
-
+  
+  (err: any, results: any) => {
+    
     if (err) {
       log.error('There was an error when running "nlu init".');
       opts.verbosity > 3 && log.error('Here were your arguments:\n', process.argv);
       log.error(err.message || err);
       return process.exit(1);
     }
-
+    
     log.veryGood(chalk.green('Looks like the nlu init routine succeeded. ') +
       'Check your new .nlu.json file in the root of your project.');
     process.exit(0);
-
+    
   });
 

@@ -162,3 +162,22 @@ export default [
     default: false
   }
 ];
+
+
+
+export interface NLURunOptions {
+  link_main: boolean,
+  install_main: boolean,
+  search_from_home: boolean,
+  no_use_local: boolean,
+  production: boolean,
+  dry_run: boolean,
+  no_link:boolean,
+  no_install: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}
+

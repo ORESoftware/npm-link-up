@@ -2,13 +2,13 @@
 
 set -e;
 
-if [ "$skip_npm_link_up_postinstall" == "yes" ]; then
+if [ "$skip_postinstall" == "yes" ]; then
     echo "skipping nlu postinstall routine.";
     exit 0;
 fi
 
 export FORCE_COLOR=1;
-export skip_npm_link_up_postinstall="yes";
+export skip_postinstall="yes";
 
 mkdir -p "$HOME/.oresoftware" || {
   echo "Could not create .oresoftware dir in user home.";
