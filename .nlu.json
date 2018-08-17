@@ -1,5 +1,5 @@
 {
-  "$schema": "./assets/nlu.schema.json",
+  "$schema": "https://raw.githubusercontent.com/oresoftware/npm-link-up/master/assets/nlu.schema.json",
   "npm-link-up": true,
   "linkToItself": false,
   "comments": [
@@ -23,3 +23,4 @@
     "foo": "eeee"
   }
 }
+

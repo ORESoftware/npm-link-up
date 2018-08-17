@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/oresoftware/npm-link-up/master/assets/nlu.schema.json",
   "npm-link-up": true,
   "linkable": true,
   "linkToItself": false,
@@ -12,14 +13,8 @@
     "/node_modules/",
     "/.git/"
   ],
-  "deps": [
-    "foo"
-  ],
   "list": [
-    "foo"
-  ],
-  "packages": {
-    "foo": true,
-    "bar": false
-  }
+    "foo",
+    "bar"
+  ]
 }

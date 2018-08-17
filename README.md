@@ -6,8 +6,19 @@
 ### Caveats + Disclaimer
 
 >
-> This will not work with MS Windows. Only MacOS and *nix. If you are interested in getting to work on Windows, pls file a ticket.
+> This will not work with MS Windows. Only MacOS and *nix. 
+> If you are interested in getting to work on Windows, pls file a ticket.
 >
+
+<br>
+
+## Video demo
+
+Watch this video to learn how to use NLU:
+
+
+The video references this example repo:
+https://github.com/ORESoftware/rolo-cholo-yolo
 
 <br>
 
@@ -16,35 +27,45 @@
 Use the CLI interface to link your local projects together for rapid and pain-free local
 development. This tool links your local projects together using symlinks,
 using declarative config files. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
-In the modest opinion of Olegzandr Von Denman, NPM packages should remain 1:1 wrt to package.json/node_modules/.git, etc. This keeps things simple.
+NPM packages should remain 1:1 wrt to package.json and vcs roots, etc. This keeps things simple and intuitive.
 
 <br>
 
-NLU uses an `.nlu.json` file, which is a like a smaller package.json file in the root of your project,
-which tells NLU about other local dependencies, and how to link your project up.
+NLU uses an `.nlu.json` file, which tells NLU about other local dependencies, and how to link your project up.
 
 <br>
 
 NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
-Mono-repos are crap. Be lean and mean and use npm-link-up.
+Mono-repos are crap. Be lean and mean and use npm-link-up. 
+NLU is part of multi-pronged attack to make multi-repos easier to manage with NPM.
+
+<b> The current pieces are: <b>
+
+* [npm-link-up (NLU)](https://github.com/ORESoftware/npm-link-up) => links multiple NPM packages together for local development
+* [r2g](https://github.com/ORESoftware/r2g) => tests local packages <i>properly</i> before publishing to NPM
+* [npp](https://github.com/ORESoftware/npp) => publish multiple packages and sync their semver versions
 
 <br>
 
 ## Installation
 
-#### ``` $ npm i -g npm-link-up ```
+<br>
+
+```bash
+$ npm i -g npm-link-up
+```
 
 <br>
 
-<i> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </i>
+If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile:
 
-```
+```bash
 . "$HOME/.oresoftware/shell.sh"
 ```
 
-<i> => You will also get bash completion for NLU, if you source the above. </i>
+<i> => Note, you will also get bash completion for NLU, if you source the above. </i>
 
 <br>
 

@@ -3,12 +3,6 @@
 export default [
 
   {
-    names: ['version', 'vn'],
-    type: 'bool',
-    help: 'Print the npm-link-up version, and exit 0.'
-  },
-
-  {
     names: ['help', 'h'],
     type: 'bool',
     help: 'Print help menu for npm-link-up, and exit 0.'
@@ -62,3 +56,14 @@ export default [
   }
 
 ];
+
+
+export interface NLUConfigOpts {
+  global: boolean,
+  json: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}

@@ -33,8 +33,8 @@ process.on('unhandledRejection', (reason, p) => {
   process.exit(1);
 });
 
-const name = 'rolo-cholo-yolo';
-const cloneable = 'https://github.com/ORESoftware/rolo-cholo-yolo.git';
+const name = 'npm-link-up-test';
+const cloneable = 'https://github.com/ORESoftware/npm-link-up-test.git';
 
 const shuffle = function (array) {
 
