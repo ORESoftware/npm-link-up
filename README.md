@@ -1,4 +1,8 @@
 
+
+[<img src="https://img.shields.io/badge/slack-@oresoftware/nlu-yellow.svg?logo=slack">](https://oresoftware.slack.com/messages/CCAHLP5BK)
+
+
 # NPM-Link-Up / NLU
 
 <br>
