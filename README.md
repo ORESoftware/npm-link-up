@@ -47,7 +47,7 @@ NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/ler
 Mono-repos are crap. Be lean and mean and use npm-link-up. 
 NLU is part of multi-pronged attack to make multi-repos easier to manage with NPM.
 
-<b> The current pieces are: <b>
+<b> The current pieces are: </b>
 
 * [npm-link-up (NLU)](https://github.com/ORESoftware/npm-link-up) => links multiple NPM packages together for local development
 * [r2g](https://github.com/ORESoftware/r2g) => tests local packages <i>properly</i> before publishing to NPM
