@@ -1,9 +1,9 @@
 
 <img width="200px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/oresoftware-nlu4-rounded.png?foo">
 
-
 [<img src="https://img.shields.io/badge/slack-@oresoftware/nlu-yellow.svg?logo=slack">](https://oresoftware.slack.com/messages/CCAHLP5BK)
 
+[![Gitter](https://badges.gitter.im/oresoftware/npm-link-up.svg)](https://gitter.im/oresoftware/npm-link-up?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # NPM-Link-Up / NLU
 
