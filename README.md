@@ -31,21 +31,27 @@ https://github.com/ORESoftware/rolo-cholo-yolo
 ## About
 
 Use the CLI interface to link your local projects together for rapid and pain-free local
-development. This tool links your local projects together using symlinks,
-using declarative config files. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
-NPM packages should remain 1:1 wrt to package.json and vcs roots, etc. This keeps things simple and intuitive.
+development. This tool links your local NPM packages together using symlinks, using declarative files. 
 
 <br>
 
-NLU uses an `.nlu.json` file, which tells NLU about other local dependencies, and how to link your project up.
+NLU is agnostic regarding mono-repo vs. multi-repo. NLU is simply used to link NPM packages on your fs together 
+by way of the respective node_modules folders. For example, if you want to store multiple NPM packages in a mono-repo, that's fine,
+and NLU can be used to link them together for local development. In production, npm install would source the dependencies and put the right
+dependencies in the node_modules folders.
+
+<br>
+
+NLU uses `.nlu.json` files, which tells NLU about other local dependencies, and how to link your project/packages up.
 
 <br>
 
 NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
-Mono-repos are crap. Be lean and mean and use npm-link-up. 
-NLU is part of multi-pronged attack to make multi-repos easier to manage with NPM.
+<br>
+
+NLU is one of several tools that make managing multiple locally developed packages easier.
 
 <b> The current pieces are: </b>
 
