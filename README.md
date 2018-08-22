@@ -282,5 +282,8 @@ Just look for the `.nlu.json` file in the root of each project. Note that https:
 
 ### Screenshots:
 
+<img width="400px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/cli-output.png">
+
+
 ![NLU cli in action](media/cli-output.png)
 
