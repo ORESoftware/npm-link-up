@@ -6,7 +6,8 @@
 * Do all packages need to have an .nlu.json file?
 
 >
-> No, you only need to use an .nlu.json file to declare a package's linkable deps. If B is symlinked to A, A needs
+> The minimum number of .nlu.json files is 1, that is all you need to get started.
+> Ultimately, you only need to use an .nlu.json file to declare a package's linkable deps. If B is symlinked to A, A needs
 > a .nlu.json file that references B. But if nothing needs to be symlinked to B, your B package does not need an .nlu.json file.
 >
 

@@ -1,5 +1,5 @@
 
-## How NLU / NPM-Link-Up works
+## How NLU / NPM-Link-Up works in Detail
 
 <b> Update: </b> During NPM version 4 days, NLU was implemented using `npm link` and `npm link x`. However, the `npm link` implementation changed with NPM version 5,
 and was no longer reliable. This turned into a blessing, because NLU was then re-implemented to be much more performant, by linking projects
@@ -7,7 +7,7 @@ directly together instead of using the NPM global space. This means we can forgo
 much had to always run `npm link` for each project, because we were never sure if the global NPM space had the global linkage or not, this is especially
 true if users switch NPM versions with NVM. So now, NLU just uses `ln -sf`, unless you tell it do `npm i` or `npm link`.
 
-<b>
+<br>
 
 The basic algorithm hasn't changed though, just substitute "ln -sf x y" for "npm link" in most places.
 
