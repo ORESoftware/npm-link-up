@@ -1,9 +1,9 @@
 
 <img width="200px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/oresoftware-nlu4-rounded.png?foo">
 
-
 [<img src="https://img.shields.io/badge/slack-@oresoftware/nlu-yellow.svg?logo=slack">](https://oresoftware.slack.com/messages/CCAHLP5BK)
 
+[![Gitter](https://badges.gitter.im/oresoftware/npm-link-up.svg)](https://gitter.im/oresoftware/npm-link-up?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # NPM-Link-Up / NLU
 
@@ -20,7 +20,7 @@
 
 ## Video demo
 
-Watch this video to learn how to use NLU:
+Watch this video to learn how to use NLU: https://youtu.be/UwNtrN2rqd0
 
 
 The video references this example repo:
@@ -31,21 +31,26 @@ https://github.com/ORESoftware/rolo-cholo-yolo
 ## About
 
 Use the CLI interface to link your local projects together for rapid and pain-free local
-development. This tool links your local projects together using symlinks,
-using declarative config files. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
-NPM packages should remain 1:1 wrt to package.json and vcs roots, etc. This keeps things simple and intuitive.
+development. This tool links your local NPM packages together using symlinks, using declarative files. 
 
 <br>
 
-NLU uses an `.nlu.json` file, which tells NLU about other local dependencies, and how to link your project up.
+NLU is agnostic regarding mono-repo vs. multi-repo. NLU is simply used to link NPM packages on your fs together 
+by way of the respective node_modules folders. For example, if you want to store multiple NPM packages in a mono-repo, that's fine,
+and NLU can be used to link them together for local development.
+
+<br>
+
+NLU uses `.nlu.json` files, which tells NLU about other local dependencies.
 
 <br>
 
 NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
-Mono-repos are crap. Be lean and mean and use npm-link-up. 
-NLU is part of multi-pronged attack to make multi-repos easier to manage with NPM.
+<br>
+
+NLU is one of several tools that make managing multiple locally developed packages easier.
 
 <b> The current pieces are: </b>
 
@@ -260,11 +265,21 @@ $ nlu run   # run this from within project x
 
 <br>
 
+
+## F.A.Q.
+
+>
+> See: `docs/faq.md`
+>
+
+<br>
+
 ## Tips and tricks:
 
 * If you want to use a particular yarn or npm version to link your project, you can install npm or yarn as a local dependency of your primary project, and NLU will pick that up.
 * The above is the case, because by default NLU adds local node_modules/.bin items to the $PATH.
 
+<br>
 
 ### Complete real-world usage example:
 See: https://github.com/sumanjs
@@ -276,5 +291,6 @@ Just look for the `.nlu.json` file in the root of each project. Note that https:
 
 ### Screenshots:
 
-![NLU cli in action](media/cli-output.png)
+<img width="700px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/cli-output.png">
+
 
