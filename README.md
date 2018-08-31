@@ -20,7 +20,7 @@
 
 ## Video demo
 
-Watch this video to learn how to use NLU: https://youtu.be/UwNtrN2rqd0
+Watch this video to learn how to use NLU: goo.gl/a9u1rr
 
 
 The video references this example repo:
