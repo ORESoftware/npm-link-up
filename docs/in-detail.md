@@ -3,7 +3,7 @@
 
 <b> Update: </b> During NPM version 4 days, NLU was implemented using `npm link` and `npm link x`. However, the `npm link` implementation changed with NPM version 5,
 and was no longer reliable. This turned into a blessing, because NLU was then re-implemented to be much more performant, by linking projects
-directly together instead of using the NPM global space. This means we can forgo re-running `npm link` for each project. Previously, we pretty
+directly together instead of using the NPM global space. This means we can forgo re-running `npm link` for each project and don't have worry about sudo/permissions, etc. Previously, we pretty
 much had to always run `npm link` for each project, because we were never sure if the global NPM space had the global linkage or not, this is especially
 true if users switch NPM versions with NVM. So now, NLU just uses `ln -sf`, unless you tell it do `npm i` or `npm link`.
 

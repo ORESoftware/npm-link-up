@@ -20,7 +20,7 @@
 
 ## Video demo
 
-Watch this video to learn how to use NLU:
+Watch this video to learn how to use NLU: https://youtu.be/UwNtrN2rqd0
 
 
 The video references this example repo:
@@ -37,12 +37,11 @@ development. This tool links your local NPM packages together using symlinks, us
 
 NLU is agnostic regarding mono-repo vs. multi-repo. NLU is simply used to link NPM packages on your fs together 
 by way of the respective node_modules folders. For example, if you want to store multiple NPM packages in a mono-repo, that's fine,
-and NLU can be used to link them together for local development. In production, npm install would source the dependencies and put the right
-dependencies in the node_modules folders.
+and NLU can be used to link them together for local development.
 
 <br>
 
-NLU uses `.nlu.json` files, which tells NLU about other local dependencies, and how to link your project/packages up.
+NLU uses `.nlu.json` files, which tells NLU about other local dependencies.
 
 <br>
 
