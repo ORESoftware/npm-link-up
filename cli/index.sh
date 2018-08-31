@@ -30,15 +30,14 @@ if nlu_match_arg "--no-local" "${my_args[@]}"; then
   use_local="nope"
 fi
 
-project_root="";
-
-if [[ "$(uname -s)" == "Darwin" ]]; then
-    project_root="$(dirname $(dirname $("$HOME/.oresoftware/bin/realpath" $0)))";
-
-else
-    project_root="$(dirname $(dirname $(realpath $0)))";
+if ! type -f ores_get_project_root &> /dev/null; then
+   npm i -s -g '@oresoftware/ores' || {
+      echo "Could not install '@oresoftware/ores'";
+      exit 1;
+   }
 fi
 
+project_root="$(ores_get_project_root "$0")";
 npm_local_bin="${project_root}/node_modules/.bin";
 
 
