@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
-get_latest_source_nlu(){
- . "$HOME/.oresoftware/bash/nlu.sh"
+all_export="yep";
+
+if [[ ! "$SHELLOPTS" =~ "allexport" ]]; then
+    all_export="nope";
+    set -a;
+fi
+
+
+
+nlu_get_latest(){
+ . "$BASH_SOURCE" # source this file
 }
 
 nlu(){
@@ -71,7 +80,13 @@ npmlinkup(){
    nlu "$@";
 }
 
+npm_link_up(){
+   nlu "$@";
+}
 
-export -f nlu;
-export -f npmlinkup;
-export -f get_latest_source_nlu;
+
+
+if [ "$all_export" == "nope" ]; then
+  set +a;
+fi
+
