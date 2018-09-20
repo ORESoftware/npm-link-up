@@ -32,7 +32,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
   
   ////////////////////////////////////////////////////////////////////////
   
-  const isPathSearchableBasic = function (item: string) {
+  const isPathSearchableBasic =  (item: string) => {
     
     item = path.normalize(item);
     
@@ -130,7 +130,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
       
       searchedPaths[dir] = true;
       
-      fs.readdir(dir, function (err: Error, items: Array<string>) {
+      fs.readdir(dir, (err, items) => {
         
         if (err) {
           log.error(err.message || err);
@@ -149,7 +149,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
           return path.resolve(dir, item);
         });
         
-        async.eachLimit(items as any, 3, function (item: string, cb: EVCb<any>) {
+        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
           
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
@@ -236,10 +236,11 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               return cb(null);
             }
             
-            let deps: Array<string>, npmlinkup: NLUDotJSON;
+            let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
             
             try {
               npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
+              hasNLUJSONFile = true;
             }
             catch (e) {
               npmlinkup = {} as NLUDotJSON;
@@ -268,6 +269,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             const m = map[pkg.name] = {
               name: pkg.name,
               bin: pkg.bin || null,
+              hasNLUJSONFile,
               isMainProject: false,
               linkToItself: Boolean(npmlinkup.linkToItself),
               runInstall: Boolean(npmlinkup.alwaysReinstall),
@@ -302,19 +304,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 if (searchRoots.length < 1) {
                   return process.nextTick(cb, null);
                 }
-                
-                // if (!Array.isArray(searchRoots)) {
-                //   return cb(new Error('The "searchRoots" property is not an array in .nlu.json file at path: ' + dirname));
-                // }
-                //
-                // try {
-                //   assert(Array.isArray(searchRoots),
-                //     `the 'searchRoots' property in an .nlu.json file is not an Array instance for '${filename}'.`);
-                // }
-                // catch (err) {
-                //   return cb(err);
-                // }
-                
+
                 mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
                   
                   if (err) {

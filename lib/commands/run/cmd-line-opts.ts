@@ -24,6 +24,20 @@ export default [
   },
 
   {
+    names: ['umbrella'],
+    type: 'bool',
+    help: 'Umbrella usage - running nlu from outside an NPM project.',
+    default: false
+  },
+
+  {
+    names: ['all-packages', 'all'],
+    type: 'bool',
+    help: 'Link-up all packages in working dir.',
+    default: false
+  },
+
+  {
     names: ['allow-unknown'],
     type: 'bool',
     help: 'Allow unknown/unrecognized options at the command line.',
@@ -77,7 +91,7 @@ export default [
     names: ['install-all', 'install:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm install" or "yarn" in each project; ' +
-    'using npm instead of yarn is the default.',
+      'using npm instead of yarn is the default.',
     env: 'nlu_setting_install_all',
   },
 
@@ -85,7 +99,7 @@ export default [
     names: ['link-all', 'link:all'],
     type: 'bool',
     help: 'This option will tell NPM Link Up to run either "npm link" or "yarn link" in each project; ' +
-    'using npm instead of yarn is the default.',
+      'using npm instead of yarn is the default.',
     env: 'nlu_setting_link_all'
   },
 
@@ -107,14 +121,14 @@ export default [
     names: ['search-root', 'search'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; overrides config. ' +
-    'To add multiple search-root\'s, use "--search-root x --search-root y".'
+      'To add multiple search-root\'s, use "--search-root x --search-root y".'
   },
 
   {
     names: ['search-root-append', 'append-search', 'search-append'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
-    'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
+      'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
   },
 
   {
@@ -163,8 +177,6 @@ export default [
   }
 ];
 
-
-
 export interface NLURunOptions {
   link_main: boolean,
   install_main: boolean,
@@ -172,7 +184,7 @@ export interface NLURunOptions {
   no_use_local: boolean,
   production: boolean,
   dry_run: boolean,
-  no_link:boolean,
+  no_link: boolean,
   no_install: boolean,
   debug: boolean,
   allow_unknown: boolean,

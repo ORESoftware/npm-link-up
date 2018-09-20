@@ -10,11 +10,13 @@ import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
+
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
+
 const cwd = process.cwd();
-const root = residence.findProjectRoot(cwd);
+let root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
@@ -27,8 +29,9 @@ import {getIgnore, getSearchRoots} from "../../handle-options";
 import options from './cmd-line-opts';
 import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
-import {getCleanMap} from '../../get-clean-final-map';
+import {getCleanMap, getCleanMapOfOnlyPackagesWithNluJSONFiles} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
+
 const npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluMap, NLURunOpts} from "../../index";
 
@@ -40,7 +43,6 @@ import {
   validateConfigFile,
   validateOptions, mapConfigObject, getDepsListFromNluJSON
 } from "../../utils";
-
 
 import {NluGlobalSettingsConf} from "../../index";
 
@@ -58,7 +60,7 @@ let opts: NLURunOpts, globalConf: NluGlobalSettingsConf, parser = dashdash.creat
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 
@@ -70,27 +72,29 @@ if (opts.help) {
   process.exit(0);
 }
 
-try{
+try {
   globalConf = require(globalConfigFilePath);
 }
-catch(err){
+catch (err) {
   log.warn('Could not load global config');
   globalConf = {};
 }
 
-if(!(globalConf && typeof globalConf === 'object')){
+if (!(globalConf && typeof globalConf === 'object')) {
   globalConf = {};
 }
 
-if(Array.isArray(globalConf)){
+if (Array.isArray(globalConf)) {
   globalConf = {};
 }
-
 
 if (!root) {
-  log.error('You do not appear to be within an NPM project (no package.json could be found).');
-  log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
-  process.exit(1);
+  if (!opts.umbrella) {
+    log.error('You do not appear to be within an NPM project (no package.json could be found).');
+    log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+    process.exit(1);
+  }
+  root = cwd;
 }
 
 let pkg, conf;
@@ -99,42 +103,53 @@ try {
   pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
-  log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
-  log.error('Your project root is supposedly here:', chalk.magenta(root));
-  log.error(e.message);
-  process.exit(1);
+  if (!opts.umbrella) {
+    log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
+    log.error('Your project root is supposedly here:', chalk.magenta(root));
+    log.error(e.message);
+    process.exit(1);
+  }
+  pkg = {
+    name: '@oresoftware/nlu-dummy'
+  };
 }
 
+let hasNLUJSONFile = false;
 const nluFilePath = path.resolve(root + '/.nlu.json');
 
 try {
   conf = require(nluFilePath);
+  hasNLUJSONFile = true;
 }
 catch (e) {
-  log.error('Could not load your .nlu.json file at this path:', nluFilePath);
-  log.error('Your project root is supposedly here:', chalk.magenta(root));
-  log.error(e.message);
-  process.exit(1);
+  if (!opts.umbrella) {
+    log.error('Could not load your .nlu.json file at this path:', nluFilePath);
+    log.error('Your project root is supposedly here:', chalk.magenta(root));
+    log.error(e.message);
+    process.exit(1);
+  }
+  opts.all_packages = true;
+  conf = {
+    searchRoots: ['.'],
+    list: []
+  }
 }
-
 
 conf.localSettings = conf.localSettings || {};
 
-if(!(conf.localSettings && typeof conf.localSettings === 'object')){
+if (!(conf.localSettings && typeof conf.localSettings === 'object')) {
   conf.localSettings = {}
 }
 
-if(Array.isArray(conf.localSettings)){
+if (Array.isArray(conf.localSettings)) {
   conf.localSettings = {};
 }
-
 
 opts = Object.assign({},
   mapConfigObject(globalConf),
   mapConfigObject(conf.localSettings),
   opts
 );
-
 
 if (!validateOptions(opts)) {
   log.error(chalk.bold('Your command line arguments were invalid, try:', chalk.magentaBright('nlu run --help')));
@@ -155,24 +170,26 @@ if (!mainProjectName) {
   log.error('Ummmm, your package.json file does not have a name property. Fatal.');
   process.exit(1);
 }
+
 if (opts.verbosity > 0) {
   log.info(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
 }
-
 
 const productionDepsKeys = getProdKeys(pkg);
 const allDepsKeys = getDevKeys(pkg);
 const list = getDepsListFromNluJSON(conf);
 
 if (list.length < 1) {
-  log.error(chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
-  log.error(chalk.cyan.bold(util.inspect(conf)));
-  process.exit(1);
+  if (!opts.all_packages) {
+    log.error(chalk.magenta(' => You do not have any dependencies listed in your .nlu.json file.'));
+    log.error(chalk.cyan.bold(util.inspect(conf)));
+    process.exit(1);
+  }
 }
 
 const searchRoots = getSearchRoots(opts, conf);
 
-if(searchRoots.length < 1){
+if (searchRoots.length < 1) {
   log.error(chalk.red('No search-roots provided.'));
   log.error('You should either update your .nlu.json config to have a searchRoots array.');
   log.error('Or you can use the --search-root=X option at the command line.');
@@ -196,14 +213,16 @@ inListButNotInDeps.forEach(function (item) {
 // we need to store a version of the list without the top level package's name
 const originalList = list.slice(0);
 
-if(!list.includes(mainProjectName)){
+if (!list.includes(mainProjectName)) {
   // always include the very project's name
-  list.push(mainProjectName);
+  if (!opts.umbrella) {
+    list.push(mainProjectName);
+  }
 }
 
 const totalList = new Map();
 
-list.forEach(function (l: string) {
+list.forEach(l => {
   totalList.set(l, true);
 });
 
@@ -227,6 +246,7 @@ if (opts.dry_run) {
 map[mainProjectName] = {
   name: mainProjectName,
   bin: conf.bin || null,
+  hasNLUJSONFile,
   isMainProject: true,
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
@@ -239,22 +259,21 @@ async.autoInject({
     readNodeModulesFolders(cb: EVCb<any>) {
 
       const nm = path.resolve(root + '/node_modules');
-      const keys = opts.production ? productionDepsKeys: allDepsKeys;
+      const keys = opts.production ? productionDepsKeys : allDepsKeys;
 
-      determineIfReinstallIsNeeded(nm, keys, opts, (err, val) =>{
+      determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
 
-        if(err){
+        if (err) {
           return cb(err);
         }
 
-        if(val === true){
+        if (val === true) {
           opts.install_main = true;
         }
 
         cb(null);
 
       });
-
 
     },
 
@@ -310,8 +329,8 @@ async.autoInject({
       const status = {searching: true};
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status);
 
-      searchRoots.forEach(function (sr) {
-        q.push(function (cb) {
+      searchRoots.forEach(sr => {
+        q.push(cb => {
           findProject(sr, cb);
         });
       });
@@ -322,7 +341,7 @@ async.autoInject({
 
       let first = true;
 
-      q.error = q.drain = function (err?: any) {
+      q.error = q.drain = (err?: any) => {
 
         if (err) {
           status.searching = false;
@@ -342,7 +361,13 @@ async.autoInject({
     runUtility(findItems: void, cb: EVCb<any>) {
 
       try {
-        cleanMap = getCleanMap(mainProjectName, map);
+
+        if (opts.all_packages) {
+          cleanMap = getCleanMapOfOnlyPackagesWithNluJSONFiles(mainProjectName, map);
+        }
+        else {
+          cleanMap = getCleanMap(mainProjectName, map);
+        }
       }
       catch (err) {
         return process.nextTick(cb, err);
@@ -357,7 +382,7 @@ async.autoInject({
     }
   },
 
-  function (err: any, results: object) {
+   (err: any, results: any) => {
 
     if (err) {
       log.error(err.stack || err);

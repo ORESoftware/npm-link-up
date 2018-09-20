@@ -35,7 +35,7 @@ let opts: any, parser = dashdash.createParser({options, allowUnknown});
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   log.warn(chalk.gray('Perhaps you meant to use on of these commands instead:', chalk.gray.bold(commands.join(', '))));
   process.exit(1);
 }

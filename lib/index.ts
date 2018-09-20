@@ -33,6 +33,8 @@ export interface NluGlobalSettingsConf {
 }
 
 export interface NLURunOpts {
+  all_packages: true,
+  umbrella: true,
   _args: Array<string>,
   search_from_home: boolean,
   override: boolean,
@@ -86,6 +88,7 @@ export interface NluMapItem {
   bin: string | { [key: string]: string },
   isMainProject: boolean,
   linkToItself: boolean,
+  hasNLUJSONFile: boolean,
   runInstall: boolean,
   path: string,
   deps: Array<string>
