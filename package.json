@@ -41,7 +41,7 @@
     "frankenstop": "latest",
     "json-stdio": "latest",
     "mkdirp": "^0.5.1",
-    "prepend-transform": "0.0.1017",
+    "prepend-transform": "latest",
     "residence": "latest",
     "treeify": "^1.0.1"
   },
