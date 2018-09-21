@@ -35,7 +35,7 @@ import {getCleanMap, getCleanMapOfOnlyPackagesWithNluJSONFiles} from '../../get-
 import {q} from '../../search-queue';
 
 const npmLinkUpPkg = require('../../../package.json');
-import {EVCb, NluMap} from "../../index";
+import {EVCb, NluConf, NluMap} from "../../index";
 
 import {
   globalConfigFilePath,
@@ -111,14 +111,14 @@ if (!root) {
   root = cwd;
 }
 
-if(!nluConfigRoot){
+if (!nluConfigRoot) {
   nluConfigRoot = cwd;
 }
 
-let pkg, conf;
+let pkg, conf: NluConf;
 
 let hasNLUJSONFile = false;
-const nluFilePath = path.resolve(root + '/.nlu.json');
+const nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
 
 try {
   conf = require(nluFilePath);
@@ -133,7 +133,9 @@ catch (e) {
     process.exit(1);
   }
   opts.all_packages = true;
-  conf = {
+  conf = <NluConf>{
+    'npm-link-up': true,
+    linkable: false,
     searchRoots: ['.'],
     list: []
   }
@@ -154,8 +156,15 @@ catch (e) {
   };
 }
 
+if(Array.isArray(conf.packages)){
+  throw chalk.magenta(`"packages" property should be an object but no an array => ${util.inspect(conf)}`);
+}
 
+if('packages' in conf){
+  assert.strictEqual(typeof conf.packages,'object', `packages" property should be an object => ${util.inspect(conf)}`)
+}
 
+conf.packages = conf.packages || {};
 conf.localSettings = conf.localSettings || {};
 
 if (!(conf.localSettings && typeof conf.localSettings === 'object')) {
@@ -220,11 +229,11 @@ if (searchRoots.length < 1) {
   process.exit(1);
 }
 
-const inListButNotInDeps: Array<string> = list.filter((item: string) => {
+const inListButNotInDeps = list.filter(item => {
   return !allDepsKeys.includes(item);
 });
 
-inListButNotInDeps.forEach(function (item) {
+inListButNotInDeps.forEach(item => {
   if (opts.verbosity > 1) {
     log.warning('warning, the following item was listed in your .nlu.json file, ' +
       'but is not listed in your package.json dependencies => "' + item + '".');
@@ -249,7 +258,7 @@ list.forEach(l => {
 
 const ignore = getIgnore(conf, opts);
 
-originalList.forEach(function (item: string) {
+originalList.forEach((item: string) => {
   if (opts.verbosity > 0) {
     log.info(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
   }
@@ -262,11 +271,13 @@ if (opts.dry_run) {
   log.warning(chalk.bold.gray('Because --dry-run was used, we are not actually linking projects together.'));
 }
 
+
+
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
 map[mainProjectName] = {
   name: mainProjectName,
-  bin: conf.bin || null,
+  bin: null,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
   linkToItself: conf.linkToItself,
@@ -348,7 +359,7 @@ async.autoInject({
       }
 
       const status = {searching: true};
-      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status);
+      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status, conf);
 
       searchRoots.forEach(sr => {
         q.push(cb => {
@@ -403,7 +414,7 @@ async.autoInject({
     }
   },
 
-   (err: any, results: any) => {
+  (err: any, results: any) => {
 
     if (err) {
       log.error(err.stack || err);

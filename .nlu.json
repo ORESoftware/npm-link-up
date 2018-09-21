@@ -19,6 +19,7 @@
     "json-stdio"
   ],
   "localSettings": {
-    "foo": "sing"
+    "bar": "23",
+    "foo": "dallas"
   }
 }

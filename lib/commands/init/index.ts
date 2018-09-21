@@ -16,7 +16,6 @@ import residence = require('residence');
 import options, {NLUInitOpts} from "./cmd-line-opts";
 import {EVCb} from "../../index";
 import log from '../../logging';
-
 const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);

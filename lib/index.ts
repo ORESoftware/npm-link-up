@@ -4,20 +4,24 @@ export const r2gSmokeTest = function () {
   return true;
 };
 
-
 export interface PackagesMap {
-  [key: string]: any
+  [key: string]: {
+    searchRoot: string | Array<string>,
+    searchRoots: string | Array<string>,
+    list: Array<string>
+  }
 }
 
 export interface NluConf {
   localSettings?: { [key: string]: any }
   linkable: boolean,
+  umbrella?: boolean,
   'npm-link-up': boolean,
-  comments: Array<string>,
+  comments?: Array<string>,
   alwaysReinstall: boolean,
   linkToItself: boolean,
-  searchRoot: string,
-  searchRoots: Array<string>,
+  searchRoot?: string,
+  searchRoots?: Array<string>,
   ignore: Array<string>,
   list?: Array<string>,
   deps?: Array<string>,
@@ -31,7 +35,6 @@ export type EVCb<T> = (err?: any, val?: T) => void;
 export interface NluGlobalSettingsConf {
   [key: string]: string | null | undefined | boolean | number
 }
-
 
 export interface NluMapItem {
   name: string,
