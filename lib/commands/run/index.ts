@@ -166,15 +166,18 @@ try {
   pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
+
   if (!opts.umbrella) {
     log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
     log.error('Your project root is supposedly here:', chalk.magenta(root));
     log.error(e.message);
     process.exit(1);
   }
+
   pkg = {
-    name: '(dummy-root-package)'
+    name: '(root)'  // (dummy-root-package)
   };
+
 }
 
 if (Array.isArray(conf.packages)) {
