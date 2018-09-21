@@ -102,14 +102,6 @@ if (Array.isArray(globalConf)) {
   globalConf = {};
 }
 
-if (!root) {
-  if (!opts.umbrella) {
-    log.error('You do not appear to be within an NPM project (no package.json could be found).');
-    log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
-    process.exit(1);
-  }
-  root = cwd;
-}
 
 if (!nluConfigRoot) {
   nluConfigRoot = cwd;
@@ -139,6 +131,15 @@ catch (e) {
     searchRoots: ['.'],
     list: []
   }
+}
+
+if (!root) {
+  if (!opts.umbrella) {
+    log.error('You do not appear to be within an NPM project (no package.json could be found).');
+    log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+    process.exit(1);
+  }
+  root = cwd;
 }
 
 try {

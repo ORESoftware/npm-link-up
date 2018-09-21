@@ -281,6 +281,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               deps: deps
             };
 
+            console.log('name:', pkg.name, 'nlu:', npmlinkup, 'm:', m);
+
             const nm = path.resolve(dirname + '/node_modules');
             const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
 
