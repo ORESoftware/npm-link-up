@@ -50,7 +50,12 @@ import {NluGlobalSettingsConf} from "../../index";
 //////////////////////////////////////////////////////////////////////////
 
 process.once('exit', function (code) {
-  log.info('NLU is exiting with code:', code, '\n');
+  if (code !== 0) {
+    log.warn('NLU is exiting with a bad code:', code, '\n');
+  }
+  else {
+    log.info('NLU is exiting with code:', code, '\n');
+  }
 });
 
 //////////////////////////////////////////////////////////////
@@ -126,7 +131,6 @@ if (!nluConfigRoot) {
   nluConfigRoot = cwd;
 }
 
-
 let pkg, conf: NluConf;
 
 let hasNLUJSONFile = false;
@@ -139,9 +143,9 @@ try {
 }
 catch (e) {
   if (!opts.umbrella) {
-    log.error('Could not load your .nlu.json file at this path:', nluFilePath);
-    log.error('Your project root is supposedly here:', chalk.magenta(root));
-    log.error(e.message);
+    log.error('Could not load your .nlu.json file at this path:', chalk.bold(nluFilePath));
+    log.error('Your project root is supposedly here:', chalk.bold(root));
+    log.error(chalk.magentaBright(e.message));
     process.exit(1);
   }
   opts.all_packages = true;

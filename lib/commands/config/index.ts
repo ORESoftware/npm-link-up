@@ -84,7 +84,7 @@ else {
     conf = require(confPath);
   }
   catch (err) {
-    log.error('Could not load your .nlu.json file at path:', confPath);
+    log.error('Could not load your .nlu.json file at path:', chalk.bold(confPath));
     throw chalk.magenta(err.message);
   }
 
