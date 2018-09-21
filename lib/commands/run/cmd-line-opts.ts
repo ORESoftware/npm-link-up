@@ -12,7 +12,8 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 2
+    default: 2,
+    env: 'nlu_verbosity_level'
   },
 
   {
@@ -20,14 +21,24 @@ export default [
     type: 'bool',
     help: 'Show debug logging.',
     default: false,
-    hidden: true
+    hidden: true,
+    env: 'nlu_is_debug'
+  },
+
+  {
+    names: ['config', 'conf', 'c'],
+    type: 'string',
+    help: 'Path to an .nlu.json file.',
+    default: '',
+    env: 'nlu_config_path'
   },
 
   {
     names: ['umbrella'],
     type: 'bool',
     help: 'Umbrella usage - running nlu from outside an NPM project.',
-    default: false
+    default: false,
+    env: 'nlu_is_umbrella'
   },
 
   {
@@ -177,19 +188,32 @@ export default [
   }
 ];
 
-export interface NLURunOptions {
+
+
+export interface NLURunOpts {
+  config: string,
+  search_from_home: boolean,
   link_main: boolean,
   install_main: boolean,
-  search_from_home: boolean,
-  no_use_local: boolean,
-  production: boolean,
+  all_packages: true,
+  umbrella: boolean,
+  _args: Array<string>,
+  override: boolean,
+  link_all: boolean,
+  search_root: Array<string>,
+  clear_all_caches: boolean,
+  install_all: boolean,
+  self_link_all: boolean,
+  help: boolean,
   dry_run: boolean,
+  force: boolean,
+  production: boolean
+  verbosity: number
+  no_use_local: boolean,
+  search_root_append: string,
   no_link: boolean,
   no_install: boolean,
   debug: boolean,
   allow_unknown: boolean,
-  force: boolean,
-  help: boolean,
-  verbosity: number
 }
 

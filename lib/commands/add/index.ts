@@ -13,8 +13,8 @@ import residence = require('residence');
 import mkdirp = require('mkdirp');
 
 //project
-import options from "./cmd-line-opts";
-import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../index";
+import options, {NLUAddOpts} from "./cmd-line-opts";
+import {EVCb, NluConf} from "../../index";
 import log from '../../logging';
 
 const cwd = process.cwd();

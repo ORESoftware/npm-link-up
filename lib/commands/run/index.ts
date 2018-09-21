@@ -17,6 +17,8 @@ import residence = require('residence');
 
 const cwd = process.cwd();
 let root = residence.findProjectRoot(cwd);
+let nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+
 const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
@@ -26,14 +28,14 @@ import {mapPaths} from '../../map-paths';
 import {cleanCache} from '../../cache-clean';
 import log from '../../logging';
 import {getIgnore, getSearchRoots} from "../../handle-options";
-import options from './cmd-line-opts';
+import options, {NLURunOpts} from './cmd-line-opts';
 import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
 import {getCleanMap, getCleanMapOfOnlyPackagesWithNluJSONFiles} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 
 const npmLinkUpPkg = require('../../../package.json');
-import {EVCb, NluMap, NLURunOpts} from "../../index";
+import {EVCb, NluMap} from "../../index";
 
 import {
   globalConfigFilePath,
@@ -72,6 +74,18 @@ if (opts.help) {
   process.exit(0);
 }
 
+opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
+
+try {
+  if (opts.config) {
+    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
+  }
+}
+catch (err) {
+  log.error('You declared a config path but the following path is not a directory:', opts.config);
+  throw chalk.magenta(err.message);
+}
+
 try {
   globalConf = require(globalConfigFilePath);
 }
@@ -97,7 +111,33 @@ if (!root) {
   root = cwd;
 }
 
+if(!nluConfigRoot){
+  nluConfigRoot = cwd;
+}
+
 let pkg, conf;
+
+let hasNLUJSONFile = false;
+const nluFilePath = path.resolve(root + '/.nlu.json');
+
+try {
+  conf = require(nluFilePath);
+  opts.umbrella = opts.umbrella || Boolean(conf.umbrella);
+  hasNLUJSONFile = true;
+}
+catch (e) {
+  if (!opts.umbrella) {
+    log.error('Could not load your .nlu.json file at this path:', nluFilePath);
+    log.error('Your project root is supposedly here:', chalk.magenta(root));
+    log.error(e.message);
+    process.exit(1);
+  }
+  opts.all_packages = true;
+  conf = {
+    searchRoots: ['.'],
+    list: []
+  }
+}
 
 try {
   pkg = require(path.resolve(root + '/package.json'));
@@ -114,26 +154,7 @@ catch (e) {
   };
 }
 
-let hasNLUJSONFile = false;
-const nluFilePath = path.resolve(root + '/.nlu.json');
 
-try {
-  conf = require(nluFilePath);
-  hasNLUJSONFile = true;
-}
-catch (e) {
-  if (!opts.umbrella) {
-    log.error('Could not load your .nlu.json file at this path:', nluFilePath);
-    log.error('Your project root is supposedly here:', chalk.magenta(root));
-    log.error(e.message);
-    process.exit(1);
-  }
-  opts.all_packages = true;
-  conf = {
-    searchRoots: ['.'],
-    list: []
-  }
-}
 
 conf.localSettings = conf.localSettings || {};
 

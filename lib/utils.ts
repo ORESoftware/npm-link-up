@@ -5,11 +5,12 @@ import Ajv = require('ajv');
 
 const schema = require('../assets/nlu.schema.json');
 import log from "./logging";
-import {EVCb, NluConf, NLURunOpts} from "./index";
+import {EVCb, NluConf} from "./index";
 import chalk from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
 import async = require('async');
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 ////////////////////////////////////////////////////////////////////
 

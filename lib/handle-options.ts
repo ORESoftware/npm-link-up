@@ -7,8 +7,9 @@ import * as path from 'path';
 import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
-import {NluConf, NLUDotJSON, NLURunOpts} from "./index";
+import {NluConf, NLUDotJSON} from "./index";
 import * as nluUtils from './utils';
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 /////////////////////////////////////////////////////////////////////////////////
 

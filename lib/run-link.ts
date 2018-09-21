@@ -1,6 +1,6 @@
 'use strict';
 
-import {EVCb, NluMap, NluMapItem, NLURunOpts, NLUAddOpts} from "./index";
+import {EVCb, NluMap, NluMapItem} from "./index";
 
 //core
 import * as util from 'util';

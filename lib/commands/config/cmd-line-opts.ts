@@ -12,7 +12,16 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 3
+    default: 3,
+    env: 'nlu_verbosity_level'
+  },
+
+  {
+    names: ['config', 'conf', 'c'],
+    type: 'string',
+    help: 'Path to an .nlu.json file.',
+    default: '',
+    env: 'nlu_config_path'
   },
 
   {
@@ -59,6 +68,7 @@ export default [
 
 
 export interface NLUConfigOpts {
+  config: string,
   global: boolean,
   json: boolean,
   debug: boolean,

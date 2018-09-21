@@ -1,8 +1,9 @@
 'use strict';
 
 import util = require('util');
-import {NluMap, NLURunOpts, NluVisualTree} from "./index";
+import {NluMap, NluVisualTree} from "./index";
 import log from './logging';
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 /////////////////////////////////////////////////////////////////////////////////
 

@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap, NLURunOpts} from "./index";
+import {EVCb, NLUDotJSON, NluMap} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths";
 import {
@@ -21,6 +21,7 @@ import {
   getProdKeys,
   getSearchRootsFromNluConf
 } from "./utils";
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 const searchedPaths = {} as { [key: string]: true };
 

@@ -13,8 +13,8 @@ const cwd = process.cwd();
 import * as path from 'path';
 import {globalConfigFilePath} from "../../utils";
 import {NluGlobalSettingsConf} from "../../index";
-
-const root = residence.findProjectRoot(cwd);
+import * as fs from "fs";
+import * as assert from "assert";
 
 process.once('exit', code => {
   console.log();
@@ -31,36 +31,55 @@ try {
   process.exit(1);
 }
 
+let root = residence.findProjectRoot(cwd);
+opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
+
+try {
+  if (opts.config) {
+    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
+  }
+}
+catch (err) {
+  log.error('You declared a config path but the following path is not a directory:', opts.config);
+  throw chalk.magenta(err.message);
+}
+
+let nluConfigRoot = residence.findRootDir(opts.config || cwd, '.nlu.json');
+
+if (!root) {
+  log.warn('You want to update the local config, but we could not find a project root - we could not find a local "package.json" file.');
+  root = cwd;
+}
+
+if (!nluConfigRoot) {
+  nluConfigRoot = cwd;
+}
+
 let conf: NluGlobalSettingsConf = null, confPath: string = null;
 
 if (opts.global) {
-  
+
   confPath = globalConfigFilePath;
-  
+
   try {
     conf = require(globalConfigFilePath);
   }
   catch (err) {
     conf = {};
   }
-  
+
   if (!(conf && typeof conf === 'object')) {
     conf = {};
   }
-  
+
   if (Array.isArray(conf)) {
     conf = {};
   }
 }
 else {
-  
-  if (!root) {
-    log.error('You want to update the local config, but we could not find a project root - could not find a local package.json file.');
-    process.exit(0);
-  }
-  
-  confPath = path.resolve(root + '/.nlu.json');
-  
+
+  confPath = path.resolve(nluConfigRoot + '/.nlu.json');
+
   try {
     conf = require(confPath);
   }
@@ -68,15 +87,15 @@ else {
     log.error('Could not load your .nlu.json file at path:', confPath);
     throw chalk.magenta(err.message);
   }
-  
+
   if (!(conf && typeof conf === 'object')) {
     conf = {};
   }
-  
+
   if (Array.isArray(conf)) {
     conf = {};
   }
-  
+
 }
 
 if (String(opts._args[1] || '').match(/[^a-zA-Z0-9-]+/g)) {
@@ -91,14 +110,14 @@ const firstArg = String(opts._args[0] || '').toLowerCase();
 const k = String(opts._args[1] || '').toLowerCase().replace(/[^a-zA-Z0-9-]+/g, '_');
 const v = String(opts._args[2] || '').toLowerCase().replace(/[^a-zA-Z0-9-]+/g, '_');
 
-if(opts._args[1]){
+if (opts._args[1]) {
   log.info('Sanitized key:', `'${k}'`);
 }
-if(opts._args[2]){
+if (opts._args[2]) {
   log.info('Sanitized value:', `'${v}'`);
 }
 
-const importGlobal = function (val: string) {
+const importGlobal = (val: string) => {
   import(`./global/${val}`).then(m => {
     console.log();
     m.default(opts, confPath, conf, k, v)
@@ -114,7 +133,7 @@ const globalValues = <any>{};
   }
 });
 
-const importLocal = function (val: string) {
+const importLocal = (val: string) => {
   import(`./local/${val}`).then(m => {
     console.log();
     m.default(opts, confPath, conf, k, v)
@@ -130,7 +149,7 @@ const localValues: any = {};
   }
 });
 
-let container = localValues;
+let container = Object.assign({}, localValues);
 
 if (opts.global) {
   container = globalValues;

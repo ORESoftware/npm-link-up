@@ -11,7 +11,8 @@ import chalk from 'chalk';
 
 // project
 import log from '../../logging';
-import {EVCb, NLUInitOpts, NluMap} from "../../index";
+import {EVCb, NluMap} from "../../index";
+import {NLUInitOpts} from "./cmd-line-opts";
 
 ////////////////////////////////////////////////////////////////
 
