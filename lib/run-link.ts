@@ -24,8 +24,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
   const keys = Object.keys(map);
 
   if (keys.length < 1) {
-    return process.nextTick(cb, new Error('NLU could not find any dependencies on the filesystem;' +
-      ' perhaps broaden your search using searchRoots.'));
+    return process.nextTick(cb, 'NLU could not find any dependencies on the filesystem;' +
+      ' perhaps broaden your search using searchRoots.');
   }
 
   if (opts.dry_run) {

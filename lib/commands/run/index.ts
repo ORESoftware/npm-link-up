@@ -17,7 +17,6 @@ import residence = require('residence');
 
 const cwd = process.cwd();
 let root = residence.findProjectRoot(cwd);
-let nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
 
 const treeify = require('treeify');
 import mkdirp = require('mkdirp');
@@ -86,6 +85,18 @@ catch (err) {
   throw chalk.magenta(err.message);
 }
 
+opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
+
+try {
+  if (opts.config) {
+    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
+  }
+}
+catch (err) {
+  log.error('You declared a config path but the following path is not a directory:', opts.config);
+  throw chalk.magenta(err.message);
+}
+
 try {
   globalConf = require(globalConfigFilePath);
 }
@@ -102,10 +113,19 @@ if (Array.isArray(globalConf)) {
   globalConf = {};
 }
 
+let nluConfigRoot: string = null;
+
+if (opts.config) {
+  nluConfigRoot = path.resolve(opts.config);
+}
+else {
+  nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+}
 
 if (!nluConfigRoot) {
   nluConfigRoot = cwd;
 }
+
 
 let pkg, conf: NluConf;
 
@@ -153,16 +173,16 @@ catch (e) {
     process.exit(1);
   }
   pkg = {
-    name: '@oresoftware/nlu-dummy'
+    name: '(dummy-root-package)'
   };
 }
 
-if(Array.isArray(conf.packages)){
+if (Array.isArray(conf.packages)) {
   throw chalk.magenta(`"packages" property should be an object but no an array => ${util.inspect(conf)}`);
 }
 
-if('packages' in conf){
-  assert.strictEqual(typeof conf.packages,'object', `packages" property should be an object => ${util.inspect(conf)}`)
+if ('packages' in conf) {
+  assert.strictEqual(typeof conf.packages, 'object', `packages" property should be an object => ${util.inspect(conf)}`)
 }
 
 conf.packages = conf.packages || {};
@@ -272,8 +292,6 @@ if (opts.dry_run) {
   log.warning(chalk.bold.gray('Because --dry-run was used, we are not actually linking projects together.'));
 }
 
-
-
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
 map[mainProjectName] = {
@@ -338,7 +356,7 @@ async.autoInject({
 
     mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, root, cb);
+      mapPaths(searchRoots, nluConfigRoot, cb);
     },
 
     findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
@@ -418,7 +436,7 @@ async.autoInject({
   (err: any, results: any) => {
 
     if (err) {
-      log.error(err.stack || err);
+      log.error(chalk.magenta(util.inspect(err.message || err)));
       return process.exit(1);
     }
 
