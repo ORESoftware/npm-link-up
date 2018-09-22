@@ -165,6 +165,13 @@ export default [
   },
 
   {
+    names: ['allow-missing'],
+    type: 'bool',
+    help: 'Allows nlu to continue even if a package cannot be found.',
+    default: false
+  },
+
+  {
     names: ['production', 'prod'],
     type: 'bool',
     help: 'Use the --production flag with npm install / npm link; only applies when using using --install or --link options.',
@@ -192,6 +199,7 @@ export default [
 
 export interface NLURunOpts {
   config: string,
+  allow_missing: boolean,
   search_from_home: boolean,
   link_main: boolean,
   install_main: boolean,

@@ -19,7 +19,7 @@ interface BinFieldObject {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
+export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
   const keys = Object.keys(map);
 
@@ -263,7 +263,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
 
     k.once('error', cb);
 
-    k.once('exit', function (code) {
+    k.once('exit', code => {
 
       if (code > 0 && /ERR/i.test(stderr)) {
         log.error(`Dep with name "${dep.name}" is done, but with an error.`);

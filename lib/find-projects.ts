@@ -24,14 +24,16 @@ import {
 import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 const searchedPaths = {} as { [key: string]: true };
+export const rootPaths: Array<string> = [];
+
+export type Task = (cb: EVCb<any>) => void;
+// searchQueue used to prevent too many dirs searched at once
+const searchQueue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 //////////////////////////////////////////////////////////////////////
 
 export const makeFindProject = function (mainProjectName: string, totalList: Map<string, true>, map: NluMap,
                                          ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) {
-
-
-  ////////////////////////////////////////////////////////////////////////
 
   const isPathSearchableBasic = (item: string) => {
 
@@ -72,8 +74,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     // it is instead checking to see if an existing search path is shorter
     // than the new search path, and if so, we don't need to add the new one
 
-    const match = keys.some(function (pth) {
-      if (String(item).startsWith(pth)) {
+    const match = keys.some(pth => {
+      if (item.startsWith(pth)) {
         goodPth = pth;
         return true;
       }
@@ -113,6 +115,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
     }
 
     searchedPaths[item] = true;
+    rootPaths.push(item);
     log.info('New path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
@@ -131,210 +134,216 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
       searchedPaths[dir] = true;
 
-      fs.readdir(dir, (err, items) => {
+      searchQueue.push(callback => {
 
-        if (err) {
-          log.error(err.message || err);
-          if (String(err.message || err).match(/permission denied/)) {
-            return cb(null);
-          }
-          return cb(err);
-        }
+        fs.readdir(dir, (err, items) => {
 
-        if (status.searching === false) {
-          opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
-          return process.nextTick(cb);
-        }
+          callback();
 
-        items = items.map(function (item) {
-          return path.resolve(dir, item);
-        });
-
-        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
-
-          if (isIgnored(String(item))) {
-            if (opts.verbosity > 2) {
-              log.warning('path ignored => ', item);
+          if (err) {
+            log.error(err.message || err);
+            if (String(err.message || err).match(/permission denied/)) {
+              return cb(null);
             }
+            return cb(err);
+          }
+
+          if (status.searching === false) {
+            opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
             return process.nextTick(cb);
           }
 
-          fs.lstat(item, function (err, stats) {
+          items = items.map(function (item) {
+            return path.resolve(dir, item);
+          });
 
-            if (err) {
-              log.warning('warning => maybe a symlink? => ', item);
-              return cb();
-            }
+          async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
-            if (status.searching === false) {
-              opts.verbosity > 1 && log.error('There was an error so we short-circuited search.');
+            if (isIgnored(String(item))) {
+              if (opts.verbosity > 2) {
+                log.warning('path ignored => ', item);
+              }
               return process.nextTick(cb);
             }
 
-            if (stats.isSymbolicLink()) {
-              opts.verbosity > 2 && log.warning('warning => looks like a symlink => ', item);
-              return cb();
-            }
+            fs.lstat(item, function (err, stats) {
 
-            if (stats.isDirectory()) {
+              if (err) {
+                log.warning('warning => maybe a symlink? => ', item);
+                return cb();
+              }
 
-              if (!isPathSearchableBasic(item)) {
+              if (status.searching === false) {
+                opts.verbosity > 1 && log.error('There was an error so we short-circuited search.');
+                return process.nextTick(cb);
+              }
+
+              if (stats.isSymbolicLink()) {
+                opts.verbosity > 2 && log.warning('warning => looks like a symlink => ', item);
+                return cb();
+              }
+
+              if (stats.isDirectory()) {
+
+                if (!isPathSearchableBasic(item)) {
+                  return cb(null);
+                }
+
+                if (isIgnored(String(item + '/'))) {
+                  if (opts.verbosity > 2) {
+                    log.warning('path ignored by settings/regex => ', item);
+                  }
+                  cb(null);
+                }
+                else {
+                  // continue drilling down
+                  getMarkers(item, cb);
+                }
+
+                return;
+              }
+
+              if (!stats.isFile()) {
+                if (opts.verbosity > 2) {
+                  log.warning('Not a directory or file (maybe a symlink?) => ', item);
+                }
                 return cb(null);
               }
 
-              if (isIgnored(String(item + '/'))) {
-                if (opts.verbosity > 2) {
-                  log.warning('path ignored by settings/regex => ', item);
+              let dirname = path.dirname(item);
+              let filename = path.basename(item);
+
+              if (String(filename) !== 'package.json') {
+                return cb(null);
+              }
+
+              let pkg: any, linkable = null;
+
+              try {
+                pkg = require(item);
+              }
+              catch (err) {
+                return cb(err);
+              }
+
+              try {
+                linkable = pkg.nlu.linkable;
+              }
+              catch (err) {
+                //ignore
+              }
+
+              if (linkable === false) {
+                return cb(null);
+              }
+
+              if (pkg.name === mainProjectName && linkable !== true) {
+                if (opts.verbosity > 1) {
+                  log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
                 }
-                cb(null);
-              }
-              else {
-                // continue drilling down
-                getMarkers(item, cb);
+                return cb(null);
               }
 
-              return;
-            }
+              let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
 
-            if (!stats.isFile()) {
-              if (opts.verbosity > 2) {
-                log.warning('Not a directory or file (maybe a symlink?) => ', item);
+              try {
+                npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
+                hasNLUJSONFile = true;
               }
-              return cb(null);
-            }
-
-            let dirname = path.dirname(item);
-            let filename = path.basename(item);
-
-            if (String(filename) !== 'package.json') {
-              return cb(null);
-            }
-
-            let pkg: any, linkable = null;
-
-            try {
-              pkg = require(item);
-            }
-            catch (err) {
-              return cb(err);
-            }
-
-            try {
-              linkable = pkg.nlu.linkable;
-            }
-            catch (err) {
-              //ignore
-            }
-
-            if (linkable === false) {
-              return cb(null);
-            }
-
-            if (pkg.name === mainProjectName && linkable !== true) {
-              if (opts.verbosity > 1) {
-                log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
+              catch (e) {
+                npmlinkup = {} as NLUDotJSON;
               }
-              return cb(null);
-            }
 
-            let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
+              if (npmlinkup.linkable === false) {
+                log.warn(`Skipping project at dir "${dirname}" because 'linkable' was set to false.`);
+                return cb(null);
+              }
 
-            try {
-              npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
-              hasNLUJSONFile = true;
-            }
-            catch (e) {
-              npmlinkup = {} as NLUDotJSON;
-            }
+              const pkgFromConf = conf.packages[pkg.name] || {};
+              npmlinkup = Object.assign({}, pkgFromConf, npmlinkup);
 
-            if (npmlinkup.linkable === false) {
-              log.warn(`Skipping project at dir "${dirname}" because 'linkable' was set to false.`);
-              return cb(null);
-            }
+              try {
+                deps = getDepsListFromNluJSON(npmlinkup);
+                assert(Array.isArray(deps),
+                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`);
+              }
+              catch (err) {
+                log.error(chalk.redBright('Could not parse list/packages/deps properties from .nlu.json file at this path:'));
+                log.error(chalk.redBright.bold(dirname));
+                return cb(err);
+              }
 
-            const pkgFromConf = conf.packages[pkg.name] || {};
-            npmlinkup = Object.assign({}, pkgFromConf, npmlinkup);
+              deps.forEach(item => {
+                totalList.set(item, true);
+              });
 
-            try {
-              deps = getDepsListFromNluJSON(npmlinkup);
-              assert(Array.isArray(deps),
-                `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`);
-            }
-            catch (err) {
-              log.error(chalk.redBright('Could not parse list/packages/deps properties from .nlu.json file at this path:'));
-              log.error(chalk.redBright.bold(dirname));
-              return cb(err);
-            }
+              const m = map[pkg.name] = {
+                name: pkg.name,
+                bin: pkg.bin || null,
+                hasNLUJSONFile,
+                isMainProject: false,
+                linkToItself: Boolean(npmlinkup.linkToItself),
+                runInstall: Boolean(npmlinkup.alwaysReinstall),
+                path: dirname,
+                deps: deps
+              };
 
-            deps.forEach(item => {
-              totalList.set(item, true);
+              const nm = path.resolve(dirname + '/node_modules');
+              const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
+
+              async.autoInject({
+
+                reinstall(cb: EVCb<any>) {
+
+                  if (!totalList.get(pkg.name)) {
+                    return process.nextTick(cb);
+                  }
+
+                  determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
+                    m.runInstall = val === true;
+                    if (val === true) {
+                      log.debug(chalk.red('the following project needs reinstall:'), dirname);
+                    }
+                    cb(err);
+                  });
+                },
+
+                addToSearchRoots(cb: EVCb<any>) {
+
+                  const searchRoots = getSearchRootsFromNluConf(npmlinkup);
+
+                  if (searchRoots.length < 1) {
+                    return process.nextTick(cb, null);
+                  }
+
+                  mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
+
+                    if (err) {
+                      return cb(err);
+                    }
+
+                    roots.forEach(r => {
+                      if (isPathSearchable(r)) {
+                        log.info(chalk.cyan('Given the .nlu.json file at this path:'), chalk.bold(dirname));
+                        log.info(chalk.cyan('We are adding this to the search queue:'), chalk.bold(r));
+                        q.push(cb => {
+                          findProject(r, cb);
+                        });
+                      }
+                    });
+
+                    cb(null);
+
+                  });
+                }
+
+              }, cb);
+
             });
 
-            const m = map[pkg.name] = {
-              name: pkg.name,
-              bin: pkg.bin || null,
-              hasNLUJSONFile,
-              isMainProject: false,
-              linkToItself: Boolean(npmlinkup.linkToItself),
-              runInstall: Boolean(npmlinkup.alwaysReinstall),
-              path: dirname,
-              deps: deps
-            };
+          }, cb);
 
-            const nm = path.resolve(dirname + '/node_modules');
-            const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
-
-            async.autoInject({
-
-              reinstall(cb: EVCb<any>) {
-
-                if (!totalList.get(pkg.name)) {
-                  return process.nextTick(cb);
-                }
-
-                determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
-                  m.runInstall = val === true;
-                  if (val === true) {
-                    log.debug(chalk.red('the following project needs reinstall:'), dirname);
-                  }
-                  cb(err);
-                });
-              },
-
-              addToSearchRoots(cb: EVCb<any>) {
-
-                const searchRoots = getSearchRootsFromNluConf(npmlinkup);
-
-                if (searchRoots.length < 1) {
-                  return process.nextTick(cb, null);
-                }
-
-                mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
-
-                  if (err) {
-                    return cb(err);
-                  }
-
-                  roots.forEach(r => {
-                    if (isPathSearchable(r)) {
-                      log.info(chalk.cyan('Given the .nlu.json file at this path:'), chalk.bold(dirname));
-                      log.info(chalk.cyan('We are adding this to the search queue:'), chalk.bold(r));
-                      q.push(cb => {
-                        findProject(r, cb);
-                      });
-                    }
-                  });
-
-                  cb(null);
-
-                });
-              }
-
-            }, cb);
-
-          });
-
-        }, cb);
+        });
 
       });
 

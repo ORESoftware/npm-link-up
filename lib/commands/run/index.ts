@@ -22,7 +22,7 @@ const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
 //project
-import {makeFindProject} from '../../find-projects';
+import {makeFindProject, rootPaths} from '../../find-projects';
 import {mapPaths} from '../../map-paths';
 import {cleanCache} from '../../cache-clean';
 import log from '../../logging';
@@ -51,7 +51,7 @@ import {NluGlobalSettingsConf} from "../../index";
 
 process.once('exit', function (code) {
   if (code !== 0) {
-    log.warn('NLU is exiting with a bad code:', code, '\n');
+    log.warn('NLU is exiting with code:', code, '\n');
   }
   else {
     log.info('NLU is exiting with code:', code, '\n');
@@ -293,7 +293,6 @@ originalList.forEach((item: string) => {
 });
 
 const map: NluMap = {};
-let cleanMap: NluMap;
 
 if (opts.dry_run) {
   log.warning(chalk.bold.gray('Because --dry-run was used, we are not actually linking projects together.'));
@@ -416,7 +415,30 @@ async.autoInject({
 
     },
 
-    runUtility(findItems: void, cb: EVCb<any>) {
+    runUtility(findItems: void, cb: EVCb<NluMap>) {
+
+      // TODO: filter excluded and completely excluded keys
+
+      const unfound = Array.from(totalList.keys()).filter(v => {
+        return !map[v];
+      });
+
+      if (unfound.length > 0) {
+        log.warn(`The following packages could ${chalk.bold('not')} be located:`);
+        log.warn(unfound);
+        if (!opts.allow_missing) {
+          console.error();
+          log.warn('The following paths (and their subdirectories) were searched:');
+          rootPaths.forEach((v, i) => {
+            console.info('\t\t', `${chalk.blueBright.bold(String(i + 1))}.`, chalk.blueBright(v));
+          });
+          console.error();
+          log.error('because the --allow-missing flag was not use, we are exiting.');
+          process.exit(1);
+        }
+      }
+
+      let cleanMap: NluMap;
 
       try {
 
@@ -432,11 +454,15 @@ async.autoInject({
       }
 
       if (opts.dry_run) {
-        return process.nextTick(cb);
+        return process.nextTick(() => {
+          cb(null, cleanMap);
+        });
       }
 
       log.info('Beginning to actually link projects together...');
-      runNPMLink(cleanMap, opts, cb);
+      runNPMLink(cleanMap, opts, err => {
+        cb(err, cleanMap);
+      });
     }
   },
 
@@ -447,22 +473,30 @@ async.autoInject({
       return process.exit(1);
     }
 
-    if ((results as any).runUtility) {
+    if (results.runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
     }
 
-    const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
-    const treeString = treeify.asTree(treeObj, true);
-    const formattedStr = String(treeString).split('\n').map(function (line) {
-      return '\t' + line;
-    });
+    const cleanMap = results.runUtility;
 
-    if (opts.verbosity > 1) {
-      log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
-      console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-      console.log(chalk.white(formattedStr.join('\n')));
-      console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    if (cleanMap && typeof  cleanMap === 'object') {
+
+      const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
+      const treeString = treeify.asTree(treeObj, true);
+      const formattedStr = String(treeString).split('\n').map(function (line) {
+        return '\t' + line;
+      });
+
+      if (opts.verbosity > 1) {
+        log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
+        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        console.log(chalk.white(formattedStr.join('\n')));
+        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+      }
+    }
+    else{
+      log.warn('Missing map object; could not create dependency tree visualization.');
     }
 
     setTimeout(function () {
