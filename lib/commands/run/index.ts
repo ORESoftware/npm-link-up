@@ -469,6 +469,7 @@ async.autoInject({
   (err: any, results: any) => {
 
     if (err) {
+      log.error('There was an error while running nlu run/add:');
       log.error(chalk.magenta(util.inspect(err.message || err)));
       return process.exit(1);
     }
@@ -495,7 +496,7 @@ async.autoInject({
         console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       }
     }
-    else{
+    else {
       log.warn('Missing map object; could not create dependency tree visualization.');
     }
 

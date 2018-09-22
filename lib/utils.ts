@@ -17,7 +17,7 @@ import * as util from "util";
 
 export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/global/settings.json');
 
-export const validateConfigFile = function (data: NluConf) {
+export const validateConfigFile =  (data: NluConf) => {
 
   try {
     const ajv = new Ajv({allErrors: false}); // options can be passed, e.g. {allErrors: true}
@@ -126,7 +126,7 @@ export const validateOptions = function (opts: any) {
 
 };
 
-export const mapConfigObject = function (obj: any) {
+export const mapConfigObject =  (obj: any) => {
   return Object.keys(obj).reduce((a, b) => {
     const key = String(b).replace(/[^a-zA-z]+/g, '_').toLowerCase();
     return (a[key] = obj[b], a);

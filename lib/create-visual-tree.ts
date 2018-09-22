@@ -43,11 +43,11 @@ export const createTree = function (map: NluMap, name: string, originalList: Arr
       
     };
     
-    originalList.forEach(function (k: string) {
+    originalList.forEach( (k: string) => {
       tree[name] && createItem(k, tree[name], [name]);
     });
     
-    let cleanTree = function (k: string, val: any) {
+    let cleanTree =  (k: string, val: any) => {
       
       delete val[k];
       
