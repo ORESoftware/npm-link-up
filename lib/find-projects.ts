@@ -157,6 +157,20 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             return path.resolve(dir, item);
           });
 
+          let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
+
+          try {
+            npmlinkup = require(path.resolve(dir + '/.nlu.json'));
+            hasNLUJSONFile = true;
+            if(npmlinkup && npmlinkup.searchable === false){
+              log.warn('The following dir is not searchable:', dir);
+              return cb(null);
+            }
+          }
+          catch (e) {
+            npmlinkup = {} as NLUDotJSON;
+          }
+
           async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
             if (isIgnored(String(item))) {
@@ -244,15 +258,6 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
 
-              let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
-
-              try {
-                npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
-                hasNLUJSONFile = true;
-              }
-              catch (e) {
-                npmlinkup = {} as NLUDotJSON;
-              }
 
               if (npmlinkup.linkable === false) {
                 log.warn(`Skipping project at dir "${dirname}" because 'linkable' was set to false.`);

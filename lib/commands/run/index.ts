@@ -10,14 +10,11 @@ import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
-
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
-
 const cwd = process.cwd();
 let root = residence.findProjectRoot(cwd);
-
 const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
@@ -32,8 +29,6 @@ import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
 import {getCleanMap, getCleanMapOfOnlyPackagesWithNluJSONFiles} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
-
-const npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluConf, NluMap} from "../../index";
 
 import {

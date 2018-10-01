@@ -26,6 +26,7 @@ export interface NluConf {
   list?: Array<string>,
   deps?: Array<string>,
   packages: PackagesMap,
+  searchable: boolean
 }
 
 export type NLUDotJSON =  NluConf;
