@@ -172,7 +172,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
     if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn "${installProd}"`;
+      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn ${installProd}`;
     }
   };
 
