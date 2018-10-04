@@ -13,10 +13,9 @@ import async = require('async');
 import residence = require('residence');
 
 //project
-import options from "./cmd-line-opts";
-import {EVCb, NLUInitOpts} from "../../index";
+import options, {NLUInitOpts} from "./cmd-line-opts";
+import {EVCb} from "../../index";
 import log from '../../logging';
-
 const npmLinkUpPkg = require('../../../package.json');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
@@ -42,7 +41,7 @@ let opts: NLUInitOpts, parser = dashdash.createParser({options, allowUnknown});
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 

@@ -7,8 +7,9 @@ import * as path from 'path';
 import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
-import {NluConf, NLUDotJSON, NLURunOpts} from "./index";
+import {NluConf, NLUDotJSON} from "./index";
 import * as nluUtils from './utils';
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +32,7 @@ export const getIgnore = (conf: NLUDotJSON, opts: any): Array<RegExp> => {
   
 };
 
-export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<string> {
+export const getSearchRoots =  (opts: NLURunOpts, conf: NluConf): Array<string> => {
   
   let searchRoots: Array<string | Array<string>> = [];
   
@@ -64,7 +65,8 @@ export const getSearchRoots = function (opts: NLURunOpts, conf: NluConf): Array<
       searchRootsReduced.push(v);
     }
   });
-  
+
+
   return searchRootsReduced;
   
 };

@@ -6,7 +6,7 @@
     "your comments go here"
   ],
   "searchRoots": [
-    "$HOME/WebstormProjects/oresoftware"
+    "$nlu_primary_search_root"
   ],
   "ignore": [
     "/node_modules/",
@@ -20,7 +20,6 @@
   ],
   "localSettings": {
     "bar": "23",
-    "foo": "eeee"
+    "foo": "dallas"
   }
 }
-

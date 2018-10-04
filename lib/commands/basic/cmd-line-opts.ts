@@ -18,7 +18,8 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 3
+    default: 3,
+    env: 'nlu_verbosity_level'
   },
 
   {
@@ -54,12 +55,17 @@ export default [
 ];
 
 
+
+
+
 export interface NLUBasicOpts {
+  _args: Array<string>,
+  override: boolean,
   bash_completion: boolean,
+  verbosity: number,
+  help: boolean,
+  force: boolean,
   version: boolean,
   debug: boolean,
   allow_unknown: boolean,
-  force: boolean,
-  help: boolean,
-  verbosity: number
 }

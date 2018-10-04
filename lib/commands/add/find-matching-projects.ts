@@ -11,7 +11,8 @@ import chalk from 'chalk';
 
 // project
 import log from '../../logging';
-import {EVCb, NLUAddOpts} from "../../index";
+import {EVCb} from "../../index";
+import {NLUAddOpts} from "./cmd-line-opts";
 
 ////////////////////////////////////////////////////////////////
 
@@ -19,7 +20,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                                           opts: NLUAddOpts, map: any, toAdd: Array<string>, status: any) {
 
 
-  let isIgnored = function (pth: string) {
+  let isIgnored =  (pth: string) => {
     return ignore.some(r => {
       if (r.test(pth)) {
         if (opts.verbosity > 2) {

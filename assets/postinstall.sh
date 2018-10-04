@@ -10,11 +10,16 @@ fi
 export FORCE_COLOR=1;
 export skip_postinstall="yes";
 
+
+mkdir -p "$HOME/.nlu/global" || {
+  echo "Could not create .nlu/global dir in user home.";
+  exit 1;
+}
+
 mkdir -p "$HOME/.oresoftware/bin" || {
   echo "Could not create .oresoftware/bin dir in user home.";
   exit 1;
 }
-
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     curl --silent -o- https://raw.githubusercontent.com/oresoftware/realpath/master/assets/install.sh | bash || {

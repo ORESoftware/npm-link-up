@@ -13,19 +13,14 @@ import * as path from "path";
 export const mapPaths = (searchRoots: Array<string>, dirname: string, cb: EVCb<Array<string>>) => {
 
   const mappedRoots = searchRoots
-  .map(v => String(v || '').trim())
-  .filter(Boolean)
-  .map(function (v) {
-    return `echo "${v}"`;
-  });
+    .map(v => String(v || '').trim())
+    .filter(Boolean)
+    .map(function (v) {
+      return `echo "${v}"`;
+    });
 
-  const k = cp.spawn('bash', [], {
-    env: Object.assign({}, process.env, {
-      NPM_LINK_UP: 'yes'
-    })
-  });
-
-  k.stdin.end(mappedRoots.join(';'));
+  const k = cp.spawn('bash');
+  k.stdin.end(mappedRoots.join(';') + '\n');
   const results: Array<string> = [];
 
   k.stdout.setEncoding('utf8');
@@ -34,14 +29,12 @@ export const mapPaths = (searchRoots: Array<string>, dirname: string, cb: EVCb<A
 
   k.stdout.on('data', d => {
     String(d || '').split('\n')
-    .map(v => String(v || '').trim())
-    .filter(Boolean).forEach(v => {
-      results.push(v);
-    });
+      .map(v => String(v || '').trim())
+      .filter(Boolean).forEach(v => results.push(v));
   });
 
   k.once('error', e => {
-    cb(e || new Error('Missing error - error was mia.'));
+    e && log.error(e);
   });
 
   k.once('exit', code => {
@@ -53,18 +46,18 @@ export const mapPaths = (searchRoots: Array<string>, dirname: string, cb: EVCb<A
     const pths: Array<string> = [];
 
     results.map(d => String(d || '').trim())
-    .filter(Boolean)
-    .sort((a, b) => (a.length - b.length))
-    .forEach(v => {
+      .filter(Boolean)
+      .sort((a, b) => (a.length - b.length))
+      .forEach(v => {
 
-      const s = !pths.some(p => {
-        return p.startsWith(v + '/');
+        const s = !pths.some(p => {
+          return p.startsWith(v + '/');
+        });
+
+        if (s) {
+          pths.push(v);
+        }
       });
-
-      if (s) {
-        pths.push(v);
-      }
-    });
 
     cb(null, pths.map(p => path.isAbsolute(p) ? p : path.resolve(dirname + '/' + p)));
 
