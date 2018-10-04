@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.1.317",
+  "version": "0.1.318",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh"
@@ -41,7 +41,7 @@
     "frankenstop": "latest",
     "json-stdio": "latest",
     "mkdirp": "^0.5.1",
-    "prepend-transform": "0.0.1017",
+    "prepend-transform": "latest",
     "residence": "latest",
     "treeify": "^1.0.1"
   },

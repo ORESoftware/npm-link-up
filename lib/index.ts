@@ -4,24 +4,29 @@ export const r2gSmokeTest = function () {
   return true;
 };
 
-
 export interface PackagesMap {
-  [key: string]: any
+  [key: string]: {
+    searchRoot: string | Array<string>,
+    searchRoots: string | Array<string>,
+    list: Array<string>
+  }
 }
 
 export interface NluConf {
   localSettings?: { [key: string]: any }
   linkable: boolean,
+  umbrella?: boolean,
   'npm-link-up': boolean,
-  comments: Array<string>,
+  comments?: Array<string>,
   alwaysReinstall: boolean,
   linkToItself: boolean,
-  searchRoot: string,
-  searchRoots: Array<string>,
+  searchRoot?: string,
+  searchRoots?: Array<string>,
   ignore: Array<string>,
   list?: Array<string>,
   deps?: Array<string>,
   packages: PackagesMap,
+  searchable: boolean
 }
 
 export type NLUDotJSON =  NluConf;
@@ -32,60 +37,12 @@ export interface NluGlobalSettingsConf {
   [key: string]: string | null | undefined | boolean | number
 }
 
-export interface NLURunOpts {
-  _args: Array<string>,
-  search_from_home: boolean,
-  override: boolean,
-  link_all: boolean,
-  link_main: boolean,
-  install_main: boolean,
-  search_root: Array<string>,
-  clear_all_caches: boolean,
-  verbosity: number,
-  help: boolean,
-  install_all: boolean,
-  self_link_all: boolean,
-  dry_run: boolean,
-  force: boolean,
-  search_root_append: string,
-  production: boolean
-}
-
-export interface NLUInitOpts {
-  _args: Array<string>,
-  search_from_home: boolean,
-  interactive: boolean,
-  search_root: Array<string>,
-  verbosity: number,
-  help: boolean,
-  force: boolean,
-}
-
-export interface NLUAddOpts {
-  _args: Array<string>,
-  override: boolean,
-  search_root: Array<string>,
-  dry_run: boolean,
-  search_from_home: boolean,
-  verbosity: number,
-  help: boolean,
-  force: boolean,
-}
-
-export interface NLUBasicOpts {
-  _args: Array<string>,
-  override: boolean,
-  bash_completion: boolean,
-  verbosity: number,
-  help: boolean,
-  force: boolean,
-}
-
 export interface NluMapItem {
   name: string,
   bin: string | { [key: string]: string },
   isMainProject: boolean,
   linkToItself: boolean,
+  hasNLUJSONFile: boolean,
   runInstall: boolean,
   path: string,
   deps: Array<string>
