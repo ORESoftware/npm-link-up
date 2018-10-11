@@ -295,15 +295,16 @@ if (opts.dry_run) {
 
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
-map[mainProjectName] = {
+const mainDep = map[mainProjectName] = {
   name: mainProjectName,
-  bin: null,  // conf.bin ?
+  bin: null as any,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
   path: root,
-  deps: list
+  deps: list,
+  package: pkg
 };
 
 async.autoInject({
@@ -313,13 +314,14 @@ async.autoInject({
       const nm = path.resolve(root + '/node_modules');
       const keys = opts.production ? productionDepsKeys : allDepsKeys;
 
-      determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
+      determineIfReinstallIsNeeded(nm, mainDep, keys, opts, (err, val) => {
 
         if (err) {
           return cb(err);
         }
 
         if (val === true) {
+          mainDep.runInstall = true;
           opts.install_main = true;
         }
 

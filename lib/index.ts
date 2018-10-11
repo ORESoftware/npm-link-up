@@ -12,6 +12,17 @@ export interface PackagesMap {
   }
 }
 
+export interface PkgJSON {
+  name: string,
+  bin?: any,
+  dependencies?: {[key: string]: string},
+  devDependencies?: {[key: string]: string},
+  optionalDependencies?: {[key: string]: string},
+  nlu?: any,
+  npp?: any,
+  r2g?: any
+}
+
 export interface NluConf {
   localSettings?: { [key: string]: any }
   linkable: boolean,
@@ -46,7 +57,8 @@ export interface NluMapItem {
   runInstall: boolean,
   path: string,
   deps: Array<string>
-  isLinked?: boolean
+  isLinked?: boolean,
+  package: PkgJSON
 }
 
 export interface NluMap {
