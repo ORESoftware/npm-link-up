@@ -227,15 +227,15 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
     const nm = path.resolve(dep.path + '/node_modules');
 
-    // determineIfReinstallIsNeeded(nm, dep, getDevKeys(dep.package), opts, (err, val) => {
-    //
-    //   if (err) {
-    //     log.warn(`Error generated from determining if npm (re)install was is necessary for package: ${dep.name} =>`, err);
-    //   }
-    //
-    //   if (val === true) {
-    //     dep.runInstall = true;
-    //   }
+    determineIfReinstallIsNeeded(nm, dep, getDevKeys(dep.package), opts, (err, val) => {
+
+      if (err) {
+        log.warn(`Error generated from determining if npm (re)install was is necessary for package: ${dep.name} =>`, err);
+      }
+
+      if (val === true) {
+        dep.runInstall = true;
+      }
 
       const deps = getNPMLinkList(dep.deps, dep);
       const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
@@ -343,7 +343,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
       });
 
-    // });
+    });
 
   }, cb);
 

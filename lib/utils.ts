@@ -132,9 +132,14 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>): boolean => {
   return Object.keys(d).some(v => {
     const desiredVersion = d[v];
     const installedVersion = m.get(v);
-    return semver.neq(desiredVersion, installedVersion);
+    try {
+      return semver.neq(desiredVersion, installedVersion);
+    }
+    catch (err) {
+      log.warn(err.message);
+      return true;
+    }
   });
-
 };
 
 export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMapItem, depsKeys: Array<string>, opts: NLURunOpts, cb: EVCb<boolean>) => {
@@ -183,12 +188,12 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
           const version = JSON.parse(String(data)).version;
           assert(version && typeof version === 'string', 'version is not defined or not a string.');
           map.set(name, version);
-          return cb(null);
         }
         catch (err) {
           result.install = true;
-          return cb(err);
         }
+
+        cb(null);
 
       });
 
@@ -201,7 +206,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
         async.eachLimit(topLevel, 3, (item, cb) => {
           const folder = path.resolve(nodeModulesPath + '/' + item);
           processFolder(item, folder, cb);
-        });
+        }, cb);
 
       },
 
@@ -269,9 +274,9 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
         return cb(null, true);
       }
 
-      if (checkPackages(dep, map)) {
-        return cb(null, true);
-      }
+      // if (checkPackages(dep, map)) {
+      //   return cb(null, true);
+      // }
 
       cb(null, false);
 
