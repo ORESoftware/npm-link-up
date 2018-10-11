@@ -93,7 +93,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
             if (stats.isSymbolicLink()) {
               node[v] = v;
             }
-            else{
+            else {
               delete node[v];
             }
             return cb(null);
@@ -120,6 +120,49 @@ const cleanTree = (treeObj: any) => {
 
   const newTree = {};
 
+  (function recurse(node: any, parent: any, prop: string, hasNodeModules: boolean) {
+
+    const children = Object.keys(node);
+
+    // log.info('children:', children);
+
+    const runRemove = () => {
+      if (!hasNodeModules) {
+        if (parent && prop) {
+          log.warning('deleting prop', prop, 'from obj:', parent);
+          delete parent[prop];
+        }
+        else{
+          log.warning('we have a parent or prop without the other:', prop, parent)
+        }
+      }
+    };
+
+    if (children.length < 1) {
+      runRemove();
+      return;
+    }
+
+    const single = children.length === 1;
+
+    for (let v of children) {
+
+      if (typeof node[v] === 'string') {
+        runRemove();
+        continue;
+      }
+
+      if (!single) {
+        // there is a new branch, so we have to demarcate the branch point so we don't delete more than one branch
+        prop = v;
+        parent = node;
+      }
+
+      recurse(node[v], parent, prop || v, hasNodeModules || v === 'node_modules');
+    }
+
+  })(treeObj, treeObj, null, false);
+
 };
 
 searchDir(searchRoot, treeObj, err => {
@@ -130,6 +173,7 @@ searchDir(searchRoot, treeObj, err => {
 
   // console.log('tree object:', treeObj);
 
+  cleanTree(treeObj);
   const treeString = treeify.asTree(treeObj, true);
   const formattedStr = String(treeString).split('\n').map(function (line) {
     return '\t' + line;
