@@ -126,14 +126,23 @@ export const mapConfigObject = (obj: any) => {
   }, {} as any);
 };
 
-const checkPackages = (dep: NluMapItem, m: Map<string, string>): boolean => {
+const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Map<string, boolean>): boolean => {
 
   const d = dep.package.dependencies || {};
   return Object.keys(d).some(v => {
     const desiredVersion = d[v];
+    if (desiredVersion === 'latest') {
+      // "latest" is not a valid semver version
+      return false;
+    }
+    if (sym.get(v)) {
+      // this dep with name v is symlinked
+      return false;
+    }
     const installedVersion = m.get(v);
     try {
-      return semver.neq(desiredVersion, installedVersion);
+      // if the installed version does not satisfy the requirement, then we reinstall
+      return !semver.satisfies(installedVersion, desiredVersion);
     }
     catch (err) {
       log.warn(err.message);
@@ -145,6 +154,7 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>): boolean => {
 export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMapItem, depsKeys: Array<string>, opts: NLURunOpts, cb: EVCb<boolean>) => {
 
   const map = new Map<string, string>();
+  const sym = new Map<string, boolean>();
 
   const result = {
     install: false
@@ -176,26 +186,52 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
 
       totalValid.push(name);
 
-      const packageJSON = path.resolve(folder + '/package.json');
-      fs.readFile(packageJSON, (err, data) => {
+      async.autoInject({
+        stat(cb: EVCb<null>) {
 
-        if (err) {
-          result.install = true;
-          return cb(err);
+          fs.lstat(folder, (err, stats) => {
+
+            if (err) {
+              result.install = true;
+              return cb(err);
+            }
+
+            if (stats.isSymbolicLink()) {
+              log.warning(name, 'is symlinked');
+              sym.set(name, true);
+            }
+
+            cb(null);
+
+          });
+
+        },
+        package(cb: EVCb<null>) {
+
+          const packageJSON = path.resolve(folder + '/package.json');
+          fs.readFile(packageJSON, (err, data) => {
+
+            if (err) {
+              result.install = true;
+              return cb(err);
+            }
+
+            try {
+              const version = JSON.parse(String(data)).version;
+              assert(version && typeof version === 'string', 'version is not defined, or not a string.');
+              map.set(name, version);
+            }
+            catch (err) {
+              result.install = true;
+              return cb(err);
+            }
+
+            cb(null);
+
+          });
         }
 
-        try {
-          const version = JSON.parse(String(data)).version;
-          assert(version && typeof version === 'string', 'version is not defined or not a string.');
-          map.set(name, version);
-        }
-        catch (err) {
-          result.install = true;
-        }
-
-        cb(null);
-
-      });
+      }, cb);
 
     };
 
@@ -274,9 +310,9 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
         return cb(null, true);
       }
 
-      // if (checkPackages(dep, map)) {
-      //   return cb(null, true);
-      // }
+      if (checkPackages(dep, map, sym)) {
+        return cb(null, true);
+      }
 
       cb(null, false);
 
