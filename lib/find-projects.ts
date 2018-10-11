@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap} from "./index";
+import {EVCb, NLUDotJSON, NluMap, PkgJSON} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths";
 import {
@@ -231,7 +231,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
 
-              let pkg: any, linkable = null;
+              let pkg: PkgJSON, linkable = null;
 
               try {
                 pkg = require(item);
@@ -290,28 +290,14 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 linkToItself: Boolean(npmlinkup.linkToItself),
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
-                deps: deps
+                deps: deps,
+                package: pkg
               };
 
               const nm = path.resolve(dirname + '/node_modules');
               const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
 
               async.autoInject({
-
-                reinstall(cb: EVCb<any>) {
-
-                  if (!totalList.get(pkg.name)) {
-                    return process.nextTick(cb);
-                  }
-
-                  determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
-                    m.runInstall = val === true;
-                    if (val === true) {
-                      log.debug(chalk.red('the following project needs reinstall:'), dirname);
-                    }
-                    cb(err);
-                  });
-                },
 
                 addToSearchRoots(cb: EVCb<any>) {
 
