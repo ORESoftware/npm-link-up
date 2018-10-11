@@ -23,6 +23,8 @@ export const validateConfigFile = (data: NluConf) => {
   try {
     const ajv = new Ajv({allErrors: false}); // options can be passed, e.g. {allErrors: true}
     const validate = ajv.compile(schema);
+    return true;
+    // schema is broken for the moment
     const valid = validate(data);
     if (!valid) console.error(validate.errors);
     return valid;
@@ -197,7 +199,6 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
             }
 
             if (stats.isSymbolicLink()) {
-              log.warning(name, 'is symlinked');
               sym.set(name, true);
             }
 
@@ -255,6 +256,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
           fs.readdir(p, (err, orgtems) => {
 
             if (err) {
+              result.install = true;
               return cb(err);
             }
 
