@@ -45,16 +45,51 @@ catch (err) {
 }
 
 const searchRoot = process.cwd();
-log.info('Searching for symlinked packages in this directory:', searchRoot);
+log.info('Searching for symlinked packages in this directory:', searchRoot, '\n');
 
 type Task = (cb: EVCb<any>) => void;
-const queue = async.queue<Task, any>((task, cb) => task(cb), 6);
+const queue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
-const treeObj = {};
+let key = `${path.basename(path.dirname(searchRoot))} (root)`;
+const treeObj = {[key]: {}};
 
 const ignore = new Set(['.git', '.idea', '.r2g', 'dist']);
 
 const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
+
+  const handleOrg = (orgDir: string, orgName: string, cb: EVCb<null>) => {
+
+    fs.readdir(orgDir, (err, items) => {
+
+      if (err) {
+        log.warning(err.message);
+        return cb(null);
+      }
+
+      async.eachLimit(items, 5, (v, cb) => {
+
+        const pth = path.resolve(orgDir, v);
+        fs.lstat(pth, (err, stats) => {
+
+          if (err) {
+            log.warning(err.message);
+            return cb(null);
+          }
+
+          if (stats.isSymbolicLink()) {
+            let key = orgName + '/' + v;
+            node[key] = null;
+          }
+
+          cb(null);
+
+        });
+
+      }, cb);
+
+    });
+
+  };
 
   queue.push(callback => {
 
@@ -69,7 +104,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
       const searchable = items.filter(v => !ignore.has(v));
 
-      async.eachLimit(searchable, 5, (v, cb) => {
+      async.eachLimit(searchable, 8, (v, cb) => {
 
         const currentNode = node[v] = {};
         const itemPath = path.resolve(dir + '/' + v);
@@ -91,7 +126,10 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
           if (nodeModulesIsParent) {
             if (stats.isSymbolicLink()) {
-              node[v] = v;
+              node[v] = null;
+            }
+            else if (v.startsWith('@')) {
+              return handleOrg(itemPath, v, cb);
             }
             else {
               delete node[v];
@@ -118,62 +156,45 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
 const cleanTree = (treeObj: any) => {
 
-  const newTree = {};
+  (function recurse(node: any, parent: any, key: string, hasNodeModules: boolean, xx: Array<{ hasNodeModules: boolean }>) {
 
-  (function recurse(node: any, parent: any, prop: string, hasNodeModules: boolean) {
+    if (hasNodeModules) {
+      for (let v of xx) {
+        v.hasNodeModules = true;
+      }
+    }
 
     const children = Object.keys(node);
 
-    // log.info('children:', children);
-
-    const runRemove = () => {
-      if (!hasNodeModules) {
-        if (parent && prop) {
-          log.warning('deleting prop', prop, 'from obj:', parent);
-          delete parent[prop];
-        }
-        else{
-          log.warning('we have a parent or prop without the other:', prop, parent)
-        }
-      }
+    const x = {
+      hasNodeModules: false
     };
 
-    if (children.length < 1) {
-      runRemove();
-      return;
-    }
-
-    const single = children.length === 1;
-
     for (let v of children) {
-
-      if (typeof node[v] === 'string') {
-        runRemove();
-        continue;
+      if (node[v] && typeof node[v] === 'object') {
+        recurse(node[v], node, v, hasNodeModules || v === 'node_modules', xx.concat(x));
       }
-
-      if (!single) {
-        // there is a new branch, so we have to demarcate the branch point so we don't delete more than one branch
-        prop = v;
-        parent = node;
-      }
-
-      recurse(node[v], parent, prop || v, hasNodeModules || v === 'node_modules');
     }
 
-  })(treeObj, treeObj, null, false);
+    if (x.hasNodeModules === false) {
+      if (parent && key && key !== 'node_modules') {
+        // log.warning('deleting ', key, 'from', parent);
+        delete parent[key];
+      }
+    }
+
+  })(treeObj, null, null, false, []);
 
 };
 
-searchDir(searchRoot, treeObj, err => {
+searchDir(searchRoot, treeObj[key], err => {
 
   if (err) {
     throw err;
   }
 
-  // console.log('tree object:', treeObj);
-
   cleanTree(treeObj);
+
   const treeString = treeify.asTree(treeObj, true);
   const formattedStr = String(treeString).split('\n').map(function (line) {
     return '\t' + line;

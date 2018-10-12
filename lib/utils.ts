@@ -312,9 +312,9 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
         return cb(null, true);
       }
 
-      if (checkPackages(dep, map, sym)) {
-        return cb(null, true);
-      }
+      // if (checkPackages(dep, map, sym)) {
+      //   return cb(null, true);
+      // }
 
       cb(null, false);
 
