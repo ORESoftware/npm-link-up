@@ -50,7 +50,7 @@ log.info('Searching for symlinked packages in this directory:', searchRoot, '\n'
 type Task = (cb: EVCb<any>) => void;
 const queue = async.queue<Task, any>((task, cb) => task(cb), 5);
 
-let key = `${path.basename(path.dirname(searchRoot))} (root)`;
+let key = `${path.basename(searchRoot)} (root)`;
 const treeObj = {[key]: {}};
 
 const ignore = new Set(['.git', '.idea', '.r2g', 'dist']);
@@ -58,6 +58,8 @@ const ignore = new Set(['.git', '.idea', '.r2g', 'dist']);
 const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
   const handleSymbolicLink = (itemPath: string, name: string, cb: EVCb<null>) => {
+
+    // this checks if the symbolic link points to a directory or now
 
     fs.stat(itemPath, (err, stats) => {
 
