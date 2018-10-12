@@ -58,7 +58,7 @@ if [ "$first_arg" == "init" ]; then
     shift 1;
     node "${project_root}/dist/commands/init" "$@";
 
-elif [ "$first_arg" == "ls" ]; then
+elif [ "$first_arg" == "ls" ] || [ "$first_arg" == "la" ] ; then
 
     shift 1;
     node "${project_root}/dist/commands/ls" "$@";

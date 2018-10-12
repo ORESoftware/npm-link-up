@@ -48,7 +48,7 @@ const searchRoot = process.cwd();
 log.info('Searching for symlinked packages in this directory:', searchRoot, '\n');
 
 type Task = (cb: EVCb<any>) => void;
-const queue = async.queue<Task, any>((task, cb) => task(cb), 5);
+const queue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 let key = `${path.basename(searchRoot)} (root)`;
 const treeObj = {[key]: {}};
@@ -59,8 +59,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
   const handleSymbolicLink = (itemPath: string, name: string, cb: EVCb<null>) => {
 
-    // this checks if the symbolic link points to a directory or now
-
+    // this checks if the symbolic link points to a directory or not
     fs.stat(itemPath, (err, stats) => {
 
       if (err) {
@@ -68,14 +67,21 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
         return cb(null);
       }
 
-      if (stats.isDirectory()) {
-        node[name] = null;
-      }
-      else {
+      if (!stats.isDirectory()) {
         log.warning('Symbolic link in node_modules points to a non-directory:', itemPath);
+        return cb(null);
       }
 
-      cb(null);
+      fs.realpath(itemPath, (err, p) => {
+
+        if (err) {
+          log.warning(err);
+          return cb(null);
+        }
+
+        node[name] = chalk.bold('❖ ') + chalk.underline(p) + ' ';
+        cb(null);
+      });
     });
 
   };
@@ -89,7 +95,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
         return cb(null);
       }
 
-      async.eachLimit(items, 5, (v, cb) => {
+      async.eachLimit(items, 8, (v, cb) => {
 
         const pth = path.resolve(orgDir, v);
         fs.lstat(pth, (err, stats) => {

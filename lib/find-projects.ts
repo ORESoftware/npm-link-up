@@ -171,7 +171,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             npmlinkup = {} as NLUDotJSON;
           }
 
-          async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
+          async.eachLimit(items, 7,  (item: string, cb: EVCb<any>) => {
 
             if (isIgnored(String(item))) {
               if (opts.verbosity > 2) {
