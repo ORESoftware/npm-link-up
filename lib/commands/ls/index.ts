@@ -48,7 +48,7 @@ const searchRoot = process.cwd();
 log.info('Searching for symlinked packages in this directory:', searchRoot, '\n');
 
 type Task = (cb: EVCb<any>) => void;
-const queue = async.queue<Task, any>((task, cb) => task(cb), 8);
+const queue = async.queue<Task, any>((task, cb) => task(cb), 5);
 
 let key = `${path.basename(path.dirname(searchRoot))} (root)`;
 const treeObj = {[key]: {}};
@@ -56,6 +56,27 @@ const treeObj = {[key]: {}};
 const ignore = new Set(['.git', '.idea', '.r2g', 'dist']);
 
 const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
+
+  const handleSymbolicLink = (itemPath: string, name: string, cb: EVCb<null>) => {
+
+    fs.stat(itemPath, (err, stats) => {
+
+      if (err) {
+        log.warning(err);
+        return cb(null);
+      }
+
+      if (stats.isDirectory()) {
+        node[name] = null;
+      }
+      else {
+        log.warning('Symbolic link in node_modules points to a non-directory:', itemPath);
+      }
+
+      cb(null);
+    });
+
+  };
 
   const handleOrg = (orgDir: string, orgName: string, cb: EVCb<null>) => {
 
@@ -77,8 +98,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
           }
 
           if (stats.isSymbolicLink()) {
-            let key = orgName + '/' + v;
-            node[key] = null;
+            return handleSymbolicLink(pth, orgName + '/' + v, cb);
           }
 
           cb(null);
@@ -104,7 +124,7 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
       const searchable = items.filter(v => !ignore.has(v));
 
-      async.eachLimit(searchable, 8, (v, cb) => {
+      async.eachLimit(searchable, 5, (v, cb) => {
 
         const currentNode = node[v] = {};
         const itemPath = path.resolve(dir + '/' + v);
@@ -125,15 +145,16 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
           }
 
           if (nodeModulesIsParent) {
+
             if (stats.isSymbolicLink()) {
-              node[v] = null;
+              return handleSymbolicLink(itemPath, v, cb);
             }
-            else if (v.startsWith('@')) {
+
+            if (stats.isDirectory() && v.startsWith('@')) {
               return handleOrg(itemPath, v, cb);
             }
-            else {
-              delete node[v];
-            }
+
+            delete node[v];
             return cb(null);
           }
 
@@ -156,10 +177,10 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
 const cleanTree = (treeObj: any) => {
 
-  (function recurse(node: any, parent: any, key: string, hasNodeModules: boolean, xx: Array<{ hasNodeModules: boolean }>) {
+  (function recurse(node: any, parent: any, key: string, hasNodeModules: boolean, list: Array<{ hasNodeModules: boolean }>) {
 
     if (hasNodeModules) {
-      for (let v of xx) {
+      for (let v of list) {
         v.hasNodeModules = true;
       }
     }
@@ -172,7 +193,7 @@ const cleanTree = (treeObj: any) => {
 
     for (let v of children) {
       if (node[v] && typeof node[v] === 'object') {
-        recurse(node[v], node, v, hasNodeModules || v === 'node_modules', xx.concat(x));
+        recurse(node[v], node, v, hasNodeModules || v === 'node_modules', list.concat(x));
       }
     }
 
