@@ -132,9 +132,8 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
       const searchable = items.filter(v => !ignore.has(v));
 
-      async.eachLimit(searchable, 5, (v, cb) => {
+      async.eachLimit(searchable, 8, (v, cb) => {
 
-        const currentNode = node[v] = {};
         const itemPath = path.resolve(dir + '/' + v);
         const parentDir = path.basename(path.dirname(itemPath));
         const nodeModulesIsParent = parentDir === 'node_modules';
@@ -143,12 +142,10 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 
           if (err) {
             log.warning(err.message);
-            delete node[v];
             return cb(null);
           }
 
           if (stats.isFile()) {
-            delete node[v];
             return cb(null);
           }
 
@@ -162,12 +159,11 @@ const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
               return handleOrg(itemPath, v, cb);
             }
 
-            delete node[v];
             return cb(null);
           }
 
           if (stats.isDirectory()) {
-            return searchDir(itemPath, currentNode, cb);
+            return searchDir(itemPath, node[v] = {}, cb);
           }
 
           delete node[v];
