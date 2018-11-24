@@ -32,7 +32,7 @@ fi
 
 if ! type -f ores_get_project_root &> /dev/null; then
    npm i -s -g '@oresoftware/ores' || {
-      echo "Could not install '@oresoftware/ores'";
+      echo "Could not install '@oresoftware/ores', please check your permissions to install global npm packages.";
       exit 1;
    }
 fi
@@ -41,7 +41,7 @@ project_root="$(ores_get_project_root "$0")";
 npm_local_bin="${project_root}/node_modules/.bin";
 
 
-if [ "$use_local" == "yes" ]; then
+if [[ "$use_local" == "yes" ]]; then
    if false; then
     echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
     echo "To not add local command line tools to the PATH, use the --no-local option.";
@@ -53,12 +53,12 @@ if false; then
     echo "$nlu_name NLU is using NPM version => $(npm --version)";
 fi
 
-if [ "$first_arg" == "init" ]; then
+if [[ "$first_arg" == "init" ]]; then
 
     shift 1;
     node "${project_root}/dist/commands/init" "$@";
 
-elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
+elif [[ "$first_arg" == "install" ]] || [[ "$first_arg" == "i" ]] ; then
 
 
   npm i -s "$@" || {
@@ -68,23 +68,23 @@ elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
 
   nlu run --install-main
 
-elif [ "$first_arg" == "config" ]; then
+elif [[ "$first_arg" == "config" ]]; then
 
     shift 1;
     mkdir -p "$HOME/.nlu/global"
     node "${project_root}/dist/commands/config" "$@";
 
-elif [ "$first_arg" == "add" ]; then
+elif [[ "$first_arg" == "add" ]]; then
 
     shift 1;
     node "${project_root}/dist/commands/add" "$@";
 
-elif [ "$first_arg" == "run" ]; then
+elif [[ "$first_arg" == "run" ]]; then
 
     shift 1;
     node "${project_root}/dist/commands/run" "$@";
 
-elif [ "$first_arg" == "update" ]; then
+elif [[ "$first_arg" == "update" ]]; then
 
     shift 1;
     echo "$nlu_name 'nlu update' is not implemented.";

@@ -6,7 +6,7 @@
     "your comments go here"
   ],
   "searchRoots": [
-    "$nlu_primary_search_root"
+    "../.."
   ],
   "ignore": [
     "/node_modules/",
