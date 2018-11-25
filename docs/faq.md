@@ -20,3 +20,11 @@
 > a VCS folder (git, mercurial, etc) that tracks multiple NPM packages.
 >
 
+* How can I link projects together if the packages/projects aren't already published to NPM?
+
+>
+>  You can update package.json to use a relative/absolute filepath to your other local packages, in the version field of dependencies, 
+>  or you can use Github urls in the version field instead of local paths.
+>
+>
+
