@@ -101,14 +101,16 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     if (opts.umbrella && dep.isMainProject) {
       return [];
     }
-
+    
     return deps.filter(d => {
+
       if (!map[d]) {
         log.warning('Map for key => "' + d + '" is not defined.');
         return false;
       }
       return map[d] && map[d].isLinked;
     })
+
       .map((d: string) => {
 
         const path = map[d].path;
@@ -120,7 +122,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       });
 
   };
-
+  
   const getBinMap = (bin: string | BinFieldObject, path: string, name: string) => {
 
     if (!bin) {
@@ -225,6 +227,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       log.info(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
     }
 
+
     const nm = path.resolve(dep.path + '/node_modules');
 
     determineIfReinstallIsNeeded(nm, dep, getDevKeys(dep.package), opts, (err, val) => {
@@ -301,6 +304,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
             log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
           }
 
+
           const k = cp.spawn('bash', [], {
             env: Object.assign({}, process.env, {
               NPM_LINK_UP: 'yes'
@@ -339,6 +343,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
             dep: dep,
             error: stderr
           });
+
         });
 
       });

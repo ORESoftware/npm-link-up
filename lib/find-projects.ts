@@ -157,6 +157,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             return path.resolve(dir, item);
           });
 
+
           let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
 
           try {
@@ -231,6 +232,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
 
+
               let pkg: PkgJSON, linkable = null;
 
               try {
@@ -257,6 +259,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 }
                 return cb(null);
               }
+
 
 
               if (npmlinkup.linkable === false) {
@@ -290,8 +293,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 linkToItself: Boolean(npmlinkup.linkToItself),
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
+
                 deps: deps,
                 package: pkg
+
               };
 
               const nm = path.resolve(dirname + '/node_modules');
@@ -299,6 +304,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
               async.autoInject({
 
+                
                 addToSearchRoots(cb: EVCb<any>) {
 
                   const searchRoots = getSearchRootsFromNluConf(npmlinkup);
