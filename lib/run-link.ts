@@ -5,6 +5,7 @@ import {EVCb, NluMap, NluMapItem} from "./index";
 //core
 import * as util from 'util';
 import * as cp from 'child_process';
+import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
@@ -12,6 +13,8 @@ import async = require('async');
 
 //project
 import log from './logging';
+import {determineIfReinstallIsNeeded, flattenDeep, getDevKeys} from "./utils";
+import * as path from "path";
 
 interface BinFieldObject {
   [key: string]: string
@@ -98,15 +101,17 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     if (opts.umbrella && dep.isMainProject) {
       return [];
     }
+    
+    return deps.filter(d => {
 
-    return deps.filter(function (d) {
       if (!map[d]) {
         log.warning('Map for key => "' + d + '" is not defined.');
         return false;
       }
       return map[d] && map[d].isLinked;
     })
-      .map(function (d: string) {
+
+      .map((d: string) => {
 
         const path = map[d].path;
         const bin = map[d].bin;
@@ -117,8 +122,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       });
 
   };
-
-  const getBinMap = function (bin: string | BinFieldObject, path: string, name: string) {
+  
+  const getBinMap = (bin: string | BinFieldObject, path: string, name: string) => {
 
     if (!bin) {
       return '';
@@ -172,7 +177,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
     if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn "${installProd}"`;
+      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn ${installProd}`;
     }
   };
 
@@ -222,108 +227,125 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       log.info(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
     }
 
-    const deps = getNPMLinkList(dep.deps, dep);
-    const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
 
-    const script = [
-      `cd "${dep.path}"`,
-      getInstallCommand(dep),
-      getGlobalLinkCommand(dep),
-      links,
-      getLinkToItselfCommand(dep)
-    ]
-      .filter(Boolean)
-      .join(' ');
+    const nm = path.resolve(dep.path + '/node_modules');
 
-    if (opts.verbosity > 1) {
-      log.info(`First-pass script is => "${chalk.blueBright.bold(script)}"`);
-    }
+    determineIfReinstallIsNeeded(nm, dep, getDevKeys(dep.package), opts, (err, val) => {
 
-    const k = cp.spawn('bash', [], {
-      env: Object.assign({}, process.env, {
-        NPM_LINK_UP: 'yes'
-      })
-    });
-
-    k.stdin.end(script);
-
-    k.stdout.setEncoding('utf8');
-    k.stderr.setEncoding('utf8');
-
-    k.stderr.pipe(process.stderr);
-
-    if (opts.verbosity > 2) {
-      k.stdout.pipe(process.stdout);
-    }
-
-    let stderr = '';
-    k.stderr.on('data', function (d) {
-      stderr += d;
-    });
-
-    k.once('error', cb);
-
-    k.once('exit', code => {
-
-      if (code > 0 && /ERR/i.test(stderr)) {
-        log.error(`Dep with name "${dep.name}" is done, but with an error.`);
-        return cb({code, dep, error: stderr});
+      if (err) {
+        log.warn(`Error generated from determining if npm (re)install was is necessary for package: ${dep.name} =>`, err);
       }
 
-      dep.isLinked = map[dep.name].isLinked = true;
+      if (val === true) {
+        dep.runInstall = true;
+      }
 
-      const linkPreviouslyUnlinked = function (cb: EVCb<any>) {
+      const deps = getNPMLinkList(dep.deps, dep);
+      const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
 
-        const cmds = getCommandListOfLinked(dep.name);
+      const script = [
+        `cd "${dep.path}"`,
+        getInstallCommand(dep),
+        getGlobalLinkCommand(dep),
+        links,
+        getLinkToItselfCommand(dep)
+      ]
+        .filter(Boolean)
+        .join(' ');
 
-        if (!cmds.length) {
-          return process.nextTick(cb);
+      if (opts.verbosity > 1) {
+        log.info(`First-pass script is => "${chalk.blueBright.bold(script)}"`);
+      }
+
+      const k = cp.spawn('bash', [], {
+        env: Object.assign({}, process.env, {
+          NPM_LINK_UP: 'yes'
+        })
+      });
+
+      k.stdin.end(script);
+
+      k.stdout.setEncoding('utf8');
+      k.stderr.setEncoding('utf8');
+
+      k.stderr.pipe(process.stderr);
+
+      if (opts.verbosity > 2) {
+        k.stdout.pipe(process.stdout);
+      }
+
+      let stderr = '';
+      k.stderr.on('data', function (d) {
+        stderr += d;
+      });
+
+      k.once('error', cb);
+
+      k.once('exit', code => {
+
+        if (code > 0 && /ERR/i.test(stderr)) {
+          log.error(`Dep with name "${dep.name}" is done, but with an error.`);
+          return cb({code, dep, error: stderr});
         }
 
-        const cmd = cmds.join(' && ');
+        dep.isLinked = map[dep.name].isLinked = true;
 
-        if (opts.verbosity > 1) {
-          log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
-        }
+        const linkPreviouslyUnlinked = function (cb: EVCb<any>) {
 
-        const k = cp.spawn('bash', [], {
-          env: Object.assign({}, process.env, {
-            NPM_LINK_UP: 'yes'
-          })
-        });
+          const cmds = getCommandListOfLinked(dep.name);
 
-        k.stdin.write(cmd);
-
-        k.stdout.setEncoding('utf8');
-        k.stderr.setEncoding('utf8');
-
-        k.stderr.pipe(process.stderr, {end: false});
-
-        if (opts.verbosity > 2) {
-          k.stdout.pipe(process.stdout, {end: false});
-        }
-
-        k.stdin.end();
-        k.once('exit', cb);
-
-      };
-
-      linkPreviouslyUnlinked((err: any) => {
-
-        if (err) {
-          log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
-        }
-        else {
-          if (opts.verbosity > 1) {
-            log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
+          if (!cmds.length) {
+            return process.nextTick(cb);
           }
-        }
 
-        cb(err, {
-          code: code,
-          dep: dep,
-          error: stderr
+          const cmd = cmds.join(' && ');
+
+          if (opts.verbosity > 1) {
+            log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
+          }
+
+
+          const k = cp.spawn('bash', [], {
+            env: Object.assign({}, process.env, {
+              NPM_LINK_UP: 'yes'
+            })
+          });
+
+          k.stdin.write(cmd);
+
+          k.stdout.setEncoding('utf8');
+          k.stderr.setEncoding('utf8');
+
+          k.stderr.pipe(process.stderr, {end: false});
+
+          if (opts.verbosity > 2) {
+            k.stdout.pipe(process.stdout, {end: false});
+          }
+
+          k.stdin.end();
+          k.once('exit', cb);
+
+        };
+
+        linkPreviouslyUnlinked((err: any) => {
+
+          if (err) {
+            log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
+          }
+          else {
+            if (opts.verbosity > 1) {
+              log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
+            }
+          }
+
+          cb(err, {
+            code: code,
+            dep: dep,
+            error: stderr
+          });
+
         });
+
       });
 
     });

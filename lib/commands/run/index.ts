@@ -17,7 +17,6 @@ import residence = require('residence');
 
 const cwd = process.cwd();
 let root = residence.findProjectRoot(cwd);
-
 const treeify = require('treeify');
 import mkdirp = require('mkdirp');
 
@@ -32,8 +31,6 @@ import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
 import {getCleanMap, getCleanMapOfOnlyPackagesWithNluJSONFiles} from '../../get-clean-final-map';
 import {q} from '../../search-queue';
-
-const npmLinkUpPkg = require('../../../package.json');
 import {EVCb, NluConf, NluMap} from "../../index";
 
 import {
@@ -86,19 +83,7 @@ try {
   }
 }
 catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', opts.config);
-  throw chalk.magenta(err.message);
-}
-
-opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
-
-try {
-  if (opts.config) {
-    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
-  }
-}
-catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', opts.config);
+  log.error('You declared a config path but the following path is not a directory:', chalk.bold(opts.config));
   throw chalk.magenta(err.message);
 }
 
@@ -125,11 +110,13 @@ if (opts.config) {
 }
 else {
   nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+
 }
 
 if (!nluConfigRoot) {
   nluConfigRoot = cwd;
 }
+
 
 let pkg, conf: NluConf;
 
@@ -300,15 +287,17 @@ if (opts.dry_run) {
 
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
-map[mainProjectName] = {
+const mainDep = map[mainProjectName] = {
   name: mainProjectName,
-  bin: null,  // conf.bin ?
+
+  bin: null as any,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
   path: root,
-  deps: list
+  deps: list,
+  package: pkg
 };
 
 async.autoInject({
@@ -317,14 +306,15 @@ async.autoInject({
 
       const nm = path.resolve(root + '/node_modules');
       const keys = opts.production ? productionDepsKeys : allDepsKeys;
-
-      determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
-
+      
+      determineIfReinstallIsNeeded(nm, mainDep, keys, opts, (err, val) => {
+        
         if (err) {
           return cb(err);
         }
 
         if (val === true) {
+          mainDep.runInstall = true;
           opts.install_main = true;
         }
 

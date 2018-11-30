@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap} from "./index";
+import {EVCb, NLUDotJSON, NluMap, PkgJSON} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths";
 import {
@@ -157,7 +157,22 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             return path.resolve(dir, item);
           });
 
-          async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
+
+          let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
+
+          try {
+            npmlinkup = require(path.resolve(dir + '/.nlu.json'));
+            hasNLUJSONFile = true;
+            if(npmlinkup && npmlinkup.searchable === false){
+              log.warn('The following dir is not searchable:', dir);
+              return cb(null);
+            }
+          }
+          catch (e) {
+            npmlinkup = {} as NLUDotJSON;
+          }
+
+          async.eachLimit(items, 7,  (item: string, cb: EVCb<any>) => {
 
             if (isIgnored(String(item))) {
               if (opts.verbosity > 2) {
@@ -217,7 +232,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
 
-              let pkg: any, linkable = null;
+
+              let pkg: PkgJSON, linkable = null;
 
               try {
                 pkg = require(item);
@@ -244,15 +260,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
 
-              let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
 
-              try {
-                npmlinkup = require(path.resolve(dirname + '/.nlu.json'));
-                hasNLUJSONFile = true;
-              }
-              catch (e) {
-                npmlinkup = {} as NLUDotJSON;
-              }
 
               if (npmlinkup.linkable === false) {
                 log.warn(`Skipping project at dir "${dirname}" because 'linkable' was set to false.`);
@@ -285,7 +293,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 linkToItself: Boolean(npmlinkup.linkToItself),
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
-                deps: deps
+
+                deps: deps,
+                package: pkg
+
               };
 
               const nm = path.resolve(dirname + '/node_modules');
@@ -293,21 +304,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
 
               async.autoInject({
 
-                reinstall(cb: EVCb<any>) {
-
-                  if (!totalList.get(pkg.name)) {
-                    return process.nextTick(cb);
-                  }
-
-                  determineIfReinstallIsNeeded(nm, keys, opts, (err, val) => {
-                    m.runInstall = val === true;
-                    if (val === true) {
-                      log.debug(chalk.red('the following project needs reinstall:'), dirname);
-                    }
-                    cb(err);
-                  });
-                },
-
+                
                 addToSearchRoots(cb: EVCb<any>) {
 
                   const searchRoots = getSearchRootsFromNluConf(npmlinkup);
