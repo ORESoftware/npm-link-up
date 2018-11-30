@@ -58,6 +58,11 @@ if [ "$first_arg" == "init" ]; then
     shift 1;
     node "${project_root}/dist/commands/init" "$@";
 
+elif [ "$first_arg" == "ls" ]; then
+
+    shift 1;
+    node "${project_root}/dist/commands/ls" "$@";
+
 elif [ "$first_arg" == "install" ] || [ "$first_arg" == "i" ] ; then
 
 
