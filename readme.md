@@ -114,6 +114,17 @@ The basic command:
 
 >
 >```bash
+>$ nlu ls      # alias: --dry-run
+>```
+>
+> * Using the current working directory as the search root, will display a tree in the console of all symlinked packages in all folders.
+> * Using `$ nlu ls -a`, in future versions, you can see all symlinks, not just symlinked dirs in node_modules. 
+>
+
+<br>
+
+>
+>```bash
 >$ nlu run --install
 >```
 >

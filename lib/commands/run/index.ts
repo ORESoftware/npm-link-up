@@ -81,19 +81,7 @@ try {
   }
 }
 catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', opts.config);
-  throw chalk.magenta(err.message);
-}
-
-opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
-
-try {
-  if (opts.config) {
-    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
-  }
-}
-catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', opts.config);
+  log.error('You declared a config path but the following path is not a directory:', chalk.bold(opts.config));
   throw chalk.magenta(err.message);
 }
 

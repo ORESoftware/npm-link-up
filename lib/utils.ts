@@ -128,27 +128,53 @@ export const mapConfigObject = (obj: any) => {
   }, {} as any);
 };
 
-const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Map<string, boolean>): boolean => {
+const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>): boolean => {
 
   const d = dep.package.dependencies || {};
   return Object.keys(d).some(v => {
     const desiredVersion = d[v];
-    if (desiredVersion === 'latest') {
-      // "latest" is not a valid semver version
-      return false;
-    }
-    if (sym.get(v)) {
+
+    if (sym.has(v)) {
       // this dep with name v is symlinked
       return false;
     }
+
     const installedVersion = m.get(v);
+
     try {
-      // if the installed version does not satisfy the requirement, then we reinstall
-      return !semver.satisfies(installedVersion, desiredVersion);
+
+      // if(!semver.valid(desiredVersion)){
+      //   log.warn(`The following semver version for package ${v} was not valid:`, desiredVersion);
+      //   return false;
+      // }
+      //
+      // if(!semver.valid(installedVersion)){
+      //   log.warn(`The following semver version for package ${v} was not valid:`, installedVersion);
+      //   return false;
+      // }
+
+      if (!/.*[0-9]{1,6}\.[0-9]{1,6}\.[0-9]{1,6}/.test(desiredVersion)) {
+        log.warn('The following package version did not match a semverish regex:', desiredVersion, 'for package:', v);
+        return false;
+      }
+
     }
     catch (err) {
       log.warn(err.message);
-      return true;
+      return false;
+    }
+
+    try {
+      // if the installed version does not satisfy the requirement, then we reinstall
+      const satisfies = semver.satisfies(installedVersion, desiredVersion);
+      if (!satisfies) {
+        log.warn('package with name', v, 'is not satisfied. Installed version:', installedVersion, 'desired version:', desiredVersion);
+      }
+      return !satisfies;
+    }
+    catch (err) {
+      log.warn(err.message);
+      return false;
     }
   });
 };
@@ -156,7 +182,7 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Map<string,
 export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMapItem, depsKeys: Array<string>, opts: NLURunOpts, cb: EVCb<boolean>) => {
 
   const map = new Map<string, string>();
-  const sym = new Map<string, boolean>();
+  const sym = new Set<string>();
 
   const result = {
     install: false
@@ -182,11 +208,11 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
       return !String(v).startsWith('@') && String(v) !== '.bin';
     });
 
-    const totalValid = topLevel.slice(0);
+    const totalValid = new Set(topLevel.slice(0));
 
     const processFolder = (name: string, folder: string, cb: EVCb<null>) => {
 
-      totalValid.push(name);
+      totalValid.add(name);
 
       async.autoInject({
         stat(cb: EVCb<null>) {
@@ -199,7 +225,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
             }
 
             if (stats.isSymbolicLink()) {
-              sym.set(name, true);
+              sym.add(name);
             }
 
             cb(null);
@@ -285,7 +311,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
       }
 
       if (err) {
-        return cb(err);
+        return cb(err, false);
       }
 
       //
@@ -299,7 +325,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
       // }
 
       const allThere = depsKeys.every(d => {
-        if (totalValid.indexOf(d) < 0) {
+        if (!totalValid.has(d)) {
           opts.verbosity > 1 && log.info('The following dep in package.json', d, 'did not appear to be in node_modules located here:', nodeModulesPath);
           return false
         }
