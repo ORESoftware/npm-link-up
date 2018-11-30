@@ -3,13 +3,17 @@
 // note: only include dependencies in this file, which are in your project's package.json file
 const path = require('path');
 
-if (!path.isAbsolute(process.env.MY_R2G_DOCKER_SEARCH_ROOT || '')) {
-  throw new Error('Please set the env var "MY_R2G_DOCKER_SEARCH_ROOT" to an absolute folder path.');
+const envLookup = 'R2G_SEARCH_ROOT';
+const searchRootPath = path.resolve(process.env[envLookup] || '');
+console.log('r2g search root path:',searchRootPath);
+
+if (!path.isAbsolute(searchRootPath)) {
+  throw new Error(`Please set the env var "${envLookup}" to an absolute folder path.`);
 }
 
 exports.default = {
 
-  searchRoot: path.resolve(process.env.MY_R2G_DOCKER_SEARCH_ROOT),
+  searchRoot: searchRootPath,
   tests: '',
   packages: {
     "@oresoftware/shell": true,

@@ -145,7 +145,7 @@ catch (e) {
 }
 
 if (!root) {
-  if (!opts.umbrella) {
+  if (!(opts.all_packages || opts.umbrella)) {
     log.error('You do not appear to be within an NPM project (no package.json could be found).');
     log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
     process.exit(1);
@@ -158,7 +158,7 @@ try {
 }
 catch (e) {
 
-  if (!opts.umbrella) {
+  if (!(opts.umbrella || opts.all_packages)) {
     log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
     log.error('Your project root is supposedly here:', chalk.magenta(root));
     log.error(e.message);
