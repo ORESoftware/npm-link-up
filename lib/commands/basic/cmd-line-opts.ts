@@ -18,7 +18,8 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 3
+    default: 3,
+    env: 'nlu_verbosity_level'
   },
 
   {
@@ -49,13 +50,22 @@ export default [
     type: 'bool',
     help: 'Generate bash-completion code.',
     hidden: true
-  },
-
-  {
-    names: ['npm-shell-version', 'use-shell-version', 'shell-version'],
-    type: 'bool',
-    help: 'Use the NPM version that is active in the shell.',
-    default: false
   }
 
 ];
+
+
+
+
+
+export interface NLUBasicOpts {
+  _args: Array<string>,
+  override: boolean,
+  bash_completion: boolean,
+  verbosity: number,
+  help: boolean,
+  force: boolean,
+  version: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+}

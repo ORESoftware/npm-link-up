@@ -1,0 +1,6 @@
+{
+  "name": "npm-link-up.json",
+  "description": "Schema for NPM-Link-Up",
+  "fileMatch": [ "nlu.json", ".nlu.json" ],
+  "url": "http://schemastore.org/schemas/json/npm-link-up.json"
+}

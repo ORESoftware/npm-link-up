@@ -1,10 +1,9 @@
 {
   "name": "npm-link-up",
-  "version": "0.1.312",
+  "version": "0.1.320",
   "bin": {
     "nlu": "cli/index.sh",
-    "npmlinkup": "cli/index.sh",
-    "realpath": "cli/realpath"
+    "npmlinkup": "cli/index.sh"
   },
   "description": "Use this package to link your projects together for local development.",
   "main": "dist/index.js",
@@ -40,19 +39,22 @@
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "frankenstop": "latest",
-    "prepend-transform": "0.0.1016",
+    "json-stdio": "latest",
+    "mkdirp": "^0.5.1",
+    "prepend-transform": "latest",
     "residence": "latest",
-    "treeify": "^1.0.1",
-    "mkdirp": "^0.5.1"
+    "semver": "^5.6.0",
+    "treeify": "^1.0.1"
   },
   "devDependencies": {
     "@types/async": "latest",
     "@types/mkdirp": "^0.5.2",
     "@types/node": "10.3.5",
+    "@types/semver": "^5.5.0",
     "rimraf": "^2.6.1"
   },
   "r2g": {
-    "test": "node .r2g/smoke-test.js"
+    "test": "node .r2g/tests/smoke-test.js"
   },
   "nlu": {
     "test": "echo 'nlu test is a noop ftm.'",

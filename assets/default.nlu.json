@@ -1,7 +1,9 @@
 {
-  "npm-link-up":true,
-  "linkToItself":false,
-  "comments":[
+  "$schema": "https://raw.githubusercontent.com/oresoftware/npm-link-up/master/assets/nlu.schema.json",
+  "npm-link-up": true,
+  "linkable": true,
+  "linkToItself": false,
+  "comments": [
     "your comments go here"
   ],
   "searchRoots": [
@@ -11,5 +13,8 @@
     "/node_modules/",
     "/.git/"
   ],
-  "list":[]
+  "list": [
+    "foo",
+    "bar"
+  ]
 }

@@ -3,15 +3,15 @@
 import chalk from 'chalk';
 const dashdash = require('dashdash');
 import options from "./cmd-line-opts";
-import {NLURunOpts} from "../../npmlinkup";
 import log from '../../logging';
-import npmLinkUpPkg = require('../../../package.json');
+const npmLinkUpPkg = require('../../../package.json');
 import residence = require('residence');
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 import addOpts from '../add/cmd-line-opts';
 import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
+import * as nluUtils from '../../utils';
 
 process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
@@ -24,17 +24,18 @@ if (!root) {
 }
 
 const commands = [
-  'npm run',
-  'npm init',
-  'npm add'
+  'nlu run',
+  'nlu init',
+  'nlu add'
 ];
 
-let opts: any, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: any, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   log.warn(chalk.gray('Perhaps you meant to use on of these commands instead:', chalk.gray.bold(commands.join(', '))));
   process.exit(1);
 }
@@ -50,16 +51,15 @@ if (opts.help) {
   console.log();
   log.info('To get help for "nlu init", use:', chalk.blueBright.bold('nlu init --help'));
   log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu run --help'));
+  log.info('To get help for "nlu run", use:', chalk.blueBright.bold('nlu add --help'));
+  log.info('Etc.');
   process.exit(0);
 }
 
-const flattenDeep = function (arr1: Array<any>): Array<any> {
-  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
-};
 
 if (opts.bash_completion) {
 
-  const allOpts = flattenDeep([addOpts, initOpts, runOpts, options]);
+  const allOpts = nluUtils.flattenDeep([addOpts, initOpts, runOpts, options]);
 
   let generatedBashCode = dashdash.bashCompletionFromOptions({
     name: 'nlu',
@@ -71,11 +71,6 @@ if (opts.bash_completion) {
   process.exit(0);
 }
 
-log.warn('The original command:');
-
-process.argv.forEach((v, i) => {
-  log.warn(chalk.gray(String(i)), chalk.green(v));
-});
 
 log.warn(chalk.bold.italic('No command line option was recognized.'));
 log.warn(chalk.gray('Perhaps you meant to use one of these commands instead:', chalk.gray.bold(commands.join(', '))));

@@ -6,27 +6,29 @@ import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
+
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
 import mkdirp = require('mkdirp');
 
 //project
-import options from "./cmd-line-opts";
-import {EVCb, NLUAddOpts, NluConf, NLUInitOpts} from "../../npmlinkup";
+import options, {NLUAddOpts} from "./cmd-line-opts";
+import {EVCb, NluConf} from "../../index";
 import log from '../../logging';
+
 const cwd = process.cwd();
 const root = residence.findProjectRoot(cwd);
 import {makeFindProjects} from "./find-matching-projects";
 import alwaysIgnore from './add-ignore';
 import alwaysIgnoreThese from "../../always-ignore";
-import {mapPaths} from "../../map-paths-with-env-vars";
+import {mapPaths} from "../../map-paths";
 import {runNPMLink} from "../../run-link";
 import {getCleanMap} from "../../get-clean-final-map";
-import {validateConfigFile} from "../../utils";
+import * as nluUtils from "../../utils";
 
 process.once('exit', code => {
-  log.info('Exiting with code:', code,'\n');
+  log.info('Exiting with code:', code, '\n');
 });
 
 if (!root) {
@@ -35,12 +37,13 @@ if (!root) {
   process.exit(1);
 }
 
-let opts: NLUAddOpts, parser = dashdash.createParser({options});
+const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
+let opts: NLUAddOpts, parser = dashdash.createParser({options, allowUnknown});
 
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error(chalk.magenta(' => CLI parsing error:'), chalk.magentaBright.bold(e.message));
+  log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
 
@@ -62,11 +65,8 @@ catch (err) {
   process.exit(1);
 }
 
-const flattenDeep = function (arr1: Array<any>): Array<any> {
-  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
-};
 
-const projectsToAdd = flattenDeep([opts._args]).map(v => String(v || '').trim()).filter(Boolean);
+const projectsToAdd = nluUtils.flattenDeep([opts._args]).map(v => String(v || '').trim()).filter(Boolean);
 
 const absolutePaths = projectsToAdd.filter(v => path.isAbsolute(v));
 
@@ -104,14 +104,15 @@ catch (err) {
   throw err.message;
 }
 
-if(!validateConfigFile(nluJSON)){
-  log.error('Your .nlu.json config file appears to be invalid. To override this, use --override.');
-  if(!opts.override){
+if (!nluUtils.validateConfigFile(nluJSON)) {
+  console.error();
+  if (!opts.override) {
+    log.error(chalk.redBright('Your .nlu.json config file appears to be invalid. To override this, use --override.'));
     process.exit(1);
   }
 }
 
-let searchRoots = nluJSON.searchRoots;
+let searchRoots = nluUtils.flattenDeep([nluJSON.searchRoots, nluJSON.searchRoot]);
 
 if (opts.search_from_home && opts.search_root) {
   log.error('You passed the --search-from-home option along with --search/--search-root.');
@@ -123,7 +124,7 @@ if (opts.search_from_home) {
 }
 
 if (opts.search_root) {
-  searchRoots = flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
+  searchRoots = nluUtils.flattenDeep([opts.search_root]).map(v => String(v || '').trim()).filter(Boolean);
 }
 
 if (!(searchRoots && searchRoots.length > 0)) {
@@ -150,13 +151,13 @@ const ignore = alwaysIgnore.concat(alwaysIgnoreThese)
 
 async.autoInject({
 
-    ensureNodeModules(cb: EVCb<any>){
+    ensureNodeModules(cb: EVCb<any>) {
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
 
     mapSearchRoots(cb: EVCb<Array<string>>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, cb);
+      mapPaths(searchRoots, root, cb);
     },
 
     getMatchingProjects(mapSearchRoots: Array<string>, cb: EVCb<any>) {
@@ -171,7 +172,7 @@ async.autoInject({
       log.info('Search roots are:', mapSearchRoots);
 
       mapSearchRoots.forEach((v: string) => {
-        q.push(function (cb: EVCb<any>) {
+        q.push((cb: EVCb<any>) => {
           findProjects(v, cb);
         });
       });
@@ -203,7 +204,7 @@ async.autoInject({
 
       try {
         nluJSON.list = nluJSON.list.concat(projectsToAdd)
-        .map(v => String(v || '').trim()).filter((v,i,a) => a.indexOf(v) === i);
+        .map(v => String(v || '').trim()).filter((v, i, a) => a.indexOf(v) === i);
       }
       catch (e) {
         return process.nextTick(cb, e);
@@ -229,7 +230,7 @@ async.autoInject({
         return process.nextTick(cb, err);
       }
 
-      opts.verbosity > 1 && log.good('Beginning to actually link projects together...');
+      opts.verbosity > 1 && log.info('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, cb);
     },
 

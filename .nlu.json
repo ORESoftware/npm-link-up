@@ -1,11 +1,12 @@
 {
+  "$schema": "https://raw.githubusercontent.com/oresoftware/npm-link-up/master/assets/nlu.schema.json",
   "npm-link-up": true,
   "linkToItself": false,
   "comments": [
     "your comments go here"
   ],
   "searchRoots": [
-    "$HOME/WebstormProjects/oresoftware"
+    "$nlu_primary_search_root"
   ],
   "ignore": [
     "/node_modules/",
@@ -13,9 +14,12 @@
   ],
   "list": [
     "@oresoftware/shell",
-    "frankenstop",
     "prepend-transform",
     "residence",
-    "suman"
-  ]
+    "json-stdio"
+  ],
+  "localSettings": {
+    "bar": "23",
+    "foo": "dallas"
+  }
 }

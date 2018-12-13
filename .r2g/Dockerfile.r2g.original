@@ -6,7 +6,7 @@ ENV ores_bash_utils "https://raw.githubusercontent.com/oresoftware/npm.bash.util
 ENV r2g_tarballs_base_url="https://raw.githubusercontent.com/oresoftware/tarballs"
 ENV FORCE_COLOR=1
 ENV docker_r2g_in_container=yes
-ENV MY_DOCKER_R2G_SEARCH_ROOT="/home/node"
+ENV MY_R2G_DOCKER_SEARCH_ROOT="/home/node"
 
 RUN  curl -sS -o- "$ores_bash_utils/master/assets/install-basics.sh" | bash
 RUN sudo echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers

@@ -12,7 +12,8 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 2
+    default: 2,
+    env: 'nlu_verbosity_level'
   },
 
   {
@@ -36,13 +37,20 @@ export default [
     type: 'bool',
     help: 'Force execution at hand.',
     default: false
-  },
-
-  {
-    names: ['no-use-local', 'no-local'],
-    type: 'bool',
-    help: 'Do not add local node_modules/.bin to the $PATH.',
-    default: false
-  },
+  }
 
 ];
+
+
+
+export interface NLUInitOpts {
+  _args: Array<string>,
+  search_from_home: boolean,
+  interactive: boolean,
+  search_root: Array<string>,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}

@@ -1,10 +1,11 @@
 'use strict';
 
-import {EVCb, NluMap, NluMapItem, NLURunOpts, NLUAddOpts} from "./npmlinkup";
+import {EVCb, NluMap, NluMapItem} from "./index";
 
 //core
 import * as util from 'util';
 import * as cp from 'child_process';
+import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
@@ -12,6 +13,8 @@ import async = require('async');
 
 //project
 import log from './logging';
+import {determineIfReinstallIsNeeded, flattenDeep, getDevKeys} from "./utils";
+import * as path from "path";
 
 interface BinFieldObject {
   [key: string]: string
@@ -19,13 +22,13 @@ interface BinFieldObject {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
+export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
 
   const keys = Object.keys(map);
 
   if (keys.length < 1) {
-    return process.nextTick(cb, new Error('NLU could not find any dependencies on the filesystem;' +
-      ' perhaps broaden your search using searchRoots.'));
+    return process.nextTick(cb, 'NLU could not find any dependencies on the filesystem;' +
+      ' perhaps broaden your search using searchRoots.');
   }
 
   if (opts.dry_run) {
@@ -36,7 +39,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
   }
 
   if (opts.verbosity > 2) {
-    log.good('Dependency map:');
+    log.info('Dependency map:');
   }
 
   Object.keys(map).forEach(function (k) {
@@ -49,20 +52,17 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
 
   const isAllLinked = function () {
     //Object.values might not be available on all Node.js versions.
-    return Object.keys(map).every(function (k) {
-      return map[k].isLinked;
-    });
+    return Object.keys(map).every(k => map[k].isLinked);
   };
 
   const getCountOfUnlinkedDeps = function (dep: NluMapItem) {
     return dep.deps.filter(function (d) {
       if (!map[d]) {
-        log.warning(`there is no dependency named ${d} in the map.`);
+        log.warning(`there is no dependency named '${d}' in the map.`);
         return false;
       }
       return !map[d].isLinked;
-    })
-      .length;
+    }).length;
   };
 
   const findNextDep = function () {
@@ -96,28 +96,32 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
     return dep;
   };
 
-  const getNPMLinkList = (deps: Array<string>) => {
+  const getNPMLinkList = (deps: Array<string>, dep: NluMapItem): Array<string> => {
 
-    return deps.filter(function (d) {
+    if (opts.umbrella && dep.isMainProject) {
+      return [];
+    }
+
+    return deps.filter(d => {
       if (!map[d]) {
         log.warning('Map for key => "' + d + '" is not defined.');
         return false;
       }
       return map[d] && map[d].isLinked;
     })
-    .map(function (d: string) {
+      .map((d: string) => {
 
-      const path = map[d].path;
-      const bin = map[d].bin;
+        const path = map[d].path;
+        const bin = map[d].bin;
 
-      // return ` npm link ${d} -f `;
-      return ` mkdir -p node_modules && rm -rf "node_modules/${d}" && mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
-        ` && ln -s "${path}" "node_modules/${d}" ` + ` ${getBinMap(bin, path, d)}`;
-    });
+        // return ` npm link ${d} -f `;
+        return ` mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" && mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
+          ` && ln -s "${path}" "node_modules/${d}" ` + ` ${getBinMap(bin, path, d)}`;
+      });
 
   };
 
-  const getBinMap = function (bin: string | BinFieldObject, path: string, name: string) {
+  const getBinMap = (bin: string | BinFieldObject, path: string, name: string) => {
 
     if (!bin) {
       return '';
@@ -133,13 +137,13 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
       return '';
     }
 
-    return ` && ` + keys.map(function (k) {
-      return ` mkdir -p node_modules/.bin && ln -sf "${path}/${bin[k]}" "node_modules/.bin/${k}" `
+    return ` && ` + keys.map(k => {
+      return ` mkdir -p "node_modules/.bin" && ln -sf "${path}/${bin[k]}" "node_modules/.bin/${k}" `
     })
-    .join(' && ');
+      .join(' && ');
   };
 
-  const getCommandListOfLinked = function (name: string) {
+  const getCommandListOfLinked = (name: string) => {
 
     const path = map[name] && map[name].path;
     const bin = map[name] && map[name].bin;
@@ -149,41 +153,67 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
       return process.exit(1);
     }
 
-    return Object.keys(map).filter(function (k) {
+    return Object.keys(map).filter(k => {
       return map[k].isLinked && map[k].deps.includes(name);
     })
-    .map(function (k) {
-      const p = `${map[k].path}`;
-      return ` cd ${p} && mkdir -p node_modules && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
-        ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)} `;
-    });
+      .map(k => {
+        const p = `${map[k].path}`;
+        return ` cd "${p}" && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
+          ` && rm -rf "node_modules/${name}" && ln -s "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)} `;
+      });
   };
 
+  const getInstallCommand = (dep: NluMapItem) => {
 
-  const getInstallCommand = function (dep: NluMapItem) {
-    if (!opts.no_install && (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main))) {
+    if (opts.umbrella && dep.isMainProject === true) {
+      return;
+    }
+
+    if (opts.no_install) {
+      return;
+    }
+
+    if (dep.runInstall || opts.install_all || (dep.isMainProject && opts.install_main)) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && rm -rf node_modules && npm install --loglevel=warn ${installProd}`;
+      return ` && rm -rf node_modules && npm install --cache-min 999999 --loglevel=warn ${installProd}`;
     }
   };
 
-  const getLinkToItselfCommand = function (dep: NluMapItem) {
-    if (!opts.no_link && (opts.self_link_all || dep.linkToItself === true)) {
+  const getLinkToItselfCommand = (dep: NluMapItem) => {
+
+    if (opts.umbrella && dep.isMainProject) {
+      return;
+    }
+
+    if (opts.no_link) {
+      return;
+    }
+
+    if (opts.self_link_all || dep.linkToItself === true) {
       // return `&& npm link ${String(dep.name).trim()} -f`
-      return ` && mkdir -p node_modules && rm -rf "node_modules/${dep.name}" && mkdir -p "node_modules/${dep.name}" ` +
+      return ` && mkdir -p "node_modules/${dep.name}" && rm -rf "node_modules/${dep.name}" && mkdir -p "node_modules/${dep.name}" ` +
         ` && rm -rf "node_modules/${dep.name}" ` +
         ` && ln -s "${dep.path}" "node_modules/${dep.name}" `;
     }
   };
 
-  const getGlobalLinkCommand = function (dep: NluMapItem) {
-    if (!opts.no_link && (opts.link_all || (dep.isMainProject && opts.link_main))) {
+  const getGlobalLinkCommand = (dep: NluMapItem) => {
+
+    if (opts.umbrella && dep.isMainProject) {
+      return;
+    }
+
+    if (opts.no_link) {
+      return;
+    }
+
+    if (opts.link_all || (dep.isMainProject && opts.link_main)) {
       const installProd = opts.production ? ' --production ' : '';
-      return ` && mkdir -p node_modules/.bin && npm link -f ${installProd}`;
+      return ` && mkdir -p "node_modules/.bin" && npm link --cache-min 999999 -f ${installProd}`;
     }
   };
 
-  async.until(isAllLinked, function (cb: EVCb<any>) {
+  async.until(isAllLinked, (cb: EVCb<any>) => {
 
     if (opts.verbosity > 2) {
       log.info(`Searching for next dep to run.`);
@@ -192,111 +222,125 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<any>) => {
     const dep = findNextDep();
 
     if (opts.verbosity > 1) {
-      log.good(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
+      log.info(`Processing dep with name => '${chalk.bold(dep.name)}'.`);
     }
 
-    const deps = getNPMLinkList(dep.deps);
-    const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
+    const nm = path.resolve(dep.path + '/node_modules');
 
-    const script = [
-      `cd ${dep.path}`,
-      getInstallCommand(dep),
-      getGlobalLinkCommand(dep),
-      links,
-      getLinkToItselfCommand(dep)
-    ]
-    .filter(Boolean)
-    .join(' ');
+    determineIfReinstallIsNeeded(nm, dep, getDevKeys(dep.package), opts, (err, val) => {
 
-    if (opts.verbosity > 1) {
-      log.info(`First-pass script is => "${chalk.blueBright.bold(script)}"`);
-    }
-
-    const k = cp.spawn('bash', [], {
-      env: Object.assign({}, process.env, {
-        NPM_LINK_UP: 'yes'
-      })
-    });
-
-    k.stdin.end(script);
-
-    k.stdout.setEncoding('utf8');
-    k.stderr.setEncoding('utf8');
-
-    k.stderr.pipe(process.stderr);
-
-    if (opts.verbosity > 2) {
-      k.stdout.pipe(process.stdout);
-    }
-
-    let stderr = '';
-    k.stderr.on('data', function (d) {
-      stderr += d;
-    });
-
-    k.once('error', cb);
-
-    k.once('exit', function (code) {
-
-      if (code > 0 && /ERR/i.test(stderr)) {
-        log.error(`Dep with name "${dep.name}" is done, but with an error.`);
-        return cb({code, dep, error: stderr});
+      if (err) {
+        log.warn(`Error generated from determining if npm (re)install was is necessary for package: ${dep.name} =>`, err);
       }
 
-      dep.isLinked = map[dep.name].isLinked = true;
+      if (val === true) {
+        dep.runInstall = true;
+      }
 
-      const linkPreviouslyUnlinked = function (cb: EVCb) {
+      const deps = getNPMLinkList(dep.deps, dep);
+      const links = deps.length > 0 ? '&& ' + deps.join(' && ') : '';
 
-        const cmds = getCommandListOfLinked(dep.name);
+      const script = [
+        `cd "${dep.path}"`,
+        getInstallCommand(dep),
+        getGlobalLinkCommand(dep),
+        links,
+        getLinkToItselfCommand(dep)
+      ]
+        .filter(Boolean)
+        .join(' ');
 
-        if (!cmds.length) {
-          return process.nextTick(cb);
+      if (opts.verbosity > 1) {
+        log.info(`First-pass script is => "${chalk.blueBright.bold(script)}"`);
+      }
+
+      const k = cp.spawn('bash', [], {
+        env: Object.assign({}, process.env, {
+          NPM_LINK_UP: 'yes'
+        })
+      });
+
+      k.stdin.end(script);
+
+      k.stdout.setEncoding('utf8');
+      k.stderr.setEncoding('utf8');
+
+      k.stderr.pipe(process.stderr);
+
+      if (opts.verbosity > 2) {
+        k.stdout.pipe(process.stdout);
+      }
+
+      let stderr = '';
+      k.stderr.on('data', function (d) {
+        stderr += d;
+      });
+
+      k.once('error', cb);
+
+      k.once('exit', code => {
+
+        if (code > 0 && /ERR/i.test(stderr)) {
+          log.error(`Dep with name "${dep.name}" is done, but with an error.`);
+          return cb({code, dep, error: stderr});
         }
 
-        const cmd = cmds.join(' && ');
+        dep.isLinked = map[dep.name].isLinked = true;
 
-        if (opts.verbosity > 1) {
-          log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
-        }
+        const linkPreviouslyUnlinked = function (cb: EVCb<any>) {
 
-        const k = cp.spawn('bash', [], {
-          env: Object.assign({}, process.env, {
-            NPM_LINK_UP: 'yes'
-          })
-        });
+          const cmds = getCommandListOfLinked(dep.name);
 
-        k.stdin.write(cmd);
-
-        k.stdout.setEncoding('utf8');
-        k.stderr.setEncoding('utf8');
-
-        k.stderr.pipe(process.stderr, {end: false});
-
-        if (opts.verbosity > 2) {
-          k.stdout.pipe(process.stdout, {end: false});
-        }
-
-        k.stdin.end();
-        k.once('exit', cb);
-
-      };
-
-      linkPreviouslyUnlinked(function (err: any) {
-
-        if (err) {
-          log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
-        }
-        else {
-          if (opts.verbosity > 1) {
-            log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
+          if (!cmds.length) {
+            return process.nextTick(cb);
           }
-        }
 
-        cb(err, {
-          code: code,
-          dep: dep,
-          error: stderr
+          const cmd = cmds.join(' && ');
+
+          if (opts.verbosity > 1) {
+            log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
+          }
+
+          const k = cp.spawn('bash', [], {
+            env: Object.assign({}, process.env, {
+              NPM_LINK_UP: 'yes'
+            })
+          });
+
+          k.stdin.write(cmd);
+
+          k.stdout.setEncoding('utf8');
+          k.stderr.setEncoding('utf8');
+
+          k.stderr.pipe(process.stderr, {end: false});
+
+          if (opts.verbosity > 2) {
+            k.stdout.pipe(process.stdout, {end: false});
+          }
+
+          k.stdin.end();
+          k.once('exit', cb);
+
+        };
+
+        linkPreviouslyUnlinked((err: any) => {
+
+          if (err) {
+            log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
+          }
+          else {
+            if (opts.verbosity > 1) {
+              log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
+            }
+          }
+
+          cb(err, {
+            code: code,
+            dep: dep,
+            error: stderr
+          });
         });
+
       });
 
     });

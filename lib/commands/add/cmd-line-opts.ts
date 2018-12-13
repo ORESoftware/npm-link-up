@@ -1,6 +1,5 @@
 'use strict';
 
-
 export default [
 
   {
@@ -13,7 +12,8 @@ export default [
     names: ['verbosity', 'v'],
     type: 'positiveInteger',
     help: 'Verbosity level is an integer between 1 and 4, inclusive.',
-    default: 3
+    default: 3,
+    env: 'nlu_verbosity_level'
   },
 
   {
@@ -23,13 +23,20 @@ export default [
     default: false
   },
 
-
   {
     names: ['debug', 'd'],
     type: 'bool',
     help: 'Show debug logging.',
     default: false,
     hidden: true
+  },
+
+  {
+    names: ['config', 'conf', 'c'],
+    type: 'string',
+    help: 'Path to an .nlu.json file.',
+    default: '',
+    env: 'nlu_config_path'
   },
 
   {
@@ -56,7 +63,7 @@ export default [
     hidden: true
   },
   {
-    names: ['dry-run','dry'],
+    names: ['dry-run', 'dry'],
     type: 'bool',
     help: 'Simulates the run and provides a visual tree report - does zero writes, just does reads.',
     default: false
@@ -70,10 +77,29 @@ export default [
   },
 
   {
-    names: ['no-use-local','no-local'],
+    names: ['no-use-local', 'no-local'],
     type: 'bool',
     help: 'Do not add local node_modules/.bin to the $PATH.',
     default: false
   },
 
 ];
+
+
+
+export interface NLUAddOpts {
+  _args: Array<string>,
+  override: boolean,
+  search_root: Array<string>,
+  config: string,
+  search_from_home: boolean,
+  no_use_local: boolean,
+  dry_run: boolean,
+  no_link: boolean,
+  no_install: boolean,
+  debug: boolean,
+  allow_unknown: boolean,
+  force: boolean,
+  help: boolean,
+  verbosity: number
+}

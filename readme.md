@@ -1,4 +1,11 @@
 
+<img width="200px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/oresoftware-nlu4-rounded.png?foo">
+
+[<img src="https://img.shields.io/badge/slack-@oresoftware/nlu-yellow.svg?logo=slack">](https://oresoftware.slack.com/messages/CCAHLP5BK)
+
+[![Gitter](https://badges.gitter.im/oresoftware/npm-link-up.svg)](https://gitter.im/oresoftware/npm-link-up?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Version](https://img.shields.io/npm/v/npm-link-up.svg?colorB=green)](https://www.npmjs.com/package/npm-link-up)
+
 # NPM-Link-Up / NLU
 
 <br>
@@ -6,45 +13,71 @@
 ### Caveats + Disclaimer
 
 >
-> This will not work with MS Windows. Only MacOS and *nix. If you are interested in getting to work on Windows, pls file a ticket.
+> This will not work with MS Windows. Only MacOS and *nix. 
+> If you are interested in getting to work on Windows, pls file a ticket.
 >
+
+<br>
+
+## Video demo
+
+Watch this video to learn how to use NLU: goo.gl/a9u1rr
+
+
+The video references this example repo:
+https://github.com/ORESoftware/rolo-cholo-yolo
 
 <br>
 
 ## About
 
 Use the CLI interface to link your local projects together for rapid and pain-free local
-development. This tool links your local projects together using symlinks,
-using declarative config files. This project is decidedly <i>anti-monorepo</i>, and is part of the resistance movement.
-In the modest opinion of Olegzandr Von Denman, NPM packages should remain 1:1 wrt to package.json/node_modules/.git, etc. This keeps things simple.
+development. This tool links your local NPM packages together using symlinks, using declarative files. 
 
 <br>
 
-NLU uses an `.nlu.json` file, which is a like a smaller package.json file in the root of your project,
-which tells NLU about other local dependencies, and how to link your project up.
+NLU is agnostic regarding mono-repo vs. multi-repo. NLU is simply used to link NPM packages on your fs together 
+by way of the respective node_modules folders. For example, if you want to store multiple NPM packages in a mono-repo, that's fine,
+and NLU can be used to link them together for local development.
+
+<br>
+
+NLU uses `.nlu.json` files, which tells NLU about other local dependencies.
 
 <br>
 
 NLU should be quite a bit leaner and simpler than [Lerna](https://github.com/lerna/lerna) and
 [Rush](https://www.npmjs.com/package/@microsoft/rush).
 
-Mono-repos are crap. Be lean and mean and use npm-link-up.
+<br>
+
+NLU is one of several tools that make managing multiple locally developed packages easier.
+
+<b> The current pieces are: </b>
+
+* [npm-link-up (NLU)](https://github.com/ORESoftware/npm-link-up) => links multiple NPM packages together for local development
+* [r2g](https://github.com/ORESoftware/r2g) => tests local packages <i>properly</i> before publishing to NPM
+* [npp](https://github.com/ORESoftware/npp) => publish multiple packages and sync their semver versions
 
 <br>
 
 ## Installation
 
-#### ``` $ npm i -g npm-link-up ```
+<br>
+
+```bash
+$ npm i -g npm-link-up
+```
 
 <br>
 
-<i> => If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile: </i>
+If you use NVM and switch Node.js versions frequently, then add the following to to ~/.bashrc or ~/.bash_profile:
 
-```
+```bash
 . "$HOME/.oresoftware/shell.sh"
 ```
 
-<i> => You will also get bash completion for NLU, if you source the above. </i>
+<i> => Note, you will also get bash completion for NLU, if you source the above. </i>
 
 <br>
 
@@ -59,7 +92,7 @@ Using NLU, we can link the primary project to other projects too, in the linking
 The basic command:
 
 >
->```js
+>```bash
 >$ nlu run
 >```
 >
@@ -75,6 +108,17 @@ The basic command:
 >```
 >
 > * will do all the reads but none of the writes from (1)...will generate a tree and display it in the console so you can see what the linked projects will look like.
+>
+
+<br>
+
+>
+>```bash
+>$ nlu ls      # alias: --dry-run
+>```
+>
+> * Using the current working directory as the search root, will display a tree in the console of all symlinked packages in all folders.
+> * Using `$ nlu ls -a`, in future versions, you can see all symlinks, not just symlinked dirs in node_modules. 
 >
 
 <br>
@@ -131,11 +175,39 @@ The basic command:
 
 <br>
 
-### Complete real-world usage example:
-See: https://github.com/sumanjs
+### The .nlu.json configuration file
 
-The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
-Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
+Your primary project needs an `.nlu.json` file, which can be auto-generated using `nlu init` (see below, for instructions.)
+
+<br>
+
+The two most important fields in the `.nlu.json` file are `"searchRoots"` and `"list"`.
+
+```js
+{
+  "searchRoots": [     // the tool will search for npm packages within these dirs
+    "$HOME/WebstormProjects", 
+    "../socket.io",
+    "../../mongoose"
+  ],
+  "list": [        // list the local packages that you want to symlink to this project, here. NPM package name only, no paths needed.
+    "socket.io",   // (these are just examples using well-known NPM packages, you will be using packages that you develop locally.)
+    "mongoose",
+    "lodash"
+  ]
+}
+```
+
+<br>
+
+The `"list"` field, is an array of the package names - these need to match the package.json name field for whatever packages you want to link
+to your primary project.
+
+<br>
+
+The `"searchRoots"` field is an array of places to search for packages on your filesystem. You can use relative paths, or alternatively,
+just use a grandparent directory which contains all of your projects. Using the latter technique is highly recommended.
+Using relative paths is more error-prone and requires more maintenance, and is more verbose. *You can use env variables in your searchRoots paths*.
 
 <br>
 
@@ -185,14 +257,12 @@ The following is a simple .nlu.json file:
     "mongoose",
     "lodash"
   ],
-  "install": "yarn",     // we give specific instructions (a bash script) on how to install, ("npm install" is default)
   "linkToItself": true   // if true, we link this project to itself; true is the default. Linking a project to itself is useful for testing.
 }
 ```
 
 
 After creating an .nlu.json file in the root of your project that's all you need to do, and then run:
-
 
 ```bash
 $ nlu run   # run this from within project x
@@ -208,13 +278,31 @@ $ nlu run   # run this from within project x
 <br>
 
 
+## F.A.Q.
+
+>
+> See: `docs/faq.md`
+>
+
+<br>
+
 ## Tips and tricks:
 
 * If you want to use a particular yarn or npm version to link your project, you can install npm or yarn as a local dependency of your primary project, and NLU will pick that up.
 * The above is the case, because by default NLU adds local node_modules/.bin items to the $PATH.
 
+<br>
+
+### Complete real-world usage example:
+See: https://github.com/sumanjs
+
+The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
+Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
+
+<br>
 
 ### Screenshots:
 
-![NLU cli in action](media/cli-output.png)
+<img width="700px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/cli-output.png">
+
 

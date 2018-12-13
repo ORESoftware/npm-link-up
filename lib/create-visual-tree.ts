@@ -1,13 +1,13 @@
 'use strict';
 
 import util = require('util');
-import {NluMap, NLURunOpts, NluVisualTree} from "./npmlinkup";
+import {NluMap, NluVisualTree} from "./index";
 import log from './logging';
+import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 /////////////////////////////////////////////////////////////////////////////////
 
-export const createTree =
-  function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
+export const createTree = function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
     
     let tree: NluVisualTree = {
       [name]: {}
@@ -43,11 +43,11 @@ export const createTree =
       
     };
     
-    originalList.forEach(function (k: string) {
+    originalList.forEach( (k: string) => {
       tree[name] && createItem(k, tree[name], [name]);
     });
     
-    let cleanTree = function (k: string, val: any) {
+    let cleanTree =  (k: string, val: any) => {
       
       delete val[k];
       

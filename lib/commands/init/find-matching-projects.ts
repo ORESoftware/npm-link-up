@@ -11,7 +11,8 @@ import chalk from 'chalk';
 
 // project
 import log from '../../logging';
-import {EVCb, NLUInitOpts, NluMap} from "../../npmlinkup";
+import {EVCb, NluMap} from "../../index";
+import {NLUInitOpts} from "./cmd-line-opts";
 
 ////////////////////////////////////////////////////////////////
 
@@ -32,11 +33,11 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
     });
   };
 
-  return function findProject(item: string, cb: EVCb) {
+  return function findProject(item: string, cb: EVCb<any>) {
 
     item = path.normalize(item);
 
-    log.good('new path being searched:', chalk.blue(item));
+    log.info('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
@@ -67,7 +68,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items, 3, function (item: string, cb: EVCb) {
+        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
           if (status.searching === false) {
             opts.verbosity > 2 && log.error('There was an error so we short-circuited search.');
@@ -140,7 +141,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
 
             if (theirDeps[pkg.name]) {
 
-              log.good('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+              log.info('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
 
               if (map[pkg.name]) {
                 // this pkg.name is already in the map!

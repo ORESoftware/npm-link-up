@@ -11,7 +11,8 @@ import chalk from 'chalk';
 
 // project
 import log from '../../logging';
-import {EVCb, NLUAddOpts} from "../../npmlinkup";
+import {EVCb} from "../../index";
+import {NLUAddOpts} from "./cmd-line-opts";
 
 ////////////////////////////////////////////////////////////////
 
@@ -19,7 +20,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                                           opts: NLUAddOpts, map: any, toAdd: Array<string>, status: any) {
 
 
-  let isIgnored = function (pth: string) {
+  let isIgnored =  (pth: string) => {
     return ignore.some(r => {
       if (r.test(pth)) {
         if (opts.verbosity > 2) {
@@ -31,11 +32,11 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
     });
   };
 
-  return function findProject(item: string, cb: EVCb) {
+  return function findProject(item: string, cb: EVCb<any>) {
 
     item = path.normalize(item);
 
-    log.good('new path being searched:', chalk.blue(item));
+    log.info('new path being searched:', chalk.blue(item));
 
     (function getMarkers(dir, cb) {
 
@@ -70,7 +71,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
           return path.resolve(dir, item);
         });
 
-        async.eachLimit(items, 3, function (item: string, cb: EVCb) {
+        async.eachLimit(items, 3, function (item: string, cb: EVCb<any>) {
 
           if (isIgnored(String(item))) {
             if (opts.verbosity > 2) {
@@ -155,7 +156,7 @@ export const makeFindProjects = function (mainProjectName: string, ignore: Array
                 status.searching = false;
               }
 
-              log.good('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
+              log.info('We found a relevant project:', chalk.blueBright.bold(pkg.name), ', at path:', chalk.gray.bold(dirname));
               const helpLink = 'https://github.com/ORESoftware/npm-link-up/tree/master/docs/easy-duplicate-package-mitigation.md';
 
               if (map[pkg.name]) {

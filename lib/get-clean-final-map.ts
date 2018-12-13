@@ -1,14 +1,14 @@
 'use strict';
 
-import {NluMap} from "./npmlinkup";
+import {NluMap} from "./index";
 
 ////////////////////////////////////////////////////////////////////////////
 
-export const getCleanMap = function (rootPackageName: string, map: NluMap): NluMap {
+export const getCleanMap =  (rootPackageName: string, map: NluMap): NluMap => {
   
   const newMap: NluMap = {};
   
-  const getRelevantItems = function (v: string) {
+  const getRelevantItems =  (v: string) => {
     
     if (map[v] && !newMap[v]) {
       
@@ -31,4 +31,19 @@ export const getCleanMap = function (rootPackageName: string, map: NluMap): NluM
   
   
   return newMap;
+};
+
+
+export const getCleanMapOfOnlyPackagesWithNluJSONFiles =  (rootPackageName: string, map: NluMap): NluMap => {
+
+  return Object.keys(map).reduce((a,b) => {
+
+    if(map[b].hasNLUJSONFile){
+       a[b] = map[b];
+    }
+    return a;
+
+  }, {} as NluMap)
+
+
 };
