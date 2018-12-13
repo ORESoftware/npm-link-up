@@ -20,6 +20,7 @@ export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/globa
 
 export const validateConfigFile = (data: NluConf) => {
 
+
   try {
     const ajv = new Ajv({allErrors: false}); // options can be passed, e.g. {allErrors: true}
     const validate = ajv.compile(schema);
@@ -106,6 +107,7 @@ export const getDevKeys = (pkg: PkgJSON) => {
     .concat(Object.keys(pkg.optionalDependencies || {}));
 };
 
+
 export const validateOptions = (opts: any) => {
 
   try {
@@ -121,12 +123,14 @@ export const validateOptions = (opts: any) => {
 
 };
 
+
 export const mapConfigObject = (obj: any) => {
   return Object.keys(obj).reduce((a, b) => {
     const key = String(b).replace(/[^a-zA-z]+/g, '_').toLowerCase();
     return (a[key] = obj[b], a);
   }, {} as any);
 };
+
 
 const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>): boolean => {
 
@@ -192,6 +196,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
     return process.nextTick(cb);
   }
 
+
   fs.readdir(nodeModulesPath, (err, originalItemsInNodeModules) => {
 
     if (err || !Array.isArray(originalItemsInNodeModules)) {
@@ -207,6 +212,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
     const topLevel = originalItemsInNodeModules.filter(v => {
       return !String(v).startsWith('@') && String(v) !== '.bin';
     });
+
 
     const totalValid = new Set(topLevel.slice(0));
 
@@ -309,7 +315,7 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
       if (err && result.install === true) {
         return cb(null, true);
       }
-
+      
       if (err) {
         return cb(err, false);
       }
@@ -338,10 +344,11 @@ export const determineIfReinstallIsNeeded = (nodeModulesPath: string, dep: NluMa
         return cb(null, true);
       }
 
+
       if (checkPackages(dep, map, sym)) {
         return cb(null, true);
       }
-
+      
       cb(null, false);
 
     });

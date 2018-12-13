@@ -10,9 +10,11 @@ import * as fs from 'fs';
 
 //npm
 import chalk from 'chalk';
+
 const dashdash = require('dashdash');
 import async = require('async');
 import residence = require('residence');
+
 const cwd = process.cwd();
 let root = residence.findProjectRoot(cwd);
 const treeify = require('treeify');
@@ -108,11 +110,13 @@ if (opts.config) {
 }
 else {
   nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+
 }
 
 if (!nluConfigRoot) {
   nluConfigRoot = cwd;
 }
+
 
 let pkg, conf: NluConf;
 
@@ -285,6 +289,7 @@ if (opts.dry_run) {
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
 const mainDep = map[mainProjectName] = {
   name: mainProjectName,
+
   bin: null as any,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
@@ -301,9 +306,9 @@ async.autoInject({
 
       const nm = path.resolve(root + '/node_modules');
       const keys = opts.production ? productionDepsKeys : allDepsKeys;
-
+      
       determineIfReinstallIsNeeded(nm, mainDep, keys, opts, (err, val) => {
-
+        
         if (err) {
           return cb(err);
         }
