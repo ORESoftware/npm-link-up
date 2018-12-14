@@ -76,7 +76,7 @@ if (opts.help) {
   process.exit(0);
 }
 
-let nluFilePath = null;
+let nluFilePath = null, isFile = null;
 
 if (opts.config) {
   
@@ -88,9 +88,11 @@ if (opts.config) {
   
   try {
     assert(fs.statSync(opts.config).isFile(), 'config path is not a file.');
+    isFile = true;
   }
   catch (err) {
   
+    isFile = false;
     opts.config = path.resolve(cwd + '/' + String(configOpt || '') + '/.nlu.json');
     
     try{
@@ -128,6 +130,9 @@ let nluConfigRoot: string = null;
 
 if (opts.config) {
   nluConfigRoot = path.resolve(opts.config);
+  if(isFile){
+    nluConfigRoot = path.dirname(nluConfigRoot);
+  }
 }
 else {
   nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
@@ -144,6 +149,8 @@ let hasNLUJSONFile = false;
 if (!nluFilePath) {
   nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
 }
+
+console.log({nluFilePath});
 
 try {
   conf = require(nluFilePath);

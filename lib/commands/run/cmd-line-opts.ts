@@ -136,7 +136,7 @@ export default [
   },
 
   {
-    names: ['search-root-append', 'append-search', 'search-append'],
+    names: ['search-root-append', 'append-search-root','append-search', 'search-append'],
     type: 'arrayOfString',
     help: 'Path to use to begin searching for relevant NPM packages; appends to existing config values. ' +
       'To add multiple search-root-append\'s, use "--search-root-append x --search-root-append y".'
