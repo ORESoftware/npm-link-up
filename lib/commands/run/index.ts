@@ -76,11 +76,9 @@ if (opts.help) {
   process.exit(0);
 }
 
-let nluFilePath = null, isFile = null;
+let nluFilePath = null, isFile = null, configOpt = opts.config;
 
 if (opts.config) {
-  
-  let configOpt = opts.config;
   
   if(!path.isAbsolute(opts.config)){
     opts.config = path.resolve(cwd + '/' + String(configOpt || ''));
@@ -150,8 +148,6 @@ if (!nluFilePath) {
   nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
 }
 
-console.log({nluFilePath});
-
 try {
   conf = require(nluFilePath);
   opts.umbrella = opts.umbrella || Boolean(conf.umbrella);
@@ -175,8 +171,9 @@ catch (e) {
 
 if (!root) {
   if (!(opts.all_packages || opts.umbrella)) {
-    log.error('You do not appear to be within an NPM project (no package.json could be found).');
-    log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+    log.warn('You do not appear to be within an NPM project (no package.json could be found).');
+    log.warn(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+    log.warn('Perhaps you meant to use the', chalk.bold('--umbrella'), 'CLI option?');
     process.exit(1);
   }
   root = cwd;
@@ -444,7 +441,10 @@ async.autoInject({
       
       if (unfound.length > 0) {
         log.warn(`The following packages could ${chalk.bold('not')} be located:`);
-        log.warn(unfound);
+        for(let i of unfound.keys()){
+          log.warn(chalk.bold(String(i+1), chalk.bold.green(unfound[i])));
+        }
+       
         if (!opts.allow_missing) {
           console.error();
           log.warn('The following paths (and their subdirectories) were searched:');
