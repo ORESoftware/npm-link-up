@@ -378,15 +378,138 @@ $ nlu run   # run this from within project x
 <br>
 
 ### Complete real-world usage example:
-See: https://github.com/sumanjs
-
-The majority of the projects in the sumanjs org are linked together using `npm-link-up`.
-Just look for the `.nlu.json` file in the root of each project. Note that https://github.com/sumanjs/suman is the "root/main/primary" project.
+See: https://github.com/sumanjs/suman-mono
 
 <br>
 
+
+#### `$ nlu ls` command example
+
+Using ```$ nlu ls ``` is a fun read-only utility - it shows you all the symlinks on the fs in your current folder:
+
+```
+
+      └─ suman-mono (root)
+           ├─ browser
+           │  └─ node_modules
+           │     └─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           ├─ browser-polyfills
+           │  └─ node_modules
+           │     └─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           ├─ daemon
+           │  └─ node_modules
+           │     ├─ poolio: ❖ /home/oleg/codes/oresoftware/poolio 
+           │     ├─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           │     ├─ suman-daemon: ❖ /home/oleg/codes/sumanjs/suman-mono/daemon 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     └─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           ├─ events
+           │  └─ node_modules
+           │     └─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           ├─ interactive
+           │  └─ node_modules
+           │     ├─ suman-interactive: ❖ /home/oleg/codes/sumanjs/suman-mono/interactive 
+           │     └─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           ├─ refine
+           │  └─ node_modules
+           │     ├─ suman-r: ❖ /home/oleg/codes/sumanjs/suman-mono/refine 
+           │     ├─ json-stdio: ❖ /home/oleg/codes/oresoftware/json-stdio 
+           │     ├─ suman-events: ❖ /home/oleg/codes/sumanjs/suman-mono/events 
+           │     ├─ suman-reporters: ❖ /home/oleg/codes/sumanjs/suman-mono/reporters 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     ├─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           │     ├─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           │     └─ tap-json-parser: ❖ /home/oleg/codes/oresoftware/tap-json-parser 
+           ├─ reporters
+           │  └─ node_modules
+           │     ├─ suman-reporters: ❖ /home/oleg/codes/sumanjs/suman-mono/reporters 
+           │     ├─ json-stdio: ❖ /home/oleg/codes/oresoftware/json-stdio 
+           │     ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           │     ├─ suman-events: ❖ /home/oleg/codes/sumanjs/suman-mono/events 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     └─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           ├─ run-plugins
+           │  └─ node_modules
+           │     ├─ suman-run-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/run-plugins 
+           │     └─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           ├─ shell
+           │  └─ node_modules
+           │     ├─ json-stdio: ❖ /home/oleg/codes/oresoftware/json-stdio 
+           │     ├─ poolio: ❖ /home/oleg/codes/oresoftware/poolio 
+           │     ├─ prepend-transform: ❖ /home/oleg/codes/oresoftware/prepend-transform 
+           │     ├─ suman-shell: ❖ /home/oleg/codes/sumanjs/suman-mono/shell 
+           │     ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     └─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           ├─ suman
+           │  └─ node_modules
+           │     ├─ json-stdio: ❖ /home/oleg/codes/oresoftware/json-stdio 
+           │     ├─ log-prepend: ❖ /home/oleg/codes/oresoftware/log-prepend 
+           │     ├─ poolio: ❖ /home/oleg/codes/oresoftware/poolio 
+           │     ├─ pragmatik: ❖ /home/oleg/codes/oresoftware/pragmatik 
+           │     ├─ prepend-transform: ❖ /home/oleg/codes/oresoftware/prepend-transform 
+           │     ├─ proxy-mcproxy: ❖ /home/oleg/codes/oresoftware/proxy-mcproxy 
+           │     ├─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           │     ├─ suman: ❖ /home/oleg/codes/sumanjs/suman-mono/suman 
+           │     ├─ suman-browser: ❖ /home/oleg/codes/sumanjs/suman-mono/browser 
+           │     ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           │     ├─ suman-daemon: ❖ /home/oleg/codes/sumanjs/suman-mono/daemon 
+           │     ├─ suman-events: ❖ /home/oleg/codes/sumanjs/suman-mono/events 
+           │     ├─ suman-interactive: ❖ /home/oleg/codes/sumanjs/suman-mono/interactive 
+           │     ├─ suman-r: ❖ /home/oleg/codes/sumanjs/suman-mono/refine 
+           │     ├─ suman-reporters: ❖ /home/oleg/codes/sumanjs/suman-mono/reporters 
+           │     ├─ suman-run-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/run-plugins 
+           │     ├─ suman-shell: ❖ /home/oleg/codes/sumanjs/suman-mono/shell 
+           │     ├─ suman-transform-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/transform-plugins 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     ├─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           │     ├─ suman-watch: ❖ /home/oleg/codes/sumanjs/suman-mono/watch 
+           │     ├─ suman-watch-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/watch-plugins 
+           │     └─ vamoot: ❖ /home/oleg/codes/oresoftware/vamoot 
+           ├─ tools
+           │  └─ node_modules
+           │     └─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           ├─ transform-plugins
+           │  └─ node_modules
+           │     ├─ suman-transform-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/transform-plugins 
+           │     └─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           ├─ types
+           │  └─ node_modules
+           ├─ utils
+           │  └─ node_modules
+           │     ├─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           │     ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     └─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           ├─ watch
+           │  └─ node_modules
+           │     ├─ poolio: ❖ /home/oleg/codes/oresoftware/poolio 
+           │     ├─ prepend-transform: ❖ /home/oleg/codes/oresoftware/prepend-transform 
+           │     ├─ residence: ❖ /home/oleg/codes/oresoftware/residence 
+           │     ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+           │     ├─ suman-events: ❖ /home/oleg/codes/sumanjs/suman-mono/events 
+           │     ├─ suman-run-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/run-plugins 
+           │     ├─ suman-transform-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/transform-plugins 
+           │     ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+           │     ├─ suman-watch: ❖ /home/oleg/codes/sumanjs/suman-mono/watch 
+           │     ├─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+           │     └─ suman-watch-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/watch-plugins 
+           └─ watch-plugins
+              └─ node_modules
+                 ├─ suman-browser-polyfills: ❖ /home/oleg/codes/sumanjs/suman-mono/browser-polyfills 
+                 ├─ suman-events: ❖ /home/oleg/codes/sumanjs/suman-mono/events 
+                 ├─ suman-reporters: ❖ /home/oleg/codes/sumanjs/suman-mono/reporters 
+                 ├─ suman-run-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/run-plugins 
+                 ├─ suman-transform-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/transform-plugins 
+                 ├─ suman-types: ❖ /home/oleg/codes/sumanjs/suman-mono/types 
+                 ├─ suman-utils: ❖ /home/oleg/codes/sumanjs/suman-mono/utils 
+                 ├─ suman-watch: ❖ /home/oleg/codes/sumanjs/suman-mono/watch 
+                 └─ suman-watch-plugins: ❖ /home/oleg/codes/sumanjs/suman-mono/watch-plugins 
+
+
+```
+
+
 ### Screenshots:
 
-<img width="700px" align="right" src="https://raw.githubusercontent.com/oresoftware/media/master/namespaces/nlu/cli-output.png">
-
-
+TBD
