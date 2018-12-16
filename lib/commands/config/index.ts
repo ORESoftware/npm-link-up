@@ -11,7 +11,7 @@ import residence = require('residence');
 
 const cwd = process.cwd();
 import * as path from 'path';
-import {globalConfigFilePath} from "../../utils";
+import {globalConfigFilePath, handleConfigCLIOpt} from "../../utils";
 import {NluGlobalSettingsConf} from "../../index";
 import * as fs from "fs";
 import * as assert from "assert";
@@ -44,58 +44,35 @@ catch (err) {
   throw chalk.magenta(err.message);
 }
 
-let nluConfigRoot = residence.findRootDir(opts.config || cwd, '.nlu.json');
+let {nluFilePath: confPath, nluConfigRoot} = handleConfigCLIOpt(cwd,opts);
+
 
 if (!root) {
   log.warn('You want to update the local config, but we could not find a project root - we could not find a local "package.json" file.');
   root = cwd;
 }
 
-if (!nluConfigRoot) {
-  nluConfigRoot = cwd;
-}
 
-let conf: NluGlobalSettingsConf = null, confPath: string = null;
+let conf: NluGlobalSettingsConf = null;
 
 if (opts.global) {
-
   confPath = globalConfigFilePath;
-
-  try {
-    conf = require(globalConfigFilePath);
-  }
-  catch (err) {
-    conf = {};
-  }
-
-  if (!(conf && typeof conf === 'object')) {
-    conf = {};
-  }
-
-  if (Array.isArray(conf)) {
-    conf = {};
-  }
 }
-else {
 
-  confPath = path.resolve(nluConfigRoot + '/.nlu.json');
+try {
+  conf = require(confPath);
+}
+catch (err) {
+  log.error('Could not load your nlu config file at path:', chalk.bold(confPath));
+  throw chalk.magenta(err.message);
+}
 
-  try {
-    conf = require(confPath);
-  }
-  catch (err) {
-    log.error('Could not load your .nlu.json file at path:', chalk.bold(confPath));
-    throw chalk.magenta(err.message);
-  }
+if (Array.isArray(conf)) {
+  throw chalk.magenta('Conf resolved to an Array instance, it needs to be an non-Array object.');
+}
 
-  if (!(conf && typeof conf === 'object')) {
-    conf = {};
-  }
-
-  if (Array.isArray(conf)) {
-    conf = {};
-  }
-
+if (!(conf && typeof conf === 'object')) {
+  conf = {};
 }
 
 if (String(opts._args[1] || '').match(/[^a-zA-Z0-9-]+/g)) {
