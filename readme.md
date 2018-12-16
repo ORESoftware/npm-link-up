@@ -370,12 +370,6 @@ $ nlu run   # run this from within project x
 
 <br>
 
-## Tips and tricks:
-
-* If you want to use a particular yarn or npm version to link your project, you can install npm or yarn as a local dependency of your primary project, and NLU will pick that up.
-* The above is the case, because by default NLU adds local node_modules/.bin items to the $PATH.
-
-<br>
 
 ### Complete real-world usage example:
 See: https://github.com/sumanjs/suman-mono
