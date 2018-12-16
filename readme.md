@@ -84,9 +84,10 @@ If you use NVM and switch Node.js versions frequently, then add the following to
 
 # Workflows
 
-There are two primary workflows:
+There are two types of workflows:
 
-1. Workflow #1 - you have an NPM package on your fs in a folder, and you have other local packages you'd like to link to it.
+1. Workflow 1 - you have an NPM package on your fs in a folder, and you have other local packages you'd like to link to it.
+This is the simple/normal case. This case is known as "I have a package and I want to symlink stuff to it."
 
 Simply run `nlu init` in the root of your package.
 
@@ -107,10 +108,15 @@ Simply run `nlu init` in the root of your package.
 ```
 
 xxx,yyy,zzz are the package names of the packages you wish to link to your current/primary package.
-Using searchRoots:"..", means it will look for xxx,yyy,zzz within the parent directory of your primary package.
+Using `"searchRoots": [".."]`, means it will look for xxx,yyy,zzz within the parent directory of your primary package.
 
 
-2. Workflow #2 - You have a mono-repo with N npm packages in it. Something like:
+2. Workflow 2 - You have a mono-repo with N npm packages in it. <br>
+This case is known as "I have multiple packages of concern and I want to make sure they all get their desired symlinks".
+It doesn't have to be a mono-repo, it can just be that you want to run the symlinking thing for multiple packages at once.
+The packages don't even have to relate to each other at all.
+
+Something like:
 
 ```
  monorepo/
@@ -129,7 +135,7 @@ In .nlu.umbrella.json, put this:
   "linkToSelf": false,
   "linkToItself": false,
   "searchRoots": [
-    "."
+    "."            # just search the current dir, no need to go up a dir
   ],
   "list": [
     "packagea",
@@ -145,13 +151,10 @@ run `nlu init` from each of packagea,packageb,packagec, then in the root of the 
 $ nlu run --umbrella -c .nlu.umbrella.json  # --umbrella option tells nlu not to put a node_modules folder in the mono-repo root
 ```
 
-If you are missing deps, that's ok, just use --allow-missing
+If you are missing deps, that's ok, just use --allow-missing.
 
-
-
-
-
-
+Special note: If you cannot add .nlu.json files to the packages b/c maybe your people are picky, there is a way to just use an nlu.umbrella.json file.
+File a ticket and I will explain how to do that.
 
 
 
