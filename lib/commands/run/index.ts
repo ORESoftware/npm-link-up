@@ -39,7 +39,7 @@ import {
   getDevKeys,
   getProdKeys,
   validateConfigFile,
-  validateOptions, mapConfigObject, getDepsListFromNluJSON
+  validateOptions, mapConfigObject, getDepsListFromNluJSON, handleConfigCLIOpt
 } from "../../utils";
 
 import {NluGlobalSettingsConf} from "../../index";
@@ -76,37 +76,6 @@ if (opts.help) {
   process.exit(0);
 }
 
-let nluFilePath = null, isFile = null, configOpt = opts.config;
-
-if (opts.config) {
-  
-  if(!path.isAbsolute(opts.config)){
-    opts.config = path.resolve(cwd + '/' + String(configOpt || ''));
-  }
-  
-  try {
-    assert(fs.statSync(opts.config).isFile(), 'config path is not a file.');
-    isFile = true;
-  }
-  catch (err) {
-  
-    isFile = false;
-    opts.config = path.resolve(cwd + '/' + String(configOpt || '') + '/.nlu.json');
-    
-    try{
-      assert(fs.statSync(opts.config).isFile(), 'config path is not a file.');
-    }
-    catch(err){
-      log.error(
-        'You declared a config path using the -c option, but the following path is not a file:',
-        chalk.bold(opts.config)
-      );
-      throw chalk.magenta(err.message);
-    }
-  }
-  
-  nluFilePath = opts.config;
-}
 
 try {
   globalConf = require(globalConfigFilePath);
@@ -124,29 +93,10 @@ if (Array.isArray(globalConf)) {
   globalConf = {};
 }
 
-let nluConfigRoot: string = null;
+const {nluFilePath, nluConfigRoot} = handleConfigCLIOpt(cwd,opts);
 
-if (opts.config) {
-  nluConfigRoot = path.resolve(opts.config);
-  if(isFile){
-    nluConfigRoot = path.dirname(nluConfigRoot);
-  }
-}
-else {
-  nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
-}
+let pkg, conf: NluConf, hasNLUJSONFile = false;
 
-if (!nluConfigRoot) {
-  nluConfigRoot = cwd;
-}
-
-let pkg, conf: NluConf;
-
-let hasNLUJSONFile = false;
-
-if (!nluFilePath) {
-  nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
-}
 
 try {
   conf = require(nluFilePath);

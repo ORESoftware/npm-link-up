@@ -13,10 +13,68 @@ import async = require('async');
 import {NLURunOpts} from "./commands/run/cmd-line-opts";
 import * as util from "util";
 import semver = require('semver');
+import * as residence from 'residence';
 
 ////////////////////////////////////////////////////////////////////
 
 export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/global/settings.json');
+
+
+export const handleConfigCLIOpt = (cwd: string, opts: any) => {
+  
+  const configOpt = String(opts.config || '');
+  let isFile = null, nluConfigRoot = '', nluFilePath = String(opts.config || '');
+  
+  if (configOpt) {
+    
+    if(!path.isAbsolute(opts.config)){
+      nluFilePath = path.resolve(cwd + '/' + String(configOpt || ''));
+    }
+    
+    try {
+      assert(fs.statSync(opts.config).isFile(), 'config path is not a file.');
+      isFile = true;
+    }
+    catch (err) {
+      
+      isFile = false;
+      nluFilePath = path.resolve(cwd + '/' + String(configOpt || '') + '/.nlu.json');
+      
+      try{
+        assert(fs.statSync(opts.config).isFile(), 'config path is not a file.');
+      }
+      catch(err){
+        log.error(
+          'You declared a config path using the -c option, but the following path is not a file:',
+          chalk.bold(opts.config)
+        );
+        throw chalk.magenta(err.message);
+      }
+    }
+    
+  }
+  
+  if (nluFilePath) {
+    nluConfigRoot = path.resolve(nluFilePath);
+    if(isFile){
+      nluConfigRoot = path.dirname(nluConfigRoot);
+    }
+  }
+  else {
+    nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+  }
+  
+  if (!nluConfigRoot) {
+    nluConfigRoot = cwd;
+  }
+  
+  if (!nluFilePath) {
+    nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
+  }
+  
+  return {nluFilePath, nluConfigRoot};
+};
+
 
 export const validateConfigFile = (data: NluConf) => {
 
