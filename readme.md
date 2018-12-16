@@ -81,6 +81,80 @@ If you use NVM and switch Node.js versions frequently, then add the following to
 
 <br>
 
+
+# Workflows
+
+There are two primary workflows:
+
+1. Workflow #1 - you have an NPM package on your fs in a folder, and you have other local packages you'd like to link to it.
+
+Simply run `nlu init` in the root of your package.
+
+```
+{
+  "npm-link-up": true,
+  "linkToSelf": false,
+  "linkToItself": false,
+  "searchRoots": [
+    ".."                    # we search one directory below
+  ],
+  "list": [
+    "xxx",
+    "yyy",
+    "zzz",
+  ]
+}
+```
+
+xxx,yyy,zzz are the package names of the packages you wish to link to your current/primary package.
+Using searchRoots:"..", means it will look for xxx,yyy,zzz within the parent directory of your primary package.
+
+
+2. Workflow #2 - You have a mono-repo with N npm packages in it. Something like:
+
+```
+ monorepo/
+    packagea/{package.json,.nlu.json}
+    packageb/{package.json,.nlu.json}
+    packagec/{package.json,.nlu.json}
+ .nlu.umbrella.json
+
+```
+
+In .nlu.umbrella.json, put this:
+
+```
+{
+  "npm-link-up": true,
+  "linkToSelf": false,
+  "linkToItself": false,
+  "searchRoots": [
+    "."
+  ],
+  "list": [
+    "packagea",
+    "packageb",
+    "packagec",
+  ]
+}
+```
+
+run `nlu init` from each of packagea,packageb,packagec, then in the root of the monorepo, run:
+
+```bash
+$ nlu run --umbrella -c .nlu.umbrella.json  # --umbrella option tells nlu not to put a node_modules folder in the mono-repo root
+```
+
+If you are missing deps, that's ok, just use --allow-missing
+
+
+
+
+
+
+
+
+
 ## Quick reference
 
 Note, command line options override the settings in `.nlu.json` files, as is typical.
