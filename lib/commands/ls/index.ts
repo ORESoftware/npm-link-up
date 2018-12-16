@@ -11,6 +11,7 @@ import options from "../run/cmd-line-opts";
 
 const dashdash = require('dashdash');
 import * as async from 'async';
+import {handleConfigCLIOpt} from '../../utils';
 
 const treeify = require('treeify');
 
@@ -32,17 +33,8 @@ if (opts.help) {
   process.exit(0);
 }
 
-opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
-
-try {
-  if (opts.config) {
-    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
-  }
-}
-catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', opts.config);
-  throw chalk.magenta(err.message);
-}
+const cwd = process.cwd();
+let {nluFilePath} = handleConfigCLIOpt(cwd,opts);
 
 const searchRoot = process.cwd();
 log.info('Searching for symlinked packages in this directory:', searchRoot, '\n');
@@ -53,7 +45,7 @@ const queue = async.queue<Task, any>((task, cb) => task(cb), 8);
 let key = `${path.basename(searchRoot)} (root)`;
 const treeObj = {[key]: {}};
 
-const ignore = new Set(['.git', '.idea', '.r2g', 'dist']);
+const ignore = new Set(['.git', '.idea', '.r2g', 'dist', 'build', '.vscode']);
 
 const searchDir = (dir: string, node: any, cb: EVCb<null>) => {
 

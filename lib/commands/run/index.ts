@@ -39,7 +39,7 @@ import {
   getDevKeys,
   getProdKeys,
   validateConfigFile,
-  validateOptions, mapConfigObject, getDepsListFromNluJSON
+  validateOptions, mapConfigObject, getDepsListFromNluJSON, handleConfigCLIOpt
 } from "../../utils";
 
 import {NluGlobalSettingsConf} from "../../index";
@@ -62,7 +62,8 @@ let opts: NLURunOpts, globalConf: NluGlobalSettingsConf, parser = dashdash.creat
 
 try {
   opts = parser.parse(process.argv);
-} catch (e) {
+}
+catch (e) {
   log.error(chalk.magenta('CLI parsing error:'), chalk.magentaBright.bold(e.message));
   process.exit(1);
 }
@@ -75,17 +76,6 @@ if (opts.help) {
   process.exit(0);
 }
 
-opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
-
-try {
-  if (opts.config) {
-    assert(fs.statSync(opts.config).isDirectory(), 'config path is not a directory.');
-  }
-}
-catch (err) {
-  log.error('You declared a config path but the following path is not a directory:', chalk.bold(opts.config));
-  throw chalk.magenta(err.message);
-}
 
 try {
   globalConf = require(globalConfigFilePath);
@@ -103,25 +93,10 @@ if (Array.isArray(globalConf)) {
   globalConf = {};
 }
 
-let nluConfigRoot: string = null;
+const {nluFilePath, nluConfigRoot} = handleConfigCLIOpt(cwd,opts);
 
-if (opts.config) {
-  nluConfigRoot = path.resolve(opts.config);
-}
-else {
-  nluConfigRoot = residence.findRootDir(cwd, '.nlu.json');
+let pkg, conf: NluConf, hasNLUJSONFile = false;
 
-}
-
-if (!nluConfigRoot) {
-  nluConfigRoot = cwd;
-}
-
-
-let pkg, conf: NluConf;
-
-let hasNLUJSONFile = false;
-const nluFilePath = path.resolve(nluConfigRoot + '/.nlu.json');
 
 try {
   conf = require(nluFilePath);
@@ -145,9 +120,10 @@ catch (e) {
 }
 
 if (!root) {
-  if (!opts.umbrella) {
-    log.error('You do not appear to be within an NPM project (no package.json could be found).');
-    log.error(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+  if (!(opts.all_packages || opts.umbrella)) {
+    log.warn('You do not appear to be within an NPM project (no package.json could be found).');
+    log.warn(' => Your present working directory is =>', chalk.magenta.bold(cwd));
+    log.warn('Perhaps you meant to use the', chalk.bold('--umbrella'), 'CLI option?');
     process.exit(1);
   }
   root = cwd;
@@ -157,18 +133,18 @@ try {
   pkg = require(path.resolve(root + '/package.json'));
 }
 catch (e) {
-
-  if (!opts.umbrella) {
+  
+  if (!(opts.umbrella || opts.all_packages)) {
     log.error('Bizarrely, you do not seem to have a "package.json" file in the root of your project.');
     log.error('Your project root is supposedly here:', chalk.magenta(root));
     log.error(e.message);
     process.exit(1);
   }
-
+  
   pkg = {
     name: '(root)'  // (dummy-root-package)
   };
-
+  
 }
 
 if (Array.isArray(conf.packages)) {
@@ -289,7 +265,7 @@ if (opts.dry_run) {
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
 const mainDep = map[mainProjectName] = {
   name: mainProjectName,
-
+  
   bin: null as any,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
@@ -301,9 +277,9 @@ const mainDep = map[mainProjectName] = {
 };
 
 async.autoInject({
-
+    
     readNodeModulesFolders(cb: EVCb<any>) {
-
+      
       const nm = path.resolve(root + '/node_modules');
       const keys = opts.production ? productionDepsKeys : allDepsKeys;
       
@@ -312,110 +288,113 @@ async.autoInject({
         if (err) {
           return cb(err);
         }
-
+        
         if (val === true) {
           mainDep.runInstall = true;
           opts.install_main = true;
         }
-
+        
         cb(null);
-
+        
       });
-
+      
     },
-
+    
     ensureNodeModules(readNodeModulesFolders: any, cb: EVCb<any>) {
-
+      
       if (!readNodeModulesFolders) {
         // no error reading node_modules dir
         return process.nextTick(cb);
       }
-
+      
       opts.install_main = true;
       // we have to install, because node_modules does not exist
       mkdirp(path.resolve(root + '/node_modules'), cb);
     },
-
+    
     npmCacheClean(cb: EVCb<any>) {
-
+      
       if (opts.dry_run) {
         return process.nextTick(cb);
       }
-
+      
       if (!opts.clear_all_caches) {
         return process.nextTick(cb);
       }
-
+      
       log.info(`Cleaning the NPM cache.`);
       cleanCache(cb);
     },
-
+    
     mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
       mapPaths(searchRoots, nluConfigRoot, cb);
     },
-
+    
     findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
-
+      
       let searchRoots = mapSearchRoots.slice(0);
-
+      
       if (opts.verbosity > 1) {
         log.info('Beginning to search for NPM projects on your filesystem.');
       }
-
+      
       if (opts.verbosity > 3) {
         log.info('NPM-Link-Up will be searching these roots for relevant projects:');
         log.info(chalk.magenta(util.inspect(searchRoots)));
       }
-
+      
       if (opts.verbosity > 2) {
         log.warning('Note that NPM-Link-Up may come across a project of yours that needs to search in directories');
         log.warning('not covered by your original search roots, and these new directories will be searched as well.');
       }
-
+      
       const status = {searching: true};
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status, conf);
-
+      
       searchRoots.forEach(sr => {
         q.push(cb => {
           findProject(sr, cb);
         });
       });
-
+      
       if (q.idle()) {
         return process.nextTick(cb, new Error('For some reason, no paths/items went onto the search queue.'));
       }
-
+      
       let first = true;
-
+      
       q.error = q.drain = (err?: any) => {
-
+        
         if (err) {
           status.searching = false;
           log.error(chalk.magenta('There was a search queue processing error.'));
         }
-
+        
         if (first) {
           q.kill();
           cb(err, {actuallyRan: true});
         }
-
+        
         first = false;
       };
-
+      
     },
-
+    
     runUtility(findItems: void, cb: EVCb<NluMap>) {
-
+      
       // TODO: filter excluded and completely excluded keys
-
+      
       const unfound = Array.from(totalList.keys()).filter(v => {
         return !map[v];
       });
-
+      
       if (unfound.length > 0) {
         log.warn(`The following packages could ${chalk.bold('not')} be located:`);
-        log.warn(unfound);
+        for(let i of unfound.keys()){
+          log.warn(chalk.bold(String(i+1), chalk.bold.green(unfound[i])));
+        }
+       
         if (!opts.allow_missing) {
           console.error();
           log.warn('The following paths (and their subdirectories) were searched:');
@@ -427,11 +406,11 @@ async.autoInject({
           process.exit(1);
         }
       }
-
+      
       let cleanMap: NluMap;
-
+      
       try {
-
+        
         if (opts.all_packages) {
           cleanMap = getCleanMapOfOnlyPackagesWithNluJSONFiles(mainProjectName, map);
         }
@@ -442,43 +421,43 @@ async.autoInject({
       catch (err) {
         return process.nextTick(cb, err);
       }
-
+      
       if (opts.dry_run) {
         return process.nextTick(() => {
           cb(null, cleanMap);
         });
       }
-
+      
       log.info('Beginning to actually link projects together...');
       runNPMLink(cleanMap, opts, err => {
         cb(err, cleanMap);
       });
     }
   },
-
+  
   (err: any, results: any) => {
-
+    
     if (err) {
       log.error('There was an error while running nlu run/add:');
       log.error(chalk.magenta(util.inspect(err.message || err)));
       return process.exit(1);
     }
-
+    
     if (results.runUtility) {
       // if runUtility is defined on results, then we actually ran the tool
       log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
     }
-
+    
     const cleanMap = results.runUtility;
-
-    if (cleanMap && typeof  cleanMap === 'object') {
-
+    
+    if (cleanMap && typeof cleanMap === 'object') {
+      
       const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
       const treeString = treeify.asTree(treeObj, true);
       const formattedStr = String(treeString).split('\n').map(function (line) {
         return '\t' + line;
       });
-
+      
       if (opts.verbosity > 1) {
         log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
         console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
@@ -489,11 +468,11 @@ async.autoInject({
     else {
       log.warn('Missing map object; could not create dependency tree visualization.');
     }
-
+    
     setTimeout(function () {
       process.exit(0);
     }, 100);
-
+    
   });
 
 
