@@ -3,7 +3,8 @@
 
 echo;
 my_args=( "$@" );
-first_arg="$1"
+first_arg="$1";
+shift 1;
 
 export nlu_name="[nlu/npm-link-up]"
 
@@ -25,7 +26,6 @@ if nlu_match_arg "--no-use-local" "${my_args[@]}"; then
   use_local="nope"
 fi
 
-
 if nlu_match_arg "--no-local" "${my_args[@]}"; then
   use_local="nope"
 fi
@@ -43,8 +43,8 @@ npm_local_bin="${project_root}/node_modules/.bin";
 
 if [[ "$use_local" == "yes" ]]; then
    if false; then
-    echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
-    echo "To not add local command line tools to the PATH, use the --no-local option.";
+        echo "$nlu_name NLU is addding local 'node_modules/.bin' executables to the PATH.";
+        echo "To not add local command line tools to the PATH, use the --no-local option.";
     fi
     export PATH="${npm_local_bin}:${PATH}";
 fi
@@ -55,50 +55,43 @@ fi
 
 if [[ "$first_arg" == "init" ]]; then
 
-    shift 1;
     node "${project_root}/dist/commands/init" "$@";
-
 
 elif [[ "$first_arg" == "ls" ]]; then
 
-    shift 1;
     node "${project_root}/dist/commands/ls" "$@";
 
 elif [[ "$first_arg" == "install" ]] || [[ "$first_arg" == "i" ]] ; then
 
-  npm i -s "$@" || {
+  npm i -s || {
     echo "npm install command failed.";
     exit 1;
   }
 
-  nlu run --install-main
+  nlu run --install-main "$@"
 
 elif [[ "$first_arg" == "config" ]]; then
 
-    shift 1;
     mkdir -p "$HOME/.nlu/global"
     node "${project_root}/dist/commands/config" "$@";
 
 elif [[ "$first_arg" == "add" ]]; then
 
-    shift 1;
     node "${project_root}/dist/commands/add" "$@";
 
 elif [[ "$first_arg" == "run" ]]; then
 
-    shift 1;
     node "${project_root}/dist/commands/run" "$@";
 
 elif [[ "$first_arg" == "update" ]]; then
 
-    shift 1;
     echo "$nlu_name 'nlu update' is not implemented.";
     echo "$nlu_name You should manually update your .nlu.json files.";
     exit 1;
 
 else
 
-    node "${project_root}/dist/commands/basic" "$@";
+    node "${project_root}/dist/commands/basic" "$my_args[@]";
 
 fi
 
