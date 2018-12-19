@@ -39,7 +39,7 @@ fi
 
 project_root="$(ores_get_project_root "$0")";
 npm_local_bin="${project_root}/node_modules/.bin";
-
+commands="${project_root}/dist/commands"
 
 if [[ "$use_local" == "yes" ]]; then
    if false; then
@@ -55,11 +55,11 @@ fi
 
 if [[ "$first_arg" == "init" ]]; then
 
-    node "${project_root}/dist/commands/init" "$@";
+    node "$commands/init" "$@";
 
 elif [[ "$first_arg" == "ls" ]]; then
 
-    node "${project_root}/dist/commands/ls" "$@";
+    node "$commands/ls" "$@";
 
 elif [[ "$first_arg" == "install" ]] || [[ "$first_arg" == "i" ]] ; then
 
@@ -73,15 +73,15 @@ elif [[ "$first_arg" == "install" ]] || [[ "$first_arg" == "i" ]] ; then
 elif [[ "$first_arg" == "config" ]]; then
 
     mkdir -p "$HOME/.nlu/global"
-    node "${project_root}/dist/commands/config" "$@";
+    node "$commands/config" "$@";
 
 elif [[ "$first_arg" == "add" ]]; then
 
-    node "${project_root}/dist/commands/add" "$@";
+    node "$commands/add" "$@";
 
 elif [[ "$first_arg" == "run" ]]; then
 
-    node "${project_root}/dist/commands/run" "$@";
+    node "$commands/run" "$@";
 
 elif [[ "$first_arg" == "update" ]]; then
 
