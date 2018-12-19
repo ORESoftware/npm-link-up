@@ -12,6 +12,7 @@ import addOpts from '../add/cmd-line-opts';
 import initOpts from '../init/cmd-line-opts';
 import runOpts from '../run/cmd-line-opts';
 import * as nluUtils from '../../utils';
+import * as stdio from 'json-stdio';
 
 process.once('exit', code => {
   log.info('Exiting with code:', code, '\n');
@@ -41,7 +42,13 @@ try {
 }
 
 if (opts.version) {
-  console.log(npmLinkUpPkg.version);
+  if(opts.json){
+    stdio.log(npmLinkUpPkg.version);
+  }
+  else{
+    console.log(npmLinkUpPkg.version);
+  }
+  
   process.exit(0);
 }
 

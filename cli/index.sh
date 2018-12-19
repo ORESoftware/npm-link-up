@@ -91,7 +91,7 @@ elif [[ "$first_arg" == "update" ]]; then
 
 else
 
-    node "${project_root}/dist/commands/basic" "$my_args[@]";
+    node "$commands/basic" "${my_args[@]}";
 
 fi
 

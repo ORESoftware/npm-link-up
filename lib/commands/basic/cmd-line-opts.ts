@@ -44,6 +44,15 @@ export default [
     default: false,
     hidden: true
   },
+  
+  {
+    names: ['json'],
+    type: 'bool',
+    help: 'Write stdout info as JSON (use json-stdio to parse it).',
+    default: false,
+    hidden: true,
+    env: 'nlu_setting_json'
+  },
 
   {
     names: ['bash-completion', 'completion'],
