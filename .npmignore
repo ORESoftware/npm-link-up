@@ -11,6 +11,7 @@ media
 .vscode
 scripts
 docs
+lib
 
 ### matching files
 *.md
@@ -18,8 +19,11 @@ docs
 *.log
 tsconfig*.json
 *.yml
+Dockerfile*
+
 
 ### files
+.nlu.json
 .gitignore
 .npmignore
 .npmrc
