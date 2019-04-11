@@ -109,7 +109,9 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       const matched = searchRoots.some(r => path.startsWith(r));
       
       if (!matched) {
-        log.error('The following dep', path, 'is not accessible for project at path:', dep.path)
+        log.error(`The following dep ${chalk.gray.bold(path)}`,
+          `is not accessible for project at path: ${chalk.gray.bold(dep.path)}`);
+        log.error(`The available searchRoots are:`, JSON.stringify(searchRoots));
       }
       
       return matched;
