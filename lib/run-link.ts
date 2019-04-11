@@ -103,10 +103,16 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     }
     
     const deps = dep.deps.map(getPath(map, dep, opts)); // map from package name to the desired package path
-  
+    
     const isAccessible = (path: string) => {
       const searchRoots = dep.searchRoots;
-      return searchRoots.some(r => path.startsWith(r));
+      const matched = searchRoots.some(r => path.startsWith(r));
+      
+      if (!matched) {
+        log.error('The following dep', path, 'is not accessible for project at path:', dep.path)
+      }
+      
+      return matched;
     };
     
     return deps.filter(Boolean).filter(d => {
@@ -120,17 +126,17 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       .map((d: string) => {
         
         const {path, name, bin} = map[d];
-  
+        
         if (dep.installedSet.has(name)) {
           throw new Error('Already installed a package with name: ' + name + ', into dep: ' + util.inspect(dep));
         }
-  
+        
         dep.installedSet.add(name);
-  
+        
         if (dep.linkedSet[path]) {
           throw new Error(`Already linked ${path} to dep: ` + util.inspect(dep));
         }
-  
+        
         dep.linkedSet[path] = map[d];
         
         if (path !== d) {

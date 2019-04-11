@@ -22,7 +22,13 @@ export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/globa
 export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
   
   const isAccessible = (p: string) => {
-    return dep.searchRoots.some(r => p.startsWith(r));
+    const matched = dep.searchRoots.some(r => p.startsWith(r));
+    
+    if(!matched){
+      log.error('The following dep', p, 'is not accessible for project at path:', dep.path)
+    }
+    
+    return matched;
   };
   
   return (packageName: string) => {

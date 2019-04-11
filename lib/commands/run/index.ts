@@ -466,6 +466,7 @@ async.autoInject({
       }).concat('');
       
       if (opts.verbosity > 1) {
+        console.log();
         log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
         // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
         console.log(chalk.white(formattedStr.join('\n')));
