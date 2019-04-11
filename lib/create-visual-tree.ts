@@ -8,99 +8,67 @@ import chalk from 'chalk';
 
 /////////////////////////////////////////////////////////////////////////////////
 
-
 export const createTree = function (map: NluMap, mainProjectPath: string, mainDep: NluMapItem, opts: NLURunOpts) {
   
-  if(!map[mainProjectPath]){
+  if (!map[mainProjectPath]) {
     throw new Error('No main project path in the map. Strange.');
   }
   
   const main = map[mainProjectPath];
   
+  if (main !== mainDep) {
+    throw new Error('Main should be equal to mainDep.');
+  }
+  
   const getKey = (dep: NluMapItem) => {
     return `${chalk.bold(dep.name)}:${dep.path}`;
   };
+  
+  type Compare = [string, NluMapItem];
+  // sorter, see: https://stackoverflow.com/questions/55624796/sort-object-entries-alphabetically-by-key
+  const sorter = ((a: Compare, b: Compare) => b[0] > a[0] ? 1 : (b[0] < a[0] ? -1 : 0));
   
   const root = {};
   let tree: NluVisualTree = {
     [getKey(main)]: root
   };
-
-  const add = (currTreeNode: any, dep: NluMapItem) => {
+  
+  const addDepthFirst = (currTreeNode: any, dep: NluMapItem) => {
     
-    for(let [k,v] of Object.entries(dep.linkedSet)){
-      // console.log({path: dep.path,key:k});
-      if(v.visited){
-        // currTreeNode[getKey(v)] = null;
+    for (let [k, v] of Object.entries(dep.linkedSet)) {
+      if (v.visited) {
         // currTreeNode[getKey(v)] = currTreeNode[getKey(v)] || null;
         continue;
       }
       v.visited = true;
-      add(currTreeNode[getKey(v)] = {}, v);
+      addDepthFirst(currTreeNode[getKey(v)] = {}, v);
     }
     
   };
   
-  add(root, main);
+  const queue: Array<[any,any]> = [];
+  
+  const addBreadthFirst = (currTreeNode: any, dep: NluMapItem) => {
+    
+    for (let [k, v] of Object.entries(dep.linkedSet)) {
+      if (v.visited) {
+        // currTreeNode[getKey(v)] = currTreeNode[getKey(v)] || null;
+        continue;
+      }
+      v.visited = true;
+      queue.push([currTreeNode[getKey(v)] = {}, v]);
+    }
+    
+    const popped = queue.shift();
+    if(popped){
+      addDepthFirst(...popped);
+    }
+  };
+  
+  addBreadthFirst(root, main);
   
   return tree;
   
 };
 
 
-export const createTreeOld = function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
-    
-    let tree: NluVisualTree = {
-      [name]: {}
-    };
-    
-    let createItem = function (key: string, obj: NluVisualTree, keys: Array<string>) {
-      
-      obj[key] = obj[key] || {};
-      
-      if (!(map[key] && Array.isArray(map[key].deps))) {
-        opts.verbosity > 1 && log.warning(`warning: no key named "${key}" in map.`);
-        return;
-      }
-      
-      if (!Array.isArray(map[key].deps)) {
-        log.warning(`warning: deps is not an array => ${util.inspect(map[key])}.`);
-        return;
-      }
-      
-      map[key].deps.forEach(function (d: string) {
-        
-        if (key !== d && keys.indexOf(d) < 0) {
-          keys.push(d);
-          let v2 = obj[key][d] = {};
-          createItem(d, v2, keys.slice(0));
-        }
-        else {
-          keys.push(d);
-          obj[key][d] = null;
-        }
-        
-      });
-      
-    };
-    
-    originalList.forEach( (k: string) => {
-      tree[name] && createItem(k, tree[name], [name]);
-    });
-    
-    let cleanTree =  (k: string, val: any) => {
-      
-      delete val[k];
-      
-      Object.keys(val).forEach(function (key) {
-        val[key] && cleanTree(key, val[key]);
-      });
-      
-    };
-    
-    // get rid of circular references (clean it visually)
-    cleanTree(name, tree[name]);
-    
-    return tree;
-    
-  };

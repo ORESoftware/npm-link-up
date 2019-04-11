@@ -311,7 +311,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
         .filter(Boolean)
         .join(' ');
       
-      if (opts.verbosity > 1) {
+      if (opts.verbosity > 2) {
         log.info(`First-pass script is => "${chalk.blueBright.bold(script)}"`);
       }
       
@@ -358,7 +358,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           
           const cmd = cmds.join(' && ');
           
-          if (opts.verbosity > 1) {
+          if (opts.verbosity > 2) {
             log.info(`Running this command for "${chalk.bold(dep.name)}" => '${chalk.blueBright(cmd)}'.`);
           }
           

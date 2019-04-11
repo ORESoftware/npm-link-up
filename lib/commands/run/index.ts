@@ -395,7 +395,7 @@ async.autoInject({
         return !map[v];
       });
       
-      if (unfound.length > 0) {
+      if (false && unfound.length > 0) {
         log.warn(`The following packages could ${chalk.bold('not')} be located:`);
         for (let i of unfound.keys()) {
           log.warn(chalk.bold(String(i + 1), chalk.bold.green(unfound[i])));
@@ -461,15 +461,15 @@ async.autoInject({
       const treeObj = createTree(cleanMap, mainDep.path, mainDep, opts);
       // const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
       const treeString = treeify.asTree(treeObj, true);
-      const formattedStr = String(treeString).split('\n').map(function (line) {
-        return '\t' + line;
-      });
+      const formattedStr = [''].concat(String(treeString).split('\n')).map(function (line) {
+        return ' look here: \t' + line;
+      }).concat('');
       
       if (opts.verbosity > 1) {
         log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
-        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
         console.log(chalk.white(formattedStr.join('\n')));
-        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       }
     }
     else {

@@ -43,7 +43,10 @@ export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
       }
     }
     if(!path && !opts.allow_missing){
-      throw new Error('No package could be located on disk for package name: ' + packageName);
+      log.error(`No package could be located on disk for package name: '${chalk.bold(packageName)}'.`);
+      log.error(`To overcome this problem, either use the ${chalk.bold('--allow-missing')} flag, ` +
+        'or include the desired package in your searchRoots in .nlu.json.');
+      process.exit(1);
     }
     return path;
   }
