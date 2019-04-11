@@ -263,7 +263,7 @@ if (opts.dry_run) {
 
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
-const mainDep = map[mainProjectName] = {
+const mainDep = map[root] = {
   name: mainProjectName,
   
   bin: null as any,  // conf.bin ?
@@ -415,7 +415,7 @@ async.autoInject({
           cleanMap = getCleanMapOfOnlyPackagesWithNluJSONFiles(mainProjectName, map);
         }
         else {
-          cleanMap = getCleanMap(mainProjectName, map);
+          cleanMap = getCleanMap(mainDep, map);
         }
       }
       catch (err) {
