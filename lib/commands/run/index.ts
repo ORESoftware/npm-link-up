@@ -76,7 +76,6 @@ if (opts.help) {
   process.exit(0);
 }
 
-
 try {
   globalConf = require(globalConfigFilePath);
 }
@@ -93,10 +92,9 @@ if (Array.isArray(globalConf)) {
   globalConf = {};
 }
 
-const {nluFilePath, nluConfigRoot} = handleConfigCLIOpt(cwd,opts);
+const {nluFilePath, nluConfigRoot} = handleConfigCLIOpt(cwd, opts);
 
 let pkg, conf: NluConf, hasNLUJSONFile = false;
-
 
 try {
   conf = require(nluFilePath);
@@ -237,7 +235,7 @@ const originalList = list.slice(0);
 if (!list.includes(mainProjectName)) {
   // always include the very project's name
   if (!opts.umbrella) {
-    list.push(mainProjectName);
+    list.push(mainProjectName); // TODO this might be causing the project to always link to itself?
   }
 }
 
@@ -263,9 +261,8 @@ if (opts.dry_run) {
 
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
-const mainDep = map[mainProjectName] = {
+const mainDep = map[root] = {
   name: mainProjectName,
-  
   bin: null as any,  // conf.bin ?
   hasNLUJSONFile,
   isMainProject: true,
@@ -273,7 +270,10 @@ const mainDep = map[mainProjectName] = {
   runInstall: conf.alwaysReinstall,
   path: root,
   deps: list,
-  package: pkg
+  package: pkg,
+  searchRoots: null as Array<string>,
+  installedSet: new Set(),
+  linkedSet: {}
 };
 
 async.autoInject({
@@ -328,7 +328,15 @@ async.autoInject({
     
     mapSearchRoots(npmCacheClean: any, cb: EVCb<any>) {
       opts.verbosity > 3 && log.info(`Mapping original search roots from your root project's "searchRoots" property.`);
-      mapPaths(searchRoots, nluConfigRoot, cb);
+      mapPaths(searchRoots, nluConfigRoot, (err, roots) => {
+        
+        if (err) {
+          return cb(err);
+        }
+        
+        mainDep.searchRoots = roots.slice(0);
+        cb(err, roots);
+      });
     },
     
     findItems(mapSearchRoots: Array<string>, cb: EVCb<any>) {
@@ -353,9 +361,7 @@ async.autoInject({
       const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status, conf);
       
       searchRoots.forEach(sr => {
-        q.push(cb => {
-          findProject(sr, cb);
-        });
+        q.push(cb => findProject(sr, cb));
       });
       
       if (q.idle()) {
@@ -389,12 +395,12 @@ async.autoInject({
         return !map[v];
       });
       
-      if (unfound.length > 0) {
+      if (false && unfound.length > 0) {
         log.warn(`The following packages could ${chalk.bold('not')} be located:`);
-        for(let i of unfound.keys()){
-          log.warn(chalk.bold(String(i+1), chalk.bold.green(unfound[i])));
+        for (let i of unfound.keys()) {
+          log.warn(chalk.bold(String(i + 1), chalk.bold.green(unfound[i])));
         }
-       
+        
         if (!opts.allow_missing) {
           console.error();
           log.warn('The following paths (and their subdirectories) were searched:');
@@ -415,7 +421,7 @@ async.autoInject({
           cleanMap = getCleanMapOfOnlyPackagesWithNluJSONFiles(mainProjectName, map);
         }
         else {
-          cleanMap = getCleanMap(mainProjectName, map);
+          cleanMap = getCleanMap(mainDep, map, opts);
         }
       }
       catch (err) {
@@ -451,18 +457,20 @@ async.autoInject({
     const cleanMap = results.runUtility;
     
     if (cleanMap && typeof cleanMap === 'object') {
-      
-      const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
+  
+      const treeObj = createTree(cleanMap, mainDep.path, mainDep, opts);
+      // const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
       const treeString = treeify.asTree(treeObj, true);
-      const formattedStr = String(treeString).split('\n').map(function (line) {
-        return '\t' + line;
-      });
+      const formattedStr = [''].concat(String(treeString).split('\n')).map(function (line) {
+        return ' look here: \t' + line;
+      }).concat('');
       
       if (opts.verbosity > 1) {
+        console.log();
         log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
-        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
         console.log(chalk.white(formattedStr.join('\n')));
-        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       }
     }
     else {

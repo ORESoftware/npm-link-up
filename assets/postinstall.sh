@@ -2,7 +2,7 @@
 
 set -e;
 
-if [ "$skip_postinstall" == "yes" ]; then
+if [[ "$skip_postinstall" == "yes" ]]; then
     echo "skipping nlu postinstall routine.";
     exit 0;
 fi
@@ -44,10 +44,13 @@ mkdir -p "$HOME/.oresoftware/bash" && {
 }
 
 (
+
+  if [[ -f "node_modules/@oresoftware/shell/assets/shell.sh" ]]; then
     cat "node_modules/@oresoftware/shell/assets/shell.sh" > "$HOME/.oresoftware/shell.sh" && {
         echo "Successfully copied @oresoftware/shell/assets/shell.sh to $HOME/.oresoftware/shell.sh";
         exit 0;
     }
+  fi
 
     curl -H 'Cache-Control: no-cache' \
     "https://raw.githubusercontent.com/oresoftware/shell/master/assets/shell.sh?$(date +%s)" \

@@ -5,3 +5,4 @@
 * what happens when a user has cloned a repo in more than one place on the filesystem?
 
 
+* fix: The following packages could ${chalk.bold('not')} be located
