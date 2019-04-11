@@ -75,6 +75,14 @@ nlu(){
    command nlu "$@";
 }
 
+link-up(){
+   nlu "$@";
+}
+
+link_up(){
+   nlu "$@";
+}
+
 
 npmlinkup(){
    nlu "$@";
