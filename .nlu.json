@@ -17,7 +17,8 @@
     "@oresoftware/shell",
     "prepend-transform",
     "residence",
-    "json-stdio"
+    "json-stdio",
+    "clean-trace"
   ],
   "localSettings": {
     "bar": "23",

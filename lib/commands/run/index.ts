@@ -444,8 +444,11 @@ async.autoInject({
   (err: any, results: any) => {
     
     if (err) {
+      if(!opts.debug){
+        err = err.message || err;
+      }
       log.error('There was an error while running nlu run/add:');
-      log.error(chalk.magenta(util.inspect(err.message || err)));
+      log.error(chalk.magenta(typeof err === 'string' ? err : util.inspect(err)));
       return process.exit(1);
     }
     
