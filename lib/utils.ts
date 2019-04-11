@@ -25,7 +25,8 @@ export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
     const matched = dep.searchRoots.some(r => p.startsWith(r));
     
     if (!matched) {
-      log.error('The following dep', p, 'is not accessible for project at path:', dep.path)
+      log.error('The following dep', p, 'is not accessible for project at path:', dep.path);
+      log.error(`The available searchRoots are:`, JSON.stringify(dep.searchRoots));
     }
     
     return matched;
@@ -232,6 +233,7 @@ export const mapConfigObject = (obj: any) => {
 const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>): boolean => {
   
   const d = dep.package.dependencies || {};
+  const cwd = process.cwd();
   return Object.keys(d).some(v => {
     const desiredVersion = d[v];
     
@@ -255,7 +257,7 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>
       // }
       
       if (!/.*[0-9]{1,6}\.[0-9]{1,6}\.[0-9]{1,6}/.test(desiredVersion)) {
-        log.warn(`In package.json located here: ${chalk.bold(dep.path)},`,
+        log.warn(`In package.json located here: ./${chalk.bold(path.relative(cwd,dep.path))},`,
           `the following package version did not match a semverish regex:`,
           `'${chalk.bold(desiredVersion)}', for package with name: ${chalk.bold(v)}`);
         return false;
