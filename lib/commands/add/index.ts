@@ -224,7 +224,7 @@ async.autoInject({
       let cleanMap;
 
       try {
-        cleanMap = getCleanMap(mainProjectName, getMatchingProjects);
+        cleanMap = getCleanMap(mainProjectName, getMatchingProjects, opts);
       }
       catch (err) {
         return process.nextTick(cb, err);

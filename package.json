@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.1.321",
+  "version": "0.1.323",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh"
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/ORESoftware/npm-link-up#readme",
   "dependencies": {
+    "@oresoftware/envstr": "0.0.1001",
     "@oresoftware/shell": "latest",
     "ajv": "^6.5.1",
     "async": "^2.6.1",

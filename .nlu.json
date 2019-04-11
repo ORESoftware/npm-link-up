@@ -13,6 +13,7 @@
     "/.git/"
   ],
   "list": [
+    "@oresoftware/envstr",
     "@oresoftware/shell",
     "prepend-transform",
     "residence",

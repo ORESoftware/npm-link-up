@@ -9,7 +9,8 @@
 //
 // console.log('this issss a dummy chan for commit history.');
 
+const sorter = (a,b) => b[0] > a[0] ? 1 :  (b[0] < a[0] ? -1 : 0);
 
-for(let v of [1,2,3]){
-  console.log(v);
+for(let [k,v] of Object.entries({a:1,b:2}).sort(sorter)){
+  console.log({k,v});
 }
