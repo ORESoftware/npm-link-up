@@ -1,13 +1,54 @@
 'use strict';
 
 import util = require('util');
-import {NluMap, NluVisualTree} from "./index";
+import {NluMap, NluMapItem, NluVisualTree} from "./index";
 import log from './logging';
 import {NLURunOpts} from "./commands/run/cmd-line-opts";
+import chalk from 'chalk';
 
 /////////////////////////////////////////////////////////////////////////////////
 
-export const createTree = function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
+
+export const createTree = function (map: NluMap, mainProjectPath: string, mainDep: NluMapItem, opts: NLURunOpts) {
+  
+  if(!map[mainProjectPath]){
+    throw new Error('No main project path in the map. Strange.');
+  }
+  
+  const main = map[mainProjectPath];
+  
+  const getKey = (dep: NluMapItem) => {
+    return `${chalk.bold(dep.name)}:${dep.path}`;
+  };
+  
+  const root = {};
+  let tree: NluVisualTree = {
+    [getKey(main)]: root
+  };
+
+  const add = (currTreeNode: any, dep: NluMapItem) => {
+    
+    for(let [k,v] of Object.entries(dep.linkedSet)){
+      // console.log({path: dep.path,key:k});
+      if(v.visited){
+        // currTreeNode[getKey(v)] = null;
+        // currTreeNode[getKey(v)] = currTreeNode[getKey(v)] || null;
+        continue;
+      }
+      v.visited = true;
+      add(currTreeNode[getKey(v)] = {}, v);
+    }
+    
+  };
+  
+  add(root, main);
+  
+  return tree;
+  
+};
+
+
+export const createTreeOld = function (map: NluMap, name: string, originalList: Array<string>, opts: NLURunOpts) {
     
     let tree: NluVisualTree = {
       [name]: {}

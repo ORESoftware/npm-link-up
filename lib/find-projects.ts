@@ -297,7 +297,8 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 deps: deps,
                 package: pkg,
                 searchRoots: null as Array<string>,
-                installedSet: new Set()
+                installedSet: new Set(),
+                linkedSet: {}
               };
               
               const nm = path.resolve(dirname + '/node_modules');

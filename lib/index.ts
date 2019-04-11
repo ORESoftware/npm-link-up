@@ -60,7 +60,9 @@ export interface NluMapItem {
   isLinked?: boolean,
   package: PkgJSON,
   searchRoots: Array<string>,
-  installedSet: Set<string>
+  installedSet: Set<string>,
+  linkedSet: {[key: string]: NluMapItem},
+  visited?: boolean
 }
 
 export interface NluMap {

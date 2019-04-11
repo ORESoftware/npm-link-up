@@ -235,7 +235,7 @@ const originalList = list.slice(0);
 if (!list.includes(mainProjectName)) {
   // always include the very project's name
   if (!opts.umbrella) {
-    list.push(mainProjectName);
+    list.push(mainProjectName); // TODO this might be causing the project to always link to itself?
   }
 }
 
@@ -272,7 +272,8 @@ const mainDep = map[root] = {
   deps: list,
   package: pkg,
   searchRoots: null as Array<string>,
-  installedSet: new Set()
+  installedSet: new Set(),
+  linkedSet: {}
 };
 
 async.autoInject({
@@ -456,8 +457,9 @@ async.autoInject({
     const cleanMap = results.runUtility;
     
     if (cleanMap && typeof cleanMap === 'object') {
-      
-      const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
+  
+      const treeObj = createTree(cleanMap, mainDep.path, mainDep, opts);
+      // const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
       const treeString = treeify.asTree(treeObj, true);
       const formattedStr = String(treeString).split('\n').map(function (line) {
         return '\t' + line;

@@ -103,6 +103,11 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     }
     
     const deps = dep.deps.map(getPath(map, dep, opts)); // map from package name to the desired package path
+  
+    const isAccessible = (path: string) => {
+      const searchRoots = dep.searchRoots;
+      return searchRoots.some(r => path.startsWith(r));
+    };
     
     return deps.filter(Boolean).filter(d => {
         
@@ -110,18 +115,33 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           log.warning('Map for key => "' + d + '" is not defined.');
           return false;
         }
-        return map[d] && map[d].isLinked;
+        return map[d] && map[d].isLinked && isAccessible(map[d].path);
       })
       .map((d: string) => {
         
         const {path, name, bin} = map[d];
+  
+        if (dep.installedSet.has(name)) {
+          throw new Error('Already installed a package with name: ' + name + ', into dep: ' + util.inspect(dep));
+        }
+  
+        dep.installedSet.add(name);
+  
+        if (dep.linkedSet[path]) {
+          throw new Error(`Already linked ${path} to dep: ` + util.inspect(dep));
+        }
+  
+        dep.linkedSet[path] = map[d];
         
-        if(path !== d){
+        if (path !== d) {
           throw new Error('The "path" field and the map entry should be the same.');
         }
         // return ` npm link ${d} -f `;
-        return ` mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" ` +
-          ` && ln -sf "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)}`;
+        return ` mkdir -p "node_modules/${name}" &&
+                 rm -rf "node_modules/${name}" &&
+                 mkdir -p "node_modules/${name}" &&
+                 rm -rf "node_modules/${name}"  &&
+                 ln -sf "${path}" "node_modules/${name}" ${getBinMap(bin, path, name)} `;
       });
     
   };
@@ -186,11 +206,21 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
         
         map[k].installedSet.add(name);
         
+        if (map[k].linkedSet[path]) {
+          throw new Error(`Already linked ${path} to dep: ` + util.inspect(map[k]));
+        }
+        
+        map[k].linkedSet[path] = dep;
+        
         if (p !== k) {
           throw new Error(`Paths should be the same: [1] '${p}', [2] '${k}'.`);
         }
-        return ` cd "${p}" && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
-          ` && rm -rf "node_modules/${name}" && ln -sf "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)} `;
+        return ` cd "${p}" &&
+               mkdir -p "node_modules/${name}" &&
+               rm -rf "node_modules/${name}" &&
+               mkdir -p "node_modules/${name}" &&
+               rm -rf "node_modules/${name}" &&
+               ln -sf "${path}" "node_modules/${name}"  ${getBinMap(bin, path, name)} `;
       });
   };
   
@@ -224,7 +254,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       return ` && mkdir -p "node_modules/${dep.name}" ` +
         ` && rm -rf "node_modules/${dep.name}" && mkdir -p "node_modules/${dep.name}" ` +
         ` && rm -rf "node_modules/${dep.name}" ` +
-        ` && ln -s "${dep.path}" "node_modules/${dep.name}" `;
+        ` && ln -sf "${dep.path}" "node_modules/${dep.name}" `;
     }
   };
   
@@ -359,10 +389,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           if (err) {
             log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
           }
-          else {
-            if (opts.verbosity > 1) {
-              log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
-            }
+          else if (opts.verbosity > 1) {
+            log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
           }
           
           cb(err, {
