@@ -58,7 +58,9 @@ export interface NluMapItem {
   path: string,
   deps: Array<string>
   isLinked?: boolean,
-  package: PkgJSON
+  package: PkgJSON,
+  searchRoots: Array<string>,
+  installedSet: Set<string>
 }
 
 export interface NluMap {

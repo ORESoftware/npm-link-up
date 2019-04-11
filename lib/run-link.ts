@@ -13,7 +13,7 @@ import async = require('async');
 
 //project
 import log from './logging';
-import {determineIfReinstallIsNeeded, flattenDeep, getDevKeys} from "./utils";
+import {determineIfReinstallIsNeeded, flattenDeep, getDevKeys, getPath} from "./utils";
 import * as path from "path";
 
 interface BinFieldObject {
@@ -55,7 +55,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     return Object.keys(map).every(k => map[k].isLinked);
   };
   
-  const getCountOfUnlinkedDeps =  (dep: NluMapItem) => {
+  const getCountOfUnlinkedDeps = (dep: NluMapItem) => {
     return dep.deps.filter(d => {
       if (!map[d]) {
         log.warning(`there is no dependency named '${d}' in the map.`);
@@ -72,8 +72,8 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     let dep;
     let count = null;
     
-    for (let name of Object.keys(map)) {
-      let d = map[name];
+    for (let dir of Object.keys(map)) {
+      let d = map[dir];
       if (!d.isLinked) {
         if (!count) {
           dep = d;
@@ -96,13 +96,15 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     return dep;
   };
   
-  const getNPMLinkList = (deps: Array<string>, dep: NluMapItem): Array<string> => {
+  const getNPMLinkList = (dep: NluMapItem): Array<string> => {
     
     if (opts.umbrella && dep.isMainProject) {
       return [];
     }
     
-    return deps.filter(d => {
+    const deps = dep.deps.map(getPath(map, dep, opts)); // map from package name to the desired package path
+    
+    return deps.filter(Boolean).filter(d => {
         
         if (!map[d]) {
           log.warning('Map for key => "' + d + '" is not defined.');
@@ -112,12 +114,14 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       })
       .map((d: string) => {
         
-        const path = map[d].path;
-        const bin = map[d].bin;
+        const {path, name, bin} = map[d];
         
+        if(path !== d){
+          throw new Error('The "path" field and the map entry should be the same.');
+        }
         // return ` npm link ${d} -f `;
-        return ` mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" && mkdir -p "node_modules/${d}" && rm -rf "node_modules/${d}" ` +
-          ` && ln -sf "${path}" "node_modules/${d}" ` + ` ${getBinMap(bin, path, d)}`;
+        return ` mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" ` +
+          ` && ln -sf "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)}`;
       });
     
   };
@@ -144,21 +148,47 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       .join(' && ');
   };
   
-  const getCommandListOfLinked = (name: string) => {
+  const getCommandListOfLinked = (dep: NluMapItem) => {
     
-    const path = map[name] && map[name].path;
-    const bin = map[name] && map[name].bin;
+    const name = dep.name;
+    const path = dep.path;
+    const bin = map[path] && map[path].bin;
     
     if (!path) {
-      log.error(`missing path for dependency with name "${name}"`);
+      log.error(`missing "path" field for dependency with name "${name}"`);
       return process.exit(1);
     }
     
+    if (!bin) {
+      log.warn(`missing "bin" field for dependency with name "${name}"`);
+      // return process.exit(1);
+    }
+    
+    if (dep.bin !== bin) {
+      throw new Error('"bin" fields do not match => ' + util.inspect(dep));
+    }
+    
+    const isAccessible = (dep: NluMapItem) => {
+      const searchRoots = dep.searchRoots;
+      return searchRoots.some(r => path.startsWith(r));
+    };
+    
     return Object.keys(map).filter(k => {
-        return map[k].isLinked && map[k].deps.includes(name);
+        return map[k].isLinked && map[k].deps.includes(name) && isAccessible(map[k]);
       })
       .map(k => {
+        
         const p = `${map[k].path}`;
+        
+        if (map[k].installedSet.has(name)) {
+          throw new Error('Already installed a package with name: ' + name + ', into dep: ' + util.inspect(map[k]));
+        }
+        
+        map[k].installedSet.add(name);
+        
+        if (p !== k) {
+          throw new Error(`Paths should be the same: [1] '${p}', [2] '${k}'.`);
+        }
         return ` cd "${p}" && mkdir -p "node_modules/${name}" && rm -rf "node_modules/${name}" && mkdir -p "node_modules/${name}" ` +
           ` && rm -rf "node_modules/${name}" && ln -sf "${path}" "node_modules/${name}" ` + ` ${getBinMap(bin, path, name)} `;
       });
@@ -238,7 +268,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
         dep.runInstall = true;
       }
       
-      const deps = getNPMLinkList(dep.deps, dep);
+      const deps = getNPMLinkList(dep);
       const links = deps.length > 0 ? ' && ' + deps.join(' && ') : '';
       
       const script = [
@@ -286,11 +316,11 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           return cb({code, dep, error: stderr});
         }
         
-        dep.isLinked = map[dep.name].isLinked = true;
+        dep.isLinked = map[dep.path].isLinked = true;
         
         const linkPreviouslyUnlinked = function (cb: EVCb<any>) {
           
-          const cmds = getCommandListOfLinked(dep.name);
+          const cmds = getCommandListOfLinked(dep);
           
           if (!cmds.length) {
             return process.nextTick(cb);

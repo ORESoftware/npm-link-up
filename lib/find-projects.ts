@@ -281,7 +281,12 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 totalList.set(item, true);
               });
               
-              const m = map[pkg.name] = {
+              if(map[dirname]){
+                log.warn('Map already has key: ' + dirname);
+                return process.nextTick(cb);
+              }
+              
+              const m = map[dirname] = {
                 name: pkg.name,
                 bin: pkg.bin || null,
                 hasNLUJSONFile,
@@ -290,8 +295,9 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
                 deps: deps,
-                package: pkg
-                
+                package: pkg,
+                searchRoots: null as Array<string>,
+                installedSet: new Set()
               };
               
               const nm = path.resolve(dirname + '/node_modules');
@@ -307,19 +313,19 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                     return process.nextTick(cb, null);
                   }
                   
-                  mapPaths(searchRoots, dirname, function (err: any, roots: Array<string>) {
+                  mapPaths(searchRoots, dirname,  (err: any, roots: Array<string>) => {
                     
                     if (err) {
                       return cb(err);
                     }
                     
+                    m.searchRoots = roots.slice(0);
+                    
                     roots.forEach(r => {
                       if (isPathSearchable(r)) {
                         log.info(chalk.cyan('Given the .nlu.json file at this path:'), chalk.bold(dirname));
                         log.info(chalk.cyan('We are adding this to the search queue:'), chalk.bold(r));
-                        q.push(cb => {
-                          findProject(r, cb);
-                        });
+                        q.push(cb => findProject(r, cb));
                       }
                     });
                     

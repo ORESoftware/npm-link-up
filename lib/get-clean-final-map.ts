@@ -1,10 +1,11 @@
 'use strict';
 
 import {NluMap, NluMapItem} from "./index";
+import {getPath} from "./utils";
 
 ////////////////////////////////////////////////////////////////////////////
 
-export const getCleanMap =  (mainDep: NluMapItem, map: NluMap): NluMap => {
+export const getCleanMap =  (mainDep: NluMapItem, map: NluMap, opts: any): NluMap => {
   
   const newMap: NluMap = {};
   
@@ -13,21 +14,22 @@ export const getCleanMap =  (mainDep: NluMapItem, map: NluMap): NluMap => {
     if (map[v] && !newMap[v]) {
       
       newMap[v] = map[v];
-      
       const list = map[v].deps;
       
       if (!Array.isArray(list)) {
         throw new Error('list should be an array, but is not an array type: ' + JSON.stringify(map[v]));
       }
       
-      list.forEach(function (l) {
-        getRelevantItems(l);
+      const mapPath = getPath(map, newMap[v], opts);
+      
+      list.forEach(l => {
+        getRelevantItems(mapPath(l));
       });
     }
     
   };
   
-  getRelevantItems(mainDep.name);
+  getRelevantItems(mainDep.path);
   
   
   return newMap;

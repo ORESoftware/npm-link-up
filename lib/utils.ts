@@ -5,7 +5,7 @@ import Ajv = require('ajv');
 
 const schema = require('../assets/nlu.schema.json');
 import log from "./logging";
-import {EVCb, NluConf, NluMapItem, PkgJSON} from "./index";
+import {EVCb, NluConf, NluMap, NluMapItem, PkgJSON} from "./index";
 import chalk from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -18,6 +18,37 @@ import * as residence from 'residence';
 ////////////////////////////////////////////////////////////////////
 
 export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/global/settings.json');
+
+export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
+  
+  const isAccessible = (p: string) => {
+    return dep.searchRoots.some(r => p.startsWith(r));
+  };
+  
+  return (packageName: string) => {
+    
+    let path = null;
+    for(let [key,val] of Object.entries(map)){
+      if(val.name === packageName){
+        if(val.path !== key){
+          throw new Error('Key of map should be the name as the path in value object => ' + util.inspect(val));
+        }
+        if(!isAccessible(val.path)){
+          continue;
+        }
+        if(path){
+          throw new Error('Path should only be defined once.');
+        }
+        path = val.path;
+      }
+    }
+    if(!path && !opts.allow_missing){
+      throw new Error('No package could be located on disk for package name: ' + packageName);
+    }
+    return path;
+  }
+  
+};
 
 
 export const handleConfigCLIOpt = (cwd: string, opts: any) => {
