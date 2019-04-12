@@ -22,7 +22,7 @@ export const getIgnore = (conf: NLUDotJSON, opts: any): Array<RegExp> => {
   
   if (ignore.length > 0) {
     opts.verbosity > 1 &&
-    log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions => '));
+    log.info(chalk.underline('NPM-Link-Up will ignore paths that match any of the following regular expressions:'));
     ignore.forEach((item: RegExp) => {
       opts.verbosity > 1 && log.warning(`ignored => ${item}`);
     });

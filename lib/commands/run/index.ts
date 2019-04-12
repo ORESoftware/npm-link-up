@@ -191,7 +191,7 @@ if (!mainProjectName) {
 }
 
 if (opts.verbosity > 0) {
-  log.info(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`);
+  log.info(chalk.bold(`We are running the "npm-link-up" tool for your project named "${chalk.magenta(mainProjectName)}".`));
 }
 
 const productionDepsKeys = getProdKeys(pkg);
@@ -248,7 +248,7 @@ list.forEach(l => {
 const ignore = getIgnore(conf, opts);
 
 originalList.forEach((item: string) => {
-  if (opts.verbosity > 0) {
+  if (opts.verbosity > 2) {
     log.info(`The following dep will be linked to this project => "${chalk.gray.bold(item)}".`);
   }
 });
@@ -343,15 +343,15 @@ async.autoInject({
       
       let searchRoots = mapSearchRoots.slice(0);
       
-      if(searchRoots.length < 1){
+      if (searchRoots.length < 1) {
         return process.nextTick(cb, new Error(`
            There were no searchRoots present in the main config, ${chalk.italic.underline('are your env variables defined?')}
-           The raw contents of the searchRoots field in ${chalk.bold(nluFilePath)} is: ${chalk.bold(JSON.stringify(conf.searchRoots))}
+           The raw contents of the 'searchRoots' field in ${chalk.bold(nluFilePath)} is: ${chalk.bold(JSON.stringify(conf.searchRoots))}
         `));
       }
       
       if (opts.verbosity > 1) {
-        log.info('Beginning to search for NPM projects on your filesystem.');
+        log.good(chalk.blueBright('Beginning to search for NPM projects on your filesystem.'));
       }
       
       if (opts.verbosity > 3) {
@@ -365,7 +365,7 @@ async.autoInject({
       }
       
       const status = {searching: true};
-      const findProject = makeFindProject(mainProjectName, totalList, map, ignore, opts, status, conf);
+      const findProject = makeFindProject(mainDep, totalList, map, ignore, opts, status, conf);
       
       searchRoots.forEach(sr => {
         q.push(cb => findProject(sr, cb));
@@ -443,7 +443,7 @@ async.autoInject({
         });
       }
       
-      log.info('Beginning to actually link projects together...');
+      log.good(chalk.blueBright('Beginning to actually link projects together...'));
       runNPMLink(cleanMap, opts, err => {
         cb(err, cleanMap);
       });
@@ -453,7 +453,7 @@ async.autoInject({
   (err: any, results: any) => {
     
     if (err) {
-      if(!opts.debug){
+      if (!opts.debug) {
         err = err.message || err;
       }
       log.error('There was an error while running nlu run/add:');
@@ -461,32 +461,48 @@ async.autoInject({
       return process.exit(1);
     }
     
-    if (results.runUtility) {
-      // if runUtility is defined on results, then we actually ran the tool
-      log.good(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
+    const cleanMap = results.runUtility as NluMap;
+    
+    if (!(cleanMap && typeof cleanMap === 'object')) {
+      log.warn('Missing map object; could not create dependency tree visualization.');
+      return process.exit(1);
     }
     
-    const cleanMap = results.runUtility;
     
-    if (cleanMap && typeof cleanMap === 'object') {
-  
-      const treeObj = createTree(cleanMap, mainDep.path, mainDep, opts);
-      // const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
-      const treeString = treeify.asTree(treeObj, true);
-      const formattedStr = [''].concat(String(treeString).split('\n')).map(function (line) {
-        return ' look here: \t' + line;
-      }).concat('');
-      
-      if (opts.verbosity > 1) {
-        console.log();
-        log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
-        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-        console.log(chalk.white(formattedStr.join('\n')));
-        // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    let allDepsLinked = true;
+    
+    
+    for (let v of Object.values(cleanMap)) {
+      for(let d of v.deps){
+        if(!v.installedSet.has(d)){
+          allDepsLinked = false;
+          log.warn(`'${chalk.gray.bold(d)}' was not linked to ${chalk.gray.bold(v.path)} (${v.name})`);
+        }
       }
     }
-    else {
-      log.warn('Missing map object; could not create dependency tree visualization.');
+  
+    if(allDepsLinked){
+      log.veryGood(chalk.green.underline('NPM-Link-Up run was successful. All done.'));
+    }
+    else{
+      log.good(chalk.blue.underline('NPM-Link-Up run was successful, ' +
+        'but a few deps could not be linked most likely because they could not be located on disk.'));
+    }
+    
+    
+    
+    
+    const treeObj = createTree(cleanMap, mainDep.path, mainDep, opts);
+    // const treeObj = createTree(cleanMap, mainProjectName, originalList, opts);
+    const treeString = treeify.asTree(treeObj, true);
+    const formattedStr = [''].concat(String(treeString).split('\n')).map(function (line) {
+      return ' look here: \t' + line;
+    }).concat('');
+    
+    if (opts.verbosity > 1) {
+      console.log();
+      log.info(chalk.cyan.bold('NPM-Link-Up results as a visual:'), '\n');
+      console.log(chalk.white(formattedStr.join('\n')));
     }
     
     setTimeout(function () {

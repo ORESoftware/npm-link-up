@@ -98,6 +98,12 @@ export default [
     default: false,
     env: 'nlu_setting_force'
   },
+  
+  {
+    names: ['ignore','i'],
+    type: 'arrayOfString',
+    help: 'Ignore given file path(s) during search.',
+  },
 
   {
     names: ['install-all', 'install:all'],

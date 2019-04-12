@@ -33,18 +33,18 @@ export const createTree = function (map: NluMap, mainProjectPath: string, mainDe
     [getKey(main)]: root
   };
   
-  const addDepthFirst = (currTreeNode: any, dep: NluMapItem) => {
-    
-    for (let [k, v] of Object.entries(dep.linkedSet)) {
-      if (v.visited) {
-        // currTreeNode[getKey(v)] = currTreeNode[getKey(v)] || null;
-        continue;
-      }
-      v.visited = true;
-      addDepthFirst(currTreeNode[getKey(v)] = {}, v);
-    }
-    
-  };
+  // const addDepthFirst = (currTreeNode: any, dep: NluMapItem) => {
+  //
+  //   for (let [k, v] of Object.entries(dep.linkedSet)) {
+  //     if (v.visited) {
+  //       // currTreeNode[getKey(v)] = currTreeNode[getKey(v)] || null;
+  //       continue;
+  //     }
+  //     v.visited = true;
+  //     addDepthFirst(currTreeNode[getKey(v)] = {}, v);
+  //   }
+  //
+  // };
   
   const queue: Array<[any,any]> = [];
   
@@ -61,7 +61,7 @@ export const createTree = function (map: NluMap, mainProjectPath: string, mainDe
     
     const popped = queue.shift();
     if(popped){
-      addDepthFirst(...popped);
+      addBreadthFirst(...popped);
     }
   };
   

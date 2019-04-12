@@ -259,7 +259,7 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>
       if (!/.*[0-9]{1,6}\.[0-9]{1,6}\.[0-9]{1,6}/.test(desiredVersion)) {
         log.warn(`In package.json located here: ./${chalk.bold(path.relative(cwd,dep.path))},`,
           `the following package version did not match a semverish regex:`,
-          `'${chalk.bold(desiredVersion)}', for package with name: ${chalk.bold(v)}`);
+          `'${chalk.bold(desiredVersion)}', for dep with name: ${chalk.bold(v)}`);
         return false;
       }
       
@@ -273,7 +273,8 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>
       // if the installed version does not satisfy the requirement, then we reinstall
       const satisfies = semver.satisfies(installedVersion, desiredVersion);
       if (!satisfies) {
-        log.warn('package with name', v, 'is not satisfied. Installed version:', installedVersion, 'desired version:', desiredVersion);
+        log.warn('package with name', v, 'is not satisfied. Installed version:',
+          installedVersion, 'desired version:', desiredVersion);
       }
       return !satisfies;
     }

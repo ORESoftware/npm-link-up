@@ -177,7 +177,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     }
     
     if (!bin) {
-      log.warn(`missing "bin" field for dependency with name "${name}"`);
+      opts.verbosity > 2 && log.warn(`No "bin" field for dependency with name "${name}"`);
       // return process.exit(1);
     }
     

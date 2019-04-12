@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap, PkgJSON} from "./index";
+import {EVCb, NLUDotJSON, NluMap, NluMapItem, PkgJSON} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths";
 import {
@@ -32,8 +32,10 @@ const searchQueue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 //////////////////////////////////////////////////////////////////////
 
-export const makeFindProject = function (mainProjectName: string, totalList: Map<string, true>, map: NluMap,
+export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<string, true>, map: NluMap,
                                          ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) {
+  
+  const mainProjectName = mainDep.name;
   
   const isPathSearchableBasic = (item: string) => {
     
@@ -251,7 +253,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
               
-              if (pkg.name === mainProjectName && linkable !== true) {
+              if (pkg.name === mainProjectName && linkable !== true && dirname !== mainDep.path) {
                 if (opts.verbosity > 1) {
                   log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
                 }
