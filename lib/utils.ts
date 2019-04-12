@@ -25,7 +25,7 @@ export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
     const matched = dep.searchRoots.some(r => p.startsWith(r));
     
     if (!matched) {
-      log.error('The following dep', p, 'is not accessible for project at path:', dep.path);
+      log.error(`The following dep ${chalk.bold.gray(p)} is not accessible for project at path: ${chalk.bold.gray(dep.path)}`);
       log.error(`The available searchRoots are:`, JSON.stringify(dep.searchRoots));
     }
     

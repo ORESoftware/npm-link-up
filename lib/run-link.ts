@@ -42,27 +42,21 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     log.info('Dependency map:');
   }
   
-  Object.keys(map).forEach(function (k) {
+  for (let k of Object.keys(map)) {
     if (opts.verbosity > 2) {
       log.info('Info for project:', chalk.bold(k));
       console.log(chalk.green.bold(util.inspect(map[k])));
       console.log();
     }
-  });
+  }
   
   const isAllLinked = function () {
     //Object.values might not be available on all Node.js versions.
-    return Object.keys(map).every(k => map[k].isLinked);
+    return Object.values(map).every(v => v.isLinked);
   };
   
   const getCountOfUnlinkedDeps = (dep: NluMapItem) => {
-    return dep.deps.filter(d => {
-      if (!map[d]) {
-        log.warning(`there is no dependency named '${d}' in the map.`);
-        return false;
-      }
-      return !map[d].isLinked;
-    }).length;
+    return dep.deps.filter(d => !dep.installedSet.has(d)).length;
   };
   
   const findNextDep = function () {
@@ -70,16 +64,11 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     // this routine finds the next dep with the fewest number of unlinked dependencies
     
     let dep;
-    let count = null;
+    let count = Number.MAX_SAFE_INTEGER;
     
-    for (let dir of Object.keys(map)) {
-      let d = map[dir];
+    for (let d of Object.values(map)) {
       if (!d.isLinked) {
-        if (!count) {
-          dep = d;
-          count = dep.deps.length;
-        }
-        else if (getCountOfUnlinkedDeps(d) < count) {
+        if (getCountOfUnlinkedDeps(d) < count) {
           dep = d;
           count = dep.deps.length;
         }
@@ -396,8 +385,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           
           if (err) {
             log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
-          }
-          else if (opts.verbosity > 1) {
+          } else if (opts.verbosity > 1) {
             log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
           }
           

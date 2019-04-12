@@ -343,6 +343,13 @@ async.autoInject({
       
       let searchRoots = mapSearchRoots.slice(0);
       
+      if(searchRoots.length < 1){
+        return process.nextTick(cb, new Error(`
+           There were no searchRoots present in the main config, ${chalk.italic.underline('are your env variables defined?')}
+           The raw contents of the searchRoots field in ${chalk.bold(nluFilePath)} is: ${chalk.bold(JSON.stringify(conf.searchRoots))}
+        `));
+      }
+      
       if (opts.verbosity > 1) {
         log.info('Beginning to search for NPM projects on your filesystem.');
       }
@@ -365,7 +372,9 @@ async.autoInject({
       });
       
       if (q.idle()) {
-        return process.nextTick(cb, new Error('For some reason, no paths/items went onto the search queue.'));
+        return process.nextTick(cb, new Error(
+          'For some reason, no search paths went onto the queue. Please report this problem to the Github issue tracker.'
+        ));
       }
       
       let first = true;
