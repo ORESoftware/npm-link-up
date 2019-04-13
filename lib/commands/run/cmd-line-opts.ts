@@ -48,6 +48,13 @@ export default [
     help: 'Link-up all packages in working dir.',
     default: false
   },
+  
+  {
+    names: ['every'],
+    type: 'bool',
+    help: 'Link-up all packages, even those without an .nlu.json file.',
+    default: false
+  },
 
   {
     names: ['allow-unknown'],
@@ -170,6 +177,13 @@ export default [
     help: 'Override any warnings.',
     default: false
   },
+  
+  {
+    names: ['combine'],
+    type: 'bool',
+    help: 'Combine deps declared in .nlu.json list, with those declared in package.json.',
+    default: false
+  },
 
   {
     names: ['allow-missing'],
@@ -211,6 +225,7 @@ export interface NLURunOpts {
   link_main: boolean,
   install_main: boolean,
   all_packages: boolean,
+  combine: boolean,
   every: boolean,
   umbrella: boolean,
   _args: Array<string>,

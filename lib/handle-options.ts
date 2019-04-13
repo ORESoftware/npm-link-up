@@ -8,14 +8,14 @@ import chalk from 'chalk';
 import log from './logging';
 import alwaysIgnoreThese from './always-ignore';
 import {NluConf, NLUDotJSON} from "./index";
-import * as nluUtils from './utils';
+import * as utils from './utils';
 import {NLURunOpts} from "./commands/run/cmd-line-opts";
 
 /////////////////////////////////////////////////////////////////////////////////
 
 export const getIgnore = (conf: NLUDotJSON, opts: any): Array<RegExp> => {
   
-  const ignore = nluUtils.getUniqueList(nluUtils.flattenDeep([conf.ignore, alwaysIgnoreThese]))
+  const ignore = utils.getUniqueList(utils.flattenDeep([conf.ignore, alwaysIgnoreThese]))
   .map(d => String(d || '').trim())
   .filter(Boolean)
   .map((item: string) => new RegExp(item));
@@ -51,7 +51,7 @@ export const getSearchRoots =  (opts: NLURunOpts, conf: NluConf): Array<string> 
   const searchRootsReduced: Array<string> = [];
   
   // here we flatten and get rid of dupes and reduce to the most common paths
-  nluUtils.getUniqueList(nluUtils.flattenDeep(searchRoots))
+  utils.getUniqueList(utils.flattenDeep(searchRoots))
   .map(d => String(d || '').trim())
   .filter(Boolean)
   .sort((a, b) => (a.length - b.length))

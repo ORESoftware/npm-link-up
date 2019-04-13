@@ -1,6 +1,8 @@
 
 
-const r = require('./nlu.json');
+const s = Array.from(new Set(null));
+
+console.log(s);
 
 // const gen = function *() {
 //   yield 3;

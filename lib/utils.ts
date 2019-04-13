@@ -21,12 +21,14 @@ export const globalConfigFilePath = path.resolve(process.env.HOME + '/.nlu/globa
 
 export const getPath = (map: NluMap, dep: NluMapItem, opts: any) => {
   
+  const loggerfn = opts.allow_missing ? log.warn : log.error;
+  
   const isAccessible = (p: string) => {
     const matched = dep.searchRoots.some(r => p.startsWith(r));
     
     if (!matched) {
-      log.error(`The following dep ${chalk.bold.gray(p)} is not accessible for project at path: ${chalk.bold.gray(dep.path)}`);
-      log.error(`The available searchRoots are:`, JSON.stringify(dep.searchRoots));
+      loggerfn(`The following dep ${chalk.bold.gray(p)} is not accessible for project at path: ${chalk.bold.gray(dep.path)}`);
+      loggerfn(`The available searchRoots are:`, JSON.stringify(dep.searchRoots));
     }
     
     return matched;
@@ -257,7 +259,7 @@ const checkPackages = (dep: NluMapItem, m: Map<string, string>, sym: Set<string>
       // }
       
       if (!/.*[0-9]{1,6}\.[0-9]{1,6}\.[0-9]{1,6}/.test(desiredVersion)) {
-        log.warn(`In package.json located here: ./${chalk.bold(path.relative(cwd,dep.path))},`,
+        log.warn(`In package.json located here: ./${chalk.bold(path.relative(cwd, dep.path))},`,
           `the following package version did not match a semverish regex:`,
           `'${chalk.bold(desiredVersion)}', for dep with name: ${chalk.bold(v)}`);
         return false;

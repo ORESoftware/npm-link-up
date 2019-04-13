@@ -62,7 +62,8 @@ export interface NluMapItem {
   searchRoots: Array<string>,
   installedSet: Set<string>,
   linkedSet: {[key: string]: NluMapItem},
-  visited?: boolean
+  visited?: boolean,
+  depNamesFromPackageJSON: Array<string>
 }
 
 export interface NluMap {

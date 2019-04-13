@@ -29,11 +29,7 @@ import {getIgnore, getSearchRoots} from "../../handle-options";
 import options, {NLURunOpts} from './cmd-line-opts';
 import {runNPMLink} from '../../run-link';
 import {createTree} from '../../create-visual-tree';
-import {
-  getCleanMap,
-  getCleanMapForAllPackagesOpt,
-  getCleanMapOfOnlyPackagesWithNluJSONFiles
-} from '../../get-clean-final-map';
+import * as clean from '../../get-clean-final-map';
 import {q} from '../../search-queue';
 import {EVCb, NluConf, NluMap} from "../../index";
 
@@ -78,6 +74,11 @@ if (opts.help) {
     + 'options:\n'
     + help);
   process.exit(0);
+}
+
+if (opts.all_packages && opts.every) {
+  log.error('Cannot use both --every and --all-packages/--all option, pick one.');
+  process.exit(1);
 }
 
 try {
@@ -219,6 +220,10 @@ if (list.length < 1) {
 
 const searchRoots = getSearchRoots(opts, conf);
 
+if(opts.every && searchRoots.length < 1){
+  searchRoots.push(process.cwd());
+}
+
 if (searchRoots.length < 1) {
   log.error(chalk.red('No search-roots provided.'));
   log.error('You should either update your .nlu.json config to have a searchRoots array.');
@@ -250,11 +255,11 @@ if (!list.includes(mainProjectName)) {
   }
 }
 
-const totalList = new Map();
+const totalList = new Map<string,string>();
 
-list.forEach(l => {
-  totalList.set(l, true);
-});
+for(let l of list){
+  totalList.set(l, null);
+}
 
 const ignore = getIgnore(conf, opts);
 
@@ -270,6 +275,8 @@ if (opts.dry_run) {
   log.warning(chalk.bold.gray('Because --dry-run was used, we are not actually linking projects together.'));
 }
 
+const keys = opts.production ? productionDepsKeys : allDepsKeys;
+
 // add the main project to the map
 // when we search for projects, we ignore any projects where package.json name is "mainProjectName"
 const mainDep = map[root] = {
@@ -284,7 +291,8 @@ const mainDep = map[root] = {
   package: pkg,
   searchRoots: null as Array<string>,
   installedSet: new Set(),
-  linkedSet: {}
+  linkedSet: {},
+  depNamesFromPackageJSON: keys
 };
 
 async.autoInject({
@@ -292,7 +300,6 @@ async.autoInject({
     readNodeModulesFolders(cb: EVCb<any>) {
       
       const nm = path.resolve(root + '/node_modules');
-      const keys = opts.production ? productionDepsKeys : allDepsKeys;
       
       determineIfReinstallIsNeeded(nm, mainDep, keys, opts, (err, val) => {
         
@@ -376,7 +383,7 @@ async.autoInject({
       }
       
       const status = {searching: true};
-      const findProject = makeFindProject(mainDep, totalList, map, ignore, opts, status, conf);
+      const findProject = makeFindProject(mainDep, totalList, searchRoots, map, ignore, opts, status, conf);
       
       searchRoots.forEach(sr => {
         q.push(cb => findProject(sr, cb));
@@ -439,10 +446,13 @@ async.autoInject({
         
         if (opts.all_packages) {
           // cleanMap = getCleanMapOfOnlyPackagesWithNluJSONFiles(mainProjectName, map);
-          cleanMap = getCleanMapForAllPackagesOpt(map,opts);
+          cleanMap = clean.getCleanMapForAllPackagesOpt(map, opts);
+        }
+        else if (opts.every) {
+          cleanMap = clean.getCleanMapForEveryOpt(map, opts);
         }
         else {
-          cleanMap = getCleanMap(mainDep, map, opts);
+          cleanMap = clean.getCleanMap(mainDep, map, opts);
         }
       }
       catch (err) {

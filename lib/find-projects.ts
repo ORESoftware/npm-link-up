@@ -32,8 +32,8 @@ const searchQueue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 //////////////////////////////////////////////////////////////////////
 
-export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, true>, map: NluMap,
-                                ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) => {
+export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, string>, defaultSearchRoots: Array<string>,
+                                map: NluMap, ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) => {
   
   const mainProjectName = mainDep.name;
   
@@ -276,8 +276,10 @@ export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, true
               
               try {
                 deps = getDepsListFromNluJSON(npmlinkup);
-                assert(Array.isArray(deps),
-                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`);
+                assert(
+                  Array.isArray(deps),
+                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`
+                );
               }
               catch (err) {
                 log.error(chalk.redBright('Could not parse list/packages/deps properties from .nlu.json file at this path:'));
@@ -285,22 +287,24 @@ export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, true
                 return cb(err);
               }
               
+              if (map[dirname]) {
+                log.warn('Map already has key: ' + dirname);
+                return cb();
+              }
+  
               for(let item of deps){
                 if(opts.every && totalList.has(item)){
                   let e = new Error(
                     `You passed the --every option, but more than one package with name '${item}' was found on disk.`
                   );
                   log.error(e.message);
-                  return cb(e)
+                  // return cb(e)
                 }
-                totalList.set(item, true);
+                totalList.set(item, dirname);
               }
   
-  
-              if (map[dirname]) {
-                log.warn('Map already has key: ' + dirname);
-                return cb();
-              }
+              const nm = path.resolve(dirname + '/node_modules');
+              const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
               
               const m = map[dirname] = {
                 name: pkg.name,
@@ -312,13 +316,12 @@ export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, true
                 path: dirname,
                 deps: deps,
                 package: pkg,
-                searchRoots: null as Array<string>,
+                searchRoots: defaultSearchRoots.slice(0),
                 installedSet: new Set(),
-                linkedSet: {}
+                linkedSet: {},
+                depNamesFromPackageJSON: keys
               };
               
-              const nm = path.resolve(dirname + '/node_modules');
-              const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
               
               async.autoInject({
                 
