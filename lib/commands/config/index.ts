@@ -32,7 +32,11 @@ try {
 }
 
 let root = residence.findProjectRoot(cwd);
-opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
+// opts.config = path.resolve(String(opts.config || '').replace(/\.nlu\.json$/, ''));
+
+if(opts.config){
+  opts.config = path.resolve(opts.config);
+}
 
 try {
   if (opts.config) {

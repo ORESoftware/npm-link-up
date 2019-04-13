@@ -32,8 +32,8 @@ const searchQueue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 //////////////////////////////////////////////////////////////////////
 
-export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<string, true>, map: NluMap,
-                                         ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) {
+export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, true>, map: NluMap,
+                                ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) => {
   
   const mainProjectName = mainDep.name;
   
@@ -161,8 +161,9 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
           
           let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
           
+          const nluJSONPath = path.resolve(dir + '/.nlu.json');
           try {
-            npmlinkup = require(path.resolve(dir + '/.nlu.json'));
+            npmlinkup = require(nluJSONPath);
             hasNLUJSONFile = true;
             if (npmlinkup && npmlinkup.searchable === false) {
               log.warn('The following dir is not searchable:', dir);
@@ -170,6 +171,11 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
             }
           }
           catch (e) {
+            if(!/cannot find module/i.test(e.message)){
+              log.error(chalk.redBright('Could not read .nlu.json file located here:'), chalk.redBright.bold(nluJSONPath));
+              log.error('Looks like you have a JSON parsing error:\n', e);
+              return cb(e);
+            }
             npmlinkup = {} as NLUDotJSON;
           }
           
@@ -191,7 +197,7 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
               
               if (status.searching === false) {
                 opts.verbosity > 1 && log.error('There was an error so we short-circuited search.');
-                return process.nextTick(cb);
+                return cb();
               }
               
               if (stats.isSymbolicLink()) {
@@ -226,10 +232,10 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
                 return cb(null);
               }
               
-              let dirname = path.dirname(item);
-              let filename = path.basename(item);
+              const dirname = path.dirname(item);
+              const filename = path.basename(item);
               
-              if (String(filename) !== 'package.json') {
+              if (filename !== 'package.json') {
                 return cb(null);
               }
               
@@ -279,13 +285,21 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
                 return cb(err);
               }
               
-              deps.forEach(item => {
+              for(let item of deps){
+                if(opts.every && totalList.has(item)){
+                  let e = new Error(
+                    `You passed the --every option, but more than one package with name '${item}' was found on disk.`
+                  );
+                  log.error(e.message);
+                  return cb(e)
+                }
                 totalList.set(item, true);
-              });
-              
-              if(map[dirname]){
+              }
+  
+  
+              if (map[dirname]) {
                 log.warn('Map already has key: ' + dirname);
-                return process.nextTick(cb);
+                return cb();
               }
               
               const m = map[dirname] = {
@@ -316,7 +330,7 @@ export const makeFindProject = function (mainDep: NluMapItem, totalList: Map<str
                     return process.nextTick(cb, null);
                   }
                   
-                  mapPaths(searchRoots, dirname,  (err: any, roots: Array<string>) => {
+                  mapPaths(searchRoots, dirname, (err: any, roots: Array<string>) => {
                     
                     if (err) {
                       return cb(err);
