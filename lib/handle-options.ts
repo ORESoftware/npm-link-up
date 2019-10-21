@@ -34,7 +34,7 @@ export const getIgnore = (conf: NLUDotJSON, opts: any): Array<RegExp> => {
 
 export const getSearchRoots =  (opts: NLURunOpts, conf: NluConf): Array<string> => {
   
-  let searchRoots: Array<string | Array<string>> = [];
+  const searchRoots: Array<string | Array<string>> = [];
   
   if (opts.search_from_home) {
     searchRoots.push(path.resolve(process.env.HOME));

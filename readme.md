@@ -86,7 +86,7 @@ If you use NVM and switch Node.js versions frequently, then add the following to
 
 There are two types of workflows:
 
-1. <b> Workflow 1 - you have an NPM package on your fs in a folder, and you have other local packages you'd like to link to it. </b>
+1. <b> Workflow 1 - you have an NPM package on your fs in a folder, and you have other local packages you'd like to link to it. This workflow represents a single point of entry in a dependency graph. </b>
 
 <br>
 
@@ -115,7 +115,7 @@ Using `"searchRoots": [".."]`, means it will look for xxx,yyy,zzz within the par
 
 <br>
 
-2. <b> Workflow 2 - You have a mono-repo with N npm packages in it. </b> <br>
+2. <b> Workflow 2 - You have a mono-repo with N npm packages in it. This workflow represents multiple points of entry in a dependency graph.</b> <br>
 
 <br>
 
@@ -130,11 +130,12 @@ Something like:
     packagea/{package.json,.nlu.json}
     packageb/{package.json,.nlu.json}
     packagec/{package.json,.nlu.json}
- .nlu.umbrella.json
 
 ```
 
-In .nlu.umbrella.json, put this:
+(If you use the --all or --every options, you won't need a config file).
+
+In .nlu.json, put this:
 
 ```
 {
@@ -155,9 +156,12 @@ In .nlu.umbrella.json, put this:
 run `nlu init` from each of packagea,packageb,packagec, then in the root of the monorepo, run:
 
 ```bash
-$ nlu run --umbrella -c .nlu.umbrella.json  # --umbrella option tells nlu not to put a node_modules folder in the mono-repo root
+ # the --umbrella option tells nlu to ignore any missing package.json file in the cwd, and 
+ # not to put a node_modules folder in the mono-repo root
+$ nlu run --umbrella  
 ```
 
+If you don't want to use .nlu.json config files, then use the --every option.
 If you are missing deps, that's ok, just use --allow-missing.
 
 Special note: If you cannot add .nlu.json files to the packages b/c maybe your people are picky, there is a way to just use an nlu.umbrella.json file.

@@ -76,11 +76,6 @@ if (opts.help) {
   process.exit(0);
 }
 
-if (opts.all_packages && opts.every) {
-  log.error('Cannot use both --every and --all-packages/--all option, pick one.');
-  process.exit(1);
-}
-
 try {
   globalConf = require(globalConfigFilePath);
 }
@@ -107,13 +102,17 @@ try {
   hasNLUJSONFile = true;
 }
 catch (e) {
-  if (!opts.umbrella) {
-    log.error('Could not load your .nlu.json file at this path:', chalk.bold(nluFilePath));
-    log.error('Your project root is supposedly here:', chalk.bold(root));
-    log.error(chalk.magentaBright(e.message));
+  if (!opts.umbrella && !opts.every) {
+    log.error('Could not load your .nlu.json file at this path:', chalk.bold.gray(nluFilePath));
+    root && log.error('Your project root is supposedly here:', chalk.bold.gray(root));
+    log.error(chalk.redBright(e.message));
     process.exit(1);
   }
-  opts.all_packages = true;
+  
+  if (!opts.every) {
+    opts.all_packages = true;
+  }
+  
   conf = <NluConf>{
     'npm-link-up': true,
     linkable: false,
@@ -155,6 +154,11 @@ catch (e) {
     name: '(root)'  // (dummy-root-package)
   };
   
+}
+
+if (opts.all_packages && opts.every) {
+  log.error('Cannot use both --every and --all-packages/--all option, pick one.');
+  process.exit(1);
 }
 
 if (Array.isArray(conf.packages)) {
@@ -211,7 +215,7 @@ const allDepsKeys = getDevKeys(pkg);
 const list = getDepsListFromNluJSON(conf);
 
 if (list.length < 1) {
-  if (!opts.all_packages) {
+  if (!opts.all_packages && !opts.every) {
     log.error(chalk.magenta('You do not have any dependencies listed in your .nlu.json file.'));
     log.error(chalk.cyan.bold(util.inspect(conf)));
     process.exit(1);
@@ -220,8 +224,13 @@ if (list.length < 1) {
 
 const searchRoots = getSearchRoots(opts, conf);
 
-if(opts.every && searchRoots.length < 1){
-  searchRoots.push(process.cwd());
+if (opts.every && searchRoots.length < 1) {
+  if (!cwd.startsWith(process.env.HOME + '/')) {
+    throw chalk.magenta(
+      'Your current working dir is not within your home directory, please explicitly pass a --search-root option.'
+    );
+  }
+  searchRoots.push(cwd);
 }
 
 if (searchRoots.length < 1) {
@@ -238,12 +247,12 @@ const inListButNotInDeps = list.filter(item => {
   return !allDepsKeys.includes(item);
 });
 
-inListButNotInDeps.forEach(item => {
+for (let item of inListButNotInDeps) {
   if (opts.verbosity > 1) {
     log.warning('warning, the following item was listed in your .nlu.json file, ' +
       'but is not listed in your package.json dependencies => "' + item + '".');
   }
-});
+}
 
 // we need to store a version of the list without the top level package's name
 const originalList = list.slice(0);
@@ -255,9 +264,9 @@ if (!list.includes(mainProjectName)) {
   }
 }
 
-const totalList = new Map<string,string>();
+const totalList = new Map<string, string>();
 
-for(let l of list){
+for (let l of list) {
   totalList.set(l, null);
 }
 
@@ -287,7 +296,8 @@ const mainDep = map[root] = {
   linkToItself: conf.linkToItself,
   runInstall: conf.alwaysReinstall,
   path: root,
-  deps: list,
+  deps: Array.from(new Set(list)),
+  explicitDeps: new Set(list),
   package: pkg,
   searchRoots: null as Array<string>,
   installedSet: new Set(),
@@ -352,7 +362,7 @@ async.autoInject({
           return cb(err);
         }
         
-        mainDep.searchRoots = roots.slice(0);
+        roots = mainDep.searchRoots = roots.slice(0);
         cb(err, roots);
       });
     },

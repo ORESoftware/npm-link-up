@@ -1,8 +1,12 @@
 
+const x = 3;
 
-const s = Array.from(new Set(null));
+const fn = () =>{
+  const x = 5;
+  console.log(x);
+};
 
-console.log(s);
+fn();
 
 // const gen = function *() {
 //   yield 3;

@@ -315,6 +315,7 @@ export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, stri
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
                 deps: deps,
+                explicitDeps: new Set(deps),
                 package: pkg,
                 searchRoots: defaultSearchRoots.slice(0),
                 installedSet: new Set(),

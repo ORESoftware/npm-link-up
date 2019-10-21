@@ -28,7 +28,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
   
   if (keys.length < 1) {
     return process.nextTick(cb, 'NLU could not find any dependencies on the filesystem;' +
-      ' perhaps broaden your search using searchRoots.');
+      ' perhaps broaden your search using the --search-root option. Or use --every instead of --all.');
   }
   
   if (opts.dry_run) {
@@ -165,7 +165,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       .join(' && ');
   };
   
-  const getCommandListOfLinked = (dep: NluMapItem) => {
+  const getCommandListOfLinked = (dep: NluMapItem) : Array<string> => {
     
     const name = dep.name;
     const path = dep.path;
@@ -177,16 +177,23 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     }
     
     if (!bin) {
-      opts.verbosity > 2 && log.warn(`No "bin" field for dependency with name "${name}"`);
-      // return process.exit(1);
+      opts.verbosity > 3 && log.warn(`No "bin" field for dependency with name "${name}"`);
     }
     
     if (dep.bin !== bin) {
       throw new Error('"bin" fields do not match => ' + util.inspect(dep));
     }
+  
+    if (opts.umbrella && dep.isMainProject === true) {
+      return [];
+    }
+    
     
     const isAccessible = (dep: NluMapItem) => {
       const searchRoots = dep.searchRoots;
+      if(opts.umbrella && dep.isMainProject){
+        return false;
+      }
       return searchRoots.some(r => path.startsWith(r));
     };
     
@@ -264,6 +271,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     if (opts.no_link) {
       return;
     }
+    
     
     if (opts.link_all || (dep.isMainProject && opts.link_main)) {
       const installProd = opts.production ? ' --production ' : '';
