@@ -55,7 +55,7 @@
     "rimraf": "^2.6.1"
   },
   "r2g": {
-    "test": "node .r2g/tests/smoke-test.js"
+    "test": "node .r2g/tests/phase-contract.cjs --phase-z"
   },
   "nlu": {
     "test": "echo 'nlu test is a noop ftm.'",
