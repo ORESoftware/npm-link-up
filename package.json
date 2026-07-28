@@ -1,6 +1,6 @@
 {
   "name": "npm-link-up",
-  "version": "0.1.324",
+  "version": "0.1.325",
   "bin": {
     "nlu": "cli/index.sh",
     "npmlinkup": "cli/index.sh"
@@ -55,7 +55,7 @@
     "rimraf": "^2.6.1"
   },
   "r2g": {
-    "test": "node .r2g/tests/smoke-test.js"
+    "test": "node .r2g/tests/phase-contract.cjs --phase-z"
   },
   "nlu": {
     "test": "echo 'nlu test is a noop ftm.'",
