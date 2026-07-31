@@ -25,9 +25,9 @@ if (!root) {
 }
 
 const commands = [
-  'nlu run',
-  'nlu init',
-  'nlu add'
+  'run',
+  'init',
+  'add'
 ];
 
 const allowUnknown = process.argv.indexOf('--allow-unknown') > 0;
@@ -80,5 +80,5 @@ if (opts.bash_completion) {
 
 
 log.warn(chalk.bold.italic('No command line option was recognized.'));
-log.warn(chalk.gray('Perhaps you meant to use one of these commands instead:', chalk.gray.bold(commands.join(', '))));
+log.warn(chalk.gray('Perhaps you meant to use one of these subcommands:', chalk.gray.bold(commands.join(', '))));
 process.exit(1);

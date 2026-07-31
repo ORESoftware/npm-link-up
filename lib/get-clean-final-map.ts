@@ -2,14 +2,20 @@
 
 import {NluMap, NluMapItem} from "./index";
 import {getPath} from "./utils";
+import * as util from "util";
+import log from "./logging";
 
 ////////////////////////////////////////////////////////////////////////////
 
-export const getCleanMap =  (mainDep: NluMapItem, map: NluMap, opts: any): NluMap => {
+export const getCleanMap = (mainDep: NluMapItem, map: NluMap, opts: any): NluMap => {
+  
+  if (opts.all_packages) {
+    throw 'Internal error, the --all-packages opt is not permitted at this code path.';
+  }
   
   const newMap: NluMap = {};
   
-  const getRelevantItems =  (v: string) => {
+  const getRelevantItems = (v: string) => {
     
     if (map[v] && !newMap[v]) {
       
@@ -31,15 +37,14 @@ export const getCleanMap =  (mainDep: NluMapItem, map: NluMap, opts: any): NluMa
   
   getRelevantItems(mainDep.path);
   
-  
   return newMap;
 };
 
-export const getCleanMap2 =  (rootPackageName: string, map: NluMap): NluMap => {
+export const getCleanMap2 = (rootPackageName: string, map: NluMap): NluMap => {
   
   const newMap: NluMap = {};
   
-  const getRelevantItems =  (v: string) => {
+  const getRelevantItems = (v: string) => {
     
     if (map[v] && !newMap[v]) {
       
@@ -51,30 +56,92 @@ export const getCleanMap2 =  (rootPackageName: string, map: NluMap): NluMap => {
         throw new Error('list should be an array, but is not an array type: ' + JSON.stringify(map[v]));
       }
       
-      list.forEach(function (l) {
+      for(let l of list){
         getRelevantItems(l);
-      });
+      }
     }
     
   };
   
   getRelevantItems(rootPackageName);
   
-  
   return newMap;
 };
 
+export const getCleanMapForAllPackagesOpt = (map: NluMap, opts: any): NluMap => {
+  
+  const newMap: NluMap = {};
+  
+  const getRelevantItems = (v: string) => {
+    
+    if (!map[v]) {
+      if (v != null) {
+        throw 'The map does not have this key:' + v;
+      }
+      return;
+    }
+    
+    if (!newMap[v]) {
+      
+      newMap[v] = map[v];
+      const list = map[v].deps;
+      
+      if (!Array.isArray(list)) {
+        throw new Error('list should be an array, but is not an array type: ' + JSON.stringify(map[v]));
+      }
+      
+      const mapPath = getPath(map, newMap[v], opts);
+      
+      for(let l of list){
+        getRelevantItems(mapPath(l));
+      }
+    }
+    
+  };
+  
+  for (let v of Object.values(map)) {
+    if (v.hasNLUJSONFile) {
+      if (!v.path) {
+        throw 'This project/package should have an associated path field: ' + util.inspect(v);
+      }
+      getRelevantItems(v.path);
+    }
+  }
+  
+  return newMap;
+  
+};
 
-export const getCleanMapOfOnlyPackagesWithNluJSONFiles =  (rootPackageName: string, map: NluMap): NluMap => {
+export const getCleanMapForEveryOpt = (map: NluMap, opts: any) => {
+  
+  const newMap: NluMap = {};
+  
+  for (let [k,v] of Object.entries(map)) {
+    
+     const depSet = new Set(v.deps);
+     if(!v.hasNLUJSONFile || opts.combine){
+       for(let d of v.depNamesFromPackageJSON){
+         depSet.add(d);
+       }
+     }
+ 
+     v.deps = Array.from(depSet);
+     newMap[k] = v;
+  }
+  
+  return newMap;
 
-  return Object.keys(map).reduce((a,b) => {
+};
 
-    if(map[b].hasNLUJSONFile){
-       a[b] = map[b];
+export const getCleanMapOfOnlyPackagesWithNluJSONFiles = (rootPackageName: string, map: NluMap): NluMap => {
+  
+  return Object.keys(map).reduce((a, b) => {
+    
+    if (map[b].hasNLUJSONFile) {
+      a[b] = map[b];
     }
     return a;
-
+    
   }, {} as NluMap)
-
-
+  
 };

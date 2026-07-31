@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 // project
 import log from './logging';
-import {EVCb, NLUDotJSON, NluMap, PkgJSON} from "./index";
+import {EVCb, NLUDotJSON, NluMap, NluMapItem, PkgJSON} from "./index";
 import {q} from './search-queue';
 import {mapPaths} from "./map-paths";
 import {
@@ -32,8 +32,10 @@ const searchQueue = async.queue<Task, any>((task, cb) => task(cb), 8);
 
 //////////////////////////////////////////////////////////////////////
 
-export const makeFindProject = function (mainProjectName: string, totalList: Map<string, true>, map: NluMap,
-                                         ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) {
+export const makeFindProject = (mainDep: NluMapItem, totalList: Map<string, string>, defaultSearchRoots: Array<string>,
+                                map: NluMap, ignore: Array<RegExp>, opts: NLURunOpts, status: any, conf: NLUDotJSON) => {
+  
+  const mainProjectName = mainDep.name;
   
   const isPathSearchableBasic = (item: string) => {
     
@@ -159,8 +161,9 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
           
           let deps: Array<string>, npmlinkup: NLUDotJSON, hasNLUJSONFile = false;
           
+          const nluJSONPath = path.resolve(dir + '/.nlu.json');
           try {
-            npmlinkup = require(path.resolve(dir + '/.nlu.json'));
+            npmlinkup = require(nluJSONPath);
             hasNLUJSONFile = true;
             if (npmlinkup && npmlinkup.searchable === false) {
               log.warn('The following dir is not searchable:', dir);
@@ -168,6 +171,11 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
             }
           }
           catch (e) {
+            if(!/cannot find module/i.test(e.message)){
+              log.error(chalk.redBright('Could not read .nlu.json file located here:'), chalk.redBright.bold(nluJSONPath));
+              log.error('Looks like you have a JSON parsing error:\n', e);
+              return cb(e);
+            }
             npmlinkup = {} as NLUDotJSON;
           }
           
@@ -189,7 +197,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               
               if (status.searching === false) {
                 opts.verbosity > 1 && log.error('There was an error so we short-circuited search.');
-                return process.nextTick(cb);
+                return cb();
               }
               
               if (stats.isSymbolicLink()) {
@@ -224,10 +232,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
               
-              let dirname = path.dirname(item);
-              let filename = path.basename(item);
+              const dirname = path.dirname(item);
+              const filename = path.basename(item);
               
-              if (String(filename) !== 'package.json') {
+              if (filename !== 'package.json') {
                 return cb(null);
               }
               
@@ -251,7 +259,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(null);
               }
               
-              if (pkg.name === mainProjectName && linkable !== true) {
+              if (pkg.name === mainProjectName && linkable !== true && dirname !== mainDep.path) {
                 if (opts.verbosity > 1) {
                   log.info('Another project on your fs has your main projects package.json name, at path:', chalk.yellow.bold(dirname));
                 }
@@ -268,8 +276,10 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
               
               try {
                 deps = getDepsListFromNluJSON(npmlinkup);
-                assert(Array.isArray(deps),
-                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`);
+                assert(
+                  Array.isArray(deps),
+                  `the 'list' property in an .nlu.json file is not an Array instance for '${filename}'.`
+                );
               }
               catch (err) {
                 log.error(chalk.redBright('Could not parse list/packages/deps properties from .nlu.json file at this path:'));
@@ -277,14 +287,24 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 return cb(err);
               }
               
-              deps.forEach(item => {
-                totalList.set(item, true);
-              });
-              
-              if(map[dirname]){
+              if (map[dirname]) {
                 log.warn('Map already has key: ' + dirname);
-                return process.nextTick(cb);
+                return cb();
               }
+  
+              for(let item of deps){
+                if(opts.every && totalList.has(item)){
+                  let e = new Error(
+                    `You passed the --every option, but more than one package with name '${item}' was found on disk.`
+                  );
+                  log.error(e.message);
+                  // return cb(e)
+                }
+                totalList.set(item, dirname);
+              }
+  
+              const nm = path.resolve(dirname + '/node_modules');
+              const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
               
               const m = map[dirname] = {
                 name: pkg.name,
@@ -295,14 +315,14 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                 runInstall: Boolean(npmlinkup.alwaysReinstall),
                 path: dirname,
                 deps: deps,
+                explicitDeps: new Set(deps),
                 package: pkg,
-                searchRoots: null as Array<string>,
+                searchRoots: defaultSearchRoots.slice(0),
                 installedSet: new Set(),
-                linkedSet: {}
+                linkedSet: {},
+                depNamesFromPackageJSON: keys
               };
               
-              const nm = path.resolve(dirname + '/node_modules');
-              const keys = opts.production ? getProdKeys(pkg) : getDevKeys(pkg);
               
               async.autoInject({
                 
@@ -314,7 +334,7 @@ export const makeFindProject = function (mainProjectName: string, totalList: Map
                     return process.nextTick(cb, null);
                   }
                   
-                  mapPaths(searchRoots, dirname,  (err: any, roots: Array<string>) => {
+                  mapPaths(searchRoots, dirname, (err: any, roots: Array<string>) => {
                     
                     if (err) {
                       return cb(err);
