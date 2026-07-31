@@ -1,5 +1,6 @@
 'use strict';
 
+
 export default [
 
   {
@@ -45,6 +46,13 @@ export default [
     names: ['all-packages', 'all'],
     type: 'bool',
     help: 'Link-up all packages in working dir.',
+    default: false
+  },
+  
+  {
+    names: ['every'],
+    type: 'bool',
+    help: 'Link-up all packages, even those without an .nlu.json file.',
     default: false
   },
 
@@ -96,6 +104,12 @@ export default [
     help: 'Force execution at hand.',
     default: false,
     env: 'nlu_setting_force'
+  },
+  
+  {
+    names: ['ignore','i'],
+    type: 'arrayOfString',
+    help: 'Ignore given file path(s) during search.',
   },
 
   {
@@ -163,6 +177,13 @@ export default [
     help: 'Override any warnings.',
     default: false
   },
+  
+  {
+    names: ['combine'],
+    type: 'bool',
+    help: 'Combine deps declared in .nlu.json list, with those declared in package.json.',
+    default: false
+  },
 
   {
     names: ['allow-missing'],
@@ -203,7 +224,9 @@ export interface NLURunOpts {
   search_from_home: boolean,
   link_main: boolean,
   install_main: boolean,
-  all_packages: true,
+  all_packages: boolean,
+  combine: boolean,
+  every: boolean,
   umbrella: boolean,
   _args: Array<string>,
   override: boolean,
