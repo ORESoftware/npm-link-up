@@ -28,7 +28,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
   
   if (keys.length < 1) {
     return process.nextTick(cb, 'NLU could not find any dependencies on the filesystem;' +
-      ' perhaps broaden your search using searchRoots.');
+      ' perhaps broaden your search using the --search-root option. Or use --every instead of --all.');
   }
   
   if (opts.dry_run) {
@@ -42,27 +42,21 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     log.info('Dependency map:');
   }
   
-  Object.keys(map).forEach(function (k) {
+  for (let k of Object.keys(map)) {
     if (opts.verbosity > 2) {
       log.info('Info for project:', chalk.bold(k));
       console.log(chalk.green.bold(util.inspect(map[k])));
       console.log();
     }
-  });
+  }
   
   const isAllLinked = function () {
     //Object.values might not be available on all Node.js versions.
-    return Object.keys(map).every(k => map[k].isLinked);
+    return Object.values(map).every(v => v.isLinked);
   };
   
   const getCountOfUnlinkedDeps = (dep: NluMapItem) => {
-    return dep.deps.filter(d => {
-      if (!map[d]) {
-        log.warning(`there is no dependency named '${d}' in the map.`);
-        return false;
-      }
-      return !map[d].isLinked;
-    }).length;
+    return dep.deps.filter(d => !dep.installedSet.has(d)).length;
   };
   
   const findNextDep = function () {
@@ -70,16 +64,11 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     // this routine finds the next dep with the fewest number of unlinked dependencies
     
     let dep;
-    let count = null;
+    let count = Number.MAX_SAFE_INTEGER;
     
-    for (let dir of Object.keys(map)) {
-      let d = map[dir];
+    for (let d of Object.values(map)) {
       if (!d.isLinked) {
-        if (!count) {
-          dep = d;
-          count = dep.deps.length;
-        }
-        else if (getCountOfUnlinkedDeps(d) < count) {
+        if (getCountOfUnlinkedDeps(d) < count) {
           dep = d;
           count = dep.deps.length;
         }
@@ -109,7 +98,9 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       const matched = searchRoots.some(r => path.startsWith(r));
       
       if (!matched) {
-        log.error('The following dep', path, 'is not accessible for project at path:', dep.path)
+        log.error(`The following dep ${chalk.gray.bold(path)}`,
+          `is not accessible for project at path: ${chalk.gray.bold(dep.path)}`);
+        log.error(`The available searchRoots are:`, JSON.stringify(searchRoots));
       }
       
       return matched;
@@ -174,7 +165,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
       .join(' && ');
   };
   
-  const getCommandListOfLinked = (dep: NluMapItem) => {
+  const getCommandListOfLinked = (dep: NluMapItem) : Array<string> => {
     
     const name = dep.name;
     const path = dep.path;
@@ -186,16 +177,23 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     }
     
     if (!bin) {
-      log.warn(`missing "bin" field for dependency with name "${name}"`);
-      // return process.exit(1);
+      opts.verbosity > 3 && log.warn(`No "bin" field for dependency with name "${name}"`);
     }
     
     if (dep.bin !== bin) {
       throw new Error('"bin" fields do not match => ' + util.inspect(dep));
     }
+  
+    if (opts.umbrella && dep.isMainProject === true) {
+      return [];
+    }
+    
     
     const isAccessible = (dep: NluMapItem) => {
       const searchRoots = dep.searchRoots;
+      if(opts.umbrella && dep.isMainProject){
+        return false;
+      }
       return searchRoots.some(r => path.startsWith(r));
     };
     
@@ -273,6 +271,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
     if (opts.no_link) {
       return;
     }
+    
     
     if (opts.link_all || (dep.isMainProject && opts.link_main)) {
       const installProd = opts.production ? ' --production ' : '';
@@ -394,8 +393,7 @@ export const runNPMLink = (map: NluMap, opts: any, cb: EVCb<null>) => {
           
           if (err) {
             log.error(`Dep with name "${dep.name}" is done, but with an error => `, err.message || err);
-          }
-          else if (opts.verbosity > 1) {
+          } else if (opts.verbosity > 1) {
             log.veryGood(`Dep with name '${chalk.bold(dep.name)}' is done.`);
           }
           
