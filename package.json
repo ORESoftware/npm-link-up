@@ -11,7 +11,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "./scripts/test.sh",
-    "postinstall": "./assets/postinstall.sh"
+    "postinstall": "./assets/postinstall.sh",
+    "lint:ores": "if [ -f .ores-lint/lint.sh ]; then sh .ores-lint/lint.sh; else echo 'ores-lint not installed'; fi",
+    "prepublishOnly": "npm run lint:ores"
   },
   "repository": {
     "type": "git",
@@ -61,5 +63,13 @@
   "nlu": {
     "test": "echo 'nlu test is a noop ftm.'",
     "linkable": true
+  },
+  "oresLint": {
+    "note": "Declared, not installed. ores-lint resolves these from a global install - see .ores-lint/README.md",
+    "requires": {
+      "eslint": ">=9",
+      "typescript-eslint": ">=8 (optional; without it .ts files are skipped)"
+    },
+    "install": "npm i -g eslint typescript-eslint"
   }
 }
